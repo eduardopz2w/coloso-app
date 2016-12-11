@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Image, Picker, Text} from 'react-native'
+import {StyleSheet, View, Image, Picker, Text, ScrollView} from 'react-native'
 import {MKTextField, MKButton, MKColor} from 'react-native-material-kit'
 import HomeViewToolbar from './HomeViewToolbar'
 
@@ -7,7 +7,7 @@ class HomeView extends Component {
   render () {
     return <View style={styles.root}>
       <HomeViewToolbar />
-      <View style={styles.container}>
+      <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.container}>
         <Image
           style={styles.homeImage}
           source={require('../../assets/poro_wallpaper.jpg')}
@@ -32,8 +32,7 @@ class HomeView extends Component {
           style={styles.searchButton}>
           <Text style={styles.searchButtonText}>BUSCAR INVOCADOR</Text>
         </MKButton>
-      </View>
-
+      </ScrollView>
     </View>
   }
 }
@@ -43,9 +42,13 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
+  mainScrollView: {
+    margin: 16
+  },
+
   container: {
     flex: 1,
-    padding: 16,
+    minHeight: 350,
     flexDirection: 'column',
     justifyContent: 'space-around'
   },
