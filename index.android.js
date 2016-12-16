@@ -33,6 +33,8 @@ const logger = createLogger({
 
 let store = createStore(lolcenaApp, applyMiddleware(thunk, logger, promiseMiddleware()))
 
+console.disableYellowBox = true
+
 export default class lolcena extends Component {
   render () {
     return <Provider store={store}>

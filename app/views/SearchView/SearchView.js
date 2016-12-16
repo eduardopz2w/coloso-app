@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {MKTextField, MKButton, MKColor, MKSpinner} from 'react-native-material-kit'
 import SearchViewToolbar from './SearchViewToolbar'
 import SearchViewActions from '../../redux/actions/SearchViewActions'
+import Snackbar from 'react-native-android-snackbar'
 
 class SearchView extends Component {
   constructor (props) {
@@ -12,6 +13,13 @@ class SearchView extends Component {
     this.state = {
       summonerName: 'armaghyons',
       region: 'lan'
+    }
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.searchError) {
+      Snackbar.show(nextProps.errorMessage, {duration: Snackbar.UNTIL_CLICK})
+      this.props.clearSearchError()
     }
   }
 
@@ -65,6 +73,7 @@ class SearchView extends Component {
   }
 
   _handlePressSearchButton (event) {
+    Snackbar.dismiss()
     this.props.searchSummonerProfile(this.state.summonerName, this.state.region)
   }
 
@@ -134,7 +143,9 @@ let mapStateToProps = (state, props) => {
   let searchViewState = state.searchView
 
   return {
-    isSearching: searchViewState.get('isSearching')
+    isSearching: searchViewState.get('isSearching'),
+    searchError: searchViewState.get('searchError'),
+    errorMessage: searchViewState.get('errorMessage')
   }
 }
 
@@ -142,6 +153,10 @@ let mapDispatchToProps = (dispatch) => {
   return {
     searchSummonerProfile: (summonerName, region) => {
       dispatch(SearchViewActions.searchSummonerProfile(summonerName, region))
+    },
+
+    clearSearchError: () => {
+      dispatch(SearchViewActions.clearSearchError())
     }
   }
 }

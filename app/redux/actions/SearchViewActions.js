@@ -9,8 +9,15 @@ const searchSummonerProfile = (summonerName, region) => {
   }
 }
 
+const clearSearchError = () => {
+  return {
+    type: 'SEARCH_VIEW/CLEAR_SEARCH_ERROR'
+  }
+}
+
 let actions = {
-  searchSummonerProfile: searchSummonerProfile
+  searchSummonerProfile: searchSummonerProfile,
+  clearSearchError: clearSearchError
 }
 
 export default actions
