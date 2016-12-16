@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Image, Picker, Text, ScrollView} from 'react-native'
+import {StyleSheet, View, Image, Picker, Text, DeviceEventEmitter} from 'react-native'
 import {connect} from 'react-redux'
 import {MKTextField, MKButton, MKColor, MKSpinner} from 'react-native-material-kit'
 import SearchViewToolbar from './SearchViewToolbar'
@@ -12,8 +12,14 @@ class SearchView extends Component {
 
     this.state = {
       summonerName: 'armaghyons',
-      region: 'lan'
+      region: 'lan',
+      keyboardOpen: false
     }
+  }
+
+  componentWillMount () {
+    this.keyboardDidShowListener = DeviceEventEmitter.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this))
+    this.keyboardDidHideListener = DeviceEventEmitter.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this))
   }
 
   componentWillReceiveProps (nextProps) {
@@ -27,17 +33,15 @@ class SearchView extends Component {
     let handlePressSearchButton = this._handlePressSearchButton.bind(this)
     let handleTextChangeSummonerName = this._handleTextChangeSummonerName.bind(this)
     let handleChangeRegion = this._handleChangeRegion.bind(this)
+    let renderImage = this._renderImage.bind(this)
 
     let {summonerName, region} = this.state
     let {isSearching} = this.props
 
     return <View style={styles.root}>
       <SearchViewToolbar />
-      <ScrollView style={styles.mainScrollView} contentContainerStyle={styles.container}>
-        <Image
-          style={styles.homeImage}
-          source={require('../../assets/poro_wallpaper.jpg')}
-        />
+      <View style={styles.container}>
+        {renderImage()}
 
         <View style={styles.inputsRow}>
           <MKTextField
@@ -68,7 +72,8 @@ class SearchView extends Component {
             <Text style={styles.searchButtonText}>BUSCAR INVOCADOR</Text>
           </MKButton>
         )}
-      </ScrollView>
+
+      </View>
     </View>
   }
 
@@ -84,6 +89,30 @@ class SearchView extends Component {
   _handleChangeRegion (newRegion) {
     this.setState({region: newRegion})
   }
+
+  handleKeyboardDidShow (e) {
+    this.setState({ keyboardOpen: true })
+  }
+
+  handleKeyboardDidHide (e) {
+    this.setState({ keyboardOpen: false })
+  }
+
+  _renderImage () {
+    if (!this.state.keyboardOpen) {
+      return <Image
+        style={styles.homeImage}
+        source={require('../../assets/poro_wallpaper.jpg')}
+      />
+    } else {
+      return null
+    }
+  }
+
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove()
+    this.keyboardDidHideListener.remove()
+  }
 }
 
 const styles = StyleSheet.create({
@@ -91,20 +120,15 @@ const styles = StyleSheet.create({
     flex: 1
   },
 
-  mainScrollView: {
-    margin: 16
-  },
-
   container: {
+    padding: 16,
     flex: 1,
-    minHeight: 350,
-    flexDirection: 'column',
     justifyContent: 'space-around'
   },
 
   homeImage: {
     width: null,
-    height: 180,
+    height: 200,
     borderRadius: 16
   },
 
