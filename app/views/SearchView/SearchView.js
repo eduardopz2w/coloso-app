@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {StyleSheet, View, Image, Picker, Text, DeviceEventEmitter} from 'react-native'
 import {connect} from 'react-redux'
 import {MKTextField, MKButton, MKColor, MKSpinner} from 'react-native-material-kit'
+import {Actions} from 'react-native-router-flux'
 import SearchViewToolbar from './SearchViewToolbar'
 import SearchViewActions from '../../redux/actions/SearchViewActions'
 import Snackbar from 'react-native-android-snackbar'
@@ -11,7 +12,7 @@ class SearchView extends Component {
     super(props)
 
     this.state = {
-      summonerName: 'armaghyons',
+      summonerName: 'armaghyon',
       region: 'lan',
       keyboardOpen: false
     }
@@ -26,6 +27,11 @@ class SearchView extends Component {
     if (nextProps.searchError) {
       Snackbar.show(nextProps.errorMessage, {duration: Snackbar.UNTIL_CLICK})
       this.props.clearSearchError()
+    }
+
+    if (nextProps.summonerFound !== null) {
+      Actions.summoner_profile_view({summonerId: nextProps.summonerFound})
+      this.props.clearSummonerFound()
     }
   }
 
@@ -169,7 +175,8 @@ let mapStateToProps = (state, props) => {
   return {
     isSearching: searchViewState.get('isSearching'),
     searchError: searchViewState.get('searchError'),
-    errorMessage: searchViewState.get('errorMessage')
+    errorMessage: searchViewState.get('errorMessage'),
+    summonerFound: searchViewState.get('summonerFound')
   }
 }
 
@@ -181,6 +188,10 @@ let mapDispatchToProps = (dispatch) => {
 
     clearSearchError: () => {
       dispatch(SearchViewActions.clearSearchError())
+    },
+
+    clearSummonerFound: () => {
+      dispatch(SearchViewActions.clearSummonerFound())
     }
   }
 }
