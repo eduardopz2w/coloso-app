@@ -1,6 +1,8 @@
 import {combineReducers} from 'redux'
 import searchView from './searchView'
+import summonerProfileViewReducer from './summonerProfileViewReducer'
 
 export default combineReducers({
-  searchView: searchView
+  searchView: searchView,
+  summonerProfileView: summonerProfileViewReducer
 })

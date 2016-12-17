@@ -34,7 +34,8 @@ const styles = StyleSheet.create({
 
 IconButton.propTypes = {
   iconName: PropTypes.string.isRequired,
-  iconColor: PropTypes.string
+  iconColor: PropTypes.string,
+  onPress: PropTypes.func
 }
 
 IconButton.defaultProps = {

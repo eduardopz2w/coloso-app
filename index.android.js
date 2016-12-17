@@ -34,7 +34,7 @@ const logger = createLogger({
   }
 })
 
-let store = createStore(lolcenaApp, applyMiddleware(thunk, logger, promiseMiddleware()))
+let store = createStore(lolcenaApp, applyMiddleware(thunk, promiseMiddleware()))
 
 console.disableYellowBox = true
 

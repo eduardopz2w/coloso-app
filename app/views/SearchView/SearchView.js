@@ -30,7 +30,8 @@ class SearchView extends Component {
     }
 
     if (nextProps.summonerFound !== null) {
-      Actions.summoner_profile_view({summonerId: nextProps.summonerFound})
+      //FIXME: Se puede cambiar la region mientras busca y explotar
+      Actions.summoner_profile_view({summonerId: nextProps.summonerFound, region: this.state.region})
       this.props.clearSummonerFound()
     }
   }
