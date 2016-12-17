@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {StyleSheet, View, Image, Picker, Text, DeviceEventEmitter} from 'react-native'
+import {StyleSheet, View, Image, Picker, Text, Keyboard} from 'react-native'
 import {connect} from 'react-redux'
 import {MKTextField, MKButton, MKColor, MKSpinner} from 'react-native-material-kit'
 import {Actions} from 'react-native-router-flux'
@@ -19,8 +19,8 @@ class SearchView extends Component {
   }
 
   componentWillMount () {
-    this.keyboardDidShowListener = DeviceEventEmitter.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this))
-    this.keyboardDidHideListener = DeviceEventEmitter.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this))
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this))
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this))
   }
 
   componentWillReceiveProps (nextProps) {
