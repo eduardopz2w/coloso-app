@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
+import RankedMiniseries from '../../../../components/RankedMiniseries';
 
 const styles = StyleSheet.create({
   root: {
@@ -22,6 +23,8 @@ const styles = StyleSheet.create({
   entryContainer: {
     paddingLeft: 16,
     paddingRight: 16,
+    paddingTop: 8,
+    paddingBottom: 8,
     flexDirection: 'row',
   },
   nameText: {
@@ -54,13 +57,11 @@ const styles = StyleSheet.create({
   },
   victoriesNumberText: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: '#4CAF50',
     paddingLeft: 15,
   },
   defeatsNumberText: {
     fontSize: 24,
-    fontWeight: 'bold',
     color: '#D32F2F',
     paddingLeft: 15,
   },
@@ -68,6 +69,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   leaguePointsText: {
+  },
+  miniseriesRow: {
+    flexDirection: 'row',
+  },
+  textBold: {
     fontWeight: 'bold',
   },
 });
@@ -101,19 +107,19 @@ class LeagueEntry extends Component {
         <View style={styles.entryDataContainer}>
           {entries.playerOrTeamName &&
             <Text style={styles.nameText}>
-              <Text style={{ fontWeight: 'bold' }}>Name: </Text>
+              <Text style={styles.textBold}>Name: </Text>
               {entries.playerOrTeamName}
             </Text>
           }
 
           <View style={styles.tierAndDivisionRow}>
             <Text style={styles.tierText}>
-              <Text style={{ fontWeight: 'bold' }}>Tier: </Text>
-              <Text style={this.getTierTextStyle()}>{tier}</Text>
+              <Text style={styles.textBold}>Tier: </Text>
+              <Text style={[this.getTierTextStyle(), styles.textBold]}>{tier}</Text>
             </Text>
             {entries.division &&
               <Text style={styles.divisionText}>
-                <Text style={{ fontWeight: 'bold' }}>Division: </Text>
+                <Text style={styles.textBold}>Division: </Text>
                 {entries.division}
               </Text>
             }
@@ -121,19 +127,26 @@ class LeagueEntry extends Component {
 
           <View style={styles.victoriesAndDefeatsRow}>
             <Text style={styles.victoriesText}>
-              <Text style={styles.victoriesTitleText}>V:</Text>
+              <Text style={[styles.victoriesTitleText, styles.textBold]}>V:</Text>
               <Text style={styles.victoriesNumberText}>{entries.wins || '0'}</Text>
             </Text>
             <Text style={styles.defeatsText}>
-              <Text style={styles.defeatsTitleText}>D:</Text>
+              <Text style={[styles.defeatsTitleText, styles.textBold]}>D:</Text>
               <Text style={styles.defeatsNumberText}>{entries.losses || '0'}</Text>
             </Text>
           </View>
 
           <View>
-            <Text style={styles.leaguePointsTitleText}>
-              League Points: <Text style={styles.leaguePointsText}>{entries.leaguePoints || '0'}</Text>
-            </Text>
+            {entries.miniSeries ? (
+              <View style={styles.miniseriesRow}>
+                <Text style={styles.textBold}>Progress:</Text>
+                <RankedMiniseries progress={entries.miniSeries.progress} style={{ flex: 1 }} />
+              </View>
+            ) : (
+              <Text style={styles.leaguePointsTitleText}>
+                League Points: <Text style={styles.leaguePointsText}>{entries.leaguePoints || '0'}</Text>
+              </Text>
+            )}
           </View>
         </View>
       </View>
@@ -151,6 +164,20 @@ class LeagueEntry extends Component {
 
     if (tier === 'UNRANKED') {
       tierTextStyle.color = '#000';
+    } else if (tier === 'SILVER') {
+      tierTextStyle.color = '#545556';
+    } else if (tier === 'BRONZE') {
+      tierTextStyle.color = '#8e6f00';
+    } else if (tier === 'GOLD') {
+      tierTextStyle.color = '#f9d13e';
+    } else if (tier === 'PLATINUM') {
+      tierTextStyle.color = '#0c819e';
+    } else if (tier === 'DIAMOND') {
+      tierTextStyle.color = '#009965';
+    } else if (tier === 'MASTER') {
+      tierTextStyle.color = '#f9d13e';
+    } else if (tier === 'CHALLENGER') {
+      tierTextStyle.color = '#f9d13e';
     }
 
     return tierTextStyle;

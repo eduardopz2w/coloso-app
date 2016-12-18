@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+
+  rootScrollView: {
+    flex: 1,
+  },
 });
 
 class LeagueEntryView extends Component {
@@ -26,7 +30,7 @@ class LeagueEntryView extends Component {
       </View>);
     }
 
-    return (<ScrollView>
+    return (<ScrollView style={styles.roowScrollView}>
       {entries.map((leagueEntry, key) => <LeagueEntry key={key} leagueEntry={leagueEntry} />)}
     </ScrollView>);
   }
