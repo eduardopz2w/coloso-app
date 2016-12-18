@@ -1,30 +1,30 @@
-import RiotApi from '../../utils/RiotApi'
+import RiotApi from '../../utils/RiotApi';
 
-const searchSummonerProfile = (summonerName, region) => {
+function searchSummonerProfile(summonerName, region) {
   return {
     type: 'SEARCH_VIEW/SEARCH_SUMMONER_PROFILE',
     payload: {
-      promise: RiotApi.summoner.findByName(summonerName, region)
-    }
-  }
+      promise: RiotApi.summoner.findByName(summonerName, region),
+    },
+  };
 }
 
-const clearSearchError = () => {
+function clearSearchError() {
   return {
-    type: 'SEARCH_VIEW/CLEAR_SEARCH_ERROR'
-  }
+    type: 'SEARCH_VIEW/CLEAR_SEARCH_ERROR',
+  };
 }
 
-const clearSummonerFound = () => {
+function clearSummonerFound() {
   return {
-    type: 'SEARCH_VIEW/CLEAR_SUMMONER_FOUND'
-  }
+    type: 'SEARCH_VIEW/CLEAR_SUMMONER_FOUND',
+  };
 }
 
-let actions = {
-  searchSummonerProfile: searchSummonerProfile,
-  clearSearchError: clearSearchError,
-  clearSummonerFound: clearSummonerFound
-}
+const actions = {
+  searchSummonerProfile,
+  clearSearchError,
+  clearSummonerFound,
+};
 
-export default actions
+export default actions;

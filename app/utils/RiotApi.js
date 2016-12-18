@@ -1,53 +1,54 @@
-import axios from 'axios'
-const SERVER_URL = 'http://192.168.0.2:1337/riot-api'
+import axios from 'axios';
 
-let findByName = (summonerName, region) => {
+const SERVER_URL = 'http://192.168.0.2:1337/riot-api';
+
+function findByName(summonerName, region) {
   return new Promise((resolve, reject) => {
-    let url = `${SERVER_URL}/${region}/summoner/by-name/${summonerName}`
+    const url = `${SERVER_URL}/${region}/summoner/by-name/${summonerName}`;
 
-    axios.get(url, {params: {region: region}})
-      .then(response => {
-        resolve(response.data)
+    return axios.get(url, { params: { region } })
+      .then((response) => {
+        resolve(response.data);
       })
-      .catch(err => {
-        let errorMessage
+      .catch((err) => {
+        let errorMessage;
 
         if (err.response) {
-          errorMessage = err.response.data.message
+          errorMessage = err.response.data.message;
         } else {
-          errorMessage = 'Algo salio mal'
+          errorMessage = 'Algo salio mal';
         }
 
-        reject({ errorMessage: errorMessage })
-      })
-  })
+        reject({ errorMessage });
+      });
+  });
 }
 
-let findById = (summonerId, region) => {
+function findById(summonerId, region) {
   return new Promise((resolve, reject) => {
-    let url = `${SERVER_URL}/${region}/summoner/by-id/${summonerId}`
+    const url = `${SERVER_URL}/${region}/summoner/by-id/${summonerId}`;
 
-    axios.get(url, {params: {region: region}})
-      .then(response => {
-        resolve(response.data)
+    return axios.get(url, { params: { region } })
+      .then((response) => {
+        resolve(response.data);
       })
-      .catch(err => {
-        let errorMessage
+      .catch((err) => {
+        let errorMessage;
 
         if (err.response) {
-          errorMessage = err.response.data.message
+          errorMessage = err.response.data.message;
         } else {
-          errorMessage = 'Algo salio mal'
+          errorMessage = 'Algo salio mal';
         }
 
-        reject({ errorMessage: errorMessage })
-      })
-  })
+        reject({ errorMessage });
+      });
+  });
 }
 
 export default {
   summoner: {
-    findByName: findByName,
-    findById: findById
-  }
-}
+    findByName,
+    findById,
+  },
+};
