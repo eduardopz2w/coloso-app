@@ -6,7 +6,7 @@ function findByName(summonerName, region) {
   return new Promise((resolve, reject) => {
     const url = `${SERVER_URL}/${region}/summoner/by-name/${summonerName}`;
 
-    return axios.get(url, { params: { region } })
+    return axios.get(url)
       .then((response) => {
         resolve(response.data);
       })
@@ -28,9 +28,31 @@ function findById(summonerId, region) {
   return new Promise((resolve, reject) => {
     const url = `${SERVER_URL}/${region}/summoner/by-id/${summonerId}`;
 
-    return axios.get(url, { params: { region } })
+    return axios.get(url)
       .then((response) => {
         resolve(response.data);
+      })
+      .catch((err) => {
+        let errorMessage;
+
+        if (err.response) {
+          errorMessage = err.response.data.message;
+        } else {
+          errorMessage = 'Algo salio mal';
+        }
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getSummonerLeagueEntry(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${SERVER_URL}/${region}/league/by-summoner/${summonerId}/entry`;
+
+    return axios.get(url)
+      .then((response) => {
+        resolve(response.data[0]);
       })
       .catch((err) => {
         let errorMessage;
@@ -50,5 +72,6 @@ export default {
   summoner: {
     findByName,
     findById,
+    leagueEntry: getSummonerLeagueEntry,
   },
 };

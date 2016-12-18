@@ -9,8 +9,18 @@ function fetchSummonerData(summonerId, region) {
   };
 }
 
+function fetchLeagueEntry(summonerId, region) {
+  return {
+    type: 'SUMMONER_PROFILE_VIEW/FETCH_LEAGUE_ENTRY',
+    payload: {
+      promise: RiotApi.summoner.leagueEntry(summonerId, region),
+    },
+  };
+}
+
 const actions = {
   fetchSummonerData,
+  fetchLeagueEntry,
 };
 
 export default actions;
