@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import SummonerProfileViewToolbar from './SummonerProfileViewToolbar';
 import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewActions';
+import LeagueEntryView from './components/LeagueEntryView';
 
 const styles = StyleSheet.create({
   root: {
@@ -16,12 +17,12 @@ class SummonerProfileView extends Component {
   constructor(props) {
     super(props);
 
-    this.handleOnPressBackButton = this.handleOnPressBackButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchSummonerData(this.props.summonerId, this.props.region);
+    this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
   }
 
 
@@ -30,11 +31,9 @@ class SummonerProfileView extends Component {
   }
 
   render() {
-    const { summonerData } = this.props;
-
     return (<View style={styles.root}>
       <SummonerProfileViewToolbar
-        summonerData={summonerData}
+        summonerData={this.props.summonerData}
         onPressBackButton={() => { Actions.pop(); }}
       />
       <ScrollableTabView
@@ -42,8 +41,7 @@ class SummonerProfileView extends Component {
         renderTabBar={() => <ScrollableTabBar />}
         onChangeTab={this.handleOnChangeTab}
       >
-        <Text tabLabel="Champions" />
-        <Text tabLabel="League" />
+        <LeagueEntryView tabLabel="League" leagueEntry={this.props.leagueEntry} />
         <Text tabLabel="History" />
         <Text tabLabel="Runes" />
         <Text tabLabel="Masteries" />
@@ -56,9 +54,10 @@ class SummonerProfileView extends Component {
 SummonerProfileView.propTypes = {
   summonerId: PropTypes.number,
   region: PropTypes.string,
-  summonerData: PropTypes.obj,
-  leagueEntry: PropTypes.obj,
   fetchSummonerData: PropTypes.func,
+  fetchLeagueEntry: PropTypes.func,
+  leagueEntry: PropTypes.object,
+  summonerData: PropTypes.object,
 };
 
 function mapStateToProps(state) {
@@ -75,6 +74,10 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchSummonerData: (summonerId, region) => {
       dispatch(SummonerProfileViewActions.fetchSummonerData(summonerId, region));
+    },
+
+    fetchLeagueEntry: (summonerId, region) => {
+      dispatch(SummonerProfileViewActions.fetchLeagueEntry(summonerId, region));
     },
   };
 }

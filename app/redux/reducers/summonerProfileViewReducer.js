@@ -8,6 +8,7 @@ const initialState = Immutable.fromJS({
   leagueEntry: {
     isFetching: false,
     fetched: false,
+    entries: [],
   },
 });
 
@@ -16,13 +17,7 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMONER_DATA_PENDING') {
     // Esta accion se ejecuta cada vez que se visita el profile por lo cual reseteamos la data vieja
-    newState = newState.withMutations((actualState) => {
-      actualState.setIn(['summonerData', 'isFetching'], true);
-      actualState.mergeIn(['leagueEntry'], {
-        isFetching: true,
-        fetched: false,
-      });
-    });
+    newState = initialState;
   }
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMONER_DATA_FULFILLED') {
@@ -37,6 +32,13 @@ function searchView(state = initialState, action) {
       fetched: true,
       isFetching: false,
       entries: action.payload.entries,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_LEAGUE_ENTRY_REJECTED') {
+    newState = newState.mergeIn(['leagueEntry'], {
+      fetched: false,
+      isFetching: false,
     });
   }
 

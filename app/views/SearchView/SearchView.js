@@ -12,8 +12,8 @@ class SearchView extends Component {
     super(props)
 
     this.state = {
-      summonerName: 'armaghyon',
-      region: 'lan',
+      summonerName: 'Mamas Insurance',
+      region: 'na',
       keyboardOpen: false
     }
   }
