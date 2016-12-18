@@ -18,6 +18,10 @@ const styles = StyleSheet.create({
   rootScrollView: {
     flex: 1,
   },
+
+  rootScrollViewContainer: {
+    paddingBottom: 16,
+  },
 });
 
 class LeagueEntryView extends Component {
@@ -30,14 +34,20 @@ class LeagueEntryView extends Component {
       </View>);
     }
 
-    return (<ScrollView style={styles.roowScrollView}>
+    return (<ScrollView
+      style={styles.roowScrollView}
+      contentContainerStyle={styles.rootScrollViewContainer}
+    >
       {entries.map((leagueEntry, key) => <LeagueEntry key={key} leagueEntry={leagueEntry} />)}
     </ScrollView>);
   }
 }
 
 LeagueEntryView.propTypes = {
-  leagueEntry: PropTypes.object,
+  leagueEntry: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    entries: PropTypes.array,
+  }),
 };
 
 export default LeagueEntryView;

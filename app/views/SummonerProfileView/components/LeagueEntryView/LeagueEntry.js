@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
+import riotConstantsParser from '../../../../utils/riotConstantsParser';
 
 const styles = StyleSheet.create({
   root: {
@@ -86,6 +87,37 @@ class LeagueEntry extends Component {
     this.getTierTextStyle = this.getTierTextStyle.bind(this);
   }
 
+
+  getTierTextStyle() {
+    // TODO add color
+    const { tier } = this.props.leagueEntry;
+    const tierTextStyle = {};
+
+    if (tier === 'UNRANKED') {
+      tierTextStyle.color = '#000';
+    } else if (tier === 'SILVER') {
+      tierTextStyle.color = '#545556';
+    } else if (tier === 'BRONZE') {
+      tierTextStyle.color = '#8e6f00';
+    } else if (tier === 'GOLD') {
+      tierTextStyle.color = '#f9d13e';
+    } else if (tier === 'PLATINUM') {
+      tierTextStyle.color = '#0c819e';
+    } else if (tier === 'DIAMOND') {
+      tierTextStyle.color = '#009965';
+    } else if (tier === 'MASTER') {
+      tierTextStyle.color = '#f9d13e';
+    } else if (tier === 'CHALLENGER') {
+      tierTextStyle.color = '#f9d13e';
+    }
+
+    return tierTextStyle;
+  }
+
+  renderTierImage() {
+    return <Image style={styles.tierImage} source={{ uri: this.props.leagueEntry.tier }} />;
+  }
+
   render() {
     const { name: leagueName, queue, tier } = this.props.leagueEntry;
     let entries = {};
@@ -96,7 +128,7 @@ class LeagueEntry extends Component {
 
     return (<View style={styles.root}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{queue}: {leagueName || 'Unranked'}</Text>
+        <Text style={styles.title}><Text style={styles.textBold}>{riotConstantsParser(queue)}:</Text> {leagueName || 'Unranked'}</Text>
       </View>
 
       <View style={styles.entryContainer}>
@@ -152,40 +184,15 @@ class LeagueEntry extends Component {
       </View>
     </View>);
   }
-
-  renderTierImage() {
-    return <Image style={styles.tierImage} source={{ uri: this.props.leagueEntry.tier }} />;
-  }
-
-  getTierTextStyle() {
-    // TODO add color
-    const { tier } = this.props.leagueEntry;
-    const tierTextStyle = {};
-
-    if (tier === 'UNRANKED') {
-      tierTextStyle.color = '#000';
-    } else if (tier === 'SILVER') {
-      tierTextStyle.color = '#545556';
-    } else if (tier === 'BRONZE') {
-      tierTextStyle.color = '#8e6f00';
-    } else if (tier === 'GOLD') {
-      tierTextStyle.color = '#f9d13e';
-    } else if (tier === 'PLATINUM') {
-      tierTextStyle.color = '#0c819e';
-    } else if (tier === 'DIAMOND') {
-      tierTextStyle.color = '#009965';
-    } else if (tier === 'MASTER') {
-      tierTextStyle.color = '#f9d13e';
-    } else if (tier === 'CHALLENGER') {
-      tierTextStyle.color = '#f9d13e';
-    }
-
-    return tierTextStyle;
-  }
 }
 
 LeagueEntry.propTypes = {
-  leagueEntry: PropTypes.object,
+  leagueEntry: PropTypes.shape({
+    tier: PropTypes.string,
+    name: PropTypes.string,
+    queue: PropTypes.string,
+    entries: PropTypes.array,
+  }),
 };
 
 export default LeagueEntry;

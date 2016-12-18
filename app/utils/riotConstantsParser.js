@@ -1,3 +1,5 @@
+// TODO: Agregar mas constantes
+
 export default function (constant) {
   if (constant === 'RANKED_SOLO_5x5') {
     return 'Ranked Solo 5 vs 5';
