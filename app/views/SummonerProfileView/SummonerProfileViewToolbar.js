@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
   },
 
   summonerImage: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 50,
     borderWidth: 4,
     borderColor: '#000',
@@ -21,8 +21,8 @@ const styles = StyleSheet.create({
   },
 
   summonerImageContainer: {
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     position: 'relative',
     alignSelf: 'center',
   },
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 
   summonerNameText: {
-    fontSize: 20,
+    fontSize: 16,
     color: '#FFF',
     textShadowColor: '#000',
     textShadowOffset: {

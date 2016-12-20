@@ -3,7 +3,9 @@ import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import _ from 'lodash';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    paddingTop: 10,
+  },
   masteryRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',

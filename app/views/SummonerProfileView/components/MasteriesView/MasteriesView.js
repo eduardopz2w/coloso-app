@@ -9,7 +9,6 @@ const styles = StyleSheet.create({
   headerSelector: {
     paddingLeft: 16,
     backgroundColor: 'rgba(0,0,0,0.1)',
-    marginBottom: 16,
   },
 });
 
