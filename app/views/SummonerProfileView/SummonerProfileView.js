@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
@@ -7,6 +7,7 @@ import SummonerProfileViewToolbar from './SummonerProfileViewToolbar';
 import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewActions';
 import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';
+import GamesRecentView from './components/GamesRecentView';
 
 const styles = StyleSheet.create({
   root: {
@@ -27,13 +28,22 @@ class SummonerProfileView extends Component {
   }
 
 
-  handleOnChangeTab({i: tabIndex}) {
-    if (tabIndex == 1) {
+  handleOnChangeTab({ i: tabIndex }) {
+    if (tabIndex === 1) {
       // ChampionsMastery
       const { isFetching, fetched } = this.props.championsMastery;
 
       if (!isFetching && !fetched) {
         this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
+      }
+    }
+
+    if (tabIndex === 2) {
+      // GamesRecent
+      const { isFetching, fetched } = this.props.gamesRecent;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchGamesRecent(this.props.summonerId, this.props.region);
       }
     }
   }
@@ -49,10 +59,9 @@ class SummonerProfileView extends Component {
         renderTabBar={() => <ScrollableTabBar />}
         onChangeTab={this.handleOnChangeTab}
       >
-        <LeagueEntryView tabLabel="League" leagueEntry={this.props.leagueEntry} />
-        <ChampionsMasteryView tabLabel="Champions" championsMastery={this.props.championsMastery} />
-        <Text tabLabel="Runes" />
-        <Text tabLabel="Masteries" />
+        <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
+        <ChampionsMasteryView tabLabel="Maestria" championsMastery={this.props.championsMastery} />
+        <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
       </ScrollableTabView>
     </View>);
   }
@@ -65,11 +74,16 @@ SummonerProfileView.propTypes = {
   fetchSummonerData: PropTypes.func,
   fetchLeagueEntry: PropTypes.func,
   fetchChampionsMastery: PropTypes.func,
+  fetchGamesRecent: PropTypes.func,
   leagueEntry: PropTypes.shape({}),
   summonerData: PropTypes.shape({}),
   championsMastery: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
+  }),
+  gamesRecent: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
   }),
 };
 
@@ -77,11 +91,13 @@ function mapStateToProps(state) {
   const summonerData = state.summonerProfileView.get('summonerData').toJS();
   const leagueEntry = state.summonerProfileView.get('leagueEntry').toJS();
   const championsMastery = state.summonerProfileView.get('championsMastery').toJS();
+  const gamesRecent = state.summonerProfileView.get('gamesRecent').toJS();
 
   return {
     summonerData,
     leagueEntry,
     championsMastery,
+    gamesRecent,
   };
 }
 
@@ -97,6 +113,10 @@ function mapDispatchToProps(dispatch) {
 
     fetchChampionsMastery: (summonerId, region) => {
       dispatch(SummonerProfileViewActions.fetchChampionsMastery(summonerId, region));
+    },
+
+    fetchGamesRecent: (summonerId, region) => {
+      dispatch(SummonerProfileViewActions.fetchGamesRecent(summonerId, region));
     },
   };
 }

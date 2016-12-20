@@ -70,7 +70,7 @@ class ChampionsMastery extends Component {
 
     fill = (championPoints * 100) / nextLevelPoints;
 
-    if (fill >= 99) {
+    if (fill >= 99.99) {
       tintColor = '#d0aa49';
     }
 

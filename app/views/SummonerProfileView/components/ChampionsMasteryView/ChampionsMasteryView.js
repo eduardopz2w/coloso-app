@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, ListView } from 'react-native';
-import { MKSpinner } from 'react-native-material-kit';
+import { StyleSheet, ListView } from 'react-native';
 import ChampionMastery from './ChampionMastery';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 const styles = StyleSheet.create({
   roowScrollView: {
@@ -12,16 +12,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     padding: 16,
-  },
-  spinnerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  spinner: {
-    width: 50,
-    height: 50,
   },
 });
 
@@ -36,13 +26,12 @@ class ChampionsMasteryView extends Component {
   render() {
     const { isFetching, masteries } = this.props.championsMastery;
     if (isFetching) {
-      return (<View style={styles.spinnerContainer}>
-        <MKSpinner style={styles.spinner} />
-      </View>);
+      return <LoadingScreen />;
     }
 
     return (<ListView
       style={styles.rootScrollView}
+      pageSize={9}
       contentContainerStyle={styles.container}
       dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
       renderRow={mastery => <ChampionMastery mastery={mastery} />}

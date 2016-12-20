@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const SERVER_URL = 'http://192.168.0.2:1337/riot-api';
 
-function findByName(summonerName, region) {
+function getSummonerByName(summonerName, region) {
   return new Promise((resolve, reject) => {
     const url = `${SERVER_URL}/${region}/summoner/by-name/${summonerName}`;
 
@@ -24,7 +24,7 @@ function findByName(summonerName, region) {
   });
 }
 
-function findById(summonerId, region) {
+function getSummonerById(summonerId, region) {
   return new Promise((resolve, reject) => {
     const url = `${SERVER_URL}/${region}/summoner/by-id/${summonerId}`;
 
@@ -90,11 +90,34 @@ function getSummonerChampionsMastery(summonerId, region) {
   });
 }
 
+function getSummonerGamesRecent(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${SERVER_URL}/${region}/game/by-summoner/${summonerId}/recent`;
+
+    return axios.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        let errorMessage;
+
+        if (err.response) {
+          errorMessage = err.response.data.message;
+        } else {
+          errorMessage = 'Algo salio mal';
+        }
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
-    findByName,
-    findById,
+    findByName: getSummonerByName,
+    findById: getSummonerById,
     leagueEntry: getSummonerLeagueEntry,
     championsMastery: getSummonerChampionsMastery,
+    gamesRecent: getSummonerGamesRecent,
   },
 };

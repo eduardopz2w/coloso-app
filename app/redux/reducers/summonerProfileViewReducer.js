@@ -16,6 +16,12 @@ const initialState = Immutable.fromJS({
     fetched: false,
     masteries: [],
   },
+
+  gamesRecent: {
+    isFetching: false,
+    fetched: false,
+    games: [],
+  },
 });
 
 function searchView(state = initialState, action) {
@@ -70,6 +76,27 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_CHAMPIONS_MASTERY_REJECTED') {
     newState = newState.mergeIn(['championsMastery'], {
+      fetched: false,
+      isFetching: false,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_GAMES_RECENT_PENDING') {
+    newState = newState.mergeIn(['gamesRecent'], {
+      isFetching: true,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_GAMES_RECENT_FULFILLED') {
+    newState = newState.mergeIn(['gamesRecent'], {
+      fetched: true,
+      isFetching: false,
+      games: action.payload.games,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_GAMES_RECENT_REJECTED') {
+    newState = newState.mergeIn(['gamesRecent'], {
       fetched: false,
       isFetching: false,
     });

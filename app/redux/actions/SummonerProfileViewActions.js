@@ -27,10 +27,20 @@ function fetchChampionsMastery(summonerId, region) {
   };
 }
 
+function fetchGamesRecent(summonerId, region) {
+  return {
+    type: 'SUMMONER_PROFILE_VIEW/FETCH_GAMES_RECENT',
+    payload: {
+      promise: RiotApi.summoner.gamesRecent(summonerId, region),
+    },
+  };
+}
+
 const actions = {
   fetchSummonerData,
   fetchLeagueEntry,
   fetchChampionsMastery,
+  fetchGamesRecent,
 };
 
 export default actions;
