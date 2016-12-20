@@ -6,6 +6,7 @@ import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab
 import SummonerProfileViewToolbar from './SummonerProfileViewToolbar';
 import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewActions';
 import LeagueEntryView from './components/LeagueEntryView';
+import ChampionsMasteryView from './components/ChampionsMasteryView';
 
 const styles = StyleSheet.create({
   root: {
@@ -26,8 +27,15 @@ class SummonerProfileView extends Component {
   }
 
 
-  handleOnChangeTab() {
-    this.setState({});
+  handleOnChangeTab({i: tabIndex}) {
+    if (tabIndex == 1) {
+      // ChampionsMastery
+      const { isFetching, fetched } = this.props.championsMastery;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
+      }
+    }
   }
 
   render() {
@@ -42,7 +50,7 @@ class SummonerProfileView extends Component {
         onChangeTab={this.handleOnChangeTab}
       >
         <LeagueEntryView tabLabel="League" leagueEntry={this.props.leagueEntry} />
-        <Text tabLabel="History" />
+        <ChampionsMasteryView tabLabel="Champions" championsMastery={this.props.championsMastery} />
         <Text tabLabel="Runes" />
         <Text tabLabel="Masteries" />
       </ScrollableTabView>
@@ -56,17 +64,24 @@ SummonerProfileView.propTypes = {
   region: PropTypes.string,
   fetchSummonerData: PropTypes.func,
   fetchLeagueEntry: PropTypes.func,
-  leagueEntry: PropTypes.object,
-  summonerData: PropTypes.object,
+  fetchChampionsMastery: PropTypes.func,
+  leagueEntry: PropTypes.shape({}),
+  summonerData: PropTypes.shape({}),
+  championsMastery: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    fetched: PropTypes.bool,
+  }),
 };
 
 function mapStateToProps(state) {
   const summonerData = state.summonerProfileView.get('summonerData').toJS();
   const leagueEntry = state.summonerProfileView.get('leagueEntry').toJS();
+  const championsMastery = state.summonerProfileView.get('championsMastery').toJS();
 
   return {
     summonerData,
     leagueEntry,
+    championsMastery,
   };
 }
 
@@ -78,6 +93,10 @@ function mapDispatchToProps(dispatch) {
 
     fetchLeagueEntry: (summonerId, region) => {
       dispatch(SummonerProfileViewActions.fetchLeagueEntry(summonerId, region));
+    },
+
+    fetchChampionsMastery: (summonerId, region) => {
+      dispatch(SummonerProfileViewActions.fetchChampionsMastery(summonerId, region));
     },
   };
 }

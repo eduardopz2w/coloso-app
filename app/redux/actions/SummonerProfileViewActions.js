@@ -18,9 +18,19 @@ function fetchLeagueEntry(summonerId, region) {
   };
 }
 
+function fetchChampionsMastery(summonerId, region) {
+  return {
+    type: 'SUMMONER_PROFILE_VIEW/FETCH_CHAMPIONS_MASTERY',
+    payload: {
+      promise: RiotApi.summoner.championsMastery(summonerId, region),
+    },
+  };
+}
+
 const actions = {
   fetchSummonerData,
   fetchLeagueEntry,
+  fetchChampionsMastery,
 };
 
 export default actions;

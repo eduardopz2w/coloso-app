@@ -10,6 +10,12 @@ const initialState = Immutable.fromJS({
     fetched: false,
     entries: [],
   },
+
+  championsMastery: {
+    isFetching: false,
+    fetched: false,
+    masteries: [],
+  },
 });
 
 function searchView(state = initialState, action) {
@@ -27,6 +33,12 @@ function searchView(state = initialState, action) {
     });
   }
 
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_LEAGUE_ENTRY_PENDING') {
+    newState = newState.mergeIn(['leagueEntry'], {
+      isFetching: true,
+    });
+  }
+
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_LEAGUE_ENTRY_FULFILLED') {
     newState = newState.mergeIn(['leagueEntry'], {
       fetched: true,
@@ -37,6 +49,27 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_LEAGUE_ENTRY_REJECTED') {
     newState = newState.mergeIn(['leagueEntry'], {
+      fetched: false,
+      isFetching: false,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_CHAMPIONS_MASTERY_PENDING') {
+    newState = newState.mergeIn(['championsMastery'], {
+      isFetching: true,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_CHAMPIONS_MASTERY_FULFILLED') {
+    newState = newState.mergeIn(['championsMastery'], {
+      fetched: true,
+      isFetching: false,
+      masteries: action.payload.masteries,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_CHAMPIONS_MASTERY_REJECTED') {
+    newState = newState.mergeIn(['championsMastery'], {
       fetched: false,
       isFetching: false,
     });

@@ -68,10 +68,33 @@ function getSummonerLeagueEntry(summonerId, region) {
   });
 }
 
+function getSummonerChampionsMastery(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${SERVER_URL}/${region}/summoner/${summonerId}/champions-mastery`;
+
+    return axios.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        let errorMessage;
+
+        if (err.response) {
+          errorMessage = err.response.data.message;
+        } else {
+          errorMessage = 'Algo salio mal';
+        }
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName,
     findById,
     leagueEntry: getSummonerLeagueEntry,
+    championsMastery: getSummonerChampionsMastery,
   },
 };

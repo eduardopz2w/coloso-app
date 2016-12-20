@@ -48,7 +48,7 @@ export default class lolcena extends Component {
       <Router>
         <Scene key="root">
           <Scene key="search_view" component={SearchView} hideNavBar={true} initial={true} />
-          <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar={true} />
+          <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar={true} direction="vertical" />
         </Scene>
       </Router>
     </Provider>
