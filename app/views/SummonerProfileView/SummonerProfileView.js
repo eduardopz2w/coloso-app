@@ -8,6 +8,7 @@ import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewA
 import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';
 import GamesRecentView from './components/GamesRecentView';
+import MasteriesView from './components/MasteriesView';
 
 const styles = StyleSheet.create({
   root: {
@@ -46,6 +47,15 @@ class SummonerProfileView extends Component {
         this.props.fetchGamesRecent(this.props.summonerId, this.props.region);
       }
     }
+
+    if (tabIndex === 3) {
+      // Masteries
+      const { isFetching, fetched } = this.props.masteries;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchMasteries(this.props.summonerId, this.props.region);
+      }
+    }
   }
 
   render() {
@@ -60,8 +70,9 @@ class SummonerProfileView extends Component {
         onChangeTab={this.handleOnChangeTab}
       >
         <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
-        <ChampionsMasteryView tabLabel="Maestria" championsMastery={this.props.championsMastery} />
+        <ChampionsMasteryView tabLabel="Campeones" championsMastery={this.props.championsMastery} />
         <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
+        <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
       </ScrollableTabView>
     </View>);
   }
@@ -75,6 +86,7 @@ SummonerProfileView.propTypes = {
   fetchLeagueEntry: PropTypes.func,
   fetchChampionsMastery: PropTypes.func,
   fetchGamesRecent: PropTypes.func,
+  fetchMasteries: PropTypes.func,
   leagueEntry: PropTypes.shape({}),
   summonerData: PropTypes.shape({}),
   championsMastery: PropTypes.shape({
@@ -85,6 +97,10 @@ SummonerProfileView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
+  masteries: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+  }),
 };
 
 function mapStateToProps(state) {
@@ -92,12 +108,14 @@ function mapStateToProps(state) {
   const leagueEntry = state.summonerProfileView.get('leagueEntry').toJS();
   const championsMastery = state.summonerProfileView.get('championsMastery').toJS();
   const gamesRecent = state.summonerProfileView.get('gamesRecent').toJS();
+  const masteries = state.summonerProfileView.get('masteries').toJS();
 
   return {
     summonerData,
     leagueEntry,
     championsMastery,
     gamesRecent,
+    masteries,
   };
 }
 
@@ -117,6 +135,10 @@ function mapDispatchToProps(dispatch) {
 
     fetchGamesRecent: (summonerId, region) => {
       dispatch(SummonerProfileViewActions.fetchGamesRecent(summonerId, region));
+    },
+
+    fetchMasteries: (summonerId, region) => {
+      dispatch(SummonerProfileViewActions.fetchMasteries(summonerId, region));
     },
   };
 }

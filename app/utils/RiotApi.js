@@ -112,6 +112,28 @@ function getSummonerGamesRecent(summonerId, region) {
   });
 }
 
+function getSummonerMasteries(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${SERVER_URL}/${region}/summoner/${summonerId}/masteries`;
+
+    return axios.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        let errorMessage;
+
+        if (err.response) {
+          errorMessage = err.response.data.message;
+        } else {
+          errorMessage = 'Algo salio mal';
+        }
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName: getSummonerByName,
@@ -119,5 +141,6 @@ export default {
     leagueEntry: getSummonerLeagueEntry,
     championsMastery: getSummonerChampionsMastery,
     gamesRecent: getSummonerGamesRecent,
+    masteries: getSummonerMasteries,
   },
 };
