@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import BannedChampions from './BannedChampions';
+import Participant from './Participant';
 
 const styles = StyleSheet.create({
   root: {},
@@ -8,21 +9,23 @@ const styles = StyleSheet.create({
 
 class TeamTab extends Component {
   render() {
-    const { bannedChampions } = this.props;
+    const { bannedChampions, participants } = this.props;
 
     return (<View style={styles.root}>
-      <BannedChampions champions={bannedChampions} />
+      <ScrollView>
+        <BannedChampions champions={bannedChampions} />
+        {participants.map((participant, key) => <Participant
+          key={key}
+          participant={participant}
+        />)}
+      </ScrollView>
     </View>);
   }
 }
 
 TeamTab.propTypes = {
-  participants: PropTypes.arrayOf(PropTypes.shape({
-    championId: PropTypes.number.isRequired,
-  })),
-  bannedChampions: PropTypes.arrayOf(PropTypes.shape({
-    championId: PropTypes.number.isRequired,
-  })),
+  participants: PropTypes.arrayOf(PropTypes.shape({})),
+  bannedChampions: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default TeamTab;

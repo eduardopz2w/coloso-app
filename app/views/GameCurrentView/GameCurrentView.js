@@ -33,8 +33,8 @@ class GameCurrentView extends Component {
     return (<View style={styles.root}>
       <ScrollableTabView
         initialPage={0}
+        prerenderingSiblingsNumber={2}
         renderTabBar={() => <DefaultTabBar />}
-        onChangeTab={this.handleOnChangeTab}
       >
         <TeamTab tabLabel="Blue Team" {...this.getTeamData(100)} />
         <TeamTab tabLabel="Red Team" {...this.getTeamData(200)} />

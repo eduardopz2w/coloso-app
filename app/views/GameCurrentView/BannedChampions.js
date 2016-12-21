@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     paddingTop: 8,
     paddingBottom: 8,
-    backgroundColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: 'rgba(0,0,0,0.1)',
     alignItems: 'center',
   },
   championImage: {
@@ -17,6 +17,8 @@ const styles = StyleSheet.create({
     marginRight: 16,
     marginLeft: 16,
     borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'black',
   },
   text: {
     fontSize: 15,

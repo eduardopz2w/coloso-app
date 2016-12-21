@@ -50,9 +50,9 @@ const lolcena = function lolcena() {
   return (<Provider store={store}>
     <Router>
       <Scene key="root">
-        <Scene key="search_view" component={SearchView} hideNavBar />
+        <Scene key="search_view" component={SearchView} hideNavBar initial />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
-        <Scene key="game_current" component={GameCurrentView} hideNavBar initial />
+        <Scene key="game_current" component={GameCurrentView} hideNavBar />
       </Scene>
     </Router>
   </Provider>);

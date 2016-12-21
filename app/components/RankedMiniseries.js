@@ -15,23 +15,24 @@ class RankedMiniseries extends Component {
 
     this.renderIcon = this.renderIcon.bind(this);
   }
+
   render() {
     const progressArray = this.props.progress.split('');
     return (<View style={[styles.root, this.props.style]}>
-      {progressArray.map(progress => this.renderIcon(progress))}
+      {progressArray.map((progress, key) => this.renderIcon(progress, key))}
     </View>);
   }
 
-  renderIcon(progress) {
+  renderIcon(progress, key) {
     const iconSize = 20;
 
     if (progress === 'W') {
-      return <Icon name="check" size={iconSize} color="#4CAF50" />;
+      return <Icon key={key} name="check" size={iconSize} color="#4CAF50" />;
     } else if (progress === 'L') {
-      return <Icon name="close" size={iconSize} color="#D32F2F" />;
+      return <Icon key={key} name="close" size={iconSize} color="#D32F2F" />;
     }
 
-    return <Icon name="remove" size={iconSize} color="#000" />;
+    return <Icon key={key} name="remove" size={iconSize} color="#000" />;
   }
 }
 
