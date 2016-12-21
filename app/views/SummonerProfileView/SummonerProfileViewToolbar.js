@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
-import { MKSpinner } from 'react-native-material-kit';
 import IconButton from '../../components/IconButton';
+import LoadingScreen from '../../components/LoadingScreen';
 import regionHumanize from '../../utils/regionHumanize';
 
 const styles = StyleSheet.create({
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
 
   profileToolbar: {
     marginTop: -30,
+    height: 125,
   },
 });
 
@@ -99,7 +100,7 @@ class SummonerProfileViewToolbar extends Component {
 
       <View style={styles.profileToolbar}>
         {isFetching ? (
-          <MKSpinner />
+          <LoadingScreen />
         ) : (
           <View>
             <View style={styles.summonerImageContainer}>
