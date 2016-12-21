@@ -124,7 +124,7 @@ class GameRecent extends PureComponent {
   getGameTitleLabel() {
     const { subType } = this.props.game;
 
-    if (subType.includes('RANKED')) {
+    if (subType.includes('RANKED') && !subType.includes('UNRANKED')) {
       return 'Clasificatoria';
     }
 
