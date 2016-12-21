@@ -122,7 +122,6 @@ class SummonerProfileViewToolbar extends Component {
 
 }
 
-
 SummonerProfileViewToolbar.propTypes = {
   summonerData: PropTypes.shape({
     profileIconId: PropTypes.number,

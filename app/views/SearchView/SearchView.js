@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
-import {StyleSheet, View, Image, Picker, Text, Keyboard} from 'react-native'
-import {connect} from 'react-redux'
-import {MKTextField, MKButton, MKColor, MKSpinner} from 'react-native-material-kit'
-import {Actions} from 'react-native-router-flux'
-import SearchViewToolbar from './SearchViewToolbar'
-import SearchViewActions from '../../redux/actions/SearchViewActions'
-import Snackbar from 'react-native-android-snackbar'
+import React, { Component } from 'react';
+import { StyleSheet, View, Image, Picker, Text, Keyboard } from 'react-native';
+import { connect } from 'react-redux';
+import { MKTextField, MKButton, MKColor, MKSpinner } from 'react-native-material-kit';
+import { Actions } from 'react-native-router-flux';
+import Snackbar from 'react-native-android-snackbar';
+import SearchViewToolbar from './SearchViewToolbar';
+import SearchViewActions from '../../redux/actions/SearchViewActions';
 
 class SearchView extends Component {
-  constructor (props) {
-    super(props)
+  constructor(props) {
+    super(props);
 
     this.state = {
-      summonerName: 'Mamas Insurance',
-      region: 'na',
-      keyboardOpen: false
-    }
+      summonerName: 'armaghyon',
+      region: 'lan',
+      keyboardOpen: false,
+    };
   }
 
   componentWillMount () {

@@ -1,3 +1,3 @@
-import SearchView from './SearchView'
+import SearchView from './SearchView';
 
-export default SearchView
+export default SearchView;

@@ -1,3 +1,3 @@
-import SummonerProfileView from './SummonerProfileView'
+import SummonerProfileView from './SummonerProfileView';
 
-export default SummonerProfileView
+export default SummonerProfileView;
