@@ -25,17 +25,17 @@ class SummonerProfileView extends Component {
 
   componentWillMount() {
     this.props.fetchSummonerData(this.props.summonerId, this.props.region);
-    this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
+    this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
   }
 
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1) {
-      // ChampionsMastery
-      const { isFetching, fetched } = this.props.championsMastery;
+      // LeagueEntryView
+      const { isFetching, fetched } = this.props.leagueEntry;
 
       if (!isFetching && !fetched) {
-        this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
+        this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
       }
     }
 
@@ -69,8 +69,8 @@ class SummonerProfileView extends Component {
         renderTabBar={() => <ScrollableTabBar />}
         onChangeTab={this.handleOnChangeTab}
       >
-        <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
         <ChampionsMasteryView tabLabel="Campeones" championsMastery={this.props.championsMastery} />
+        <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
         <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
         <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
       </ScrollableTabView>
@@ -87,7 +87,10 @@ SummonerProfileView.propTypes = {
   fetchChampionsMastery: PropTypes.func,
   fetchGamesRecent: PropTypes.func,
   fetchMasteries: PropTypes.func,
-  leagueEntry: PropTypes.shape({}),
+  leagueEntry: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    fetched: PropTypes.bool,
+  }),
   summonerData: PropTypes.shape({}),
   championsMastery: PropTypes.shape({
     isFetching: PropTypes.bool,
