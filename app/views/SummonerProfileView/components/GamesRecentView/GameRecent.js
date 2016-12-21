@@ -155,7 +155,7 @@ class GameRecent extends PureComponent {
 
   render() {
     // TODO: Parsear los gametype
-    const { championId, spell1, spell2, gameType, createDate } = this.props.game;
+    const { championId, spell1, spell2, createDate, subType } = this.props.game;
     const {
       championsKilled,
       assists,
@@ -193,7 +193,7 @@ class GameRecent extends PureComponent {
           {this.renderMultiKillBadge()}
         </View>
         <View style={styles.dataCol}>
-          <Text style={styles.gameTitle}>{gameType} ({this.getGameTitleLabel()})</Text>
+          <Text style={styles.gameTitle}>{subType} ({this.getGameTitleLabel()})</Text>
           <Grid>
             <Row>
               <Col style={styles.flexRow}>
@@ -249,6 +249,7 @@ GameRecent.propTypes = {
     spell2: PropTypes.number,
     subType: PropTypes.string,
     gameType: PropTypes.string,
+    gameMode: PropTypes.string,
     createDate: PropTypes.number,
     stats: PropTypes.shape({
       win: PropTypes.bool,
