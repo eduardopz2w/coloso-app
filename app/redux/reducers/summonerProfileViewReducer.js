@@ -28,6 +28,12 @@ const initialState = Immutable.fromJS({
     fetched: false,
     pages: [],
   },
+
+  runes: {
+    isFetching: false,
+    fetched: false,
+    pages: [],
+  },
 });
 
 function searchView(state = initialState, action) {
@@ -124,6 +130,27 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_MASTERIES_REJECTED') {
     newState = newState.mergeIn(['masteries'], {
+      fetched: false,
+      isFetching: false,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_RUNES_PENDING') {
+    newState = newState.mergeIn(['runes'], {
+      isFetching: true,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_RUNES_FULFILLED') {
+    newState = newState.mergeIn(['runes'], {
+      fetched: true,
+      isFetching: false,
+      pages: action.payload.pages,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_RUNES_REJECTED') {
+    newState = newState.mergeIn(['runes'], {
       fetched: false,
       isFetching: false,
     });
