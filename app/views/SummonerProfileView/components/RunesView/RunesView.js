@@ -5,7 +5,8 @@ import PageSelector from '../../../../components/PageSelector';
 import RunePage from './RunePage';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+  },
   headerSelector: {
     paddingLeft: 16,
     backgroundColor: 'rgba(0,0,0,0.1)',

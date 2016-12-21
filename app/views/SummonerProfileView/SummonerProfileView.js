@@ -59,8 +59,8 @@ class SummonerProfileView extends Component {
     }
 
     if (tabIndex === 4) {
-      // Masteries
-      const { isFetching, fetched } = this.props.masteries;
+      // Runes
+      const { isFetching, fetched } = this.props.runes;
 
       if (!isFetching && !fetched) {
         this.props.fetchRunes(this.props.summonerId, this.props.region);
