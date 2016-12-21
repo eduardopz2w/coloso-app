@@ -9,6 +9,7 @@ import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';
 import GamesRecentView from './components/GamesRecentView';
 import MasteriesView from './components/MasteriesView';
+import RunesView from './components/RunesView';
 
 const styles = StyleSheet.create({
   root: {
@@ -56,6 +57,15 @@ class SummonerProfileView extends Component {
         this.props.fetchMasteries(this.props.summonerId, this.props.region);
       }
     }
+
+    if (tabIndex === 4) {
+      // Masteries
+      const { isFetching, fetched } = this.props.masteries;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchRunes(this.props.summonerId, this.props.region);
+      }
+    }
   }
 
   render() {
@@ -73,6 +83,7 @@ class SummonerProfileView extends Component {
         <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
         <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
         <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
+        <RunesView tabLabel="Runas" runes={this.props.runes} />
       </ScrollableTabView>
     </View>);
   }
@@ -87,6 +98,7 @@ SummonerProfileView.propTypes = {
   fetchChampionsMastery: PropTypes.func,
   fetchGamesRecent: PropTypes.func,
   fetchMasteries: PropTypes.func,
+  fetchRunes: PropTypes.func,
   leagueEntry: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
@@ -104,6 +116,10 @@ SummonerProfileView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
+  runes: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+  }),
 };
 
 function mapStateToProps(state) {
@@ -112,6 +128,7 @@ function mapStateToProps(state) {
   const championsMastery = state.summonerProfileView.get('championsMastery').toJS();
   const gamesRecent = state.summonerProfileView.get('gamesRecent').toJS();
   const masteries = state.summonerProfileView.get('masteries').toJS();
+  const runes = state.summonerProfileView.get('runes').toJS();
 
   return {
     summonerData,
@@ -119,6 +136,7 @@ function mapStateToProps(state) {
     championsMastery,
     gamesRecent,
     masteries,
+    runes,
   };
 }
 
@@ -142,6 +160,10 @@ function mapDispatchToProps(dispatch) {
 
     fetchMasteries: (summonerId, region) => {
       dispatch(SummonerProfileViewActions.fetchMasteries(summonerId, region));
+    },
+
+    fetchRunes: (summonerId, region) => {
+      dispatch(SummonerProfileViewActions.fetchRunes(summonerId, region));
     },
   };
 }
