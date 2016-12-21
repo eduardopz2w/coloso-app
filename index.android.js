@@ -18,6 +18,7 @@ import lolcenaApp from './app/redux/reducers';
 // -------- Views --------------
 import SearchView from './app/views/SearchView';
 import SummonerProfileView from './app/views/SummonerProfileView';
+import GameCurrentView from './app/views/GameCurrentView';
 
 const logger = createLogger({
   stateTransformer: (state) => {
@@ -51,6 +52,7 @@ const lolcena = function lolcena() {
       <Scene key="root">
         <Scene key="search_view" component={SearchView} hideNavBar initial />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
+        <Scene key="game_current" component={GameCurrentView} hideNavBar />
       </Scene>
     </Router>
   </Provider>);

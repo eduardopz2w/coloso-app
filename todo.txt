@@ -1,0 +1,2 @@
+- Cambiar las imagenes a usar data dragon
+- News checker

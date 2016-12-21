@@ -4,17 +4,18 @@ const initialState = Immutable.fromJS({
   isSearching: false,
   searchError: false,
   errorMessage: null,
-  summonerFound: null,
+  summonerFoundId: null,
+  gameFound: false,
 });
 
 function searchView(state = initialState, action) {
   let newState = state;
 
-  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_PROFILE_PENDING') {
+  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_PENDING') {
     newState = newState.set('isSearching', true);
   }
 
-  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_PROFILE_REJECTED') {
+  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_REJECTED') {
     newState = newState.merge({
       isSearching: false,
       searchError: true,
@@ -22,10 +23,30 @@ function searchView(state = initialState, action) {
     });
   }
 
-  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_PROFILE_FULFILLED') {
+  if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_FULFILLED') {
     newState = newState.merge({
       isSearching: false,
-      summonerFound: action.payload.id,
+      summonerFoundId: action.payload.id,
+    });
+  }
+
+  if (action.type === 'SEARCH_VIEW/SEARCH_GAME_PENDING') {
+    newState = newState.set('isSearching', true);
+  }
+
+  if (action.type === 'SEARCH_VIEW/SEARCH_GAME_REJECTED') {
+    newState = newState.merge({
+      summonerFoundId: false,
+      isSearching: false,
+      searchError: true,
+      errorMessage: action.payload.errorMessage,
+    });
+  }
+
+  if (action.type === 'SEARCH_VIEW/SEARCH_GAME_FULFILLED') {
+    newState = newState.merge({
+      isSearching: false,
+      gameFound: true,
     });
   }
 
@@ -37,8 +58,11 @@ function searchView(state = initialState, action) {
     });
   }
 
-  if (action.type === 'SEARCH_VIEW/CLEAR_SUMMONER_FOUND') {
-    newState = newState.set('summonerFound', null);
+  if (action.type === 'SEARCH_VIEW/CLEAR_FOUND_DATA') {
+    newState = newState.merge({
+      summonerFoundId: false,
+      gameFound: false,
+    });
   }
 
   return newState;

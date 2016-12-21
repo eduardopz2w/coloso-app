@@ -156,6 +156,28 @@ function getSummonerRunes(summonerId, region) {
   });
 }
 
+function getSummonerGameCurrent(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${SERVER_URL}/${region}/game/by-summoner/${summonerId}/current`;
+
+    return axios.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        let errorMessage;
+
+        if (err.response) {
+          errorMessage = err.response.data.message;
+        } else {
+          errorMessage = 'Algo salio mal';
+        }
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName: getSummonerByName,
@@ -165,5 +187,6 @@ export default {
     gamesRecent: getSummonerGamesRecent,
     masteries: getSummonerMasteries,
     runes: getSummonerRunes,
+    gameCurrent: getSummonerGameCurrent,
   },
 };
