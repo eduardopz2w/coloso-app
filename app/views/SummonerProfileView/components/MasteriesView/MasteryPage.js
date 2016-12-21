@@ -64,7 +64,7 @@ const FEROCITY_ROWS = [
   [6161, 6162, 6164],
 ];
 
-const CUNNING_ROWS = [
+const RESOLVE_ROWS = [
   [6211, 6212],
   [6221, 6222, 6223],
   [6231, 6232],
@@ -73,7 +73,7 @@ const CUNNING_ROWS = [
   [6261, 6262, 6263],
 ];
 
-const RESOLVE_ROWS = [
+const CUNNING_ROWS = [
   [6311, 6312],
   [6321, 6322, 6323],
   [6331, 6332],
