@@ -24,11 +24,11 @@ const logger = createLogger({
     const newState = {};
 
     _.each(state, (value, key) => {
-      if (Immutable.Iterable.isIterable(state[key])) {
-        newState[key] = state[key].toJS();
+      if (Immutable.Iterable.isIterable(value)) {
+        newState[key] = value.toJS();
+      } else {
+        newState[key] = value;
       }
-
-      newState[key] = state[key];
     });
 
     return newState;
