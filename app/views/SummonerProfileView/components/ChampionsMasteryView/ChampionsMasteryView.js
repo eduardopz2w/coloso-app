@@ -31,7 +31,7 @@ class ChampionsMasteryView extends Component {
 
     return (<ListView
       style={styles.rootScrollView}
-      pageSize={9}
+      pageSize={6}
       contentContainerStyle={styles.container}
       dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
       renderRow={mastery => <ChampionMastery mastery={mastery} />}

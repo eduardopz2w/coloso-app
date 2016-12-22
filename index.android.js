@@ -13,6 +13,8 @@ import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import _ from 'lodash';
+import moment from 'moment';
+import 'moment/locale/es';
 
 import lolcenaApp from './app/redux/reducers';
 // -------- Views --------------
@@ -43,6 +45,7 @@ if (__DEV__) {
 }
 
 const store = createStore(lolcenaApp, applyMiddleware(...middlewares));
+moment.locale('es');
 
 console.disableYellowBox = true;
 

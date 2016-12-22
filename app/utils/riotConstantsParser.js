@@ -21,5 +21,28 @@ export default function (constant) {
     return 'Ranked Team 3 vs 3';
   }
 
+  if (constant === 'CLASSIC') {
+    return 'Grieta del Invocador';
+  }
+
+  if (constant === 'ARAM') {
+    return 'Abismo de los lamentos';
+  }
+
+  if (constant === 'TUTORIAL') {
+    return 'Tutorial';
+  }
+
+  if (constant === 'ONEFORALL') {
+    return 'Uno para todos';
+  }
+  if (constant === 'ASCENSION') {
+    return 'Ascension';
+  }
+
+  if (constant === 'KINGPORO') {
+    return 'La leyenda del rey poro';
+  }
+
   return constant;
 }

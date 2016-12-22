@@ -4,6 +4,9 @@ import { Grid, Col, Row } from 'react-native-easy-grid';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import _ from 'lodash';
+import colors from '../../../../utils/colors';
+import styleUtils from '../../../../utils/styleUtils';
+import riotConstantsParser from '../../../../utils/riotConstantsParser';
 
 const styles = StyleSheet.create({
   root: {
@@ -18,6 +21,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
+    borderColor: 'black',
+    borderWidth: 2,
   },
   championImageContainer: {
     position: 'relative',
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 50,
-    marginLeft: -10,
+    marginLeft: -9,
   },
   dataCol: {
     flex: 1,
@@ -51,31 +56,42 @@ const styles = StyleSheet.create({
     paddingRight: 8,
   },
   gameTitle: {
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: 'bold',
-    textAlign: 'center',
     marginBottom: 4,
+    paddingLeft: 6,
   },
   iconImage: {
     width: 15,
     height: 15,
   },
-  flexRow: {
-    flexDirection: 'row',
-  },
   itemImage: {
     width: 24,
     height: 24,
+    borderColor: 'black',
+    borderWidth: 1.5,
   },
   noItem: {
     width: 24,
     height: 24,
     backgroundColor: 'black',
   },
+  iconDataRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  iconDataCol: {
+    width: 60,
+    marginRight: 6,
+    marginLeft: 6,
+    height: 20,
+    flexDirection: 'row',
+  },
   itemsRow: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 6,
+    marginBottom: 6,
   },
   multikillContainer: {
     backgroundColor: '#d0aa49',
@@ -87,6 +103,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 12,
     fontWeight: 'bold',
+  },
+  timeAgoRow: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
   },
 });
 
@@ -109,10 +129,14 @@ class GameRecent extends PureComponent {
 
   getBorderLeftStyle() {
     const { win } = this.props.game.stats;
-    let borderColor = '#D32F2F';
+    let borderColor;
 
-    if (win) {
-      borderColor = '#4CAF50';
+    if (this.props.game.invalid) {
+      borderColor = '#BBB';
+    } else if (win) {
+      borderColor = colors.victory;
+    } else {
+      borderColor = colors.defeat;
     }
 
     return {
@@ -155,7 +179,7 @@ class GameRecent extends PureComponent {
 
   render() {
     // TODO: Parsear los gametype
-    const { championId, spell1, spell2, createDate, subType } = this.props.game;
+    const { championId, spell1, spell2, createDate, gameMode, ipEarned } = this.props.game;
     const {
       championsKilled,
       assists,
@@ -178,7 +202,7 @@ class GameRecent extends PureComponent {
     return (<View style={styles.root}>
       <View style={[styles.container, this.getBorderLeftStyle()]}>
         <View>
-          <View style={styles.flexRow}>
+          <View style={styleUtils.flexRow}>
             <View style={styles.championImageContainer}>
               <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
               <View style={styles.championLevelContainer}>
@@ -193,39 +217,36 @@ class GameRecent extends PureComponent {
           {this.renderMultiKillBadge()}
         </View>
         <View style={styles.dataCol}>
-          <Text style={styles.gameTitle}>{subType} ({this.getGameTitleLabel()})</Text>
+          <Text style={styles.gameTitle}>
+            {riotConstantsParser(gameMode)} ({this.getGameTitleLabel()})
+          </Text>
           <Grid>
-            <Row>
-              <Col style={styles.flexRow}>
+            <View style={styles.iconDataRow}>
+              <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text>{championsKilled || 0}/{assists || 0}/{numDeaths || 0}</Text>
-              </Col>
-              <Col style={styles.flexRow}>
+                <Text> {championsKilled || 0}/{assists || 0}/{numDeaths || 0}</Text>
+              </View>
+              <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
-                <Text>{minionsKilled}</Text>
-              </Col>
-              <Col style={styles.flexRow}>
+                <Text> {minionsKilled}</Text>
+              </View>
+              <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <Text>{goldEarned}</Text>
-              </Col>
-            </Row>
-            <Row>
-              <Col style={styles.flexRow}>
+                <Text> {goldEarned}</Text>
+              </View>
+              <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_ward' }} />
-                <Text>{wardPlaced || 0}</Text>
-              </Col>
-              <Col style={styles.flexRow}>
+                <Text> {wardPlaced || 0}</Text>
+              </View>
+              <View style={styles.iconDataCol}>
                 <Icon name="timer" size={15} />
-                <Text>
-                  {timePlayedMomentDuration.minutes()}:
-                  {timePlayedMomentDuration.seconds()}
-                </Text>
-              </Col>
-              <Col style={styles.flexRow}>
-                <Icon name="access-time" size={15} />
-                <Text>{moment(createDate).fromNow()}</Text>
-              </Col>
-            </Row>
+                <Text> {moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
+              </View>
+              <View style={styles.iconDataCol}>
+                <Text>IP: </Text>
+                <Text>+{ipEarned || 0}</Text>
+              </View>
+            </View>
             <Row style={styles.itemsRow}>
               {renderItemImage(item0)}
               {renderItemImage(item1)}
@@ -234,6 +255,10 @@ class GameRecent extends PureComponent {
               {renderItemImage(item4)}
               {renderItemImage(item5)}
               {renderItemImage(item6)}
+            </Row>
+            <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
+              <Icon name="access-time" size={15} />
+              <Text> {moment(createDate).fromNow()}</Text>
             </Row>
           </Grid>
         </View>
@@ -250,7 +275,9 @@ GameRecent.propTypes = {
     subType: PropTypes.string,
     gameType: PropTypes.string,
     gameMode: PropTypes.string,
+    invalid: PropTypes.string,
     createDate: PropTypes.number,
+    ipEarned: PropTypes.number,
     stats: PropTypes.shape({
       win: PropTypes.bool,
       championsKilled: PropTypes.number,
