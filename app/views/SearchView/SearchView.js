@@ -131,6 +131,7 @@ class SearchView extends Component {
 
   handlePressSearchButton() {
     Snackbar.dismiss();
+    Keyboard.dismiss();
     this.props.searchSummoner(this.state.summonerName, this.state.region);
   }
 
