@@ -1,15 +1,34 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Picker } from 'react-native';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 
-const styles = StyleSheet.create({
-  root: {
-    flexDirection: 'row',
+
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      flexDirection: 'row',
+    },
+    titleText: {
+      alignSelf: 'center',
+      fontWeight: 'bold',
+    },
+    picker: {
+      width: 200,
+    },
   },
-  titleText: {
-    alignSelf: 'center',
-    fontWeight: 'bold',
+  {
+    '@media (min-device-width: 600)': {
+      titleText: {
+        fontSize: 18,
+        marginRight: 10,
+      },
+      picker: {
+        width: 350,
+        height: 50,
+      },
+    },
   },
-});
+);
 
 class PageSelector extends Component {
   constructor(props) {
@@ -35,7 +54,7 @@ class PageSelector extends Component {
     return (<View style={styles.root}>
       <Text style={styles.titleText}>Pagina: </Text>
       <Picker
-        style={{ width: 200 }}
+        style={styles.picker}
         selectedValue={this.state.selectedValue}
         onValueChange={this.handleOnValueChange}
       >
