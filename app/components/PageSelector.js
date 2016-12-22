@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     alignSelf: 'center',
+    fontWeight: 'bold',
   },
 });
 

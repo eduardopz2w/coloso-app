@@ -3,8 +3,13 @@ import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import _ from 'lodash';
 
 const styles = StyleSheet.create({
-  root: {
+  rootScrollView: {
     paddingTop: 10,
+  },
+  root: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   masteryRow: {
     flexDirection: 'row',
@@ -15,6 +20,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 5,
+    borderColor: 'black',
+    borderWidth: 2,
   },
   masteryImageContainer: {
     width: 40,
@@ -32,7 +39,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   masteryPageContainer: {
-    width: 230,
+    minWidth: 200,
     padding: 8,
     borderRadius: 10,
     alignSelf: 'center',
@@ -130,7 +137,11 @@ class MasteryPage extends Component {
   }
 
   render() {
-    return (<ScrollView style={styles.root} ref={(mainScroll) => { this.mainScroll = mainScroll; }}>
+    return (<ScrollView
+      style={styles.rootScrollView}
+      contentContainerStyle={styles.root}
+      ref={(mainScroll) => { this.mainScroll = mainScroll; }}
+    >
       {this.renderPage(FEROCITY_ROWS, styles.ferocitypage)}
       {this.renderPage(CUNNING_ROWS, styles.cunningpage)}
       {this.renderPage(RESOLVE_ROWS, styles.resolvePage)}

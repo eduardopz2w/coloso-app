@@ -3,12 +3,13 @@ import { View, StyleSheet } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
+import colors from '../../../../utils/colors';
 
 const styles = StyleSheet.create({
   root: {},
   headerSelector: {
     paddingLeft: 16,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    backgroundColor: colors.titlesBackground,
   },
 });
 

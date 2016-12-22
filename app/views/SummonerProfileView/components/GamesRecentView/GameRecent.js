@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
-import { Grid, Col, Row } from 'react-native-easy-grid';
+import { Grid, Row } from 'react-native-easy-grid';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import _ from 'lodash';
