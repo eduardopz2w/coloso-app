@@ -26,17 +26,17 @@ class SummonerProfileView extends Component {
 
   componentWillMount() {
     this.props.fetchSummonerData(this.props.summonerId, this.props.region);
-    this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
+    this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
   }
 
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1) {
-      // LeagueEntryView
-      const { isFetching, fetched } = this.props.leagueEntry;
+      // championsMastery
+      const { isFetching, fetched } = this.props.championsMastery;
 
       if (!isFetching && !fetched) {
-        this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
+        this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
       }
     }
 
@@ -49,21 +49,22 @@ class SummonerProfileView extends Component {
       }
     }
 
+
     if (tabIndex === 3) {
-      // Masteries
-      const { isFetching, fetched } = this.props.masteries;
-
-      if (!isFetching && !fetched) {
-        this.props.fetchMasteries(this.props.summonerId, this.props.region);
-      }
-    }
-
-    if (tabIndex === 4) {
       // Runes
       const { isFetching, fetched } = this.props.runes;
 
       if (!isFetching && !fetched) {
         this.props.fetchRunes(this.props.summonerId, this.props.region);
+      }
+    }
+
+    if (tabIndex === 4) {
+      // Masteries
+      const { isFetching, fetched } = this.props.masteries;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchMasteries(this.props.summonerId, this.props.region);
       }
     }
   }
@@ -79,11 +80,11 @@ class SummonerProfileView extends Component {
         renderTabBar={() => <ScrollableTabBar />}
         onChangeTab={this.handleOnChangeTab}
       >
-        <ChampionsMasteryView tabLabel="Campeones" championsMastery={this.props.championsMastery} />
         <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
+        <ChampionsMasteryView tabLabel="Campeones" championsMastery={this.props.championsMastery} />
         <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
-        <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
         <RunesView tabLabel="Runas" runes={this.props.runes} />
+        <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
       </ScrollableTabView>
     </View>);
   }
