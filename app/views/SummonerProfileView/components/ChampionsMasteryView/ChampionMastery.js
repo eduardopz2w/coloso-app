@@ -1,42 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, Image } from 'react-native';
 import { CircularProgress } from 'react-native-circular-progress';
-
-const CHAMPION_IMAGE_SIZE = 70;
-const PROGRESS_WIDTH = 5;
-const MASTERY_SIZE = 50;
-
-const styles = StyleSheet.create({
-  root: {
-    margin: 2,
-    height: 100,
-  },
-  championImage: {
-    width: CHAMPION_IMAGE_SIZE,
-    height: CHAMPION_IMAGE_SIZE,
-    borderRadius: 50,
-    position: 'absolute',
-    top: PROGRESS_WIDTH,
-    left: PROGRESS_WIDTH,
-  },
-  imageAndProgressContainer: {
-    position: 'relative',
-  },
-  masteryImage: {
-    position: 'absolute',
-    bottom: (MASTERY_SIZE / 2.3) * -1,
-    width: MASTERY_SIZE,
-    height: MASTERY_SIZE,
-    left: ((CHAMPION_IMAGE_SIZE + (PROGRESS_WIDTH * 2)) / 2) - (MASTERY_SIZE / 2),
-  },
-  chestImage: {
-    width: 25,
-    height: 25,
-    top: 2,
-    right: 2,
-    position: 'absolute',
-  },
-});
 
 class ChampionsMastery extends Component {
   constructor(props) {
@@ -45,9 +9,47 @@ class ChampionsMastery extends Component {
     this.renderMastery = this.renderMastery.bind(this);
     this.renderProgress = this.renderProgress.bind(this);
     this.renderChestStatus = this.renderChestStatus.bind(this);
+    this.getStyles = this.getStyles.bind(this);
   }
 
-  renderMastery() {
+  getStyles() {
+    const { progressWidth, championImageSize } = this.props;
+    const masterySize = championImageSize - 20;
+
+    return {
+      root: {
+        margin: 2,
+        height: championImageSize + (masterySize / 2) + progressWidth,
+      },
+      championImage: {
+        width: championImageSize,
+        height: championImageSize,
+        borderRadius: 50,
+        position: 'absolute',
+        top: progressWidth,
+        left: progressWidth,
+      },
+      imageAndProgressContainer: {
+        position: 'relative',
+      },
+      masteryImage: {
+        position: 'absolute',
+        bottom: (masterySize / 2.3) * -1,
+        width: masterySize,
+        height: masterySize,
+        left: ((championImageSize + (progressWidth * 2)) / 2) - (masterySize / 2),
+      },
+      chestImage: {
+        width: masterySize * 0.5,
+        height: masterySize * 0.5,
+        top: 2,
+        right: 2,
+        position: 'absolute',
+      },
+    };
+  }
+
+  renderMastery(styles) {
     const { championLevel } = this.props.mastery;
     if (championLevel === 0) {
       return null;
@@ -75,8 +77,8 @@ class ChampionsMastery extends Component {
     }
 
     return (<CircularProgress
-      size={CHAMPION_IMAGE_SIZE + (PROGRESS_WIDTH * 2)}
-      width={PROGRESS_WIDTH}
+      size={this.props.championImageSize + (this.props.progressWidth * 2)}
+      width={this.props.progressWidth}
       fill={fill}
       tintColor={tintColor}
       rotation={180}
@@ -84,7 +86,7 @@ class ChampionsMastery extends Component {
     />);
   }
 
-  renderChestStatus() {
+  renderChestStatus(styles) {
     const { chestGranted } = this.props.mastery;
     let chestUri = 'chest_available';
 
@@ -97,13 +99,14 @@ class ChampionsMastery extends Component {
 
   render() {
     const { championId } = this.props.mastery;
+    const styles = this.getStyles();
 
     return (<View style={styles.root}>
       <View style={styles.imageAndProgressContainer}>
         {this.renderProgress()}
         <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
-        {this.renderMastery()}
-        {this.renderChestStatus()}
+        {this.renderMastery(styles)}
+        {this.renderChestStatus(styles)}
       </View>
 
     </View>);
@@ -120,6 +123,8 @@ ChampionsMastery.propTypes = {
     championPointsUntilNextLevel: PropTypes.number,
     chestGranted: PropTypes.bool,
   }),
+  championImageSize: PropTypes.number.isRequired,
+  progressWidth: PropTypes.number.isRequired,
 };
 
 export default ChampionsMastery;

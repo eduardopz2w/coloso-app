@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, ListView } from 'react-native';
+import { StyleSheet, ListView, Dimensions } from 'react-native';
 import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
 
@@ -25,16 +25,31 @@ class ChampionsMasteryView extends Component {
   }
   render() {
     const { isFetching, masteries } = this.props.championsMastery;
+    let championImageSize;
+    let progressWidth;
+
+    if (Dimensions.get('window').width <= 500) {
+      championImageSize = 70;
+      progressWidth = 5;
+    } else {
+      championImageSize = 100;
+      progressWidth = 7;
+    }
+
     if (isFetching) {
       return <LoadingScreen />;
     }
 
     return (<ListView
       style={styles.rootScrollView}
-      pageSize={6}
+      pageSize={3}
       contentContainerStyle={styles.container}
       dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-      renderRow={mastery => <ChampionMastery mastery={mastery} />}
+      renderRow={mastery => <ChampionMastery
+        mastery={mastery}
+        championImageSize={championImageSize}
+        progressWidth={progressWidth}
+      />}
     />);
   }
 }
