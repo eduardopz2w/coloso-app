@@ -1,111 +1,169 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, Dimensions, Image, Text } from 'react-native';
 import { Grid, Row } from 'react-native-easy-grid';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import _ from 'lodash';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 import riotConstantsParser from '../../../../utils/riotConstantsParser';
 
-const styles = StyleSheet.create({
-  root: {
-    borderBottomWidth: 1,
-    borderColor: '#BBB',
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      borderBottomWidth: 1,
+      borderColor: '#BBB',
+    },
+    container: {
+      flexDirection: 'row',
+      padding: 8,
+    },
+    championImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      borderColor: 'black',
+      borderWidth: 2,
+    },
+    championImageContainer: {
+      position: 'relative',
+      height: 50,
+      zIndex: 1,
+    },
+    championLevelContainer: {
+      width: 15,
+      height: 15,
+      justifyContent: 'center',
+      backgroundColor: 'black',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      borderRadius: 50,
+    },
+    championLevelText: {
+      color: 'white',
+      textAlign: 'center',
+      fontSize: 10,
+    },
+    spellImage: {
+      width: 25,
+      height: 25,
+      borderRadius: 50,
+      marginLeft: -9,
+    },
+    dataCol: {
+      flex: 1,
+      paddingLeft: 8,
+      paddingRight: 8,
+    },
+    gameTitle: {
+      fontSize: 13,
+      fontWeight: 'bold',
+      marginBottom: 4,
+    },
+    iconImage: {
+      width: 15,
+      height: 15,
+    },
+    itemImage: {
+      width: 24,
+      height: 24,
+      borderColor: 'black',
+      borderWidth: 1.5,
+    },
+    noItem: {
+      width: 24,
+      height: 24,
+      backgroundColor: 'black',
+    },
+    iconDataRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    iconDataCol: {
+      minWidth: 70,
+      height: 20,
+      flexDirection: 'row',
+    },
+    itemsRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      marginTop: 6,
+      marginBottom: 6,
+    },
+    multikillContainer: {
+      backgroundColor: '#d0aa49',
+      borderRadius: 50,
+      marginTop: 8,
+    },
+    multikillText: {
+      color: 'white',
+      textAlign: 'center',
+      fontSize: 12,
+      fontWeight: 'bold',
+    },
+    timeAgoRow: {
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
   },
-  container: {
-    flexDirection: 'row',
-    padding: 8,
+  {
+    '@media (min-device-width: 600)': {
+      championImage: {
+        width: 90,
+        height: 90,
+        borderWidth: 3,
+      },
+      championImageContainer: {
+        width: 90,
+        height: 90,
+      },
+      championLevelContainer: {
+        width: 25,
+        height: 25,
+      },
+      championLevelText: {
+        fontSize: 16,
+      },
+      spellImage: {
+        width: 45,
+        height: 45,
+      },
+      multikillText: {
+        fontSize: 18,
+      },
+      dataCol: {
+        paddingLeft: 16,
+        paddingRight: 16,
+      },
+      gameTitle: {
+        fontSize: 18,
+      },
+      iconImage: {
+        width: 25,
+        height: 25,
+        marginRight: 8,
+      },
+      dataText: {
+        fontSize: 19,
+      },
+      iconDataCol: {
+        minWidth: 130,
+        height: 30,
+        flexDirection: 'row',
+      },
+      noItem: {
+        width: 45,
+        height: 45,
+      },
+      itemImage: {
+        width: 45,
+        height: 45,
+      },
+    },
   },
-  championImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    borderColor: 'black',
-    borderWidth: 2,
-  },
-  championImageContainer: {
-    position: 'relative',
-    height: 50,
-    zIndex: 1,
-  },
-  championLevelContainer: {
-    width: 15,
-    height: 15,
-    justifyContent: 'center',
-    backgroundColor: 'black',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    borderRadius: 50,
-  },
-  championLevelText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 10,
-  },
-  spellImage: {
-    width: 25,
-    height: 25,
-    borderRadius: 50,
-    marginLeft: -9,
-  },
-  dataCol: {
-    flex: 1,
-    paddingLeft: 8,
-    paddingRight: 8,
-  },
-  gameTitle: {
-    fontSize: 13,
-    fontWeight: 'bold',
-    marginBottom: 4,
-  },
-  iconImage: {
-    width: 15,
-    height: 15,
-  },
-  itemImage: {
-    width: 24,
-    height: 24,
-    borderColor: 'black',
-    borderWidth: 1.5,
-  },
-  noItem: {
-    width: 24,
-    height: 24,
-    backgroundColor: 'black',
-  },
-  iconDataRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  iconDataCol: {
-    minWidth: 70,
-    height: 20,
-    flexDirection: 'row',
-  },
-  itemsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 6,
-    marginBottom: 6,
-  },
-  multikillContainer: {
-    backgroundColor: '#d0aa49',
-    borderRadius: 50,
-    marginTop: 8,
-  },
-  multikillText: {
-    color: 'white',
-    textAlign: 'center',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  timeAgoRow: {
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-});
+);
 
 function renderItemImage(itemId) {
   if (itemId) {
@@ -113,6 +171,14 @@ function renderItemImage(itemId) {
   }
 
   return <View style={styles.noItem} />;
+}
+
+function getIconSize() {
+  if (Dimensions.get('window').width >= 600) {
+    return 25;
+  }
+
+  return 15;
 }
 
 class GameRecent extends PureComponent {
@@ -221,27 +287,27 @@ class GameRecent extends PureComponent {
             <View style={styles.iconDataRow}>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text>{championsKilled || '0'}/{assists || '0'}/{numDeaths || '0'}</Text>
+                <Text style={styles.dataText}>{championsKilled || '0'}/{assists || '0'}/{numDeaths || '0'}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
-                <Text>{minionsKilled}</Text>
+                <Text style={styles.dataText}>{minionsKilled}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <Text>{goldEarned}</Text>
+                <Text style={styles.dataText}>{goldEarned}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_ward' }} />
-                <Text>{wardPlaced || 0}</Text>
+                <Text style={styles.dataText}>{wardPlaced || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
-                <Icon name="timer" size={15} />
-                <Text>{moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
+                <Icon style={styles.iconImage} name="timer" size={getIconSize()} />
+                <Text style={styles.dataText}>{moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
               </View>
               <View style={styles.iconDataCol}>
-                <Text>IP: </Text>
-                <Text>+{ipEarned || 0}</Text>
+                <Text style={styles.dataText}>IP: </Text>
+                <Text style={styles.dataText}>+{ipEarned || 0}</Text>
               </View>
             </View>
             <Row style={styles.itemsRow}>
@@ -254,8 +320,8 @@ class GameRecent extends PureComponent {
               {renderItemImage(item6)}
             </Row>
             <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
-              <Icon name="access-time" size={15} />
-              <Text> {moment(createDate).fromNow()}</Text>
+              <Icon style={styles.iconImage} name="access-time" size={getIconSize()} />
+              <Text style={styles.dataText}> {moment(createDate).fromNow()}</Text>
             </Row>
           </Grid>
         </View>
