@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { MKSpinner } from 'react-native-material-kit';
 import LeagueEntry from './LeagueEntry';
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class LeagueEntryView extends Component {
+class LeagueEntryView extends PureComponent {
   render() {
     const { isFetching, entries } = this.props.leagueEntry;
 
@@ -38,7 +38,15 @@ class LeagueEntryView extends Component {
       style={styles.roowScrollView}
       contentContainerStyle={styles.rootScrollViewContainer}
     >
-      {entries.map((leagueEntry, key) => <LeagueEntry key={key} leagueEntry={leagueEntry} />)}
+      {entries.map((leagueEntry, key) => {
+        let reverse = true;
+
+        if (key % 2 === 0) {
+          reverse = false;
+        }
+
+        return <LeagueEntry key={key} leagueEntry={leagueEntry} reverse={reverse} />;
+      })}
     </ScrollView>);
   }
 }

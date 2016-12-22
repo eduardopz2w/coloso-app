@@ -54,6 +54,9 @@ const styles = MediaQueryStyleSheet.create(
     dataText: {
       fontWeight: 'bold',
     },
+    leaguePointsText: {
+      color: 'black',
+    },
   }, {
     '@media (min-device-width: 600)': {
       tierImage: {
@@ -83,6 +86,9 @@ const styles = MediaQueryStyleSheet.create(
       },
       defeatsNumberText: {
         fontSize: 24,
+      },
+      leaguePointsText: {
+        fontSize: 20,
       },
     },
   },
@@ -115,6 +121,7 @@ class LeagueEntry extends Component {
   }
 
   render() {
+    const { reverse } = this.props;
     const { name: leagueName, queue, tier } = this.props.leagueEntry;
     let entries = {};
 
@@ -127,7 +134,7 @@ class LeagueEntry extends Component {
         <Text style={styles.title}><Text style={styleUtils.boldText}>{riotConstantsParser(queue)}:</Text> {leagueName || 'Unranked'}</Text>
       </View>
 
-      <View style={styles.entryContainer}>
+      <View style={[styles.entryContainer, reverse && { flexDirection: 'row-reverse' }]}>
         <View>
           {this.renderTierImage()}
         </View>
@@ -190,6 +197,7 @@ LeagueEntry.propTypes = {
     queue: PropTypes.string,
     entries: PropTypes.array,
   }),
+  reverse: PropTypes.bool,
 };
 
 export default LeagueEntry;
