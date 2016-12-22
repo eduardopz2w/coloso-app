@@ -27,13 +27,16 @@ class ChampionsMasteryView extends Component {
     const { isFetching, masteries } = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
+    let pageSize;
 
     if (Dimensions.get('window').width <= 500) {
       championImageSize = 70;
       progressWidth = 5;
+      pageSize = 9;
     } else {
       championImageSize = 100;
       progressWidth = 7;
+      pageSize = 16;
     }
 
     if (isFetching) {
@@ -42,7 +45,7 @@ class ChampionsMasteryView extends Component {
 
     return (<ListView
       style={styles.rootScrollView}
-      pageSize={3}
+      pageSize={pageSize}
       contentContainerStyle={styles.container}
       dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
       renderRow={mastery => <ChampionMastery
