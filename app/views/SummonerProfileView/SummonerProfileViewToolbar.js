@@ -4,13 +4,12 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../components/IconButton';
 import LoadingScreen from '../../components/LoadingScreen';
 import regionHumanize from '../../utils/regionHumanize';
+import colors from '../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {
-    backgroundImage: {
-      width: null,
-      height: null,
-      paddingBottom: 16,
+    root: {
+      backgroundColor: colors.primary,
     },
 
     summonerImage: {
@@ -18,7 +17,7 @@ const styles = MediaQueryStyleSheet.create(
       height: 80,
       borderRadius: 50,
       borderWidth: 4,
-      borderColor: '#000',
+      borderColor: colors.accent,
       marginBottom: 5,
     },
 
@@ -33,7 +32,7 @@ const styles = MediaQueryStyleSheet.create(
       position: 'absolute',
       width: 25,
       height: 25,
-      backgroundColor: 'black',
+      backgroundColor: colors.accent,
       bottom: 0,
       right: 0,
       justifyContent: 'center',
@@ -42,7 +41,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     summonerLevelText: {
-      color: 'white',
+      color: 'black',
       textAlign: 'center',
     },
 
@@ -135,10 +134,7 @@ class SummonerProfileViewToolbar extends Component {
   render() {
     const { isFetching, profileIconId, name, summonerLevel, region } = this.props.summonerData;
 
-    return (<Image
-      style={styles.backgroundImage}
-      source={require('../../assets/world_background.jpg')}
-    >
+    return (<View style={styles.root}>
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
       </View>
@@ -165,7 +161,7 @@ class SummonerProfileViewToolbar extends Component {
           </View>
         )}
       </View>
-    </Image>);
+    </View>);
   }
 
 }

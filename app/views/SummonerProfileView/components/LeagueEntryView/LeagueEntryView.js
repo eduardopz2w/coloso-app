@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
-import { MKSpinner } from 'react-native-material-kit';
+import { ScrollView, StyleSheet } from 'react-native';
 import LeagueEntry from './LeagueEntry';
+import LoadingScreen from '../../../../components/LoadingScreen';
 
 const styles = StyleSheet.create({
   spinnerContainer: {
@@ -29,9 +29,7 @@ class LeagueEntryView extends PureComponent {
     const { isFetching, entries } = this.props.leagueEntry;
 
     if (isFetching) {
-      return (<View style={styles.spinnerContainer}>
-        <MKSpinner style={styles.spinner} />
-      </View>);
+      return <LoadingScreen />;
     }
 
     return (<ScrollView

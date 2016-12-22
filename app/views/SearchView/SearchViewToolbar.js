@@ -4,8 +4,8 @@ import {
   View,
   Text
 } from 'react-native'
+import colors from '../../utils/colors';
 import IconButton from '../../components/IconButton'
-import {MKColor} from 'react-native-material-kit'
 
 class SearchViewToolbar extends Component {
   render () {
@@ -18,7 +18,7 @@ class SearchViewToolbar extends Component {
 
 const styles = StyleSheet.create({
   root: {
-    backgroundColor: MKColor.Indigo,
+    backgroundColor: colors.primary,
     height: 56,
     flexDirection: 'row',
     alignItems: 'center'

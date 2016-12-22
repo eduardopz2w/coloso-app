@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { MKSpinner } from 'react-native-material-kit';
+import colors from '../utils/colors';
 
 const styles = StyleSheet.create({
   root: {
@@ -16,7 +17,7 @@ const styles = StyleSheet.create({
 
 const LoadingScreen = function LoadingScreen() {
   return (<View style={styles.root}>
-    <MKSpinner style={styles.spinner} />
+    <MKSpinner style={styles.spinner} strokeColor={colors.spinnerColor} />
   </View>);
 };
 

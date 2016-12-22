@@ -10,6 +10,7 @@ import ChampionsMasteryView from './components/ChampionsMasteryView';
 import GamesRecentView from './components/GamesRecentView';
 import MasteriesView from './components/MasteriesView';
 import RunesView from './components/RunesView';
+import colors from '../../utils/colors';
 
 const styles = StyleSheet.create({
   root: {
@@ -78,6 +79,10 @@ class SummonerProfileView extends Component {
       <ScrollableTabView
         initialPage={0}
         renderTabBar={() => <ScrollableTabBar />}
+        tabBarBackgroundColor={colors.primary}
+        tabBarActiveTextColor={colors.accent}
+        tabBarInactiveTextColor="rgba(255,255,255,0.8)"
+        tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}
       >
         <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />

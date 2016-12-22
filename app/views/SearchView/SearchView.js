@@ -7,6 +7,7 @@ import Snackbar from 'react-native-android-snackbar';
 import _ from 'lodash';
 import SearchViewToolbar from './SearchViewToolbar';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
+import colors from '../../utils/colors';
 
 const styles = StyleSheet.create({
   root: {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   },
 
   searchButton: {
-    backgroundColor: MKColor.Indigo,
+    backgroundColor: colors.primary,
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
