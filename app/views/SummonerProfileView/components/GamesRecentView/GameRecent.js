@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: 'bold',
     marginBottom: 4,
-    paddingLeft: 6,
   },
   iconImage: {
     width: 15,
@@ -81,15 +80,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   iconDataCol: {
-    width: 60,
-    marginRight: 6,
-    marginLeft: 6,
+    minWidth: 70,
     height: 20,
     flexDirection: 'row',
   },
   itemsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
     marginTop: 6,
     marginBottom: 6,
   },
@@ -224,23 +221,23 @@ class GameRecent extends PureComponent {
             <View style={styles.iconDataRow}>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text> {championsKilled || 0}/{assists || 0}/{numDeaths || 0}</Text>
+                <Text>{championsKilled || '0'}/{assists || '0'}/{numDeaths || '0'}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
-                <Text> {minionsKilled}</Text>
+                <Text>{minionsKilled}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <Text> {goldEarned}</Text>
+                <Text>{goldEarned}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_ward' }} />
-                <Text> {wardPlaced || 0}</Text>
+                <Text>{wardPlaced || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Icon name="timer" size={15} />
-                <Text> {moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
+                <Text>{moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Text>IP: </Text>
@@ -275,7 +272,7 @@ GameRecent.propTypes = {
     subType: PropTypes.string,
     gameType: PropTypes.string,
     gameMode: PropTypes.string,
-    invalid: PropTypes.string,
+    invalid: PropTypes.bool,
     createDate: PropTypes.number,
     ipEarned: PropTypes.number,
     stats: PropTypes.shape({
