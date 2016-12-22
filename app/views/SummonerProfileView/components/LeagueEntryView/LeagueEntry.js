@@ -1,52 +1,92 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
 import riotConstantsParser from '../../../../utils/riotConstantsParser';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 
-const styles = StyleSheet.create({
-  root: {
-    backgroundColor: '#FFF',
-    borderBottomWidth: 1,
-    borderColor: 'rgba(0,0,0,0.1)',
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      backgroundColor: '#FFF',
+      borderBottomWidth: 1,
+      borderColor: 'rgba(0,0,0,0.1)',
+    },
+    title: {
+      fontSize: 14,
+    },
+    titleContainer: {
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingTop: 5,
+      paddingBottom: 5,
+      backgroundColor: colors.titlesBackground,
+    },
+    tierImage: {
+      width: 70,
+      height: 70,
+      marginRight: 8,
+    },
+    entryContainer: {
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingTop: 8,
+      paddingBottom: 16,
+      flexDirection: 'row',
+    },
+    victoriesNumberText: {
+      fontSize: 20,
+      color: colors.victory,
+      fontWeight: 'bold',
+    },
+    defeatsNumberText: {
+      fontSize: 20,
+      color: colors.defeat,
+      fontWeight: 'bold',
+    },
+    leaguePointsTitleText: {
+      textAlign: 'center',
+    },
+    miniSeriesContainer: {
+      alignItems: 'center',
+    },
+    dataText: {
+      fontWeight: 'bold',
+    },
+  }, {
+    '@media (min-device-width: 600)': {
+      tierImage: {
+        width: 100,
+        height: 100,
+      },
+      entryContainer: {
+        paddingLeft: 40,
+        paddingRight: 40,
+      },
+      miniSeriesContainer: {
+        width: 250,
+        alignSelf: 'center',
+        marginTop: 10,
+      },
+      nameText: {
+        fontSize: 18,
+      },
+      dataText: {
+        fontSize: 18,
+      },
+      title: {
+        fontSize: 18,
+      },
+      victoriesNumberText: {
+        fontSize: 24,
+      },
+      defeatsNumberText: {
+        fontSize: 24,
+      },
+    },
   },
-  title: {
-    fontSize: 14,
-  },
-  titleContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 5,
-    paddingBottom: 5,
-    backgroundColor: colors.titlesBackground,
-  },
-  tierImage: {
-    width: 70,
-    height: 70,
-    marginRight: 8,
-  },
-  entryContainer: {
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 8,
-    paddingBottom: 16,
-    flexDirection: 'row',
-  },
-  victoriesNumberText: {
-    fontSize: 20,
-    color: colors.victory,
-    fontWeight: 'bold',
-  },
-  defeatsNumberText: {
-    fontSize: 20,
-    color: colors.defeat,
-    fontWeight: 'bold',
-  },
-  leaguePointsTitleText: {
-    textAlign: 'center',
-  },
-});
+);
 
 class LeagueEntry extends Component {
   constructor(props) {
@@ -102,11 +142,11 @@ class LeagueEntry extends Component {
 
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={styleUtils.boldText}>Tier: </Text>
-              <Text style={[this.getTierTextStyle(), styleUtils.boldText]}>{tier}</Text>
+              <Text style={styles.dataText}>Tier: </Text>
+              <Text style={[this.getTierTextStyle(), styles.dataText]}>{tier}</Text>
             </Text>
             {entries.division &&
-              <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
+              <Text style={[styleUtils.flexOne, styleUtils.centerText, styles.dataText]}>
                 <Text style={styleUtils.boldText}>Division: </Text>
                 {entries.division}
               </Text>
@@ -115,24 +155,24 @@ class LeagueEntry extends Component {
 
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.victoriesTitleText, styleUtils.boldText]}>Victorias: </Text>
+              <Text style={[styles.victoriesTitleText, styles.dataText]}>Victorias: </Text>
               <Text style={styles.victoriesNumberText}>{entries.wins}</Text>
             </Text>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.defeatsTitleText, styleUtils.boldText]}>Derrotas: </Text>
+              <Text style={[styles.defeatsTitleText, styles.dataText]}>Derrotas: </Text>
               <Text style={styles.defeatsNumberText}>{entries.losses}</Text>
             </Text>
           </View>
 
           <View>
             {entries.miniSeries ? (
-              <View style={styleUtils.flexRow}>
-                <Text style={styleUtils.boldText}>Progreso: </Text>
+              <View style={[styleUtils.flexRow, styles.miniSeriesContainer]}>
+                <Text style={[styleUtils.boldText, styles.dataText]}>Progreso: </Text>
                 <RankedMiniseries progress={entries.miniSeries.progress} style={{ flex: 1 }} />
               </View>
             ) : (
               <Text style={styles.leaguePointsTitleText}>
-                <Text style={styleUtils.boldText}>League Points: </Text>
+                <Text style={styles.dataText}>League Points: </Text>
                 <Text style={styles.leaguePointsText}> {entries.leaguePoints}</Text>
               </Text>
             )}
