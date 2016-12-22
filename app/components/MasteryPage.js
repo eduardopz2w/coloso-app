@@ -10,6 +10,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
+    paddingBottom: 16,
   },
   masteryRow: {
     flexDirection: 'row',
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: 'center',
     marginBottom: 16,
+    marginRight: 16,
   },
   ferocitypage: {
     backgroundColor: 'rgba(255,0,0,0.2)',
