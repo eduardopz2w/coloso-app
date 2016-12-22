@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Image, Text } from 'react-native';
 import _ from 'lodash';
-import RankedMiniseries from '../../components/RankedMiniseries';
 import { MKButton } from 'react-native-material-kit';
+import RankedMiniseries from '../../components/RankedMiniseries';
 
 const styles = StyleSheet.create({
   root: {
@@ -131,7 +131,7 @@ class Participant extends Component {
   }
 
   render() {
-    const { championId, spell1Id, spell2Id, summonerName } = this.props.participant;
+    const { championId, spell1Id, spell2Id, summonerName, summonerId } = this.props.participant;
     const rankedSoloEntry = this.getRankedSoloEntry();
     const { division, wins, losses, leaguePoints, miniSeries } = rankedSoloEntry.entries[0];
 
@@ -178,11 +178,17 @@ class Participant extends Component {
           )}
         </View>
         <View style={styles.buttonsRow}>
-          <MKButton style={styles.roundedButton}>
+          <MKButton
+            style={styles.roundedButton}
+            onPress={() => this.props.onPressRunesButton(summonerId)}
+          >
             <Text style={styles.roundedButtonText}>RUNAS</Text>
           </MKButton>
 
-          <MKButton style={styles.roundedButton}>
+          <MKButton
+            style={styles.roundedButton}
+            onPress={() => this.props.onPressMasteriesButton(summonerId)}
+          >
             <Text style={styles.roundedButtonText}>MAESTRIAS</Text>
           </MKButton>
         </View>
@@ -193,6 +199,7 @@ class Participant extends Component {
 
 Participant.propTypes = {
   participant: PropTypes.shape({
+    summonerId: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
@@ -201,6 +208,8 @@ Participant.propTypes = {
       queue: PropTypes.string.isRequired,
     })),
   }).isRequired,
+  onPressRunesButton: PropTypes.func.isRequired,
+  onPressMasteriesButton: PropTypes.func.isRequired,
 };
 
 export default Participant;

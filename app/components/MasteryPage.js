@@ -98,7 +98,13 @@ class MasteryPage extends Component {
   }
 
   renderMasteryImage(masteryId) {
-    const indexFound = _.findIndex(this.props.page.masteries, { id: masteryId });
+    let indexFound = _.findIndex(this.props.page.masteries, { id: masteryId });
+
+    if (indexFound === -1) {
+      // Si el array usa "masteryId" en lugar de solo "id"
+      indexFound = _.findIndex(this.props.page.masteries, { masteryId });
+    }
+
     let masteryUri = `mastery_gray_${masteryId}`;
     let rank;
 
@@ -137,8 +143,9 @@ MasteryPage.propTypes = {
     name: PropTypes.string,
     masteries: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number,
-      rank: PropTypes.number,
-    })),
+      masteryId: PropTypes.number,
+      rank: PropTypes.number.isRequired,
+    })).isRequired,
   }),
 };
 

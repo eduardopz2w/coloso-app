@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 class BannedChampions extends Component {
   render() {
     const champions = this.props.champions;
-    console.log(champions);
+
     return (<View style={styles.root}>
       <Text style={styles.text}>Baneos:</Text>
       {champions.map((champion, key) => <Image

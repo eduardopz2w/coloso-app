@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
-import MasteryPage from './MasteryPage';
+import MasteryPage from '../../../../components/MasteryPage';
 
 const styles = StyleSheet.create({
   root: {},

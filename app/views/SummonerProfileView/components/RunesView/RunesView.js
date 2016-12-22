@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
-import RunePage from './RunePage';
+import RunePage from '../../../../components/RunePage';
 
 const styles = StyleSheet.create({
   root: {

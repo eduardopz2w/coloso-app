@@ -17,6 +17,8 @@ class TeamTab extends Component {
         {participants.map((participant, key) => <Participant
           key={key}
           participant={participant}
+          onPressRunesButton={this.props.onPressRunesButton}
+          onPressMasteriesButton={this.props.onPressMasteriesButton}
         />)}
       </ScrollView>
     </View>);
@@ -26,6 +28,8 @@ class TeamTab extends Component {
 TeamTab.propTypes = {
   participants: PropTypes.arrayOf(PropTypes.shape({})),
   bannedChampions: PropTypes.arrayOf(PropTypes.shape({})),
+  onPressRunesButton: PropTypes.func.isRequired,
+  onPressMasteriesButton: PropTypes.func.isRequired,
 };
 
 export default TeamTab;

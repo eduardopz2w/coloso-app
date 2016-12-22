@@ -1,9 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Dimensions, BackAndroid } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { connect } from 'react-redux';
+import Modal from 'react-native-modalbox';
 import _ from 'lodash';
 import TeamTab from './TeamTab';
+import RunePage from '../../components/RunePage';
+import MasteryPage from '../../components/MasteryPage';
 
 const styles = StyleSheet.create({
   root: {
@@ -16,8 +19,25 @@ class GameCurrentView extends Component {
     super(props);
 
     this.getTeamData = this.getTeamData.bind(this);
+    this.getSummonerRunes = this.getSummonerRunes.bind(this);
+    this.getSummonerMasteries = this.getSummonerMasteries.bind(this);
+    this.handleOnPressRunesButton = this.handleOnPressRunesButton.bind(this);
+    this.handleOnPressMasteriesButton = this.handleOnPressMasteriesButton.bind(this);
+    this.getModalStyle = this.getModalStyle.bind(this);
+    this.state = {
+      summonerSelectedId: null,
+      modalType: null,
+      modalIsOpen: false,
+    };
   }
 
+  componentWillMount() {
+    this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
+  }
+
+  componentWillUnmount() {
+    this.backAndroidListener.remove();
+  }
   getTeamData(teamId) {
     const { gameData } = this.props;
     const participants = _.filter(gameData.participants, { teamId });
@@ -29,16 +49,90 @@ class GameCurrentView extends Component {
     };
   }
 
+  getSummonerRunes(summonerId) {
+    return _.find(this.props.gameData.participants, { summonerId }).runes;
+  }
+
+  getSummonerMasteries(summonerId) {
+    return _.find(this.props.gameData.participants, { summonerId }).masteries;
+  }
+
+
+  getModalStyle() {
+    const modalStyle = {
+      width: 300,
+      height: 280,
+    };
+
+    if (this.state.modalType === 'MASTERIES') {
+      modalStyle.height = Dimensions.get('window').height * 0.8;
+    }
+
+    return modalStyle;
+  }
+
+  handleOnPressRunesButton(summonerId) {
+    this.setState({ summonerSelectedId: summonerId, modalType: 'RUNES' });
+    this.modal.open();
+  }
+
+  handleOnPressMasteriesButton(summonerId) {
+    this.setState({ summonerSelectedId: summonerId, modalType: 'MASTERIES' });
+    this.modal.open();
+  }
+
+  handleOnBackAndroid() {
+    if (this.state.modalIsOpen) {
+      this.modal.close();
+      return true;
+    }
+
+    return false;
+  }
+
   render() {
+    let modalContent;
+
+    if (this.state.modalType === 'RUNES') {
+      modalContent = (<RunePage
+        page={{ runes: this.getSummonerRunes(this.state.summonerSelectedId) }}
+      />);
+    } else if (this.state.modalType === 'MASTERIES') {
+      modalContent = (<MasteryPage
+        page={{ masteries: this.getSummonerMasteries(this.state.summonerSelectedId) }}
+      />);
+    }
+
     return (<View style={styles.root}>
       <ScrollableTabView
         initialPage={0}
         prerenderingSiblingsNumber={2}
         renderTabBar={() => <DefaultTabBar />}
       >
-        <TeamTab tabLabel="Blue Team" {...this.getTeamData(100)} />
-        <TeamTab tabLabel="Red Team" {...this.getTeamData(200)} />
+        <TeamTab
+          tabLabel="Blue Team"
+          {...this.getTeamData(100)}
+          onPressRunesButton={this.handleOnPressRunesButton}
+          onPressMasteriesButton={this.handleOnPressMasteriesButton}
+        />
+
+        <TeamTab
+          tabLabel="Red Team"
+          {...this.getTeamData(200)}
+          onPressRunesButton={this.handleOnPressRunesButton}
+          onPressMasteriesButton={this.handleOnPressMasteriesButton}
+        />
       </ScrollableTabView>
+      <Modal
+        position="center"
+        style={this.getModalStyle()}
+        swipeToClose={false}
+        ref={(modal) => { this.modal = modal; }}
+        onOpened={() => this.setState({ modalIsOpen: true })}
+        onClosed={() => this.setState({ modalIsOpen: false })}
+      >
+        {modalContent}
+      </Modal>
     </View>);
   }
 }

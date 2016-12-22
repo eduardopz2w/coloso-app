@@ -69,7 +69,7 @@ class RunePage extends Component {
 
 RunePage.propTypes = {
   page: PropTypes.shape({
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     runes: PropTypes.arrayOf(PropTypes.shape({
       runeId: PropTypes.number.isRequired,
       count: PropTypes.number.isRequired,
