@@ -14,6 +14,9 @@ import regionHumanize from '../../utils/regionHumanize';
 
 // TODO: Agregar busquedas recientes
 
+const PROFILE_SEARCH = 'PROFILE_SEARCH';
+const GAME_SEARCH = 'GAME_SEARCH';
+
 const styles = MediaQueryStyleSheet.create(
   {
     root: {
@@ -98,10 +101,9 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: 'Miyunna',
-      region: 'br',
-      keyboardOpen: false,
-      searchType: 'PROFILE',
+      summonerName: null,
+      region: 'na',
+      searchType: PROFILE_SEARCH,
       visibleHeight: Dimensions.get('window').height,
     };
 
@@ -122,27 +124,19 @@ class SearchView extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.searchError) {
-      Snackbar.show(nextProps.errorMessage, { duration: Snackbar.UNTIL_CLICK });
+      Snackbar.show(nextProps.errorMessage, { duration: Snackbar.LONG });
       return this.props.clearSearchError();
     }
 
-    if (this.state.searchType === 'PROFILE') {
-      if (_.isNumber(nextProps.summonerFoundId)) {
-        Actions.summoner_profile_view({
-          summonerId: nextProps.summonerFoundId,
-          region: this.state.region,
-        });
-        this.props.clearFoundData();
-      }
-    } else if (this.state.searchType === 'GAME') {
-      if (_.isNumber(nextProps.summonerFoundId)) {
-        if (!nextProps.isSearching && !nextProps.gameFound) {
-          this.props.searchGame(nextProps.summonerFoundId, this.state.region);
-        } else if (nextProps.gameFound) {
-          this.props.clearFoundData();
-          Actions.game_current();
-        }
-      }
+    if (_.isNumber(nextProps.summonerFoundId)) {
+      Actions.summoner_profile_view({
+        summonerId: nextProps.summonerFoundId,
+        region: nextProps.summonerFoundRegion,
+      });
+      this.props.clearFoundData();
+    } else if (nextProps.gameFound) {
+      this.props.clearFoundData();
+      Actions.game_current();
     }
 
     return null;
@@ -200,7 +194,12 @@ class SearchView extends Component {
   handlePressSearchButton() {
     Snackbar.dismiss();
     Keyboard.dismiss();
-    this.props.searchSummoner(this.state.summonerName, this.state.region);
+
+    if (this.state.searchType === PROFILE_SEARCH) {
+      this.props.searchSummoner(this.state.summonerName, this.state.region);
+    } else if (this.state.searchType === GAME_SEARCH) {
+      this.props.searchGame(this.state.summonerName, this.state.region);
+    }
   }
 
   handleKeyboardDidHide() {
@@ -211,9 +210,9 @@ class SearchView extends Component {
 
   handleOnChekedChangeProfileButton({ checked }) {
     if (checked) {
-      this.setState({ searchType: 'PROFILE' });
+      this.setState({ searchType: PROFILE_SEARCH });
     } else {
-      this.setState({ searchType: 'GAME' });
+      this.setState({ searchType: GAME_SEARCH });
     }
   }
 
@@ -316,6 +315,7 @@ SearchView.propTypes = {
   clearSearchError: PropTypes.func,
   clearFoundData: PropTypes.func,
   summonerFoundId: PropTypes.any,
+  summonerFoundRegion: PropTypes.any,
   gameFound: PropTypes.bool.isRequired,
   searchGame: PropTypes.func,
 };
@@ -328,6 +328,7 @@ function mapStateToProps(state) {
     searchError: searchViewState.get('searchError'),
     errorMessage: searchViewState.get('errorMessage'),
     summonerFoundId: searchViewState.get('summonerFoundId'),
+    summonerFoundRegion: searchViewState.get('summonerFoundRegion'),
     gameFound: searchViewState.get('gameFound'),
   };
 }

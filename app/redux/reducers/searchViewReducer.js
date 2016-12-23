@@ -5,6 +5,7 @@ const initialState = Immutable.fromJS({
   searchError: false,
   errorMessage: null,
   summonerFoundId: null,
+  summonerFoundRegion: null,
   gameFound: false,
 });
 
@@ -27,6 +28,7 @@ function searchView(state = initialState, action) {
     newState = newState.merge({
       isSearching: false,
       summonerFoundId: action.payload.id,
+      summonerFoundRegion: action.payload.region,
     });
   }
 
@@ -34,19 +36,18 @@ function searchView(state = initialState, action) {
     newState = newState.set('isSearching', true);
   }
 
-  if (action.type === 'SEARCH_VIEW/SEARCH_GAME_REJECTED') {
-    newState = newState.merge({
-      summonerFoundId: false,
-      isSearching: false,
-      searchError: true,
-      errorMessage: action.payload.errorMessage,
-    });
-  }
-
   if (action.type === 'SEARCH_VIEW/SEARCH_GAME_FULFILLED') {
     newState = newState.merge({
       isSearching: false,
       gameFound: true,
+    });
+  }
+
+  if (action.type === 'SEARCH_VIEW/SEARCH_GAME_REJECTED') {
+    newState = newState.merge({
+      isSearching: false,
+      searchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
