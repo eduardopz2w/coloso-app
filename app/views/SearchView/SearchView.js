@@ -1,65 +1,95 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, View, Image, Picker, Text, Keyboard } from 'react-native';
+import { StyleSheet, View, Image, Picker, Text, Keyboard, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { MKTextField, MKButton, MKColor, MKSpinner, MKRadioButton } from 'react-native-material-kit';
+import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
+import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import { Actions } from 'react-native-router-flux';
 import Snackbar from 'react-native-android-snackbar';
 import _ from 'lodash';
 import SearchViewToolbar from './SearchViewToolbar';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import colors from '../../utils/colors';
+import styleUtils from '../../utils/styleUtils';
+import regionHumanize from '../../utils/regionHumanize';
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      flex: 1,
+    },
 
-  container: {
-    padding: 16,
-    flex: 1,
-    justifyContent: 'space-around',
-  },
+    container: {
+      padding: 16,
+      flex: 1,
+      justifyContent: 'space-around',
+    },
 
-  homeImage: {
-    width: null,
-    height: 200,
-    borderRadius: 16,
-  },
+    label: {
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
 
-  inputsRow: {
-    flexDirection: 'row',
-  },
+    formContainer: {
+      overflow: 'scroll',
+    },
 
-  inputName: {
-    flex: 1,
-    height: 47,
-  },
+    formGroup: {
+      marginBottom: 8,
+    },
 
-  inputRegion: {
-    width: 80,
-    height: 50,
-  },
+    inputName: {
+      flex: 1,
+      height: 47,
+      marginLeft: 10,
+    },
 
-  searchButton: {
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: 40,
-  },
+    radioGroup: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  searchButtonText: {
-    color: '#FFFFFF',
-  },
+    inputRegion: {
+      flex: 1,
+      height: 50,
+    },
 
-  spinnerContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    searchButton: {
+      backgroundColor: colors.primary,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 40,
+    },
 
-  flexRow: {
-    flexDirection: 'row',
+    searchButtonText: {
+      color: '#FFFFFF',
+    },
+
+    spinnerContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   },
-});
+  {
+    '@media (min-device-width: 600)': {
+      formGroup: {
+        marginBottom: 16,
+      },
+      container: {
+        paddingLeft: 40,
+        paddingRight: 40,
+      },
+      inputName: {
+        marginLeft: 16,
+      },
+      inputRegion: {
+        marginLeft: 8
+      },
+      radioGroup: {
+        flex: 1,
+      },
+    },
+  },
+);
 
 class SearchView extends Component {
   constructor(props) {
@@ -70,13 +100,16 @@ class SearchView extends Component {
       region: 'br',
       keyboardOpen: false,
       searchType: 'PROFILE',
+      visibleHeight: Dimensions.get('window').height,
     };
 
     this.handlePressSearchButton = this.handlePressSearchButton.bind(this);
     this.handleTextChangeSummonerName = this.handleTextChangeSummonerName.bind(this);
     this.handleChangeRegion = this.handleChangeRegion.bind(this);
     this.handleOnChekedChangeProfileButton = this.handleOnChekedChangeProfileButton.bind(this);
-    this.renderImage = this.renderImage.bind(this);
+    this.getHomeImageStyle = this.getHomeImageStyle.bind(this);
+    this.renderButton = this.renderButton.bind(this);
+    this.renderSpinner = this.renderSpinner.bind(this);
     this.radioGroup = new MKRadioButton.Group();
   }
 
@@ -118,8 +151,12 @@ class SearchView extends Component {
     this.keyboardDidHideListener.remove();
   }
 
-  handleKeyboardDidShow() {
-    this.setState({ keyboardOpen: true });
+  handleKeyboardDidShow(e) {
+    const newSize = Dimensions.get('window').height - e.endCoordinates.height;
+
+    this.setState({
+      visibleHeight: newSize,
+    });
   }
 
   handleChangeRegion(newRegion) {
@@ -137,7 +174,9 @@ class SearchView extends Component {
   }
 
   handleKeyboardDidHide() {
-    this.setState({ keyboardOpen: false });
+    this.setState({
+      visibleHeight: Dimensions.get('window').height,
+    });
   }
 
   handleOnChekedChangeProfileButton({ checked }) {
@@ -148,74 +187,122 @@ class SearchView extends Component {
     }
   }
 
-  renderImage() {
-    if (!this.state.keyboardOpen) {
-      return (<Image
-        style={styles.homeImage}
-        source={require('../../assets/poro_wallpaper.jpg')}
-      />);
+  getHomeImageStyle() {
+    const { width: deviceWidth } = Dimensions.get('window');
+    let imageWidth;
+    let imageHeight;
+    const acceptableHeight = this.state.visibleHeight * 0.4;
+    let acceptableWidth = deviceWidth - 32;
+
+    if (deviceWidth >= 599) {
+      acceptableWidth = deviceWidth - 80;
+    }
+
+    // Si no hay espacio suficiente
+    if (this.state.visibleHeight < 350) {
+      return { width: 0, height: 0 };
+    }
+
+    // Definimos la imagen con respecto al alto acceptableHeigh
+    imageHeight = acceptableHeight;
+    imageWidth = imageHeight * 2;
+
+    if (imageWidth > acceptableWidth) {
+      const widthDiff = imageWidth - acceptableWidth;
+      const resizePercent = widthDiff / imageWidth;
+
+      imageWidth -= imageWidth * resizePercent;
+      imageHeight -= imageHeight * resizePercent;
+    }
+
+    return {
+      width: imageWidth,
+      height: imageHeight,
+      alignSelf: 'center',
+      borderRadius: 5,
+    };
+  }
+
+  renderSpinner() {
+    if (this.props.isSearching) {
+      return (<View style={styles.spinnerContainer}>
+        <MKSpinner strokeColor={colors.spinnerColor} />
+      </View>);
     }
 
     return null;
   }
 
+  renderButton() {
+    if (!this.props.isSearching && this.state.visibleHeight > 300) {
+      return (<MKButton
+        style={styles.searchButton}
+        onPress={this.handlePressSearchButton}
+      >
+        <Text style={styles.searchButtonText}>BUSCAR INVOCADOR</Text>
+      </MKButton>);
+    }
+
+    return null;
+  }
   render() {
-    const { summonerName, region } = this.state;
-    const { isSearching } = this.props;
+    const { summonerName } = this.state;
+    const regions = ['lan', 'las', 'na', 'br'];
 
     return (<View style={styles.root}>
       <SearchViewToolbar />
       <View style={styles.container}>
-        {this.renderImage()}
+        <Image
+          style={this.getHomeImageStyle()}
+          source={require('../../assets/poro_wallpaper.jpg')}
+        />
 
-        <View style={styles.inputsRow}>
-          <MKTextField
-            style={styles.inputName}
-            value={summonerName}
-            onTextChange={this.handleTextChangeSummonerName}
-            placeholder="Nombre de invocador"
-          />
-
-          <Picker
-            style={styles.inputRegion}
-            onValueChange={this.handleChangeRegion}
-            selectedValue={region}
-          >
-            <Picker.Item label="LAN" value="lan" />
-            <Picker.Item label="LAS" value="las" />
-            <Picker.Item label="NA" value="na" />
-            <Picker.Item label="BR" value="br" />
-          </Picker>
-        </View>
-
-        <View style={styles.flexRow}>
-          <View style={[styles.flexRow, { flex: 1, alignItems: 'center' }]}>
-            <MKRadioButton
-              group={this.radioGroup}
-              onCheckedChange={this.handleOnChekedChangeProfileButton}
-              checked
+        <View style={styles.formContainer}>
+          <View style={styles.formGroup}>
+            <MediaQuery minDeviceWidth={600}>
+              <Text style={styles.label}>Nombre de Invocador: </Text>
+            </MediaQuery>
+            <MKTextField
+              style={styles.inputName}
+              value={summonerName}
+              onTextChange={this.handleTextChangeSummonerName}
+              placeholder="Nombre de invocador"
             />
-            <Text>Perfil de Invocador</Text>
           </View>
-          <View style={[styles.flexRow, { flex: 1, alignItems: 'center' }]}>
-            <MKRadioButton group={this.radioGroup} />
-            <Text>Juego Actual</Text>
+          <View style={styles.formGroup}>
+            <MediaQuery minDeviceWidth={600}>
+              <Text style={styles.label}>Region: </Text>
+            </MediaQuery>
+            <Picker
+              style={styles.inputRegion}
+              onValueChange={this.handleChangeRegion}
+              selectedValue={this.state.region}
+            >
+              {regions.map((region, index) => <Picker.Item
+                key={index}
+                label={regionHumanize(region)}
+                value={region}
+              />)}
+            </Picker>
+          </View>
+          <View style={styleUtils.flexRow}>
+            <View style={styles.radioGroup}>
+              <MKRadioButton
+                group={this.radioGroup}
+                onCheckedChange={this.handleOnChekedChangeProfileButton}
+                checked
+              />
+              <Text>Perfil de invocador</Text>
+            </View>
+            <View style={styles.radioGroup}>
+              <MKRadioButton group={this.radioGroup} />
+              <Text>Juego actual</Text>
+            </View>
           </View>
         </View>
 
-        {isSearching ? (
-          <View style={styles.spinnerContainer}>
-            <MKSpinner />
-          </View>
-        ) : (
-          <MKButton
-            style={styles.searchButton}
-            onPress={this.handlePressSearchButton}
-          >
-            <Text style={styles.searchButtonText}>BUSCAR INVOCADOR</Text>
-          </MKButton>
-        )}
-
+        {this.renderSpinner()}
+        {this.renderButton()}
       </View>
     </View>);
   }

@@ -5,6 +5,10 @@ function regionHumanize(region) {
     return 'Norte America';
   } else if (region === 'lan') {
     return 'Latinoamerica Norte';
+  } else if (region === 'las') {
+    return 'Latinoamerica Sur';
+  } else if (region === 'br') {
+    return 'Brasil';
   }
 
   return region;
