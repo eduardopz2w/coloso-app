@@ -85,7 +85,11 @@ class SummonerProfileView extends Component {
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}
       >
-        <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
+        <LeagueEntryView
+          tabLabel="Clasificatoria"
+          leagueEntry={this.props.leagueEntry}
+          onPressRetryButton={() => this.props.fetchLeagueEntry()}
+        />
         <ChampionsMasteryView
           tabLabel="Campeones"
           championsMastery={this.props.championsMastery}
@@ -96,8 +100,16 @@ class SummonerProfileView extends Component {
           gamesRecent={this.props.gamesRecent}
           onPressRetryButton={() => this.props.fetchGamesRecent()}
         />
-        <RunesView tabLabel="Runas" runes={this.props.runes} />
-        <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
+        <RunesView
+          tabLabel="Runas"
+          runes={this.props.runes}
+          onPressRetryButton={() => this.props.fetchRunes()}
+        />
+        <MasteriesView
+          tabLabel="Maestrias"
+          masteries={this.props.masteries}
+          onPressRetryButton={() => this.props.fetchMasteries()}
+        />
       </ScrollableTabView>
     </View>);
   }

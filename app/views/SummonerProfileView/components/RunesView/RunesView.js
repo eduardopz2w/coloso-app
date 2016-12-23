@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
+import ErrorScreen from '../../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {
@@ -22,10 +23,18 @@ class RunesView extends Component {
     };
   }
   render() {
-    const { isFetching, fetched, pages } = this.props.runes;
+    const { isFetching, fetchError, pages } = this.props.runes;
 
-    if (isFetching || !fetched) {
+    if (isFetching) {
       return <LoadingScreen />;
+    }
+
+    if (fetchError) {
+      return (<ErrorScreen
+        message="Error al cargar las runas"
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />);
     }
 
     return (<View style={styles.root}>
@@ -44,8 +53,10 @@ RunesView.propTypes = {
   runes: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
+    fetchError: PropTypes.bool,
     pages: PropTypes.array,
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default RunesView;

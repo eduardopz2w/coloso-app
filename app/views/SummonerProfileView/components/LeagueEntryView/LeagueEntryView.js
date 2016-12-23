@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import LeagueEntry from './LeagueEntry';
 import LoadingScreen from '../../../../components/LoadingScreen';
+import ErrorScreen from '../../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   spinnerContainer: {
@@ -26,10 +27,18 @@ const styles = StyleSheet.create({
 
 class LeagueEntryView extends PureComponent {
   render() {
-    const { isFetching, entries } = this.props.leagueEntry;
+    const { isFetching, fetchError, entries } = this.props.leagueEntry;
 
     if (isFetching) {
       return <LoadingScreen />;
+    }
+
+    if (fetchError) {
+      return (<ErrorScreen
+        message="Error al cargar la informacion"
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />);
     }
 
     return (<ScrollView
@@ -52,8 +61,10 @@ class LeagueEntryView extends PureComponent {
 LeagueEntryView.propTypes = {
   leagueEntry: PropTypes.shape({
     isFetching: PropTypes.bool,
+    fetchError: PropTypes.bool,
     entries: PropTypes.array,
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default LeagueEntryView;

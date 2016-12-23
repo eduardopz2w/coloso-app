@@ -8,6 +8,7 @@ const initialState = Immutable.fromJS({
   leagueEntry: {
     isFetching: false,
     fetched: false,
+    fetchError: false,
     entries: [],
   },
 
@@ -28,12 +29,14 @@ const initialState = Immutable.fromJS({
   masteries: {
     isFetching: false,
     fetched: false,
+    fetchError: false,
     pages: [],
   },
 
   runes: {
     isFetching: false,
     fetched: false,
+    fetchError: false,
     pages: [],
   },
 });
@@ -63,6 +66,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['leagueEntry'], {
       fetched: true,
       isFetching: false,
+      fetchError: false,
       entries: action.payload.entries,
     });
   }
@@ -71,6 +75,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['leagueEntry'], {
       fetched: false,
       isFetching: false,
+      fetchError: true,
     });
   }
 
@@ -130,6 +135,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['masteries'], {
       fetched: true,
       isFetching: false,
+      fetchError: false,
       pages: action.payload.pages,
     });
   }
@@ -138,6 +144,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['masteries'], {
       fetched: false,
       isFetching: false,
+      fetchError: true,
     });
   }
 
@@ -151,6 +158,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['runes'], {
       fetched: true,
       isFetching: false,
+      fetchError: false,
       pages: action.payload.pages,
     });
   }
@@ -159,6 +167,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['runes'], {
       fetched: false,
       isFetching: false,
+      fetchError: true,
     });
   }
 

@@ -4,6 +4,7 @@ import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
 import colors from '../../../../utils/colors';
+import ErrorScreen from '../../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {},
@@ -22,10 +23,18 @@ class MasteriesView extends Component {
     };
   }
   render() {
-    const { isFetching, fetched, pages } = this.props.masteries;
+    const { isFetching, fetchError, pages } = this.props.masteries;
 
-    if (isFetching || !fetched) {
+    if (isFetching) {
       return <LoadingScreen />;
+    }
+
+    if (fetchError) {
+      return (<ErrorScreen
+        message="Error al cargar las maestrias"
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />);
     }
 
     return (<View style={styles.root}>
@@ -44,8 +53,10 @@ MasteriesView.propTypes = {
   masteries: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
+    fetchError: PropTypes.bool,
     pages: PropTypes.array,
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default MasteriesView;
