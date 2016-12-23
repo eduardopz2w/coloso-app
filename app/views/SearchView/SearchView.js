@@ -9,6 +9,7 @@ import Snackbar from 'react-native-android-snackbar';
 import _ from 'lodash';
 import SearchViewToolbar from './SearchViewToolbar';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
+import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import colors from '../../utils/colors';
 import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
@@ -122,6 +123,7 @@ class SearchView extends Component {
   }
 
   componentWillMount() {
+    this.props.loadSearchHistory();
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this));
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this));
   }
@@ -198,6 +200,7 @@ class SearchView extends Component {
   handlePressSearchButton() {
     Snackbar.dismiss();
     Keyboard.dismiss();
+    this.props.addSearchEntry(this.state.summonerName, this.state.region);
 
     if (this.state.searchType === PROFILE_SEARCH) {
       this.props.searchSummoner(this.state.summonerName, this.state.region);
@@ -338,6 +341,8 @@ SearchView.propTypes = {
   gameFound: PropTypes.bool.isRequired,
   searchGame: PropTypes.func,
   searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({})),
+  loadSearchHistory: PropTypes.func.isRequired,
+  addSearchEntry: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -370,6 +375,14 @@ function mapDispatchToProps(dispatch) {
 
     clearFoundData: () => {
       dispatch(SearchViewActions.clearFoundData());
+    },
+
+    loadSearchHistory: () => {
+      dispatch(SearchHistoryActions.loadEntries());
+    },
+
+    addSearchEntry: (summonerName, region) => {
+      dispatch(SearchHistoryActions.addEntry(summonerName, region));
     },
   };
 }

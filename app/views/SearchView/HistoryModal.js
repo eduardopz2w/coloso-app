@@ -1,12 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableWithoutFeedback, Dimensions } from 'react-native';
 import Modal from 'react-native-modalbox';
-import styleUtils from '../../utils/styleUtils';
 import colors from '../../utils/colors';
 
 const styles = StyleSheet.create({
   root: {
-    height: 250,
     padding: 18,
   },
   title: {
@@ -36,6 +34,12 @@ const styles = StyleSheet.create({
   },
 });
 
+function getMaxHeight() {
+  return {
+    maxHeight: Dimensions.get('window').height * 0.50,
+  };
+}
+
 class HistoryModal extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +62,7 @@ class HistoryModal extends Component {
   render() {
     return (<Modal
       ref={(modal) => { this.modal = modal; }}
-      style={[styles.root, this.props.style]}
+      style={[styles.root, this.props.style, getMaxHeight()]}
       position="bottom"
     >
       <Text style={styles.title}>Busqueda rapida</Text>

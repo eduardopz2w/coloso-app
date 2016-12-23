@@ -29,7 +29,7 @@ class SearchViewToolbar extends Component {
     return <View style={[styles.root, this.props.style]}>
       <IconButton iconName="menu" />
       <Text style={styles.title}>Buscar</Text>
-      <IconButton iconName="menu" onPress={this.props.onPressHistoryButton} />
+      <IconButton iconName="history" onPress={this.props.onPressHistoryButton} />
     </View>
   }
 }

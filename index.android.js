@@ -22,6 +22,7 @@ import lolcenaApp from './app/redux/reducers';
 import SearchView from './app/views/SearchView';
 import SummonerProfileView from './app/views/SummonerProfileView';
 import GameCurrentView from './app/views/GameCurrentView';
+import storage from './app/utils/storage';
 
 const logger = createLogger({
   stateTransformer: (state) => {
@@ -40,6 +41,7 @@ const logger = createLogger({
 });
 
 let middlewares = [thunk, promiseMiddleware()];
+global.storage = storage;
 
 if (__DEV__) {
   middlewares = [...middlewares, logger];
