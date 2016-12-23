@@ -26,8 +26,8 @@ class SummonerProfileView extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchSummonerData(this.props.summonerId, this.props.region);
-    this.props.fetchLeagueEntry(this.props.summonerId, this.props.region);
+    this.props.fetchSummonerData();
+    this.props.fetchLeagueEntry();
   }
 
 
@@ -37,7 +37,7 @@ class SummonerProfileView extends Component {
       const { isFetching, fetched } = this.props.championsMastery;
 
       if (!isFetching && !fetched) {
-        this.props.fetchChampionsMastery(this.props.summonerId, this.props.region);
+        this.props.fetchChampionsMastery();
       }
     }
 
@@ -46,7 +46,7 @@ class SummonerProfileView extends Component {
       const { isFetching, fetched } = this.props.gamesRecent;
 
       if (!isFetching && !fetched) {
-        this.props.fetchGamesRecent(this.props.summonerId, this.props.region);
+        this.props.fetchGamesRecent();
       }
     }
 
@@ -56,7 +56,7 @@ class SummonerProfileView extends Component {
       const { isFetching, fetched } = this.props.runes;
 
       if (!isFetching && !fetched) {
-        this.props.fetchRunes(this.props.summonerId, this.props.region);
+        this.props.fetchRunes();
       }
     }
 
@@ -65,7 +65,7 @@ class SummonerProfileView extends Component {
       const { isFetching, fetched } = this.props.masteries;
 
       if (!isFetching && !fetched) {
-        this.props.fetchMasteries(this.props.summonerId, this.props.region);
+        this.props.fetchMasteries();
       }
     }
   }
@@ -86,7 +86,11 @@ class SummonerProfileView extends Component {
         onChangeTab={this.handleOnChangeTab}
       >
         <LeagueEntryView tabLabel="Clasificatoria" leagueEntry={this.props.leagueEntry} />
-        <ChampionsMasteryView tabLabel="Campeones" championsMastery={this.props.championsMastery} />
+        <ChampionsMasteryView
+          tabLabel="Campeones"
+          championsMastery={this.props.championsMastery}
+          onPressRetryButton={() => this.props.fetchChampionsMastery()}
+        />
         <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
         <RunesView tabLabel="Runas" runes={this.props.runes} />
         <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
@@ -146,29 +150,31 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, ownProps) {
+  const { summonerId, region } = ownProps;
+
   return {
-    fetchSummonerData: (summonerId, region) => {
+    fetchSummonerData: () => {
       dispatch(SummonerProfileViewActions.fetchSummonerData(summonerId, region));
     },
 
-    fetchLeagueEntry: (summonerId, region) => {
+    fetchLeagueEntry: () => {
       dispatch(SummonerProfileViewActions.fetchLeagueEntry(summonerId, region));
     },
 
-    fetchChampionsMastery: (summonerId, region) => {
+    fetchChampionsMastery: () => {
       dispatch(SummonerProfileViewActions.fetchChampionsMastery(summonerId, region));
     },
 
-    fetchGamesRecent: (summonerId, region) => {
+    fetchGamesRecent: () => {
       dispatch(SummonerProfileViewActions.fetchGamesRecent(summonerId, region));
     },
 
-    fetchMasteries: (summonerId, region) => {
+    fetchMasteries: () => {
       dispatch(SummonerProfileViewActions.fetchMasteries(summonerId, region));
     },
 
-    fetchRunes: (summonerId, region) => {
+    fetchRunes: () => {
       dispatch(SummonerProfileViewActions.fetchRunes(summonerId, region));
     },
   };

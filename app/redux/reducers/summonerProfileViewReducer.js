@@ -14,6 +14,7 @@ const initialState = Immutable.fromJS({
   championsMastery: {
     isFetching: false,
     fetched: false,
+    fetchError: false,
     masteries: [],
   },
 
@@ -82,6 +83,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['championsMastery'], {
       fetched: true,
       isFetching: false,
+      fetchError: false,
       masteries: action.payload.masteries,
     });
   }
@@ -90,6 +92,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['championsMastery'], {
       fetched: false,
       isFetching: false,
+      fetchError: true,
     });
   }
 

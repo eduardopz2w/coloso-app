@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { StyleSheet, ListView, Dimensions } from 'react-native';
 import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
+import ErrorScreen from '../../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   roowScrollView: {
@@ -24,7 +25,7 @@ class ChampionsMasteryView extends Component {
     });
   }
   render() {
-    const { isFetching, masteries } = this.props.championsMastery;
+    const { isFetching, masteries, fetchError } = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -39,8 +40,17 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
+
     if (isFetching) {
       return <LoadingScreen />;
+    }
+
+    if (fetchError) {
+      return (<ErrorScreen
+        message="Error al cargar los campeones"
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />);
     }
 
     return (<ListView
@@ -61,8 +71,10 @@ ChampionsMasteryView.propTypes = {
   championsMastery: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
+    fetchError: PropTypes.bool,
     masteries: PropTypes.array,
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default ChampionsMasteryView;
