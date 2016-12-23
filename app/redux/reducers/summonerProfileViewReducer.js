@@ -21,6 +21,7 @@ const initialState = Immutable.fromJS({
   gamesRecent: {
     isFetching: false,
     fetched: false,
+    fetchError: false,
     games: [],
   },
 
@@ -106,6 +107,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['gamesRecent'], {
       fetched: true,
       isFetching: false,
+      fetchError: false,
       games: action.payload.games,
     });
   }
@@ -114,6 +116,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['gamesRecent'], {
       fetched: false,
       isFetching: false,
+      fetchError: true,
     });
   }
 

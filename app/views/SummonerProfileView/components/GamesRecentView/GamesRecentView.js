@@ -2,6 +2,8 @@ import React, { PureComponent, PropTypes } from 'react';
 import { ListView } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import GameRecent from './GameRecent';
+import ErrorScreen from '../../../../components/ErrorScreen';
+
 
 class GamesRecentView extends PureComponent {
   constructor(props) {
@@ -12,10 +14,18 @@ class GamesRecentView extends PureComponent {
     });
   }
   render() {
-    const { isFetching, games } = this.props.gamesRecent;
+    const { isFetching, games, fetchError } = this.props.gamesRecent;
 
     if (isFetching) {
       return (<LoadingScreen />);
+    }
+
+    if (fetchError) {
+      return (<ErrorScreen
+        message="Error al cargar el historial"
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />);
     }
 
     return (<ListView
@@ -28,8 +38,10 @@ class GamesRecentView extends PureComponent {
 GamesRecentView.propTypes = {
   gamesRecent: PropTypes.shape({
     isFetching: PropTypes.bool,
+    fetchError: PropTypes.bool,
     games: PropTypes.array,
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default GamesRecentView;

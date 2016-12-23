@@ -91,7 +91,11 @@ class SummonerProfileView extends Component {
           championsMastery={this.props.championsMastery}
           onPressRetryButton={() => this.props.fetchChampionsMastery()}
         />
-        <GamesRecentView tabLabel="Historial" gamesRecent={this.props.gamesRecent} />
+        <GamesRecentView
+          tabLabel="Historial"
+          gamesRecent={this.props.gamesRecent}
+          onPressRetryButton={() => this.props.fetchGamesRecent()}
+        />
         <RunesView tabLabel="Runas" runes={this.props.runes} />
         <MasteriesView tabLabel="Maestrias" masteries={this.props.masteries} />
       </ScrollableTabView>
