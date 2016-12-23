@@ -12,7 +12,7 @@ export default {
     challenger: '#f9d13e',
   },
   titlesBackground: 'rgba(0,0,0,0.06)',
-  primary: 'rgba(0,0,0,0.80)',
+  primary: '#3F51B5',
   accent: 'white',
-  spinnerColor: 'black',
+  spinnerColor: '#3F51B5',
 };
