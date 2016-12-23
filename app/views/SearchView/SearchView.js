@@ -248,7 +248,7 @@ class SearchView extends Component {
   }
   render() {
     const { summonerName } = this.state;
-    const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru'];
+    const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
 
     return (<View style={styles.root}>
       <SearchViewToolbar />

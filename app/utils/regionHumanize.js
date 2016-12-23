@@ -9,7 +9,8 @@ const regions = [
   { shortName: 'eunw', longName: 'Europa Oeste' },
   { shortName: 'jp', longName: 'Japón' },
   { shortName: 'kr', longName: 'Corea' },
-  { shortName: 'ru', longName: 'Turquía' },
+  { shortName: 'tr', longName: 'Turquía' },
+  { shortName: 'ru', longName: 'Rusia' },
   { shortName: 'br', longName: 'Brasil' },
 ];
 
