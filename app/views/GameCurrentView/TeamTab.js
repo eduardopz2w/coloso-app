@@ -13,7 +13,9 @@ class TeamTab extends Component {
 
     return (<View style={styles.root}>
       <ScrollView>
-        <BannedChampions champions={bannedChampions} />
+        {bannedChampions.length > 0 &&
+          <BannedChampions champions={bannedChampions} />
+        }
         {participants.map((participant, key) => <Participant
           key={key}
           participant={participant}

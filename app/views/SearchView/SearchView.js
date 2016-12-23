@@ -66,8 +66,8 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: 'KoboldChieftain',
-      region: 'na',
+      summonerName: 'Miyunna',
+      region: 'br',
       keyboardOpen: false,
       searchType: 'PROFILE',
     };
@@ -184,6 +184,7 @@ class SearchView extends Component {
             <Picker.Item label="LAN" value="lan" />
             <Picker.Item label="LAS" value="las" />
             <Picker.Item label="NA" value="na" />
+            <Picker.Item label="BR" value="br" />
           </Picker>
         </View>
 

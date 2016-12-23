@@ -1,31 +1,50 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 
-const styles = StyleSheet.create({
-  root: {
-    flexDirection: 'row',
-    paddingLeft: 16,
-    paddingRight: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
-    backgroundColor: 'rgba(0,0,0,0.1)',
-    alignItems: 'center',
+
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      flexDirection: 'row',
+      paddingLeft: 16,
+      paddingRight: 16,
+      paddingTop: 8,
+      paddingBottom: 8,
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      alignItems: 'center',
+    },
+    championImage: {
+      width: 35,
+      height: 35,
+      marginRight: 16,
+      marginLeft: 16,
+      borderRadius: 50,
+      borderWidth: 2,
+      borderColor: 'black',
+    },
+    text: {
+      fontSize: 15,
+      flex: 1,
+      fontWeight: 'bold',
+    },
   },
-  championImage: {
-    width: 35,
-    height: 35,
-    marginRight: 16,
-    marginLeft: 16,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: 'black',
+  {
+    '@media (min-device-width: 600)': {
+      root: {
+        paddingLeft: 40,
+        paddingRight: 40,
+      },
+      text: {
+        fontSize: 18,
+      },
+      championImage: {
+        width: 45,
+        height: 45,
+      },
+    },
   },
-  text: {
-    fontSize: 15,
-    flex: 1,
-    fontWeight: 'bold',
-  },
-});
+);
 
 class BannedChampions extends Component {
   render() {

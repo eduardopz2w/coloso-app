@@ -24,7 +24,7 @@ class RankedMiniseries extends Component {
   }
 
   renderIcon(progress, key) {
-    const iconSize = 20;
+    const iconSize = this.props.iconsSize || 20;
 
     if (progress === 'W') {
       return <Icon key={key} name="check" size={iconSize} color="#4CAF50" />;
@@ -39,6 +39,7 @@ class RankedMiniseries extends Component {
 RankedMiniseries.propTypes = {
   progress: PropTypes.string.isRequired,
   style: PropTypes.object,
+  iconsSize: PropTypes.number,
 };
 
 export default RankedMiniseries;

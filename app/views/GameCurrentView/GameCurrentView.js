@@ -1,12 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Dimensions, BackAndroid } from 'react-native';
+import { View, StyleSheet, Dimensions, BackAndroid } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { connect } from 'react-redux';
+import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import _ from 'lodash';
+import colors from '../../utils/colors';
 import TeamTab from './TeamTab';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
+import Toolbar from './Toolbar';
 
 const styles = StyleSheet.create({
   root: {
@@ -104,20 +107,29 @@ class GameCurrentView extends Component {
     }
 
     return (<View style={styles.root}>
+      <Toolbar
+        mapId={this.props.gameData.mapId}
+        gameQueueConfigId={this.props.gameData.gameQueueConfigId}
+        onPressBackButton={() => Actions.pop()}
+      />
       <ScrollableTabView
         initialPage={0}
         prerenderingSiblingsNumber={2}
+        tabBarBackgroundColor={colors.primary}
+        tabBarActiveTextColor={colors.accent}
+        tabBarInactiveTextColor="rgba(255,255,255,0.8)"
+        tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         renderTabBar={() => <DefaultTabBar />}
       >
         <TeamTab
-          tabLabel="Blue Team"
+          tabLabel="Equipo Azul"
           {...this.getTeamData(100)}
           onPressRunesButton={this.handleOnPressRunesButton}
           onPressMasteriesButton={this.handleOnPressMasteriesButton}
         />
 
         <TeamTab
-          tabLabel="Red Team"
+          tabLabel="Equipo Rojo"
           {...this.getTeamData(200)}
           onPressRunesButton={this.handleOnPressRunesButton}
           onPressMasteriesButton={this.handleOnPressMasteriesButton}
@@ -140,6 +152,8 @@ class GameCurrentView extends Component {
 GameCurrentView.propTypes = {
   gameData: PropTypes.shape({
     participants: PropTypes.array.isRequired,
+    mapId: PropTypes.number.isRequired,
+    gameQueueConfigId: PropTypes.number.isRequired,
   }).isRequired,
 };
 

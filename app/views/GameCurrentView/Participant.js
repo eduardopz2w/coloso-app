@@ -1,92 +1,152 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Image, Text } from 'react-native';
+import { View, Image, Text, Dimensions } from 'react-native';
 import _ from 'lodash';
 import { MKButton } from 'react-native-material-kit';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../components/RankedMiniseries';
 
-const styles = StyleSheet.create({
-  root: {
-    padding: 8,
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
-  },
-  championImage: {
-    width: 60,
-    height: 60,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: 'black',
-    zIndex: 1,
-  },
-  spellImage: {
-    width: 30,
-    height: 30,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  spellsCol: {
-    marginLeft: -10,
-  },
-  flexRow: {
-    flexDirection: 'row',
-  },
-  dataCol: {
-    flex: 1,
-    marginLeft: 16,
-  },
-  summonerName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'black',
-  },
-  tierImage: {
-    width: 60,
-    height: 60,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  flexOne: {
-    flex: 1,
-  },
-  flexText: {
-    flex: 1,
-    fontWeight: 'bold',
-  },
-  victoriesNumberText: {
-    fontSize: 16,
-    color: '#4CAF50',
-    paddingLeft: 15,
-  },
-  defeatsNumberText: {
-    fontSize: 16,
-    color: '#D32F2F',
-    paddingLeft: 15,
-  },
-  blackText: {
-    color: 'black',
-  },
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      padding: 8,
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: 'rgba(0,0,0,0.2)',
+    },
+    championImage: {
+      width: 60,
+      height: 60,
+      borderRadius: 50,
+      borderWidth: 3,
+      borderColor: 'black',
+      zIndex: 1,
+    },
+    spellImage: {
+      width: 30,
+      height: 30,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: 'black',
+    },
+    spellsCol: {
+      marginLeft: -10,
+    },
+    flexRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    dataCol: {
+      flex: 1,
+      marginLeft: 16,
+    },
+    summonerName: {
+      fontSize: 16,
+      fontWeight: 'bold',
+      color: 'black',
+    },
+    tierImage: {
+      width: 60,
+      height: 60,
+      alignSelf: 'center',
+      marginTop: 10,
+    },
+    flexOne: {
+      flex: 1,
+    },
+    flexText: {
+      flex: 1,
+      fontWeight: 'bold',
+    },
+    victoriesNumberText: {
+      fontSize: 16,
+      color: '#4CAF50',
+      paddingLeft: 15,
+    },
+    defeatsNumberText: {
+      fontSize: 16,
+      color: '#D32F2F',
+      paddingLeft: 15,
+    },
+    blackText: {
+      color: 'black',
+    },
 
-  buttonsRow: {
-    justifyContent: 'space-around',
-    flexDirection: 'row',
-  },
+    buttonsRow: {
+      justifyContent: 'space-around',
+      flexDirection: 'row',
+    },
 
-  roundedButton: {
-    marginTop: 12,
-    width: 100,
-    padding: 4,
-    borderRadius: 4,
-    borderWidth: 1.5,
-    borderColor: 'rgba(0,0,0,0.2)',
-  },
+    roundedButton: {
+      marginTop: 12,
+      width: 100,
+      padding: 4,
+      borderRadius: 4,
+      borderWidth: 1.5,
+      borderColor: 'rgba(0,0,0,0.2)',
+    },
 
-  roundedButtonText: {
-    fontSize: 12,
-    textAlign: 'center',
+    roundedButtonText: {
+      fontSize: 12,
+      textAlign: 'center',
+    },
+    dataText: {
+      fontWeight: 'bold',
+    },
   },
-});
+  {
+    '@media (min-device-width: 600)': {
+      championImage: {
+        width: 80,
+        height: 80,
+      },
+      spellImage: {
+        width: 40,
+        height: 40,
+      },
+      spellsCol: {
+        marginLeft: -12,
+      },
+      tierImage: {
+        width: 90,
+        height: 90,
+      },
+      dataCol: {
+        marginLeft: 40,
+        marginRight: 20,
+      },
+      summonerName: {
+        fontSize: 25,
+        marginBottom: 4,
+      },
+      flexText: {
+        fontSize: 20,
+      },
+      dataText: {
+        fontSize: 20,
+      },
+      victoriesNumberText: {
+        fontSize: 22,
+      },
+      defeatsNumberText: {
+        fontSize: 22,
+      },
+      roundedButton: {
+        width: 150,
+      },
+      roundedButtonText: {
+        fontSize: 18,
+      },
+    },
+  },
+);
+
+function getMiniseriesIconsSize() {
+  if (Dimensions.get('window').width >= 600) {
+    return 27;
+  }
+
+  return 20;
+}
 
 class Participant extends Component {
   constructor(props) {
@@ -153,7 +213,7 @@ class Participant extends Component {
           <Text style={styles.flexText}>Tier: {this.renderTierText(rankedSoloEntry.tier)}</Text>
           {division &&
             <Text style={styles.flexText}>
-              Division:<Text style={styles.blackText}>{division}</Text>
+              Division: <Text style={styles.blackText}>{division}</Text>
             </Text>
           }
         </View>
@@ -168,8 +228,11 @@ class Participant extends Component {
         <View style={styles.flexRow}>
           {miniSeries ? (
             <View style={styles.flexRow}>
-              <Text style={{ fontWeight: 'bold' }}>Progreso: </Text>
-              <RankedMiniseries progress={miniSeries.progress} />
+              <Text style={styles.dataText}>Progreso: </Text>
+              <RankedMiniseries
+                progress={miniSeries.progress}
+                iconsSize={getMiniseriesIconsSize()}
+              />
             </View>
           ) : (
             <Text style={styles.flexText}>
