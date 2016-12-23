@@ -23,13 +23,13 @@ class RunesView extends Component {
     };
   }
   render() {
-    const { isFetching, fetchError, pages } = this.props.runes;
+    const { isFetching, fetchError, fetched, pages } = this.props.runes;
 
     if (isFetching) {
       return <LoadingScreen />;
     }
 
-    if (fetchError) {
+    if (fetchError || !fetched) {
       return (<ErrorScreen
         message="Error al cargar las runas"
         onPressRetryButton={this.props.onPressRetryButton}

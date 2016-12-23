@@ -14,13 +14,13 @@ class GamesRecentView extends PureComponent {
     });
   }
   render() {
-    const { isFetching, games, fetchError } = this.props.gamesRecent;
+    const { isFetching, games, fetched, fetchError } = this.props.gamesRecent;
 
     if (isFetching) {
       return (<LoadingScreen />);
     }
 
-    if (fetchError) {
+    if (fetchError || !fetched) {
       return (<ErrorScreen
         message="Error al cargar el historial"
         onPressRetryButton={this.props.onPressRetryButton}
@@ -39,6 +39,7 @@ GamesRecentView.propTypes = {
   gamesRecent: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
+    fetched: PropTypes.bool,
     games: PropTypes.array,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

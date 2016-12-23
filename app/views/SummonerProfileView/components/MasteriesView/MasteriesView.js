@@ -23,13 +23,13 @@ class MasteriesView extends Component {
     };
   }
   render() {
-    const { isFetching, fetchError, pages } = this.props.masteries;
+    const { isFetching, fetchError, fetched, pages } = this.props.masteries;
 
     if (isFetching) {
       return <LoadingScreen />;
     }
 
-    if (fetchError) {
+    if (fetchError || !fetched) {
       return (<ErrorScreen
         message="Error al cargar las maestrias"
         onPressRetryButton={this.props.onPressRetryButton}

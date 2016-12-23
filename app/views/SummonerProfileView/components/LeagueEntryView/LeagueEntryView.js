@@ -27,9 +27,9 @@ const styles = StyleSheet.create({
 
 class LeagueEntryView extends PureComponent {
   render() {
-    const { isFetching, fetchError, entries } = this.props.leagueEntry;
+    const { isFetching, fetchError, fetched, entries } = this.props.leagueEntry;
 
-    if (isFetching) {
+    if (isFetching || !fetched) {
       return <LoadingScreen />;
     }
 
@@ -62,6 +62,7 @@ LeagueEntryView.propTypes = {
   leagueEntry: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
+    fetched: PropTypes.bool,
     entries: PropTypes.array,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

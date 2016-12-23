@@ -25,7 +25,7 @@ class ChampionsMasteryView extends Component {
     });
   }
   render() {
-    const { isFetching, masteries, fetchError } = this.props.championsMastery;
+    const { isFetching, masteries, fetched, fetchError } = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -41,7 +41,7 @@ class ChampionsMasteryView extends Component {
     }
 
 
-    if (isFetching) {
+    if (isFetching || !fetched) {
       return <LoadingScreen />;
     }
 
