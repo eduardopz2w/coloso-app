@@ -5,12 +5,14 @@ import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-ma
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import { Actions } from 'react-native-router-flux';
 import Snackbar from 'react-native-android-snackbar';
+
 import _ from 'lodash';
 import SearchViewToolbar from './SearchViewToolbar';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import colors from '../../utils/colors';
 import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
+import HistoryModal from './HistoryModal';
 
 // TODO: Agregar busquedas recientes
 
@@ -111,6 +113,8 @@ class SearchView extends Component {
     this.handleTextChangeSummonerName = this.handleTextChangeSummonerName.bind(this);
     this.handleChangeRegion = this.handleChangeRegion.bind(this);
     this.handleOnChekedChangeProfileButton = this.handleOnChekedChangeProfileButton.bind(this);
+    this.handleOnPressHistoryButton = this.handleOnPressHistoryButton.bind(this);
+    this.handleOnPressHistoryEntry = this.handleOnPressHistoryEntry.bind(this);
     this.getHomeImageStyle = this.getHomeImageStyle.bind(this);
     this.renderButton = this.renderButton.bind(this);
     this.renderSpinner = this.renderSpinner.bind(this);
@@ -224,6 +228,15 @@ class SearchView extends Component {
     });
   }
 
+  handleOnPressHistoryButton() {
+    this.historyModal.open();
+  }
+
+  handleOnPressHistoryEntry(summonerName, region) {
+    this.historyModal.close();
+    this.setState({ summonerName, region });
+  }
+
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
@@ -246,12 +259,12 @@ class SearchView extends Component {
 
     return null;
   }
+
   render() {
-    const { summonerName } = this.state;
     const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
 
     return (<View style={styles.root}>
-      <SearchViewToolbar />
+      <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton}/>
       <View style={styles.container}>
         <Image
           style={this.getHomeImageStyle()}
@@ -265,7 +278,7 @@ class SearchView extends Component {
             </MediaQuery>
             <MKTextField
               style={styles.inputName}
-              value={summonerName}
+              value={this.state.summonerName}
               onTextChange={this.handleTextChangeSummonerName}
               placeholder="Nombre de invocador"
             />
@@ -305,6 +318,11 @@ class SearchView extends Component {
         {this.renderSpinner()}
         {this.renderButton()}
       </View>
+
+      <HistoryModal
+        ref={(historyModal) => { this.historyModal = historyModal; }}
+        onPressHistoryEntry={this.handleOnPressHistoryEntry}
+      />
     </View>);
   }
 }

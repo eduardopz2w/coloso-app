@@ -7,15 +7,6 @@ import {
 import colors from '../../utils/colors';
 import IconButton from '../../components/IconButton'
 
-class SearchViewToolbar extends Component {
-  render () {
-    return <View style={[styles.root, this.props.style]}>
-      <IconButton iconName="menu" />
-      <Text style={styles.title}>Buscar</Text>
-    </View>
-  }
-}
-
 const styles = StyleSheet.create({
   root: {
     backgroundColor: colors.primary,
@@ -31,6 +22,16 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFFFFF'
   }
-})
+});
+
+class SearchViewToolbar extends Component {
+  render () {
+    return <View style={[styles.root, this.props.style]}>
+      <IconButton iconName="menu" />
+      <Text style={styles.title}>Buscar</Text>
+      <IconButton iconName="menu" onPress={this.props.onPressHistoryButton} />
+    </View>
+  }
+}
 
 export default SearchViewToolbar
