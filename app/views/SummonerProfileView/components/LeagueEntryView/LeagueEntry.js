@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
-import riotConstantsParser from '../../../../utils/riotConstantsParser';
+import rankedQueueParser from '../../../../utils/rankedQueueParser';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 
@@ -131,7 +131,7 @@ class LeagueEntry extends Component {
 
     return (<View style={styles.root}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}><Text style={styleUtils.boldText}>{riotConstantsParser(queue)}:</Text> {leagueName || 'Unranked'}</Text>
+        <Text style={styles.title}><Text style={styleUtils.boldText}>{rankedQueueParser(queue)}:</Text> {leagueName || 'Unranked'}</Text>
       </View>
 
       <View style={[styles.entryContainer, reverse && { flexDirection: 'row-reverse' }]}>

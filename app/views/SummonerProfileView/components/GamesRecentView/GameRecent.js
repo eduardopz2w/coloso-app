@@ -7,7 +7,7 @@ import _ from 'lodash';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
-import riotConstantsParser from '../../../../utils/riotConstantsParser';
+import gameModeParser from '../../../../utils/gameModeParser';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -281,7 +281,7 @@ class GameRecent extends PureComponent {
         </View>
         <View style={styles.dataCol}>
           <Text style={styles.gameTitle}>
-            {riotConstantsParser(gameMode)} ({this.getGameTitleLabel()})
+            {gameModeParser(gameMode)} ({this.getGameTitleLabel()})
           </Text>
           <Grid>
             <View style={styles.iconDataRow}>
