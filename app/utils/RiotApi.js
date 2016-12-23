@@ -1,23 +1,41 @@
 import axios from 'axios';
-// TODO: Handle errors
-const SERVER_URL = 'http://192.168.0.2:1337/riot-api';
+import _ from 'lodash';
+
+const TIMEOUT = 100;
+const BASEURL = 'http://192.168.0.2:1337/riot-api/';
+
+const riotClient = axios.create({
+  baseURL: BASEURL,
+  timeout: TIMEOUT,
+});
+
+riotClient.interceptors.response.use(response => response, (error) => {
+  if (error.response) {
+    return Promise.reject(error);
+  }
+
+  _.assign(error, {
+    response: {
+      data: {
+        message: 'Error al conectar con el servidor',
+      },
+    },
+  });
+
+  return Promise.reject(error);
+});
 
 function getSummonerByName(summonerName, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/summoner/by-name/${summonerName}`;
+    const url = `${region}/summoner/by-name/${summonerName}`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        console.log(err.response);
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -26,20 +44,14 @@ function getSummonerByName(summonerName, region) {
 
 function getSummonerById(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/summoner/by-id/${summonerId}`;
+    const url = `${region}/summoner/by-id/${summonerId}`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -48,20 +60,14 @@ function getSummonerById(summonerId, region) {
 
 function getSummonerLeagueEntry(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/league/by-summoner/${summonerId}/entry`;
+    const url = `${region}/league/by-summoner/${summonerId}/entry`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data[0]);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -70,20 +76,14 @@ function getSummonerLeagueEntry(summonerId, region) {
 
 function getSummonerChampionsMastery(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/summoner/${summonerId}/champions-mastery`;
+    const url = `${region}/summoner/${summonerId}/champions-mastery`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -92,20 +92,14 @@ function getSummonerChampionsMastery(summonerId, region) {
 
 function getSummonerGamesRecent(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/game/by-summoner/${summonerId}/recent`;
+    const url = `${region}/game/by-summoner/${summonerId}/recent`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -114,20 +108,14 @@ function getSummonerGamesRecent(summonerId, region) {
 
 function getSummonerMasteries(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/summoner/${summonerId}/masteries`;
+    const url = `${region}/summoner/${summonerId}/masteries`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -136,20 +124,14 @@ function getSummonerMasteries(summonerId, region) {
 
 function getSummonerRunes(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/summoner/${summonerId}/runes`;
+    const url = `${region}/summoner/${summonerId}/runes`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
@@ -158,20 +140,14 @@ function getSummonerRunes(summonerId, region) {
 
 function getSummonerGameCurrent(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${SERVER_URL}/${region}/game/by-summoner/${summonerId}/current`;
+    const url = `${region}/game/by-summoner/${summonerId}/current`;
 
-    return axios.get(url)
+    return riotClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
-        let errorMessage;
-
-        if (err.response) {
-          errorMessage = err.response.data.message;
-        } else {
-          errorMessage = 'Algo salio mal';
-        }
+        const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
       });
