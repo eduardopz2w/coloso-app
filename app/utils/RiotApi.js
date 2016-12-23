@@ -1,7 +1,7 @@
 import axios from 'axios';
 import _ from 'lodash';
 
-const TIMEOUT = 100;
+const TIMEOUT = 5000;
 const BASEURL = 'http://192.168.0.2:1337/riot-api/';
 
 const riotClient = axios.create({
