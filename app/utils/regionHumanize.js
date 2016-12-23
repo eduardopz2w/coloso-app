@@ -1,17 +1,26 @@
-// TODO: Agregar todas las regiones
+import _ from 'lodash';
 
-function regionHumanize(region) {
-  if (region === 'na') {
-    return 'Norte America';
-  } else if (region === 'lan') {
-    return 'Latinoamerica Norte';
-  } else if (region === 'las') {
-    return 'Latinoamerica Sur';
-  } else if (region === 'br') {
-    return 'Brasil';
+const regions = [
+  { shortName: 'na', longName: 'Norteamérica' },
+  { shortName: 'lan', longName: 'Latinoamérica Norte' },
+  { shortName: 'las', longName: 'Latinoamérica Sur' },
+  { shortName: 'oce', longName: 'Oceanía' },
+  { shortName: 'eune', longName: 'Europa Nórdica y Este' },
+  { shortName: 'eunw', longName: 'Europa Oeste' },
+  { shortName: 'jp', longName: 'Japón' },
+  { shortName: 'kr', longName: 'Corea' },
+  { shortName: 'ru', longName: 'Turquía' },
+  { shortName: 'br', longName: 'Brasil' },
+];
+
+function regionHumanize(shortName) {
+  const regionFound = _.find(regions, { shortName });
+
+  if (regionFound) {
+    return regionFound.longName;
   }
 
-  return region;
+  return shortName;
 }
 
 export default regionHumanize;

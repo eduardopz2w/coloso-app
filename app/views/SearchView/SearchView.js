@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, View, Image, Picker, Text, Keyboard, Dimensions } from 'react-native';
+import { View, Image, Picker, Text, Keyboard, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
@@ -11,6 +11,8 @@ import SearchViewActions from '../../redux/actions/SearchViewActions';
 import colors from '../../utils/colors';
 import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
+
+// TODO: Agregar busquedas recientes
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -82,7 +84,7 @@ const styles = MediaQueryStyleSheet.create(
         marginLeft: 16,
       },
       inputRegion: {
-        marginLeft: 8
+        marginLeft: 8,
       },
       radioGroup: {
         flex: 1,
@@ -151,42 +153,6 @@ class SearchView extends Component {
     this.keyboardDidHideListener.remove();
   }
 
-  handleKeyboardDidShow(e) {
-    const newSize = Dimensions.get('window').height - e.endCoordinates.height;
-
-    this.setState({
-      visibleHeight: newSize,
-    });
-  }
-
-  handleChangeRegion(newRegion) {
-    this.setState({ region: newRegion });
-  }
-
-  handleTextChangeSummonerName(newSummonerName) {
-    this.setState({ summonerName: newSummonerName });
-  }
-
-  handlePressSearchButton() {
-    Snackbar.dismiss();
-    Keyboard.dismiss();
-    this.props.searchSummoner(this.state.summonerName, this.state.region);
-  }
-
-  handleKeyboardDidHide() {
-    this.setState({
-      visibleHeight: Dimensions.get('window').height,
-    });
-  }
-
-  handleOnChekedChangeProfileButton({ checked }) {
-    if (checked) {
-      this.setState({ searchType: 'PROFILE' });
-    } else {
-      this.setState({ searchType: 'GAME' });
-    }
-  }
-
   getHomeImageStyle() {
     const { width: deviceWidth } = Dimensions.get('window');
     let imageWidth;
@@ -223,6 +189,42 @@ class SearchView extends Component {
     };
   }
 
+  handleChangeRegion(newRegion) {
+    this.setState({ region: newRegion });
+  }
+
+  handleTextChangeSummonerName(newSummonerName) {
+    this.setState({ summonerName: newSummonerName });
+  }
+
+  handlePressSearchButton() {
+    Snackbar.dismiss();
+    Keyboard.dismiss();
+    this.props.searchSummoner(this.state.summonerName, this.state.region);
+  }
+
+  handleKeyboardDidHide() {
+    this.setState({
+      visibleHeight: Dimensions.get('window').height,
+    });
+  }
+
+  handleOnChekedChangeProfileButton({ checked }) {
+    if (checked) {
+      this.setState({ searchType: 'PROFILE' });
+    } else {
+      this.setState({ searchType: 'GAME' });
+    }
+  }
+
+  handleKeyboardDidShow(e) {
+    const newSize = Dimensions.get('window').height - e.endCoordinates.height;
+
+    this.setState({
+      visibleHeight: newSize,
+    });
+  }
+
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
@@ -247,7 +249,7 @@ class SearchView extends Component {
   }
   render() {
     const { summonerName } = this.state;
-    const regions = ['lan', 'las', 'na', 'br'];
+    const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru'];
 
     return (<View style={styles.root}>
       <SearchViewToolbar />
