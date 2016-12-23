@@ -3,6 +3,7 @@
  * https://github.com/facebook/react-native
  * @flow
  */
+ // TODO: Usar appbar en el router
 import { Scene, Router } from 'react-native-router-flux';
 import React from 'react';
 import { Provider } from 'react-redux';

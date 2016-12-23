@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+// TODO: Handle errors
 const SERVER_URL = 'http://192.168.0.2:1337/riot-api';
 
 function getSummonerByName(summonerName, region) {
