@@ -63,7 +63,7 @@ class HistoryModal extends Component {
     >
       <Text style={styles.title}>Busqueda rapida</Text>
       <ScrollView>
-        {this.props.searchHistory.map((historyEntry, index) => <TouchableWithoutFeedback
+        {this.props.historyEntries.map((historyEntry, index) => <TouchableWithoutFeedback
           onPress={() => {
             this.handleOnPressHistoryEntry(historyEntry.summonerName, historyEntry.region);
           }}
@@ -80,12 +80,12 @@ class HistoryModal extends Component {
 }
 
 HistoryModal.defaultProps = {
-  searchHistory: [],
+  historyEntries: [],
 };
 
 HistoryModal.propTypes = {
   style: PropTypes.shape({}),
-  searchHistory: PropTypes.arrayOf(PropTypes.shape({
+  historyEntries: PropTypes.arrayOf(PropTypes.shape({
     summonerName: PropTypes.string.isRequired,
     region: PropTypes.string.isRequired,
   })),

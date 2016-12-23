@@ -321,6 +321,7 @@ class SearchView extends Component {
 
       <HistoryModal
         ref={(historyModal) => { this.historyModal = historyModal; }}
+        historyEntries={this.props.searchHistoryEntries}
         onPressHistoryEntry={this.handleOnPressHistoryEntry}
       />
     </View>);
@@ -336,6 +337,7 @@ SearchView.propTypes = {
   summonerFoundRegion: PropTypes.any,
   gameFound: PropTypes.bool.isRequired,
   searchGame: PropTypes.func,
+  searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 function mapStateToProps(state) {
@@ -348,6 +350,7 @@ function mapStateToProps(state) {
     summonerFoundId: searchViewState.get('summonerFoundId'),
     summonerFoundRegion: searchViewState.get('summonerFoundRegion'),
     gameFound: searchViewState.get('gameFound'),
+    searchHistoryEntries: state.searchHistory.get('entries').toJS(),
   };
 }
 
