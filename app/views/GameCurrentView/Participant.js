@@ -86,16 +86,19 @@ const styles = MediaQueryStyleSheet.create(
 
     roundedButton: {
       marginTop: 12,
-      width: 100,
+      flex: 1,
       padding: 4,
+      maxWidth: 90,
       borderRadius: 4,
-      borderWidth: 1.5,
-      borderColor: 'rgba(0,0,0,0.2)',
+      borderWidth: 1,
+      borderColor: colors.primary,
     },
 
     roundedButtonText: {
       fontSize: 12,
       textAlign: 'center',
+      color: colors.primary,
+      fontWeight: 'bold',
     },
     dataText: {
       fontWeight: 'bold',
@@ -139,7 +142,7 @@ const styles = MediaQueryStyleSheet.create(
         fontSize: 22,
       },
       roundedButton: {
-        width: 150,
+        maxWidth: 150,
       },
       roundedButtonText: {
         fontSize: 18,
