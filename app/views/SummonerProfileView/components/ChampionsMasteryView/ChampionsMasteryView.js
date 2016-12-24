@@ -25,7 +25,7 @@ class ChampionsMasteryView extends Component {
     });
   }
   render() {
-    const { isFetching, masteries, fetched, fetchError } = this.props.championsMastery;
+    const { isFetching, masteries, fetched } = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -40,29 +40,26 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
-
-    if (isFetching || !fetched) {
+    if (fetched) {
+      return (<ListView
+        style={styles.rootScrollView}
+        pageSize={pageSize}
+        contentContainerStyle={styles.container}
+        dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
+        renderRow={mastery => <ChampionMastery
+          mastery={mastery}
+          championImageSize={championImageSize}
+          progressWidth={progressWidth}
+        />}
+      />);
+    } else if (isFetching) {
       return <LoadingScreen />;
     }
 
-    if (fetchError) {
-      return (<ErrorScreen
-        message="Error al cargar los campeones"
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />);
-    }
-
-    return (<ListView
-      style={styles.rootScrollView}
-      pageSize={pageSize}
-      contentContainerStyle={styles.container}
-      dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-      renderRow={mastery => <ChampionMastery
-        mastery={mastery}
-        championImageSize={championImageSize}
-        progressWidth={progressWidth}
-      />}
+    return (<ErrorScreen
+      message="Error al cargar los campeones"
+      onPressRetryButton={this.props.onPressRetryButton}
+      retryButton
     />);
   }
 }

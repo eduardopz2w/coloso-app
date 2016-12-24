@@ -27,34 +27,32 @@ const styles = StyleSheet.create({
 
 class LeagueEntryView extends PureComponent {
   render() {
-    const { isFetching, fetchError, fetched, entries } = this.props.leagueEntry;
+    const { isFetching, fetched, entries } = this.props.leagueEntry;
 
-    if (isFetching || !fetched) {
+    if (fetched) {
+      return (<ScrollView
+        style={styles.roowScrollView}
+        contentContainerStyle={styles.rootScrollViewContainer}
+      >
+        {entries.map((leagueEntry, key) => {
+          let reverse = true;
+
+          if (key % 2 === 0) {
+            reverse = false;
+          }
+
+          return <LeagueEntry key={key} leagueEntry={leagueEntry} reverse={reverse} />;
+        })}
+      </ScrollView>);
+    } else if (isFetching) {
       return <LoadingScreen />;
     }
 
-    if (fetchError) {
-      return (<ErrorScreen
-        message="Error al cargar la informacion"
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />);
-    }
-
-    return (<ScrollView
-      style={styles.roowScrollView}
-      contentContainerStyle={styles.rootScrollViewContainer}
-    >
-      {entries.map((leagueEntry, key) => {
-        let reverse = true;
-
-        if (key % 2 === 0) {
-          reverse = false;
-        }
-
-        return <LeagueEntry key={key} leagueEntry={leagueEntry} reverse={reverse} />;
-      })}
-    </ScrollView>);
+    return (<ErrorScreen
+      message="Error al cargar la informacion"
+      onPressRetryButton={this.props.onPressRetryButton}
+      retryButton
+    />);
   }
 }
 

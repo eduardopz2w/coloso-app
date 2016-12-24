@@ -14,23 +14,21 @@ class GamesRecentView extends PureComponent {
     });
   }
   render() {
-    const { isFetching, games, fetched, fetchError } = this.props.gamesRecent;
+    const { isFetching, games, fetched } = this.props.gamesRecent;
 
-    if (isFetching) {
+    if (fetched) {
+      return (<ListView
+        dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
+        renderRow={game => <GameRecent game={game} />}
+      />);
+    } else if (isFetching) {
       return (<LoadingScreen />);
     }
 
-    if (fetchError || !fetched) {
-      return (<ErrorScreen
-        message="Error al cargar el historial"
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />);
-    }
-
-    return (<ListView
-      dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
-      renderRow={game => <GameRecent game={game} />}
+    return (<ErrorScreen
+      message="Error al cargar el historial"
+      onPressRetryButton={this.props.onPressRetryButton}
+      retryButton
     />);
   }
 }

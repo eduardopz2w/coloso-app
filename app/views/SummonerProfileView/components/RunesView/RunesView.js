@@ -23,29 +23,27 @@ class RunesView extends Component {
     };
   }
   render() {
-    const { isFetching, fetchError, fetched, pages } = this.props.runes;
+    const { isFetching, fetched, pages } = this.props.runes;
 
-    if (isFetching) {
+    if (fetched) {
+      return (<View style={styles.root}>
+        <View style={styles.headerSelector}>
+          <PageSelector
+            pages={pages}
+            onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
+          />
+        </View>
+        <RunePage page={pages[this.state.pageSelected]} />
+      </View>);
+    } else if (isFetching) {
       return <LoadingScreen />;
     }
 
-    if (fetchError || !fetched) {
-      return (<ErrorScreen
-        message="Error al cargar las runas"
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />);
-    }
-
-    return (<View style={styles.root}>
-      <View style={styles.headerSelector}>
-        <PageSelector
-          pages={pages}
-          onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
-        />
-      </View>
-      <RunePage page={pages[this.state.pageSelected]} />
-    </View>);
+    return (<ErrorScreen
+      message="Error al cargar las runas"
+      onPressRetryButton={this.props.onPressRetryButton}
+      retryButton
+    />);
   }
 }
 
