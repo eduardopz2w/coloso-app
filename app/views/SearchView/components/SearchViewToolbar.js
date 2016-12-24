@@ -1,7 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
 import colors from '../../../utils/colors';
 import IconButton from '../../../components/IconButton';
 

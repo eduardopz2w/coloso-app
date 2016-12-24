@@ -36,18 +36,18 @@ const styles = StyleSheet.create({
 });
 
 function getModalStyle(deviceDimensions) {
-  if (deviceDimensions.width < 600) {
-    return {
-      height: null,
-      maxHeight: deviceDimensions.height * 0.50,
-    };
-  } else {
+  if (deviceDimensions.width > 600) {
     return {
       width: 350,
       height: null,
       maxHeight: 400,
     };
   }
+
+  return {
+    height: null,
+    maxHeight: deviceDimensions.height * 0.50,
+  };
 }
 
 class HistoryModal extends Component {
@@ -109,7 +109,7 @@ class HistoryModal extends Component {
       position={deviceDimensions.width < 600 ? 'bottom' : 'center'}
       backdropOpacity={0.7}
     >
-      <Text style={styles.title}>Busqueda rapida</Text>
+      <Text style={styles.title}>Busqueda Rápida</Text>
       {content}
     </Modal>);
   }
