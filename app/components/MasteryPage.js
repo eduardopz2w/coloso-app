@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 2,
   },
+  masteryActive: {
+    borderColor: '#d0aa49',
+  },
   masteryImageContainer: {
     width: 40,
     height: 40,
@@ -31,13 +34,15 @@ const styles = StyleSheet.create({
   },
   rankText: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
+    bottom: 2,
+    right: 2,
     width: 20,
     color: 'white',
     fontSize: 10,
     backgroundColor: 'black',
     textAlign: 'center',
+    borderRadius: 5,
+    fontWeight: 'bold',
   },
   masteryPageContainer: {
     minWidth: 200,
@@ -109,22 +114,22 @@ class MasteryPage extends Component {
   renderMasteryImage(masteryId) {
     let indexFound = _.findIndex(this.props.page.masteries, { id: masteryId });
 
+    // Si el array usa "masteryId" en lugar de solo "id" DONT DELETE
     if (indexFound === -1) {
-      // Si el array usa "masteryId" en lugar de solo "id"
       indexFound = _.findIndex(this.props.page.masteries, { masteryId });
     }
 
-    let masteryUri = `mastery_gray_${masteryId}`;
-    let rank;
-
     if (indexFound >= 0) {
-      masteryUri = `mastery_${masteryId}`;
-      rank = this.props.page.masteries[indexFound].rank;
+      const rank = this.props.page.masteries[indexFound].rank;
+
+      return (<View style={styles.masteryImageContainer}>
+        <Image style={[styles.masteryImage, styles.masteryActive]} source={{ uri: `mastery_${masteryId}` }} />
+        <Text style={styles.rankText}>{rank}</Text>
+      </View>);
     }
 
     return (<View style={styles.masteryImageContainer}>
-      <Image style={styles.masteryImage} source={{ uri: masteryUri }} />
-      {rank > 1 && <Text style={styles.rankText}>{rank}</Text>}
+      <Image style={styles.masteryImage} source={{ uri: `mastery_gray_${masteryId}` }} />
     </View>);
   }
 
