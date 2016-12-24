@@ -62,7 +62,7 @@ function searchView(state = initialState, action) {
   if (action.type === 'SEARCH_VIEW/CLEAR_FOUND_DATA') {
     newState = newState.merge({
       summonerFoundId: 0,
-      gameFound: '',
+      gameFound: false,
     });
   }
 
