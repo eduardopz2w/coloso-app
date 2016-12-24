@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
-import SummonerProfileViewToolbar from './SummonerProfileViewToolbar';
+import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar';
 import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewActions';
 import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';

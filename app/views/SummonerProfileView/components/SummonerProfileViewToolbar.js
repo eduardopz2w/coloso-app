@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Image, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import IconButton from '../../components/IconButton';
-import LoadingScreen from '../../components/LoadingScreen';
-import regionHumanize from '../../utils/regionHumanize';
-import colors from '../../utils/colors';
+import IconButton from '../../../components/IconButton';
+import LoadingScreen from '../../../components/LoadingScreen';
+import regionHumanize from '../../../utils/regionHumanize';
+import colors from '../../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {
