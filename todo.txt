@@ -1,4 +1,4 @@
 - Cambiar las imagenes a usar data dragon
 - News checker
 - Modal en campeones
-- Parse riot api errors
+- Compress images
