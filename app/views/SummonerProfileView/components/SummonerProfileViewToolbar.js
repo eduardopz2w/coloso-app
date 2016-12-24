@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import FitImage from 'react-native-fit-image';
 import IconButton from '../../../components/IconButton';
 import LoadingScreen from '../../../components/LoadingScreen';
 import regionHumanize from '../../../utils/regionHumanize';
@@ -13,12 +14,9 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     summonerImage: {
-      width: 80,
-      height: 80,
+      width: 72,
+      height: 72,
       borderRadius: 50,
-      borderWidth: 4,
-      borderColor: colors.accent,
-      marginBottom: 5,
     },
 
     summonerImageContainer: {
@@ -26,6 +24,11 @@ const styles = MediaQueryStyleSheet.create(
       height: 80,
       position: 'relative',
       alignSelf: 'center',
+      justifyContent: 'center',
+      borderColor: colors.accent,
+      borderRadius: 50,
+      borderWidth: 4,
+      alignItems: 'center',
     },
 
     summonerLevelContainer: {
@@ -115,6 +118,10 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
+function getImageUri(profileIconId) {
+  return `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${profileIconId}.png`;
+}
+
 class SummonerProfileViewToolbar extends Component {
   // TODO: Imagenes desde el servidor
   constructor(props) {
@@ -145,9 +152,9 @@ class SummonerProfileViewToolbar extends Component {
         ) : (
           <View style={styles.profileToolbarContainer}>
             <View style={styles.summonerImageContainer}>
-              <Image
+              <FitImage
                 style={styles.summonerImage}
-                source={{ uri: `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${profileIconId}.png` }}
+                source={{ uri: getImageUri(profileIconId) }}
               />
               <View style={styles.summonerLevelContainer}>
                 <Text style={styles.summonerLevelText}>{summonerLevel}</Text>
