@@ -100,6 +100,21 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.primary,
       fontWeight: 'bold',
     },
+    profileButton: {
+      height: 22,
+      paddingLeft: 8,
+      paddingRight: 8,
+      borderRadius: 5,
+      backgroundColor: colors.primary,
+      marginLeft: 8,
+      justifyContent: 'center',
+    },
+    profileButtonText: {
+      color: 'white',
+      fontWeight: 'bold',
+      textAlign: 'center',
+      textAlignVertical: 'center',
+    },
     dataText: {
       fontWeight: 'bold',
     },
@@ -146,6 +161,12 @@ const styles = MediaQueryStyleSheet.create(
       },
       roundedButtonText: {
         fontSize: 18,
+      },
+      profileButton: {
+        height: 30,
+      },
+      profileButtonText: {
+        fontSize: 16,
       },
     },
   },
@@ -219,7 +240,15 @@ class Participant extends Component {
         {this.renderTierImage()}
       </View>
       <View style={styles.dataCol}>
-        <Text style={styles.summonerName}>{summonerName}</Text>
+        <View style={styles.flexRow}>
+          <Text style={styles.summonerName}>{summonerName}</Text>
+          <MKButton
+            style={[styles.profileButton]}
+            onPress={() => this.props.onPressProfileButton(summonerId)}
+          >
+            <Text style={styles.profileButtonText}>PERFIL</Text>
+          </MKButton>
+        </View>
         <View style={styles.flexRow}>
           <Text style={styles.flexText}>Tier: {this.renderTierText(rankedSoloEntry.tier)}</Text>
           {division &&
@@ -284,6 +313,7 @@ Participant.propTypes = {
   }).isRequired,
   onPressRunesButton: PropTypes.func.isRequired,
   onPressMasteriesButton: PropTypes.func.isRequired,
+  onPressProfileButton: PropTypes.func.isRequired,
 };
 
 export default Participant;

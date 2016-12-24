@@ -31,6 +31,7 @@ class GameCurrentView extends Component {
     this.getSummonerMasteries = this.getSummonerMasteries.bind(this);
     this.handleOnPressRunesButton = this.handleOnPressRunesButton.bind(this);
     this.handleOnPressMasteriesButton = this.handleOnPressMasteriesButton.bind(this);
+    this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.getModalStyle = this.getModalStyle.bind(this);
     this.state = {
       summonerSelectedId: null,
@@ -93,6 +94,10 @@ class GameCurrentView extends Component {
     this.modal.open();
   }
 
+  handleOnPressProfileButton(summonerId) {
+    Actions.summoner_profile_view({ summonerId, region: this.props.gameData.region });
+  }
+
   handleOnBackAndroid() {
     if (this.state.modalIsOpen) {
       this.modal.close();
@@ -141,6 +146,7 @@ class GameCurrentView extends Component {
           {...this.getTeamData(100)}
           onPressRunesButton={this.handleOnPressRunesButton}
           onPressMasteriesButton={this.handleOnPressMasteriesButton}
+          onPressProfileButton={this.handleOnPressProfileButton}
         />
 
         <TeamTab
@@ -148,6 +154,7 @@ class GameCurrentView extends Component {
           {...this.getTeamData(200)}
           onPressRunesButton={this.handleOnPressRunesButton}
           onPressMasteriesButton={this.handleOnPressMasteriesButton}
+          onPressProfileButton={this.handleOnPressProfileButton}
         />
       </ScrollableTabView>
       <Modal
@@ -169,6 +176,7 @@ GameCurrentView.propTypes = {
     participants: PropTypes.array.isRequired,
     mapId: PropTypes.number.isRequired,
     gameQueueConfigId: PropTypes.number.isRequired,
+    region: PropTypes.string.isRequired,
   }).isRequired,
 };
 

@@ -21,6 +21,7 @@ class TeamTab extends Component {
           participant={participant}
           onPressRunesButton={this.props.onPressRunesButton}
           onPressMasteriesButton={this.props.onPressMasteriesButton}
+          onPressProfileButton={this.props.onPressProfileButton}
         />)}
       </ScrollView>
     </View>);
@@ -32,6 +33,7 @@ TeamTab.propTypes = {
   bannedChampions: PropTypes.arrayOf(PropTypes.shape({})),
   onPressRunesButton: PropTypes.func.isRequired,
   onPressMasteriesButton: PropTypes.func.isRequired,
+  onPressProfileButton: PropTypes.func.isRequired,
 };
 
 export default TeamTab;
