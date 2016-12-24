@@ -5,8 +5,6 @@ import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-ma
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import { Actions } from 'react-native-router-flux';
 import Snackbar from 'react-native-android-snackbar';
-
-import _ from 'lodash';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
@@ -14,6 +12,7 @@ import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import colors from '../../utils/colors';
 import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
+import homeImage from '../../assets/poro_wallpaper.jpg';
 
 // TODO: Agregar busquedas recientes
 
@@ -129,31 +128,31 @@ class SearchView extends Component {
     this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.searchError) {
-      Snackbar.show(nextProps.errorMessage, { duration: Snackbar.LONG });
+  componentDidUpdate() {
+    if (this.props.searchError) {
+      Snackbar.show(this.props.errorMessage, { duration: Snackbar.LONG });
       return this.props.clearSearchError();
     }
 
-    if (_.isNumber(nextProps.summonerFoundId)) {
+    if (this.props.summonerFoundId > 0) {
       Actions.summoner_profile_view({
-        summonerId: nextProps.summonerFoundId,
-        region: nextProps.summonerFoundRegion,
+        summonerId: this.props.summonerFoundId,
+        region: this.props.summonerFoundRegion,
       });
       this.props.clearFoundData();
-    } else if (nextProps.gameFound) {
+    } else if (this.props.gameFound) {
       this.props.clearFoundData();
       Actions.game_current();
     }
 
     return null;
   }
-
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
     this.backAndroidListener.remove();
   }
+
 
   getHomeImageStyle() {
     const { width: deviceWidth } = Dimensions.get('window');
@@ -288,7 +287,7 @@ class SearchView extends Component {
       <View style={styles.container}>
         <Image
           style={this.getHomeImageStyle()}
-          source={require('../../assets/poro_wallpaper.jpg')}
+          source={homeImage}
         />
 
         <View style={styles.formContainer}>
@@ -353,9 +352,11 @@ SearchView.propTypes = {
   searchSummoner: PropTypes.func,
   clearSearchError: PropTypes.func,
   clearFoundData: PropTypes.func,
-  summonerFoundId: PropTypes.any,
-  summonerFoundRegion: PropTypes.any,
+  summonerFoundId: PropTypes.number,
+  summonerFoundRegion: PropTypes.string,
   gameFound: PropTypes.bool.isRequired,
+  searchError: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string,
   searchGame: PropTypes.func,
   searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({})),
   loadSearchHistory: PropTypes.func.isRequired,

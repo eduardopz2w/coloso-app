@@ -4,8 +4,8 @@ const initialState = Immutable.fromJS({
   isSearching: false,
   searchError: false,
   errorMessage: null,
-  summonerFoundId: null,
-  summonerFoundRegion: null,
+  summonerFoundId: 0,
+  summonerFoundRegion: '',
   gameFound: false,
 });
 
@@ -61,8 +61,8 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SEARCH_VIEW/CLEAR_FOUND_DATA') {
     newState = newState.merge({
-      summonerFoundId: false,
-      gameFound: false,
+      summonerFoundId: 0,
+      gameFound: '',
     });
   }
 
