@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Dimensions, BackAndroid } from 'react-native';
+import { View, StyleSheet, Dimensions, BackAndroid, Text } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
@@ -14,6 +14,11 @@ import Toolbar from './Toolbar';
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+  },
+  modalTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    padding: 16,
   },
 });
 
@@ -62,13 +67,17 @@ class GameCurrentView extends Component {
 
 
   getModalStyle() {
+    const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
     const modalStyle = {
-      width: 300,
-      height: 280,
+      height: null,
+      maxHeight: deviceHeight * 0.8,
     };
 
-    if (this.state.modalType === 'MASTERIES') {
-      modalStyle.height = Dimensions.get('window').height * 0.8;
+    // Mobil
+    if (deviceWidth < 600) {
+      modalStyle.width = 300;
+    } else {
+      modalStyle.width = 550;
     }
 
     return modalStyle;
@@ -97,13 +106,19 @@ class GameCurrentView extends Component {
     let modalContent;
 
     if (this.state.modalType === 'RUNES') {
-      modalContent = (<RunePage
-        page={{ runes: this.getSummonerRunes(this.state.summonerSelectedId) }}
-      />);
+      modalContent = (<View>
+        <Text style={styles.modalTitle}>Runas</Text>
+        <RunePage
+          page={{ runes: this.getSummonerRunes(this.state.summonerSelectedId) }}
+        />
+      </View>);
     } else if (this.state.modalType === 'MASTERIES') {
-      modalContent = (<MasteryPage
-        page={{ masteries: this.getSummonerMasteries(this.state.summonerSelectedId) }}
-      />);
+      modalContent = (<View>
+        <Text style={styles.modalTitle}>Maestrias</Text>
+        <MasteryPage
+          page={{ masteries: this.getSummonerMasteries(this.state.summonerSelectedId) }}
+        />
+      </View>);
     }
 
     return (<View style={styles.root}>
