@@ -1,37 +1,48 @@
-import React, {Component} from 'react'
-import {
-  StyleSheet,
-  View,
-  Text
-} from 'react-native'
+import React, { PureComponent, PropTypes } from 'react';
+import { View, Text } from 'react-native';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
+
 import colors from '../../../utils/colors';
-import IconButton from '../../../components/IconButton'
+import IconButton from '../../../components/IconButton';
 
-const styles = StyleSheet.create({
-  root: {
-    backgroundColor: colors.primary,
-    height: 56,
-    flexDirection: 'row',
-    alignItems: 'center'
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      backgroundColor: colors.primary,
+      height: 56,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+
+    title: {
+      flex: 1,
+      marginLeft: 18,
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#FFFFFF',
+    },
   },
+  {
+    '@media (min-device-width: 600)': {
+      title: {
+        marginLeft: 40,
+      },
+    },
+  },
+);
 
-  title: {
-    flex: 1,
-    marginLeft: 12,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF'
-  }
-});
-
-class SearchViewToolbar extends Component {
-  render () {
-    return <View style={[styles.root, this.props.style]}>
-      <IconButton iconName="menu" />
-      <Text style={styles.title}>Buscar</Text>
+class SearchViewToolbar extends PureComponent {
+  render() {
+    return (<View style={[styles.root, this.props.style]}>
+      <Text style={styles.title}>Buscar Invocador</Text>
       <IconButton iconName="history" onPress={this.props.onPressHistoryButton} />
-    </View>
+    </View>);
   }
 }
 
-export default SearchViewToolbar
+SearchViewToolbar.propTypes = {
+  style: View.propTypes.style,
+  onPressHistoryButton: PropTypes.func,
+};
+
+export default SearchViewToolbar;
