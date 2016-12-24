@@ -4,7 +4,7 @@ export default function (gameMode) {
   }
 
   if (gameMode === 'ARAM') {
-    return 'Abismo de los lamentos';
+    return 'Abismo de los Lamentos';
   }
 
   if (gameMode === 'TUTORIAL') {
@@ -14,12 +14,13 @@ export default function (gameMode) {
   if (gameMode === 'ONEFORALL') {
     return 'Uno para todos';
   }
+
   if (gameMode === 'ASCENSION') {
     return 'Ascensión';
   }
 
   if (gameMode === 'KINGPORO') {
-    return 'La leyenda del rey poro';
+    return 'La leyenda del Rey Poro';
   }
 
   if (gameMode === 'ODIN') {
@@ -27,11 +28,11 @@ export default function (gameMode) {
   }
 
   if (gameMode === 'FIRSTBLOOD') {
-    return 'Primera sangre';
+    return 'Primera Sangre';
   }
 
   if (gameMode === 'SIEGE') {
-    return 'Asedio del nexo';
+    return 'Asedio del Nexo';
   }
 
   return gameMode;
