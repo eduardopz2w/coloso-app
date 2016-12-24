@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 function addEntry(summonerName, region) {
   return (dispatch) => {
-    storage.load({ key: 'searchHistoryEntries' })
+    Storage.load({ key: 'searchHistoryEntries' })
       .then(({ entries }) => {
         // Filtramos en caso de duplicado
         let entriesFiltered = _.filter(entries, (entry) => {
@@ -20,24 +20,19 @@ function addEntry(summonerName, region) {
           payload: { entries: entriesFiltered },
         });
 
-        return storage.save({ key: 'searchHistoryEntries', rawData: { entries: entriesFiltered } });
+        return Storage.save({ key: 'searchHistoryEntries', rawData: { entries: entriesFiltered } });
       });
   };
 }
 
 function loadEntries() {
   return (dispatch) => {
-    storage.load({ key: 'searchHistoryEntries' })
+    Storage.load({ key: 'searchHistoryEntries' })
       .then(({ entries }) => {
         dispatch({
           type: 'SEARCH_HISTORY/UPDATE_ENTRIES',
           payload: { entries },
         });
-      })
-      .catch(() => {
-        // TODO: Mejorar la iniciacion del storage
-        // Si esta vacio creamos el storage
-        storage.save({ key: 'searchHistoryEntries', rawData: { entries: [] } });
       });
   };
 }

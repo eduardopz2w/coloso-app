@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Picker, Text, Keyboard, Dimensions } from 'react-native';
+import { View, Image, Picker, Text, Keyboard, Dimensions, BackAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
@@ -7,13 +7,13 @@ import { Actions } from 'react-native-router-flux';
 import Snackbar from 'react-native-android-snackbar';
 
 import _ from 'lodash';
-import SearchViewToolbar from './SearchViewToolbar';
+import SearchViewToolbar from './components/SearchViewToolbar';
+import HistoryModal from './components//HistoryModal';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import colors from '../../utils/colors';
 import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
-import HistoryModal from './HistoryModal';
 
 // TODO: Agregar busquedas recientes
 
@@ -126,6 +126,7 @@ class SearchView extends Component {
     this.props.loadSearchHistory();
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this));
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this));
+    this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -151,18 +152,25 @@ class SearchView extends Component {
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
+    this.backAndroidListener.remove();
   }
 
   getHomeImageStyle() {
     const { width: deviceWidth } = Dimensions.get('window');
     let imageWidth;
     let imageHeight;
-    const acceptableHeight = this.state.visibleHeight * 0.4;
-    let acceptableWidth = deviceWidth - 32;
+    let acceptableHeight;
+    let acceptableWidth;
+    const formGroupHeight = 400; // Para calcular en la tablet con teclado abierto
 
-    if (deviceWidth >= 599) {
+    if (deviceWidth < 600) {
+      acceptableWidth = deviceWidth - 32;
+      acceptableHeight = this.state.visibleHeight * 0.4;
+    } else {
       acceptableWidth = deviceWidth - 80;
+      acceptableHeight = this.state.visibleHeight - formGroupHeight;
     }
+
 
     // Si no hay espacio suficiente
     if (this.state.visibleHeight < 350) {
@@ -187,6 +195,15 @@ class SearchView extends Component {
       alignSelf: 'center',
       borderRadius: 5,
     };
+  }
+
+  handleOnBackAndroid() {
+    if (this.historyModal.isOpen()) {
+      this.historyModal.close();
+      return true;
+    }
+
+    return false;
   }
 
   handleChangeRegion(newRegion) {
@@ -267,7 +284,7 @@ class SearchView extends Component {
     const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
 
     return (<View style={styles.root}>
-      <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton}/>
+      <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
       <View style={styles.container}>
         <Image
           style={this.getHomeImageStyle()}

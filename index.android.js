@@ -22,33 +22,34 @@ import lolcenaApp from './app/redux/reducers';
 import SearchView from './app/views/SearchView';
 import SummonerProfileView from './app/views/SummonerProfileView';
 import GameCurrentView from './app/views/GameCurrentView';
-import storage from './app/utils/storage';
+import StorageInstance from './app/utils/Storage';
 
-const logger = createLogger({
-  stateTransformer: (state) => {
-    const newState = {};
-
-    _.each(state, (value, key) => {
-      if (Immutable.Iterable.isIterable(value)) {
-        newState[key] = value.toJS();
-      } else {
-        newState[key] = value;
-      }
-    });
-
-    return newState;
-  },
-});
 
 let middlewares = [thunk, promiseMiddleware()];
-global.storage = storage;
 
 if (__DEV__) {
+  const logger = createLogger({
+    stateTransformer: (state) => {
+      const newState = {};
+
+      _.each(state, (value, key) => {
+        if (Immutable.Iterable.isIterable(value)) {
+          newState[key] = value.toJS();
+        } else {
+          newState[key] = value;
+        }
+      });
+
+      return newState;
+    },
+  });
+
   middlewares = [...middlewares, logger];
 }
 
 const store = createStore(lolcenaApp, applyMiddleware(...middlewares));
 moment.locale('es');
+global.Storage = StorageInstance;
 
 console.disableYellowBox = true;
 
