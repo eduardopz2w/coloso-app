@@ -109,9 +109,10 @@ class LeagueEntry extends Component {
 
     return {
       color: colors.tiers[tier.toLowerCase()],
+      textShadowColor: '#000',
       textShadowOffset: {
-        width: 1,
-        height: 1,
+        width: 0.5,
+        height: 0.5,
       },
     };
   }

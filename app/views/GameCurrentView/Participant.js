@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { MKButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../components/RankedMiniseries';
+import colors from '../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -34,6 +35,13 @@ const styles = MediaQueryStyleSheet.create(
     flexRow: {
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    tierText: {
+      textShadowColor: '#000',
+      textShadowOffset: {
+        width: 0.5,
+        height: 0.5,
+      },
     },
     dataCol: {
       flex: 1,
@@ -170,21 +178,21 @@ class Participant extends Component {
     let color;
 
     if (tier === 'UNRANKED') {
-      color = '#000';
+      color = colors.tiers.unranked;
     } else if (tier === 'SILVER') {
-      color = '#545556';
+      color = colors.tiers.silver;
     } else if (tier === 'BRONZE') {
-      color = '#8e6f00';
+      color = colors.tiers.bronze;
     } else if (tier === 'GOLD') {
-      color = '#f9d13e';
+      color = colors.tiers.gold;
     } else if (tier === 'PLATINUM') {
-      color = '#0c819e';
+      color = colors.tiers.platinum;
     } else if (tier === 'DIAMOND') {
-      color = '#009965';
+      color = colors.tiers.diamond;
     } else if (tier === 'MASTER') {
-      color = '#f9d13e';
+      color = colors.tiers.master;
     } else if (tier === 'CHALLENGER') {
-      color = '#f9d13e';
+      color = colors.tiers.challenger;
     }
 
     return <Text style={[styles.tierText, { color }]}>{tier}</Text>;
