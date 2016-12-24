@@ -49,7 +49,7 @@ function getModalStyle(deviceDimensions) {
   return {
     height: null,
     maxHeight: deviceDimensions.height * 0.50,
-    width: 300,
+    flex: 1,
   };
 }
 
