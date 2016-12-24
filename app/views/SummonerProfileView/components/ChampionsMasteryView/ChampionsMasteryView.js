@@ -69,11 +69,11 @@ class ChampionsMasteryView extends Component {
 
 ChampionsMasteryView.propTypes = {
   championsMastery: PropTypes.shape({
-    isFetching: PropTypes.bool,
-    fetched: PropTypes.bool,
-    fetchError: PropTypes.bool,
-    masteries: PropTypes.array,
-  }),
+    isFetching: PropTypes.bool.isRequied,
+    fetched: PropTypes.bool.isRequied,
+    fetchError: PropTypes.bool.isRequied,
+    masteries: PropTypes.array.isRequied,
+  }).isRequired,
   onPressRetryButton: PropTypes.func.isRequired,
 };
 

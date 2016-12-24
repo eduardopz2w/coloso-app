@@ -7,9 +7,22 @@ const BASEURL = 'http://192.168.0.2:1337/riot-api/';
 const riotClient = axios.create({
   baseURL: BASEURL,
   timeout: TIMEOUT,
+  responseType: 'json',
 });
 
-riotClient.interceptors.response.use(response => response, (error) => {
+riotClient.interceptors.response.use((response) => {
+  if (!_.isObject(response.data) && !_.isArray(response.data)) {
+    return Promise.reject({
+      response: {
+        data: {
+          message: 'Algo ha salido mal',
+        },
+      },
+    });
+  }
+
+  return response;
+}, (error) => {
   if (error.response) {
     return Promise.reject(error);
   }
