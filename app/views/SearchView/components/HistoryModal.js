@@ -36,18 +36,20 @@ const styles = StyleSheet.create({
 });
 
 function getModalStyle(deviceDimensions) {
+  // Tablet
   if (deviceDimensions.width > 600) {
     return {
-      width: 350,
+      width: 400,
       height: null,
       maxHeight: 400,
     };
   }
 
+  // Mobil
   return {
     height: null,
     maxHeight: deviceDimensions.height * 0.50,
-    width: 400,
+    width: 300,
   };
 }
 
