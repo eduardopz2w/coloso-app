@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 5000;
-const BASEURL = 'http://192.168.0.2:1337/riot-api/';
+const BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
 
 const riotClient = axios.create({
   baseURL: BASEURL,
