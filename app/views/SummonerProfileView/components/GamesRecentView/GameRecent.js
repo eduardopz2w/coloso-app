@@ -289,7 +289,7 @@ class GameRecent extends PureComponent {
             <View style={styles.iconDataRow}>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text style={styles.dataText}>{championsKilled || '0'}/{assists || '0'}/{numDeaths || '0'}</Text>
+                <Text style={styles.dataText}>{championsKilled || '0'}/{numDeaths || '0'}/{assists || '0'}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
