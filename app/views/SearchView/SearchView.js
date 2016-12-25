@@ -135,12 +135,14 @@ class SearchView extends Component {
     }
 
     if (this.props.summonerFoundId > 0) {
+      this.props.addSearchEntry(this.state.summonerName, this.state.region);
       Actions.summoner_profile_view({
         summonerId: this.props.summonerFoundId,
         region: this.props.summonerFoundRegion,
       });
       this.props.clearFoundData();
     } else if (this.props.gameFound) {
+      this.props.addSearchEntry(this.state.summonerName, this.state.region);
       this.props.clearFoundData();
       Actions.game_current();
     }
@@ -206,17 +208,20 @@ class SearchView extends Component {
   }
 
   handleChangeRegion(newRegion) {
-    this.setState({ region: newRegion });
+    if (!this.props.isSearching) {
+      this.setState({ region: newRegion });
+    }
   }
 
   handleTextChangeSummonerName(newSummonerName) {
-    this.setState({ summonerName: newSummonerName });
+    if (!this.props.isSearching) {
+      this.setState({ summonerName: newSummonerName });
+    }
   }
 
   handlePressSearchButton() {
     Snackbar.dismiss();
     Keyboard.dismiss();
-    this.props.addSearchEntry(this.state.summonerName, this.state.region);
 
     if (this.state.searchType === PROFILE_SEARCH) {
       this.props.searchSummoner(this.state.summonerName, this.state.region);
