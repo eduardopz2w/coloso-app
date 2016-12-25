@@ -6,10 +6,6 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 const styles = MediaQueryStyleSheet.create(
   {
     root: {},
-    container: {
-      paddingLeft: 16,
-      paddingRight: 16,
-    },
     runeImage: {
       width: 50,
       height: 50,
@@ -64,6 +60,9 @@ const styles = MediaQueryStyleSheet.create(
       descriptionText: {
         fontSize: 18,
       },
+      messageText: {
+        fontSize: 18,
+      },
     },
   },
 );
@@ -77,7 +76,7 @@ class RunePage extends Component {
     const { runes } = this.props.page;
 
     if (runes.length === 0) {
-      return <Text>Esta página de runas está vacía.</Text>;
+      return <Text style={styles.messageText}>Esta página de runas está vacía.</Text>;
     }
 
     return (<ScrollView contentContainerStyle={styles.container}>

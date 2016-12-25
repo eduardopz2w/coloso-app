@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     backgroundColor: 'rgba(0,0,0,0.1)',
   },
+  container: {
+    padding: 16,
+  },
 });
 
 class RunesView extends Component {
@@ -33,7 +36,9 @@ class RunesView extends Component {
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
-        <RunePage page={pages[this.state.pageSelected]} />
+        <View style={styles.container}>
+          <RunePage page={pages[this.state.pageSelected]} />
+        </View>
       </View>);
     } else if (isFetching) {
       return <LoadingScreen />;

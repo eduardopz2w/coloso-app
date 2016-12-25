@@ -1,20 +1,33 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, ListView, Dimensions, Text, View } from 'react-native';
+import { ListView, Dimensions, Text, View } from 'react-native';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
 
-const styles = StyleSheet.create({
-  roowScrollView: {
-    flex: 1,
+const styles = MediaQueryStyleSheet.create(
+  {
+    roowScrollView: {
+      flex: 1,
+    },
+    container: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'space-around',
+      padding: 16,
+    },
+    messageText: {
+      flex: 1,
+    },
   },
-  container: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    padding: 16,
+  {
+    '@media (min-device-width: 600)': {
+      messageText: {
+        fontSize: 18,
+      },
+    },
   },
-});
+);
 
 class ChampionsMasteryView extends Component {
   constructor(props) {
@@ -43,7 +56,7 @@ class ChampionsMasteryView extends Component {
     if (fetched) {
       if (masteries.length === 0) {
         return (<View style={styles.container}>
-          <Text>Este invocador no tiene puntos de maestria con ningún campeón.</Text>
+          <Text style={styles.messageText}>Este invocador no tiene puntos de maestria con ningún campeón.</Text>
         </View>);
       }
 
