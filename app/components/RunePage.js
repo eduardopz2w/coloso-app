@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 
@@ -75,6 +75,10 @@ function getRuneImageUri(runeImage) {
 class RunePage extends Component {
   render() {
     const { runes } = this.props.page;
+
+    if (runes.length === 0) {
+      return <Text>Esta página de runas está vacía.</Text>;
+    }
 
     return (<ScrollView contentContainerStyle={styles.container}>
       {runes.map((rune, key) => <View style={styles.runeRow} key={key} >

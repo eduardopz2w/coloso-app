@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, ListView, Dimensions } from 'react-native';
+import { StyleSheet, ListView, Dimensions, Text, View } from 'react-native';
 import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
@@ -41,6 +41,12 @@ class ChampionsMasteryView extends Component {
     }
 
     if (fetched) {
+      if (masteries.length === 0) {
+        return (<View style={styles.container}>
+          <Text>Este invocador no tiene puntos de maestria con ningún campeón.</Text>
+        </View>);
+      }
+
       return (<ListView
         style={styles.rootScrollView}
         pageSize={pageSize}
