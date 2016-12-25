@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Picker, Text, Keyboard, Dimensions, BackAndroid } from 'react-native';
+import { View, Image, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import { Actions } from 'react-native-router-flux';
-import Snackbar from 'react-native-android-snackbar';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
@@ -103,7 +102,7 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: null,
+      summonerName: '',
       region: 'na',
       searchType: PROFILE_SEARCH,
       visibleHeight: Dimensions.get('window').height,
@@ -130,7 +129,7 @@ class SearchView extends Component {
 
   componentDidUpdate() {
     if (this.props.searchError) {
-      Snackbar.show(this.props.errorMessage, { duration: Snackbar.LONG });
+      Alert.alert(null, this.props.errorMessage);
       return this.props.clearSearchError();
     }
 
@@ -220,13 +219,14 @@ class SearchView extends Component {
   }
 
   handlePressSearchButton() {
-    Snackbar.dismiss();
-    Keyboard.dismiss();
+    if (this.state.summonerName !== '') {
+      Keyboard.dismiss();
 
-    if (this.state.searchType === PROFILE_SEARCH) {
-      this.props.searchSummoner(this.state.summonerName, this.state.region);
-    } else if (this.state.searchType === GAME_SEARCH) {
-      this.props.searchGame(this.state.summonerName, this.state.region);
+      if (this.state.searchType === PROFILE_SEARCH) {
+        this.props.searchSummoner(this.state.summonerName, this.state.region);
+      } else if (this.state.searchType === GAME_SEARCH) {
+        this.props.searchGame(this.state.summonerName, this.state.region);
+      }
     }
   }
 
