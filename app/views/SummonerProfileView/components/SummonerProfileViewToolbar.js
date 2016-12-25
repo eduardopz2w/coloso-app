@@ -6,6 +6,7 @@ import IconButton from '../../../components/IconButton';
 import LoadingScreen from '../../../components/LoadingScreen';
 import regionHumanize from '../../../utils/regionHumanize';
 import colors from '../../../utils/colors';
+import profileBackgroundImage from '../../../assets/profile_background.jpg';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -17,6 +18,13 @@ const styles = MediaQueryStyleSheet.create(
       width: 72,
       height: 72,
       borderRadius: 50,
+    },
+    backgroundImage: {
+      position: 'absolute',
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0,
     },
 
     summonerImageContainer: {
@@ -92,8 +100,8 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       summonerImage: {
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
       },
 
       summonerLevelContainer: {
@@ -142,6 +150,7 @@ class SummonerProfileViewToolbar extends Component {
     const { isFetching, profileIconId, name, summonerLevel, region } = this.props.summonerData;
 
     return (<View style={styles.root}>
+      <Image style={styles.backgroundImage} source={profileBackgroundImage} />
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
       </View>

@@ -69,9 +69,9 @@ const styles = MediaQueryStyleSheet.create(
       height: 15,
     },
     itemImage: {
-      width: 24,
-      height: 24,
-      borderColor: 'black',
+      width: 25,
+      height: 25,
+      borderColor: '#d0aa49',
       borderWidth: 1.5,
     },
     noItem: {
@@ -96,7 +96,7 @@ const styles = MediaQueryStyleSheet.create(
     },
     multikillContainer: {
       backgroundColor: '#d0aa49',
-      borderRadius: 50,
+      borderRadius: 5,
       marginTop: 8,
     },
     multikillText: {
