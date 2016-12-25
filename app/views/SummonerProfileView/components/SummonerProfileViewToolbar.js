@@ -150,7 +150,7 @@ class SummonerProfileViewToolbar extends Component {
     const { isFetching, profileIconId, name, summonerLevel, region } = this.props.summonerData;
 
     return (<View style={styles.root}>
-      <Image style={styles.backgroundImage} source={profileBackgroundImage} />
+      <Image style={styles.backgroundImage} source={profileBackgroundImage} resizeMode="contain" resizeMethod="scale" />
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
       </View>
