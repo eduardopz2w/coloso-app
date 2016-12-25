@@ -1,4 +1,4 @@
-package com.lolcena;
+package com.pedronalbert.lolcena;
 
 import com.facebook.react.ReactActivity;
 
