@@ -7,6 +7,7 @@ import ErrorScreen from '../../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {
+    flex: 1,
   },
   headerSelector: {
     paddingLeft: 16,
@@ -14,6 +15,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 16,
+    flex: 1,
   },
 });
 

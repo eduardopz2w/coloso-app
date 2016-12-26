@@ -5,7 +5,9 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 const styles = MediaQueryStyleSheet.create(
   {
-    root: {},
+    root: {
+      flex: -1,
+    },
     runeImage: {
       width: 50,
       height: 50,
@@ -100,6 +102,7 @@ class RunePage extends Component {
     }
 
     return (<ListView
+      style={styles.root}
       contentContainerStyle={styles.container}
       dataSource={this.ds.cloneWithRows(runes)}
       renderRow={renderRow}

@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import FitImage from 'react-native-fit-image';
 import IconButton from '../../../components/IconButton';
 import LoadingScreen from '../../../components/LoadingScreen';
 import regionHumanize from '../../../utils/regionHumanize';
@@ -159,7 +158,7 @@ class SummonerProfileViewToolbar extends Component {
         ) : (
           <View style={styles.profileToolbarContainer}>
             <View style={styles.summonerImageContainer}>
-              <FitImage
+              <Image
                 style={styles.summonerImage}
                 source={{ uri: getImageUri(profileIconId) }}
               />
