@@ -1,12 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import FitImage from 'react-native-fit-image';
 import IconButton from '../../../components/IconButton';
 import LoadingScreen from '../../../components/LoadingScreen';
 import regionHumanize from '../../../utils/regionHumanize';
 import colors from '../../../utils/colors';
-import profileBackgroundImage from '../../../assets/profile_background.jpg';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -150,7 +149,6 @@ class SummonerProfileViewToolbar extends Component {
     const { isFetching, profileIconId, name, summonerLevel, region } = this.props.summonerData;
 
     return (<View style={styles.root}>
-      <Image style={styles.backgroundImage} source={profileBackgroundImage} resizeMode="contain" resizeMethod="scale" />
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
       </View>

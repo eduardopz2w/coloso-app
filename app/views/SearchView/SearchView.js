@@ -1,101 +1,20 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert } from 'react-native';
+import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
-import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import colors from '../../utils/colors';
-import styleUtils from '../../utils/styleUtils';
 import regionHumanize from '../../utils/regionHumanize';
-import homeImage from '../../assets/poro_wallpaper.jpg';
+import styles from './styles';
 
 // TODO: Agregar busquedas recientes
 
 const PROFILE_SEARCH = 'PROFILE_SEARCH';
 const GAME_SEARCH = 'GAME_SEARCH';
-
-const styles = MediaQueryStyleSheet.create(
-  {
-    root: {
-      flex: 1,
-    },
-
-    container: {
-      padding: 16,
-      flex: 1,
-      justifyContent: 'space-around',
-    },
-
-    label: {
-      fontWeight: 'bold',
-      fontSize: 16,
-    },
-
-    formContainer: {
-      overflow: 'scroll',
-    },
-
-    formGroup: {
-      marginBottom: 8,
-    },
-
-    inputName: {
-      flex: 1,
-      height: 47,
-      marginLeft: 10,
-    },
-
-    radioGroup: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-
-    inputRegion: {
-      flex: 1,
-      height: 50,
-    },
-
-    searchButton: {
-      backgroundColor: colors.primary,
-      justifyContent: 'center',
-      alignItems: 'center',
-      height: 40,
-    },
-
-    searchButtonText: {
-      color: '#FFFFFF',
-    },
-
-    spinnerContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
-  {
-    '@media (min-device-width: 600)': {
-      formGroup: {
-        marginBottom: 16,
-      },
-      container: {
-        paddingLeft: 40,
-        paddingRight: 40,
-      },
-      inputName: {
-        marginLeft: 16,
-      },
-      inputRegion: {
-        marginLeft: 8,
-      },
-      radioGroup: {
-        flex: 1,
-      },
-    },
-  },
-);
 
 class SearchView extends Component {
   constructor(props) {
@@ -114,7 +33,6 @@ class SearchView extends Component {
     this.handleOnChekedChangeProfileButton = this.handleOnChekedChangeProfileButton.bind(this);
     this.handleOnPressHistoryButton = this.handleOnPressHistoryButton.bind(this);
     this.handleOnPressHistoryEntry = this.handleOnPressHistoryEntry.bind(this);
-    this.getHomeImageStyle = this.getHomeImageStyle.bind(this);
     this.renderButton = this.renderButton.bind(this);
     this.renderSpinner = this.renderSpinner.bind(this);
     this.radioGroup = new MKRadioButton.Group();
@@ -152,49 +70,6 @@ class SearchView extends Component {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
     this.backAndroidListener.remove();
-  }
-
-
-  getHomeImageStyle() {
-    const { width: deviceWidth } = Dimensions.get('window');
-    let imageWidth;
-    let imageHeight;
-    let acceptableHeight;
-    let acceptableWidth;
-    const formGroupHeight = 400; // Para calcular en la tablet con teclado abierto
-
-    if (deviceWidth < 600) {
-      acceptableWidth = deviceWidth - 32;
-      acceptableHeight = this.state.visibleHeight * 0.4;
-    } else {
-      acceptableWidth = deviceWidth - 80;
-      acceptableHeight = this.state.visibleHeight - formGroupHeight;
-    }
-
-
-    // Si no hay espacio suficiente
-    if (this.state.visibleHeight < 350) {
-      return { width: 0, height: 0 };
-    }
-
-    // Definimos la imagen con respecto al alto acceptableHeigh
-    imageHeight = acceptableHeight;
-    imageWidth = imageHeight * 2;
-
-    if (imageWidth > acceptableWidth) {
-      const widthDiff = imageWidth - acceptableWidth;
-      const resizePercent = widthDiff / imageWidth;
-
-      imageWidth -= imageWidth * resizePercent;
-      imageHeight -= imageHeight * resizePercent;
-    }
-
-    return {
-      width: imageWidth,
-      height: imageHeight,
-      alignSelf: 'center',
-      borderRadius: 5,
-    };
   }
 
   handleOnBackAndroid() {
@@ -264,7 +139,7 @@ class SearchView extends Component {
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
-        <MKSpinner strokeColor={colors.spinnerColor} />
+        <MKSpinner strokeColor="white" />
       </View>);
     }
 
@@ -290,16 +165,10 @@ class SearchView extends Component {
     return (<View style={styles.root}>
       <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
       <View style={styles.container}>
-        <Image
-          style={this.getHomeImageStyle()}
-          source={homeImage}
-        />
 
         <View style={styles.formContainer}>
           <View style={styles.formGroup}>
-            <MediaQuery minDeviceWidth={600}>
-              <Text style={styles.label}>Nombre de Invocador: </Text>
-            </MediaQuery>
+            <Text style={[styles.label]}>Nombre de Invocador: </Text>
             <MKTextField
               style={styles.inputName}
               value={this.state.summonerName}
@@ -308,9 +177,7 @@ class SearchView extends Component {
             />
           </View>
           <View style={styles.formGroup}>
-            <MediaQuery minDeviceWidth={600}>
-              <Text style={styles.label}>Region: </Text>
-            </MediaQuery>
+            <Text style={[styles.label]}>Region: </Text>
             <Picker
               style={styles.inputRegion}
               onValueChange={this.handleChangeRegion}
@@ -323,7 +190,7 @@ class SearchView extends Component {
               />)}
             </Picker>
           </View>
-          <View style={styleUtils.flexRow}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
             <View style={styles.radioGroup}>
               <MKRadioButton
                 group={this.radioGroup}
