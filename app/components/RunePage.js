@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ListView } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 
@@ -71,7 +71,27 @@ function getRuneImageUri(runeImage) {
   return `rune_${runeImage}`.replace('.png', '');
 }
 
+function renderRow(rune) {
+  return (<View style={styles.runeRow}>
+    <Image style={styles.runeImage} source={{ uri: getRuneImageUri(rune.image.full) }} >
+      <Text style={styles.countText}>x{rune.count}</Text>
+    </Image>
+    <View style={styles.dataCol}>
+      <Text style={styles.titleText}>{rune.name}</Text>
+      <Text style={styles.descriptionText}>{rune.description}</Text>
+    </View>
+  </View>);
+}
+
 class RunePage extends Component {
+  constructor(props) {
+    super(props);
+
+    this.ds = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
+  }
+
   render() {
     const { runes } = this.props.page;
 
@@ -79,17 +99,11 @@ class RunePage extends Component {
       return <Text style={styles.messageText}>Esta página de runas está vacía.</Text>;
     }
 
-    return (<ScrollView contentContainerStyle={styles.container}>
-      {runes.map((rune, key) => <View style={styles.runeRow} key={key} >
-        <Image style={styles.runeImage} source={{ uri: getRuneImageUri(rune.image.full) }} >
-          <Text style={styles.countText}>x{rune.count}</Text>
-        </Image>
-        <View style={styles.dataCol}>
-          <Text style={styles.titleText}>{rune.name}</Text>
-          <Text style={styles.descriptionText}>{rune.description}</Text>
-        </View>
-      </View>)}
-    </ScrollView>);
+    return (<ListView
+      contentContainerStyle={styles.container}
+      dataSource={this.ds.cloneWithRows(runes)}
+      renderRow={renderRow}
+    />);
   }
 }
 

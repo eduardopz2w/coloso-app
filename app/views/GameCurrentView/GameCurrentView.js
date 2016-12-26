@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    padding: 16,
+    marginBottom: 10,
   },
 });
 
@@ -72,6 +72,7 @@ class GameCurrentView extends Component {
     const modalStyle = {
       height: null,
       maxHeight: deviceHeight * 0.8,
+      padding: 16,
     };
 
     // Mobil
@@ -130,6 +131,7 @@ class GameCurrentView extends Component {
       <Toolbar
         mapId={this.props.gameData.mapId}
         gameQueueConfigId={this.props.gameData.gameQueueConfigId}
+        gameStartTime={this.props.gameData.gameStartTime}
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
@@ -177,6 +179,7 @@ GameCurrentView.propTypes = {
     mapId: PropTypes.number.isRequired,
     gameQueueConfigId: PropTypes.number.isRequired,
     region: PropTypes.string.isRequired,
+    gameStartTime: PropTypes.number.isRequired,
   }).isRequired,
 };
 

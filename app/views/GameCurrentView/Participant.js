@@ -90,8 +90,6 @@ const styles = MediaQueryStyleSheet.create(
       padding: 4,
       maxWidth: 90,
       borderRadius: 4,
-      borderWidth: 1,
-      borderColor: colors.primary,
     },
 
     roundedButtonText: {
@@ -283,6 +281,7 @@ class Participant extends Component {
         <View style={styles.buttonsRow}>
           <MKButton
             style={styles.roundedButton}
+            rippleColor="rgba(0,0,0,0.1)"
             onPress={() => this.props.onPressRunesButton(summonerId)}
           >
             <Text style={styles.roundedButtonText}>RUNAS</Text>
@@ -290,6 +289,7 @@ class Participant extends Component {
 
           <MKButton
             style={styles.roundedButton}
+            rippleColor="rgba(0,0,0,0.1)"
             onPress={() => this.props.onPressMasteriesButton(summonerId)}
           >
             <Text style={styles.roundedButtonText}>MAESTRIAS</Text>
