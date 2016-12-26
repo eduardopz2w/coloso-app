@@ -10,7 +10,7 @@ export default MediaQueryStyleSheet.create(
     },
 
     container: {
-      padding: 16,
+      margin: 16,
       flex: 1,
       justifyContent: 'space-around',
     },
@@ -20,10 +20,11 @@ export default MediaQueryStyleSheet.create(
       fontSize: 16,
     },
 
-    formContainer: {
+    paperBox: {
       backgroundColor: 'white',
       padding: 16,
       borderRadius: 5,
+      marginBottom: 25,
     },
 
     formGroup: {
@@ -97,6 +98,16 @@ export default MediaQueryStyleSheet.create(
       },
       radioGroup: {
         flex: 1,
+      },
+      historyContainer: {
+        flex: -1,
+        minHeight: 100,
+        overflow: 'hidden',
+      },
+      modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 12,
       },
     },
   },

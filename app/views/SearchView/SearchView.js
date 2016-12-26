@@ -3,11 +3,12 @@ import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert } from 're
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
+import { MediaQuery } from 'react-native-responsive';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
-import colors from '../../utils/colors';
+import History from './components/History';
 import regionHumanize from '../../utils/regionHumanize';
 import styles from './styles';
 
@@ -149,6 +150,7 @@ class SearchView extends Component {
   renderButton() {
     if (!this.props.isSearching && this.state.visibleHeight > 300) {
       return (<MKButton
+        rippleColor="rgba(0,0,0,0.1)"
         style={styles.searchButton}
         onPress={this.handlePressSearchButton}
       >
@@ -162,11 +164,12 @@ class SearchView extends Component {
   render() {
     const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
 
+
     return (<View style={styles.root}>
       <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
       <View style={styles.container}>
 
-        <View style={styles.formContainer}>
+        <View style={styles.paperBox}>
           <View style={styles.formGroup}>
             <Text style={[styles.label]}>Nombre de Invocador: </Text>
             <MKTextField
@@ -206,6 +209,18 @@ class SearchView extends Component {
           </View>
         </View>
 
+        <MediaQuery minDeviceWidth={600}>
+          <View style={[styles.paperBox, styles.historyContainer]}>
+            <Text style={styles.modalTitle}>Busqueda Rápida</Text>
+            <History
+              ref={(historyModal) => { this.historyModal = historyModal; }}
+              style={{ flex: -1 }}
+              historyEntries={this.props.searchHistoryEntries}
+              onPressHistoryEntry={this.handleOnPressHistoryEntry}
+            />
+          </View>
+        </MediaQuery>
+
         {this.renderSpinner()}
         {this.renderButton()}
       </View>
@@ -230,7 +245,9 @@ SearchView.propTypes = {
   searchError: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
   searchGame: PropTypes.func,
-  searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({})),
+  searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({
+    entries: PropTypes.arrayOf(PropTypes.shape({})),
+  })),
   loadSearchHistory: PropTypes.func.isRequired,
   addSearchEntry: PropTypes.func.isRequired,
 };

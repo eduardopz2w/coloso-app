@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Text } from 'react-native';
-import { MediaQueryStyleSheet } from 'react-native-responsive';
+import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import colors from '../../../utils/colors';
 import IconButton from '../../../components/IconButton';
 
@@ -34,7 +34,9 @@ class SearchViewToolbar extends PureComponent {
   render() {
     return (<View style={[styles.root, this.props.style]}>
       <Text style={styles.title}>Buscar Invocador</Text>
-      <IconButton iconName="history" onPress={this.props.onPressHistoryButton} />
+      <MediaQuery maxDeviceWidth={599}>
+        <IconButton iconName="history" onPress={this.props.onPressHistoryButton} />
+      </MediaQuery>
     </View>);
   }
 }
