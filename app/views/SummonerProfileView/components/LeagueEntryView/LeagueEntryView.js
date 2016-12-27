@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native';
 import LeagueEntry from './LeagueEntry';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
   spinnerContainer: {
@@ -26,6 +27,10 @@ const styles = StyleSheet.create({
 });
 
 class LeagueEntryView extends PureComponent {
+  componentDidMount() {
+    tracker.trackScreenView('LeagueEntryView');
+  }
+
   render() {
     const { isFetching, fetched, entries } = this.props.leagueEntry;
 

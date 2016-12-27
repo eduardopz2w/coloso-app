@@ -3,7 +3,7 @@ import { ListView } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import GameRecent from './GameRecent';
 import ErrorScreen from '../../../../components/ErrorScreen';
-
+import { tracker } from '../../../../utils/analytics';
 
 class GamesRecentView extends PureComponent {
   constructor(props) {
@@ -13,6 +13,11 @@ class GamesRecentView extends PureComponent {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
   }
+
+  componentDidMount() {
+    tracker.trackScreenView('GamesRecentView');
+  }
+
   render() {
     const { isFetching, games, fetched } = this.props.gamesRecent;
 

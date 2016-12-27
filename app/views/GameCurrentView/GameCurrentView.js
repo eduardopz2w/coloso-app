@@ -9,6 +9,7 @@ import colors from '../../utils/colors';
 import TeamTab from './TeamTab';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
+import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
 
 const styles = StyleSheet.create({
@@ -42,6 +43,10 @@ class GameCurrentView extends Component {
 
   componentWillMount() {
     this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
+  }
+
+  componentDidMount() {
+    tracker.trackScreenView('GameCurrentView');
   }
 
   componentWillUnmount() {

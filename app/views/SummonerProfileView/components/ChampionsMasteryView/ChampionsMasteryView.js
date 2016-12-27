@@ -4,6 +4,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import { tracker } from '../../../../utils/analytics';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -37,6 +38,11 @@ class ChampionsMasteryView extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
   }
+
+  componentDidMount() {
+    tracker.trackScreenView('ChampionsMasteryView');
+  }
+
   render() {
     const { isFetching, masteries, fetched } = this.props.championsMastery;
     let championImageSize;

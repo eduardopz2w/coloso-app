@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import { MediaQuery } from 'react-native-responsive';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
+import { tracker } from '../../utils/analytics';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import History from './components/History';
@@ -46,6 +47,11 @@ class SearchView extends Component {
     this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
   }
 
+  componentDidMount() {
+    console.log(tracker);
+    tracker.trackScreenView('SearchView');
+  }
+
   componentDidUpdate() {
     if (this.props.searchError) {
       Alert.alert(null, this.props.errorMessage);
@@ -67,6 +73,7 @@ class SearchView extends Component {
 
     return null;
   }
+
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
@@ -269,11 +276,13 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     searchSummoner: (summonerName, region) => {
+      tracker.trackEvent('search profile', `name: ${summonerName} region: ${region}`);
       dispatch(SearchViewActions.searchSummoner(summonerName, region));
     },
 
-    searchGame: (summonerId, region) => {
-      dispatch(SearchViewActions.searchGame(summonerId, region));
+    searchGame: (summonerName, region) => {
+      tracker.trackEvent('search game', `name: ${summonerName} region: ${region}`);
+      dispatch(SearchViewActions.searchGame(summonerName, region));
     },
 
     clearSearchError: () => {

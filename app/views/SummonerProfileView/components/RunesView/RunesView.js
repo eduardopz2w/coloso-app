@@ -4,6 +4,7 @@ import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {
@@ -27,6 +28,11 @@ class RunesView extends Component {
       pageSelected: 0,
     };
   }
+
+  componentDidMount() {
+    tracker.trackScreenView('RunesView');
+  }
+
   render() {
     const { isFetching, fetched, pages } = this.props.runes;
 

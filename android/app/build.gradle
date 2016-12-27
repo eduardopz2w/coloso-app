@@ -90,8 +90,8 @@ android {
         applicationId "com.pedronalbert.lolcena"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "0.5"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -136,6 +136,7 @@ android {
 
 dependencies {
     compile project(':react-native-google-analytics-bridge')
+    compile project(':react-native-admob')
     compile project(':react-native-material-kit')
     compile project(':react-native-vector-icons')
     compile fileTree(dir: "libs", include: ["*.jar"])

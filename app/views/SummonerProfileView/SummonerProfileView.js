@@ -11,6 +11,7 @@ import GamesRecentView from './components/GamesRecentView';
 import MasteriesView from './components/MasteriesView';
 import RunesView from './components/RunesView';
 import colors from '../../utils/colors';
+import { tracker } from '../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {
@@ -30,6 +31,9 @@ class SummonerProfileView extends Component {
     this.props.fetchLeagueEntry();
   }
 
+  componentDidMount() {
+    tracker.trackScreenView('SummonerProfileView');
+  }
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1) {

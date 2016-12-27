@@ -5,6 +5,7 @@ import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
 import colors from '../../../../utils/colors';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {},
@@ -22,6 +23,11 @@ class MasteriesView extends Component {
       pageSelected: 0,
     };
   }
+
+  componentDidMount() {
+    tracker.trackScreenView('MasteriesView');
+  }
+
   render() {
     const { isFetching, fetched, pages } = this.props.masteries;
 
