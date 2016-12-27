@@ -139,12 +139,12 @@ class SummonerProfileView extends Component {
 SummonerProfileView.propTypes = {
   summonerId: PropTypes.number,
   region: PropTypes.string,
-  fetchSummonerData: PropTypes.func.isRequied,
-  fetchLeagueEntry: PropTypes.func.isRequied,
-  fetchChampionsMastery: PropTypes.func.isRequied,
-  fetchGamesRecent: PropTypes.func.isRequied,
-  fetchMasteries: PropTypes.func.isRequied,
-  fetchSummary: PropTypes.func.isRequied,
+  fetchSummonerData: PropTypes.func,
+  fetchLeagueEntry: PropTypes.func,
+  fetchChampionsMastery: PropTypes.func,
+  fetchGamesRecent: PropTypes.func,
+  fetchMasteries: PropTypes.func,
+  fetchSummary: PropTypes.func,
   fetchRunes: PropTypes.func,
   leagueEntry: PropTypes.shape({
     isFetching: PropTypes.bool,
