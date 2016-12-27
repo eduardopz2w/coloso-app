@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import _ from 'lodash';
 import CollapsibleBar from 'react-native-bar-collapsible';
 import colors from '../../../../utils/colors';
+import constantsParser from '../../../../utils/riotConstantsParser';
 
 const styles = StyleSheet.create({
   root: {},
@@ -32,7 +33,8 @@ const styles = StyleSheet.create({
     fontSize: 11,
   },
   collapsible: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
+    backgroundColor: 'rgba(0,0,0,0.06)',
+    marginBottom: 1,
   },
 });
 
@@ -51,11 +53,12 @@ class Summary extends PureComponent {
   render() {
     const { summary } = this.props;
     const { aggregatedStats } = summary;
+    const title = constantsParser.playerStatSummaryType(summary.playerStatSummaryType);
 
     return (<CollapsibleBar
       style={styles.collapsible}
       titleStyle={styles.title}
-      title={summary.playerStatSummaryType}
+      title={title}
       tintColor={colors.text.main}
       collapsible
       iconSize={10}

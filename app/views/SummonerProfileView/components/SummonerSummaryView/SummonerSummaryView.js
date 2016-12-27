@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView } from 'react-native';
+import { StyleSheet, ListView } from 'react-native';
 import _ from 'lodash';
 import LoadingScreen from '../../../../components/LoadingScreen';
+import ErrorScreen from '../../../../components/ErrorScreen';
 import Summary from './Summary';
 
 const styles = StyleSheet.create({
@@ -43,9 +44,11 @@ class SummonerSumaryView extends Component {
       return <LoadingScreen />;
     }
 
-    return (<View style={styles.root}>
-      <Text>Error al cargar</Text>
-    </View>);
+    return (<ErrorScreen
+      message="Error al cargar las estadisticas"
+      onPressRetryButton={this.props.onPressRetryButton}
+      retryButton
+    />);
   }
 }
 
@@ -55,6 +58,7 @@ SummonerSumaryView.propTypes = {
     fetched: PropTypes.bool.isRequired,
     playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})),
   }),
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default SummonerSumaryView;

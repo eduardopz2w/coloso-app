@@ -171,6 +171,22 @@ function getSummonerGameCurrent(summonerId, region) {
   });
 }
 
+function getSummonerStatsSummary(summonerId, region, season) {
+  return new Promise((resolve, reject) => {
+    const url = `${region}/summoner/${summonerId}/stats/summary/${season}`;
+
+    return riotClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName: getSummonerByName,
@@ -181,5 +197,8 @@ export default {
     masteries: getSummonerMasteries,
     runes: getSummonerRunes,
     gameCurrent: getSummonerGameCurrent,
+    stats: {
+      summary: getSummonerStatsSummary,
+    },
   },
 };

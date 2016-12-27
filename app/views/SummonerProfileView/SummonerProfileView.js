@@ -79,7 +79,7 @@ class SummonerProfileView extends Component {
       const { isFetching, fetched } = this.props.summary;
 
       if (!isFetching && !fetched) {
-        this.props.fetchSummary('season2016');
+        this.props.fetchSummary('SEASON2016');
       }
     }
   }
@@ -127,6 +127,7 @@ class SummonerProfileView extends Component {
         <SummonerSummaryView
           summary={this.props.summary}
           tabLabel="Estadisticas"
+          onPressRetryButton={() => this.props.fetchSummary('SEASON2016')}
         />
       </ScrollableTabView>
     </View>);
