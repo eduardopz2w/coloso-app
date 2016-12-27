@@ -1,4 +1,5 @@
 import RiotApi from '../../utils/RiotApi';
+import season2016Data from '../../fakedata/season2016_fakedata';
 
 function fetchSummonerData(summonerId, region) {
   return {
@@ -54,6 +55,14 @@ function fetchRunes(summonerId, region) {
   };
 }
 
+function fetchSummary(summonerId, region, season) {
+  // TODO: use riot api
+  return {
+    type: 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_FULFILLED',
+    payload: season2016Data,
+  };
+}
+
 const actions = {
   fetchSummonerData,
   fetchLeagueEntry,
@@ -61,6 +70,7 @@ const actions = {
   fetchGamesRecent,
   fetchMasteries,
   fetchRunes,
+  fetchSummary,
 };
 
 export default actions;

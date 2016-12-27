@@ -23,8 +23,8 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: '',
-      region: 'na',
+      summonerName: 'armaghyon',
+      region: 'lan',
       searchType: PROFILE_SEARCH,
       visibleHeight: Dimensions.get('window').height,
     };
