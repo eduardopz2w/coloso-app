@@ -1,14 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, ListView } from 'react-native';
+import { StyleSheet, ListView, View } from 'react-native';
 import _ from 'lodash';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import SeasonSelector from '../../../../components/SeasonSelector';
 import Summary from './Summary';
 
 const styles = StyleSheet.create({
   root: {},
   container: {
-    padding: 16,
+    marginTop: 16,
+  },
+  headerSelector: {
+    paddingLeft: 16,
+    backgroundColor: 'rgba(0,0,0,0.1)',
   },
 });
 
@@ -35,10 +40,21 @@ class SummonerSumaryView extends Component {
       const summaries = filterEmpty(this.props.summary.playerStatSummaries);
 
       return (
-        <ListView
-          dataSource={this.dataSource.cloneWithRows(summaries)}
-          renderRow={summary => <Summary summary={summary} />}
-        />
+        <View>
+          <View style={styles.headerSelector}>
+            <SeasonSelector
+              initialValue={this.props.summary.season}
+              onChangeSelected={this.props.onChangeSeason}
+              disabled={this.props.summary.isFetching}
+            />
+          </View>
+          <View style={styles.container}>
+            <ListView
+              dataSource={this.dataSource.cloneWithRows(summaries)}
+              renderRow={summary => <Summary summary={summary} />}
+            />
+          </View>
+        </View>
       );
     } else if (this.props.summary.isFetching) {
       return <LoadingScreen />;
@@ -57,8 +73,10 @@ SummonerSumaryView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})),
+    season: PropTypes.string.isRequired,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
+  onChangeSeason: PropTypes.func.isRequired,
 };
 
 export default SummonerSumaryView;

@@ -45,8 +45,8 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     playerStatSummaries: [],
-    region: '',
-  }
+    season: '',
+  },
 });
 
 function searchView(state = initialState, action) {
@@ -182,6 +182,8 @@ function searchView(state = initialState, action) {
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_PENDING') {
     newState = newState.mergeIn(['summary'], {
       isFetching: true,
+      fetched: false,
+      season: action.payload.season,
     });
   }
 
@@ -191,7 +193,7 @@ function searchView(state = initialState, action) {
       isFetching: false,
       fetchError: false,
       playerStatSummaries: action.payload.playerStatSummaries,
-      region: action.payload.region,
+      season: action.payload.season,
     });
   }
 

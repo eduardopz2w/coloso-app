@@ -127,7 +127,8 @@ class SummonerProfileView extends Component {
         <SummonerSummaryView
           summary={this.props.summary}
           tabLabel="Estadisticas"
-          onPressRetryButton={() => this.props.fetchSummary('SEASON2016')}
+          onPressRetryButton={() => this.props.fetchSummary(this.props.summary.region)}
+          onChangeSeason={season => this.props.fetchSummary(season)}
         />
       </ScrollableTabView>
     </View>);

@@ -59,6 +59,7 @@ function fetchSummary(summonerId, region, season) {
     type: 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY',
     payload: {
       promise: RiotApi.summoner.stats.summary(summonerId, region, season),
+      data: { season },
     },
   };
 }
