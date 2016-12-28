@@ -69,7 +69,7 @@ const styles = MediaQueryStyleSheet.create(
     summonerLevelText: {
       color: 'black',
       textAlign: 'center',
-      fontSize: 12
+      fontSize: 12,
     },
 
     summonerNameText: {
