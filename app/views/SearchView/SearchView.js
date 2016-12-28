@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert } from 'react-native';
+import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
@@ -155,7 +155,7 @@ class SearchView extends Component {
   }
 
   renderButton() {
-    if (!this.props.isSearching && this.state.visibleHeight > 300) {
+    if (!this.props.isSearching && this.state.visibleHeight > 350) {
       return (<MKButton
         rippleColor="rgba(0,0,0,0.1)"
         style={styles.searchButton}
@@ -174,63 +174,55 @@ class SearchView extends Component {
 
     return (<View style={styles.root}>
       <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
-      <View style={styles.container}>
-
-        <View style={styles.paperBox}>
-          <View style={styles.formGroup}>
-            <Text style={[styles.label]}>Nombre de Invocador: </Text>
-            <MKTextField
-              style={styles.inputName}
-              value={this.state.summonerName}
-              onTextChange={this.handleTextChangeSummonerName}
-              placeholder="Nombre de invocador"
-            />
-          </View>
-          <View style={styles.formGroup}>
-            <Text style={[styles.label]}>Region: </Text>
-            <Picker
-              style={styles.inputRegion}
-              onValueChange={this.handleChangeRegion}
-              selectedValue={this.state.region}
-            >
-              {regions.map((region, index) => <Picker.Item
-                key={index}
-                label={regionHumanize(region)}
-                value={region}
-              />)}
-            </Picker>
-          </View>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            <View style={styles.radioGroup}>
-              <MKRadioButton
-                group={this.radioGroup}
-                onCheckedChange={this.handleOnChekedChangeProfileButton}
-                checked
-              />
-              <Text>Perfil de invocador</Text>
+      <View style={styles.wrapper}>
+        <ScrollView style={styles.scrollView}>
+          <View style={styles.container}>
+            <View style={styles.paperBox}>
+              <View style={styles.formGroup}>
+                <Text style={[styles.label]}>Nombre de Invocador: </Text>
+                <MKTextField
+                  style={styles.inputName}
+                  value={this.state.summonerName}
+                  onTextChange={this.handleTextChangeSummonerName}
+                  placeholder="Nombre de invocador"
+                />
+              </View>
+              <View style={styles.formGroup}>
+                <Text style={[styles.label]}>Region: </Text>
+                <Picker
+                  style={styles.inputRegion}
+                  onValueChange={this.handleChangeRegion}
+                  selectedValue={this.state.region}
+                >
+                  {regions.map((region, index) => <Picker.Item
+                    key={index}
+                    label={regionHumanize(region)}
+                    value={region}
+                  />)}
+                </Picker>
+              </View>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+                <View style={styles.radioGroup}>
+                  <MKRadioButton
+                    group={this.radioGroup}
+                    onCheckedChange={this.handleOnChekedChangeProfileButton}
+                    checked
+                  />
+                  <Text>Perfil de invocador</Text>
+                </View>
+                <View style={styles.radioGroup}>
+                  <MKRadioButton group={this.radioGroup} />
+                  <Text>Juego actual</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.radioGroup}>
-              <MKRadioButton group={this.radioGroup} />
-              <Text>Juego actual</Text>
-            </View>
           </View>
-        </View>
-
-        <MediaQuery minDeviceWidth={600}>
-          <View style={[styles.paperBox, styles.historyContainer]}>
-            <Text style={styles.modalTitle}>Busqueda Rápida</Text>
-            <History
-              ref={(historyModal) => { this.historyModal = historyModal; }}
-              style={{ flex: -1 }}
-              historyEntries={this.props.searchHistoryEntries}
-              onPressHistoryEntry={this.handleOnPressHistoryEntry}
-            />
-          </View>
-        </MediaQuery>
+        </ScrollView>
 
         {this.renderSpinner()}
         {this.renderButton()}
       </View>
+
 
       <HistoryModal
         ref={(historyModal) => { this.historyModal = historyModal; }}

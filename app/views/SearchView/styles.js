@@ -9,8 +9,18 @@ export default MediaQueryStyleSheet.create(
       backgroundColor: colors.primary,
     },
 
+    wrapper: {
+      flex: 1,
+      justifyContent: 'space-around',
+      paddingHorizontal: 16,
+    },
+
+    scrollView: {
+      flex: 1,
+      maxHeight: 300,
+    },
+
     container: {
-      margin: 16,
       flex: 1,
       justifyContent: 'space-around',
     },
@@ -73,22 +83,14 @@ export default MediaQueryStyleSheet.create(
       justifyContent: 'center',
       alignItems: 'center',
     },
-    backgroundVideo: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      bottom: 0,
-      right: 0,
-    },
   },
   {
     '@media (min-device-width: 600)': {
+      wrapper: {
+        paddingHorizontal: 40,
+      },
       formGroup: {
         marginBottom: 16,
-      },
-      container: {
-        paddingLeft: 40,
-        paddingRight: 40,
       },
       inputName: {
         marginLeft: 16,
@@ -98,11 +100,6 @@ export default MediaQueryStyleSheet.create(
       },
       radioGroup: {
         flex: 1,
-      },
-      historyContainer: {
-        flex: -1,
-        minHeight: 100,
-        overflow: 'hidden',
       },
       modalTitle: {
         fontSize: 18,

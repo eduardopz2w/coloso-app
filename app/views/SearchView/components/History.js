@@ -4,8 +4,8 @@ import { MKButton } from 'react-native-material-kit';
 import colors from '../../../utils/colors';
 
 const styles = StyleSheet.create({
-  listView: {
-    flex: 1,
+  ListView: {
+    flex: -1,
   },
   historyRow: {
     borderBottomWidth: 1,
