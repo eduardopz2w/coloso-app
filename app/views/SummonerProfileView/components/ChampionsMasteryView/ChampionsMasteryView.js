@@ -5,20 +5,24 @@ import ChampionMastery from './ChampionMastery';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
+import Summary from './Summary';
 
 const styles = MediaQueryStyleSheet.create(
   {
     roowScrollView: {
       flex: 1,
     },
-    container: {
+
+    listViewContainer: {
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'space-around',
       padding: 16,
     },
-    messageText: {
+
+    container: {
       flex: 1,
+      padding: 16,
     },
   },
   {
@@ -61,22 +65,30 @@ class ChampionsMasteryView extends Component {
 
     if (fetched) {
       if (masteries.length === 0) {
-        return (<View style={styles.container}>
-          <Text style={styles.messageText}>Este invocador no tiene puntos de maestria con ningún campeón.</Text>
+        return (<View style={{ flex: 1 }}>
+          <Summary masteries={masteries} />
+          <View style={styles.container}>
+            <Text style={styles.messageText}>
+              Este invocador no tiene puntos de maestria con ningún campeón.
+            </Text>
+          </View>
         </View>);
       }
 
-      return (<ListView
-        style={styles.rootScrollView}
-        pageSize={pageSize}
-        contentContainerStyle={styles.container}
-        dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-        renderRow={mastery => <ChampionMastery
-          mastery={mastery}
-          championImageSize={championImageSize}
-          progressWidth={progressWidth}
-        />}
-      />);
+      return (<View>
+        <Summary masteries={masteries} />
+        <ListView
+          style={styles.rootScrollView}
+          pageSize={pageSize}
+          contentContainerStyle={styles.listViewContainer}
+          dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
+          renderRow={mastery => <ChampionMastery
+            mastery={mastery}
+            championImageSize={championImageSize}
+            progressWidth={progressWidth}
+          />}
+        />
+      </View>);
     } else if (isFetching) {
       return <LoadingScreen />;
     }
