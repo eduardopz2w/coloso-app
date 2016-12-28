@@ -9,7 +9,7 @@ import Summary from './Summary';
 const styles = StyleSheet.create({
   root: {},
   container: {
-    marginTop: 16,
+    marginTop: 8,
   },
   headerSelector: {
     paddingLeft: 16,

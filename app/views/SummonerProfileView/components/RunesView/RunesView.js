@@ -15,7 +15,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.1)',
   },
   container: {
-    padding: 16,
+    paddingTop: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
     flex: 1,
   },
 });
