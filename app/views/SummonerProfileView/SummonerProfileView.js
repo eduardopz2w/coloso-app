@@ -9,6 +9,7 @@ import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';
 import GamesRecentView from './components/GamesRecentView';
 import MasteriesView from './components/MasteriesView';
+import SummonerSummaryView from './components/SummonerSummaryView';
 import RunesView from './components/RunesView';
 import colors from '../../utils/colors';
 import { tracker } from '../../utils/analytics';
@@ -72,6 +73,15 @@ class SummonerProfileView extends Component {
         this.props.fetchMasteries();
       }
     }
+
+    if (tabIndex === 5) {
+      // Masteries
+      const { isFetching, fetched } = this.props.summary;
+
+      if (!isFetching && !fetched) {
+        this.props.fetchSummary('SEASON2016');
+      }
+    }
   }
 
   render() {
@@ -114,6 +124,12 @@ class SummonerProfileView extends Component {
           masteries={this.props.masteries}
           onPressRetryButton={() => this.props.fetchMasteries()}
         />
+        <SummonerSummaryView
+          summary={this.props.summary}
+          tabLabel="Estadisticas"
+          onPressRetryButton={() => this.props.fetchSummary(this.props.summary.season)}
+          onChangeSeason={season => this.props.fetchSummary(season)}
+        />
       </ScrollableTabView>
     </View>);
   }
@@ -128,6 +144,7 @@ SummonerProfileView.propTypes = {
   fetchChampionsMastery: PropTypes.func,
   fetchGamesRecent: PropTypes.func,
   fetchMasteries: PropTypes.func,
+  fetchSummary: PropTypes.func,
   fetchRunes: PropTypes.func,
   leagueEntry: PropTypes.shape({
     isFetching: PropTypes.bool,
@@ -150,6 +167,12 @@ SummonerProfileView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
+  summary: PropTypes.shape({
+    isFetching: PropTypes.bool.isRequired,
+    fetched: PropTypes.bool.isRequired,
+    playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    season: PropTypes.string,
+  }),
 };
 
 function mapStateToProps(state) {
@@ -159,6 +182,7 @@ function mapStateToProps(state) {
   const gamesRecent = state.summonerProfileView.get('gamesRecent').toJS();
   const masteries = state.summonerProfileView.get('masteries').toJS();
   const runes = state.summonerProfileView.get('runes').toJS();
+  const summary = state.summonerProfileView.get('summary').toJS();
 
   return {
     summonerData,
@@ -167,6 +191,7 @@ function mapStateToProps(state) {
     gamesRecent,
     masteries,
     runes,
+    summary,
   };
 }
 
@@ -196,6 +221,10 @@ function mapDispatchToProps(dispatch, ownProps) {
 
     fetchRunes: () => {
       dispatch(SummonerProfileViewActions.fetchRunes(summonerId, region));
+    },
+
+    fetchSummary: (season) => {
+      dispatch(SummonerProfileViewActions.fetchSummary(summonerId, region, season));
     },
   };
 }

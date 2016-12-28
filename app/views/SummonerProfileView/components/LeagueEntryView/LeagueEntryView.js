@@ -54,7 +54,7 @@ class LeagueEntryView extends PureComponent {
     }
 
     return (<ErrorScreen
-      message="Error al cargar la informacion"
+      message={this.props.leagueEntry.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -67,6 +67,7 @@ LeagueEntryView.propTypes = {
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
     entries: PropTypes.array,
+    errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };

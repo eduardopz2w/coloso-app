@@ -82,7 +82,7 @@ class ChampionsMasteryView extends Component {
     }
 
     return (<ErrorScreen
-      message="Error al cargar los campeones"
+      message={this.props.championsMastery.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -95,6 +95,7 @@ ChampionsMasteryView.propTypes = {
     fetched: PropTypes.bool.isRequied,
     fetchError: PropTypes.bool.isRequied,
     masteries: PropTypes.array.isRequied,
+    errorMessage: PropTypes.string,
   }).isRequired,
   onPressRetryButton: PropTypes.func.isRequired,
 };

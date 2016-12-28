@@ -2,12 +2,20 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 5000;
-const BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
+const VERSION_CODE = 6;
+let BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
+
+if (__DEV__) {
+  BASEURL = 'http://192.168.0.2:1337/riot-api/';
+}
 
 const riotClient = axios.create({
   baseURL: BASEURL,
   timeout: TIMEOUT,
   responseType: 'json',
+  headers: {
+    'x-version-code': VERSION_CODE,
+  },
 });
 
 riotClient.interceptors.response.use((response) => {
@@ -15,7 +23,7 @@ riotClient.interceptors.response.use((response) => {
     return Promise.reject({
       response: {
         data: {
-          message: 'Algo ha salido mal',
+          message: 'Algo ha salido mal, asegurate de tener la ultima version de la aplicación',
         },
       },
     });
@@ -30,7 +38,7 @@ riotClient.interceptors.response.use((response) => {
   _.assign(error, {
     response: {
       data: {
-        message: 'Error al conectar con el servidor',
+        message: 'Error al conectar con el servidor, asegurate de tener acceso a internet y de tener la ultima version de la aplicación',
       },
     },
   });
@@ -47,7 +55,6 @@ function getSummonerByName(summonerName, region) {
         resolve(response.data);
       })
       .catch((err) => {
-        console.log(err.response);
         const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
@@ -167,6 +174,22 @@ function getSummonerGameCurrent(summonerId, region) {
   });
 }
 
+function getSummonerStatsSummary(summonerId, region, season) {
+  return new Promise((resolve, reject) => {
+    const url = `${region}/summoner/${summonerId}/stats/summary/${season}`;
+
+    return riotClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName: getSummonerByName,
@@ -177,5 +200,8 @@ export default {
     masteries: getSummonerMasteries,
     runes: getSummonerRunes,
     gameCurrent: getSummonerGameCurrent,
+    stats: {
+      summary: getSummonerStatsSummary,
+    },
   },
 };

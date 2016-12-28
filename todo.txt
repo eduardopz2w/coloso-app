@@ -1,4 +1,0 @@
-- Cambiar las imagenes a usar data dragon
-- News checker
-- Modal en campeones
-- Compress images

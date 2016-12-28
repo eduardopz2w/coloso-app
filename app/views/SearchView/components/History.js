@@ -1,11 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, ListView } from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import colors from '../../../utils/colors';
 
 const styles = StyleSheet.create({
-  listView: {
-    flex: 1,
+  ListView: {
+    flex: -1,
   },
   historyRow: {
     borderBottomWidth: 1,
@@ -83,6 +83,7 @@ History.propTypes = {
     summonerName: PropTypes.string.isRequired,
     region: PropTypes.string.isRequired,
   })),
+  style: View.propTypes.style,
   onPressHistoryEntry: PropTypes.func.isRequired,
 };
 

@@ -15,7 +15,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.1)',
   },
   container: {
-    padding: 16,
+    paddingTop: 8,
+    paddingRight: 16,
+    paddingLeft: 16,
     flex: 1,
   },
 });
@@ -53,7 +55,7 @@ class RunesView extends Component {
     }
 
     return (<ErrorScreen
-      message="Error al cargar las runas"
+      message={this.props.runes.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -66,6 +68,7 @@ RunesView.propTypes = {
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     pages: PropTypes.array,
+    errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };

@@ -15,4 +15,7 @@ export default {
   primary: '#3F51B5',
   accent: 'white',
   spinnerColor: '#3F51B5',
+  text: {
+    main: 'rgba(0,0,0,0.5)',
+  },
 };

@@ -9,6 +9,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     entries: [],
   },
 
@@ -16,6 +17,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     masteries: [],
   },
 
@@ -23,6 +25,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     games: [],
   },
 
@@ -30,6 +33,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     pages: [],
   },
 
@@ -37,7 +41,17 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     pages: [],
+  },
+
+  summary: {
+    isFetching: false,
+    fetched: false,
+    fetchError: false,
+    errorMessage: '',
+    playerStatSummaries: [],
+    season: '',
   },
 });
 
@@ -76,6 +90,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -99,6 +114,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -122,6 +138,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -145,6 +162,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -168,6 +186,34 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_PENDING') {
+    newState = newState.mergeIn(['summary'], {
+      isFetching: true,
+      fetched: false,
+      season: action.payload.season,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_FULFILLED') {
+    newState = newState.mergeIn(['summary'], {
+      fetched: true,
+      isFetching: false,
+      fetchError: false,
+      playerStatSummaries: action.payload.playerStatSummaries,
+      season: action.payload.season,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_REJECTED') {
+    newState = newState.mergeIn(['summary'], {
+      fetched: false,
+      isFetching: false,
+      fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 

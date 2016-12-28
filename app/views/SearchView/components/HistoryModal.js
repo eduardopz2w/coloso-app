@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
 
 function getModalStyle(deviceDimensions) {
   // Tablet
-  if (deviceDimensions.width > 600) {
+  if (deviceDimensions.width >= 600) {
     return {
       width: 400,
       height: null,
-      maxHeight: 400,
+      maxHeight: deviceDimensions.height * 0.50,
     };
   }
 
@@ -32,7 +32,6 @@ function getModalStyle(deviceDimensions) {
   return {
     height: null,
     maxHeight: deviceDimensions.height * 0.50,
-    flex: 1,
   };
 }
 
