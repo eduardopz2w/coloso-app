@@ -16,6 +16,7 @@ const styles = MediaQueryStyleSheet.create(
       marginTop: -56,
       paddingTop: 18,
       paddingBottom: 8,
+      minHeight: 100,
     },
 
     profileToolbarContainer: {
@@ -97,6 +98,7 @@ const styles = MediaQueryStyleSheet.create(
     '@media (min-device-width: 600)': {
       profileToolbar: {
         marginTop: 0,
+        minHeight: 130,
       },
 
       profileToolbarContainer: {
