@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, TouchableWithoutFeedback } from 'react-native';
 import { CircularProgress } from 'react-native-circular-progress';
 
 class ChampionsMastery extends Component {
@@ -9,6 +9,7 @@ class ChampionsMastery extends Component {
     this.renderMastery = this.renderMastery.bind(this);
     this.renderProgress = this.renderProgress.bind(this);
     this.renderChestStatus = this.renderChestStatus.bind(this);
+    this.handleOnPress = this.handleOnPress.bind(this);
     this.getStyles = this.getStyles.bind(this);
   }
 
@@ -47,6 +48,10 @@ class ChampionsMastery extends Component {
         position: 'absolute',
       },
     };
+  }
+
+  handleOnPress() {
+    return this.props.onPress(this.props.mastery.championId);
   }
 
   renderMastery(styles) {
@@ -101,15 +106,16 @@ class ChampionsMastery extends Component {
     const { championId } = this.props.mastery;
     const styles = this.getStyles();
 
-    return (<View style={styles.root}>
-      <View style={styles.imageAndProgressContainer}>
-        {this.renderProgress()}
-        <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
-        {this.renderMastery(styles)}
-        {this.renderChestStatus(styles)}
+    return (<TouchableWithoutFeedback onPress={this.handleOnPress}>
+      <View style={styles.root}>
+        <View style={styles.imageAndProgressContainer}>
+          {this.renderProgress()}
+          <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
+          {this.renderMastery(styles)}
+          {this.renderChestStatus(styles)}
+        </View>
       </View>
-
-    </View>);
+    </TouchableWithoutFeedback>);
   }
 
 }
@@ -125,6 +131,7 @@ ChampionsMastery.propTypes = {
   }),
   championImageSize: PropTypes.number.isRequired,
   progressWidth: PropTypes.number.isRequired,
+  onPress: PropTypes.func.isRequired,
 };
 
 export default ChampionsMastery;
