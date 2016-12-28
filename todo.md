@@ -1,0 +1,4 @@
+- Chequeo de noticias
+- Modal en maestria campeones
+- Corregir el problema del teclado en el search view
+- Sistema de refers en admob
