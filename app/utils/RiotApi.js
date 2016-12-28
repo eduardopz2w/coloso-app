@@ -2,6 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 5000;
+const VERSION_CODE = 6;
 let BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
 
 if (__DEV__) {
@@ -12,6 +13,9 @@ const riotClient = axios.create({
   baseURL: BASEURL,
   timeout: TIMEOUT,
   responseType: 'json',
+  headers: {
+    'x-version-code': VERSION_CODE,
+  },
 });
 
 riotClient.interceptors.response.use((response) => {
@@ -19,7 +23,7 @@ riotClient.interceptors.response.use((response) => {
     return Promise.reject({
       response: {
         data: {
-          message: 'Algo ha salido mal',
+          message: 'Algo ha salido mal, asegurate de tener la ultima version de la aplicación',
         },
       },
     });
@@ -34,7 +38,7 @@ riotClient.interceptors.response.use((response) => {
   _.assign(error, {
     response: {
       data: {
-        message: 'Error al conectar con el servidor',
+        message: 'Error al conectar con el servidor, asegurate de tener acceso a internet y de tener la ultima version de la aplicación',
       },
     },
   });

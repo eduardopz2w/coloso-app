@@ -61,7 +61,7 @@ class SummonerSumaryView extends Component {
     }
 
     return (<ErrorScreen
-      message="Error al cargar las estadisticas"
+      message={this.props.summary.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -74,6 +74,7 @@ SummonerSumaryView.propTypes = {
     fetched: PropTypes.bool.isRequired,
     playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})),
     season: PropTypes.string.isRequired,
+    errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
   onChangeSeason: PropTypes.func.isRequired,

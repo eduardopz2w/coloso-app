@@ -46,7 +46,7 @@ class MasteriesView extends Component {
     }
 
     return (<ErrorScreen
-      message="Error al cargar las maestrias"
+      message={this.props.masteries.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -59,6 +59,7 @@ MasteriesView.propTypes = {
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     pages: PropTypes.array,
+    errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };

@@ -9,6 +9,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     entries: [],
   },
 
@@ -16,6 +17,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     masteries: [],
   },
 
@@ -23,6 +25,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     games: [],
   },
 
@@ -30,6 +33,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     pages: [],
   },
 
@@ -37,6 +41,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     pages: [],
   },
 
@@ -44,6 +49,7 @@ const initialState = Immutable.fromJS({
     isFetching: false,
     fetched: false,
     fetchError: false,
+    errorMessage: '',
     playerStatSummaries: [],
     season: '',
   },
@@ -84,6 +90,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -107,6 +114,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -130,6 +138,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -153,6 +162,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -176,6 +186,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 
@@ -202,6 +213,7 @@ function searchView(state = initialState, action) {
       fetched: false,
       isFetching: false,
       fetchError: true,
+      errorMessage: action.payload.errorMessage,
     });
   }
 

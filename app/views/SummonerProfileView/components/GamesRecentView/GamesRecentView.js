@@ -31,7 +31,7 @@ class GamesRecentView extends PureComponent {
     }
 
     return (<ErrorScreen
-      message="Error al cargar el historial"
+      message={this.props.gamesRecent.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -43,6 +43,7 @@ GamesRecentView.propTypes = {
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
+    errorMessage: PropTypes.string,
     games: PropTypes.array,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

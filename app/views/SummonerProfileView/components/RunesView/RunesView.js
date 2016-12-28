@@ -53,7 +53,7 @@ class RunesView extends Component {
     }
 
     return (<ErrorScreen
-      message="Error al cargar las runas"
+      message={this.props.runes.errorMessage}
       onPressRetryButton={this.props.onPressRetryButton}
       retryButton
     />);
@@ -66,6 +66,7 @@ RunesView.propTypes = {
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     pages: PropTypes.array,
+    errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };
