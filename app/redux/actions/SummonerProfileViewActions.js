@@ -54,6 +54,16 @@ function fetchRunes(summonerId, region) {
   };
 }
 
+function fetchSummary(summonerId, region, season) {
+  return {
+    type: 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY',
+    payload: {
+      promise: RiotApi.summoner.stats.summary(summonerId, region, season),
+      data: { season },
+    },
+  };
+}
+
 const actions = {
   fetchSummonerData,
   fetchLeagueEntry,
@@ -61,6 +71,7 @@ const actions = {
   fetchGamesRecent,
   fetchMasteries,
   fetchRunes,
+  fetchSummary,
 };
 
 export default actions;

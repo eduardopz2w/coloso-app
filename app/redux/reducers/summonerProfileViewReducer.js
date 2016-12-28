@@ -39,6 +39,14 @@ const initialState = Immutable.fromJS({
     fetchError: false,
     pages: [],
   },
+
+  summary: {
+    isFetching: false,
+    fetched: false,
+    fetchError: false,
+    playerStatSummaries: [],
+    season: '',
+  },
 });
 
 function searchView(state = initialState, action) {
@@ -165,6 +173,32 @@ function searchView(state = initialState, action) {
 
   if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_RUNES_REJECTED') {
     newState = newState.mergeIn(['runes'], {
+      fetched: false,
+      isFetching: false,
+      fetchError: true,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_PENDING') {
+    newState = newState.mergeIn(['summary'], {
+      isFetching: true,
+      fetched: false,
+      season: action.payload.season,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_FULFILLED') {
+    newState = newState.mergeIn(['summary'], {
+      fetched: true,
+      isFetching: false,
+      fetchError: false,
+      playerStatSummaries: action.payload.playerStatSummaries,
+      season: action.payload.season,
+    });
+  }
+
+  if (action.type === 'SUMMONER_PROFILE_VIEW/FETCH_SUMMARY_REJECTED') {
+    newState = newState.mergeIn(['summary'], {
       fetched: false,
       isFetching: false,
       fetchError: true,

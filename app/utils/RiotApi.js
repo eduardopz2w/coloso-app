@@ -2,7 +2,11 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 5000;
-const BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
+let BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
+
+if (__DEV__) {
+  BASEURL = 'http://192.168.0.2:1337/riot-api/';
+}
 
 const riotClient = axios.create({
   baseURL: BASEURL,
@@ -167,6 +171,22 @@ function getSummonerGameCurrent(summonerId, region) {
   });
 }
 
+function getSummonerStatsSummary(summonerId, region, season) {
+  return new Promise((resolve, reject) => {
+    const url = `${region}/summoner/${summonerId}/stats/summary/${season}`;
+
+    return riotClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
 export default {
   summoner: {
     findByName: getSummonerByName,
@@ -177,5 +197,8 @@ export default {
     masteries: getSummonerMasteries,
     runes: getSummonerRunes,
     gameCurrent: getSummonerGameCurrent,
+    stats: {
+      summary: getSummonerStatsSummary,
+    },
   },
 };
