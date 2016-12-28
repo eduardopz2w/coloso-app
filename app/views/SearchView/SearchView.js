@@ -3,13 +3,11 @@ import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollVie
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
-import { MediaQuery } from 'react-native-responsive';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import { tracker } from '../../utils/analytics';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
-import History from './components/History';
 import regionHumanize from '../../utils/regionHumanize';
 import styles from './styles';
 
@@ -23,8 +21,8 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: 'armaghyon',
-      region: 'lan',
+      summonerName: '',
+      region: 'na',
       searchType: PROFILE_SEARCH,
       visibleHeight: Dimensions.get('window').height,
     };
@@ -48,7 +46,6 @@ class SearchView extends Component {
   }
 
   componentDidMount() {
-    console.log(tracker);
     tracker.trackScreenView('SearchView');
   }
 

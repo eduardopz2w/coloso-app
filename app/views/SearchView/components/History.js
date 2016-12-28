@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, ListView } from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import colors from '../../../utils/colors';
 
@@ -83,6 +83,7 @@ History.propTypes = {
     summonerName: PropTypes.string.isRequired,
     region: PropTypes.string.isRequired,
   })),
+  style: View.propTypes.style,
   onPressHistoryEntry: PropTypes.func.isRequired,
 };
 

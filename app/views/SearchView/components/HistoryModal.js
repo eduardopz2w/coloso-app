@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
 
 function getModalStyle(deviceDimensions) {
   // Tablet
-  console.log(deviceDimensions);
   if (deviceDimensions.width >= 600) {
     return {
       width: 400,

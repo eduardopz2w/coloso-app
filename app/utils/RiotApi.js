@@ -55,7 +55,6 @@ function getSummonerByName(summonerName, region) {
         resolve(response.data);
       })
       .catch((err) => {
-        console.log(err.response);
         const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });
