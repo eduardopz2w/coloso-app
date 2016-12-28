@@ -12,11 +12,17 @@ const styles = MediaQueryStyleSheet.create(
       backgroundColor: colors.primary,
     },
 
-    summonerImage: {
-      width: 72,
-      height: 72,
-      borderRadius: 50,
+    profileToolbar: {
+      marginTop: -56,
+      paddingTop: 18,
+      paddingBottom: 8,
     },
+
+    profileToolbarContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+
     backgroundImage: {
       position: 'absolute',
       top: 0,
@@ -26,8 +32,8 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     summonerImageContainer: {
-      width: 80,
-      height: 80,
+      width: 70,
+      height: 70,
       position: 'relative',
       alignSelf: 'center',
       justifyContent: 'center',
@@ -37,10 +43,16 @@ const styles = MediaQueryStyleSheet.create(
       alignItems: 'center',
     },
 
+    summonerImage: {
+      width: 64,
+      height: 64,
+      borderRadius: 50,
+    },
+
     summonerLevelContainer: {
       position: 'absolute',
-      width: 25,
-      height: 25,
+      width: 20,
+      height: 20,
       backgroundColor: colors.accent,
       bottom: 0,
       right: 0,
@@ -49,9 +61,15 @@ const styles = MediaQueryStyleSheet.create(
       borderRadius: 50,
     },
 
+    summonerDataContainer: {
+      marginLeft: 18,
+      justifyContent: 'center',
+    },
+
     summonerLevelText: {
       color: 'black',
       textAlign: 'center',
+      fontSize: 12
     },
 
     summonerNameText: {
@@ -62,7 +80,6 @@ const styles = MediaQueryStyleSheet.create(
         width: 2,
         height: 2,
       },
-      textAlign: 'center',
     },
 
     regionText: {
@@ -75,10 +92,6 @@ const styles = MediaQueryStyleSheet.create(
       },
     },
 
-    profileToolbar: {
-      marginTop: -30,
-      height: 125,
-    },
   },
   {
     '@media (min-device-width: 600)': {
@@ -87,7 +100,6 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       profileToolbarContainer: {
-        flexDirection: 'row',
         marginLeft: 70,
         marginRight: 40,
       },
