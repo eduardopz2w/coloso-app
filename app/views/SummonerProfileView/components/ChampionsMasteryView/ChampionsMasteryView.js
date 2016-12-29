@@ -27,11 +27,20 @@ const styles = MediaQueryStyleSheet.create(
       flex: 1,
       padding: 16,
     },
+
+    modal: {
+      maxWidth: 300,
+      height: null,
+      padding: 16,
+    },
   },
   {
     '@media (min-device-width: 600)': {
       messageText: {
         fontSize: 18,
+      },
+      modal: {
+        maxWidth: 500,
       },
     },
   },
@@ -117,9 +126,8 @@ class ChampionsMasteryView extends Component {
           />}
         />
         <Modal
-          style={{ maxWidth: 300, height: null, padding: 16 }}
+          style={styles.modal}
           position="center"
-          swipeToClose={false}
           ref={(modal) => { this.modal = modal; }}
           onOpened={() => this.setState({ modalIsOpen: true })}
           onClosed={() => this.setState({ modalIsOpen: false })}

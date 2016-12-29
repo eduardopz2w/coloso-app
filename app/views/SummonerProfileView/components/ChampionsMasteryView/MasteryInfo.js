@@ -1,40 +1,73 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import { Col } from 'react-native-easy-grid';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import { MKProgress } from 'react-native-material-kit';
 import moment from 'moment';
 import styleUtils from '../../../../utils/styleUtils';
 
-const styles = StyleSheet.create({
-  root: {},
-  championImage: {
-    width: 55,
-    height: 55,
-    borderRadius: 50,
-    borderColor: 'black',
-    borderWidth: 1,
-  },
-  championName: {
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {},
+    championImage: {
+      width: 55,
+      height: 55,
+      borderRadius: 50,
+      borderColor: 'black',
+      borderWidth: 1,
+    },
+    championName: {
+      fontSize: 17,
+      fontWeight: 'bold',
+    },
 
-  championTitle: {
-    fontSize: 14,
-    marginBottom: 16,
-  },
+    championTitle: {
+      fontSize: 14,
+      marginBottom: 16,
+    },
 
-  tier: {
-    width: 50,
-    height: 50,
-  },
+    tier: {
+      width: 50,
+      height: 50,
+    },
 
-  progress: {
-    flex: 1,
-    height: 5,
-    borderRadius: 7,
+    progress: {
+      flex: 1,
+      height: 5,
+      borderRadius: 7,
+    },
   },
-});
+  {
+    '@media (min-device-width: 600)': {
+      championImage: {
+        width: 80,
+        height: 80,
+        borderWidth: 5,
+      },
+
+      tier: {
+        width: 70,
+        height: 70,
+      },
+
+      championName: {
+        fontSize: 23,
+      },
+
+      championTitle: {
+        fontSize: 19,
+      },
+
+      progress: {
+        height: 10,
+      },
+
+      text: {
+        fontSize: 18,
+      },
+    },
+  },
+);
 
 class MasteryInfo extends Component {
   constructor(props) {
@@ -63,10 +96,10 @@ class MasteryInfo extends Component {
     }
 
     return (<View style={{ marginBottom: 16 }}>
-      <Text style={styleUtils.boldText}>Progreso:</Text>
+      <Text style={[styleUtils.boldText, styles.text]}>Progreso:</Text>
       <View style={{ flexDirection: 'row' }}>
-        <Col><Text>{mastery.championPoints}</Text></Col>
-        <Col><Text style={{ textAlign: 'right' }}>{nextLevelPoints}</Text></Col>
+        <Col><Text style={styles.text}>{mastery.championPoints}</Text></Col>
+        <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{nextLevelPoints}</Text></Col>
       </View>
       <View>
         <MKProgress progress={progressNumber} style={styles.progress} progressColor={tintColor} />
@@ -97,16 +130,16 @@ class MasteryInfo extends Component {
           <Text style={styles.championTitle}>{championData.title}</Text>
           {this.renderProgress()}
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styleUtils.boldText}>Cofre Disponible: </Text>
-            <Text>{mastery.chestGranted ? 'No' : 'Si'}</Text>
+            <Text style={[styleUtils.boldText, styles.text]}>Cofre Disponible: </Text>
+            <Text style={styles.text}>{mastery.chestGranted ? 'No' : 'Si'}</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styleUtils.boldText}>Piezas de Maestria: </Text>
-            <Text>{mastery.tokensEarned}</Text>
+            <Text style={[styleUtils.boldText, styles.text]}>Piezas de Maestria: </Text>
+            <Text style={styles.text}>{mastery.tokensEarned}</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styleUtils.boldText}>Jugado: </Text>
-            <Text>{moment(mastery.lastPlayTime).fromNow()}</Text>
+            <Text style={[styleUtils.boldText, styles.text]}>Jugado: </Text>
+            <Text style={styles.text}>{moment(mastery.lastPlayTime).fromNow()}</Text>
           </View>
         </View>
       </View>
