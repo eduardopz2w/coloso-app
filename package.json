@@ -11,6 +11,7 @@
     "immutable": "^3.8.1",
     "lodash": "^4.17.2",
     "moment": "^2.17.1",
+    "numeral": "^2.0.4",
     "react": "15.4.1",
     "react-native": "0.38.0",
     "react-native-admob": "^1.1.5",
