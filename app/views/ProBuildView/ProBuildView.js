@@ -3,6 +3,7 @@ import { View, StyleSheet, Image, Text, Dimensions, ScrollView } from 'react-nat
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ProBuildViewActions from '../../redux/actions/ProBuildViewActions';
 import LoadingScreen from '../../components/LoadingScreen';
@@ -50,6 +51,8 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     marginLeft: -8,
     marginRight: 16,
+    borderWidth: 1,
+    borderColor: 'black',
   },
 
   championName: {
@@ -105,6 +108,25 @@ const styles = StyleSheet.create({
   itemsArrow: {
     width: itemsArrowSize,
   },
+
+  skillsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+  },
+
+  skillLabel: {
+    width: 35,
+    height: 35,
+    backgroundColor: colors.primary,
+    color: 'white',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    borderRadius: 50,
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
 });
 
 class ProBuildView extends Component {
@@ -112,6 +134,7 @@ class ProBuildView extends Component {
     super(props);
     this.deviceDimensions = Dimensions.get('window');
     this.getItemStyle = this.getItemStyle.bind(this);
+    this.renderSkillOrder = this.renderSkillOrder.bind(this);
   }
 
   componentWillMount() {
@@ -129,6 +152,45 @@ class ProBuildView extends Component {
       width,
       height: width,
     };
+  }
+
+  renderSkillOrder() {
+    const skillsNodes = [];
+    const skills = [
+      { label: 'Q', value: 0 },
+      { label: 'W', value: -1 },
+      { label: 'E', value: -2 },
+      { label: 'R', value: -3 },
+    ];
+
+    _.each(this.props.build.skillsOrder, (skillNumber) => {
+      if (skillNumber === 1) {
+        skills[0].value += 1;
+      } else if (skillNumber === 2) {
+        skills[1].value += 1;
+      } else if (skillNumber === 3) {
+        skills[2].value += 1;
+      } else {
+        skills[3].value += 1;
+      }
+    });
+
+    _.map(_.orderBy(skills, ['value'], ['desc']), (skill, index) => {
+      skillsNodes.push(<Text key={`sk_${index}`} style={styles.skillLabel}>{skill.label}</Text>);
+      if (index !== 3) {
+        skillsNodes.push(<Icon
+          key={`ar_${index}`}
+          style={styles.itemsArrow}
+          name="keyboard-arrow-right"
+          color="rgba(0,0,0,0.5)"
+          size={18}
+        />);
+      }
+    });
+
+    return (<View style={styles.skillsContainer}>
+      {skillsNodes}
+    </View>);
   }
 
   render() {
@@ -200,7 +262,11 @@ class ProBuildView extends Component {
               </View>
             </View>
 
-            <Text style={styles.title}>Objetos Comprados</Text>
+            <Text style={styles.title}>Prioridad de Habilidades</Text>
+
+            {this.renderSkillOrder()}
+
+            <Text style={styles.title}>Orden de Compra</Text>
 
             <View style={styles.itemsContainer}>
               {itemsAndSeparators}
