@@ -4,6 +4,7 @@ import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-vi
 import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
+import numeral from 'numeral';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import ProBuildViewActions from '../../redux/actions/ProBuildViewActions';
@@ -117,6 +118,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
 
+  goldText: {
+    color: colors.tiers.gold,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 0.2,
+      height: 0.2,
+    },
+  },
+
   skillLabel: {
     width: 35,
     height: 35,
@@ -134,16 +145,17 @@ const styles = StyleSheet.create({
     height: null,
   },
 
+  scoreText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
   killsText: {
     color: colors.victory,
   },
 
   deathsText: {
     color: colors.defeat,
-  },
-
-  assistsText: {
-    color: colors.primary,
   },
 });
 
@@ -189,7 +201,7 @@ class ProBuildView extends Component {
         itemName: itemData.name,
         itemPlainText: itemData.plaintext,
         itemId: itemData.itemId,
-        itemGold: itemData.gold.total,
+        itemGold: numeral(itemData.gold.total).format('0,0'),
       },
     }, () => {
       this.modal.open();
@@ -300,7 +312,7 @@ class ProBuildView extends Component {
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
-                <Text>
+                <Text style={styles.scoreText}>
                   <Text style={styles.killsText}>{build.stats.kills}</Text>/
                   <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
                   <Text style={styles.assistsText}>{build.stats.assists}</Text>
@@ -308,7 +320,9 @@ class ProBuildView extends Component {
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
-                <Text>{build.stats.goldEarned}</Text>
+                <Text style={styles.goldText}>
+                  {numeral(build.stats.goldEarned).format('0,0')}
+                </Text>
               </View>
             </View>
 
@@ -343,7 +357,7 @@ class ProBuildView extends Component {
               <Text style={{ fontWeight: 'bold' }}>{this.state.modalData.itemName}</Text>
               <View style={{ flexDirection: 'row', marginVertical: 4 }}>
                 <Image style={{ width: 20, height: 20, marginRight: 8 }} source={{ uri: 'ui_gold' }} />
-                <Text>{this.state.modalData.itemGold}</Text>
+                <Text style={styles.goldText}>{this.state.modalData.itemGold}</Text>
               </View>
               <Text>{this.state.modalData.itemPlainText}</Text>
             </View>

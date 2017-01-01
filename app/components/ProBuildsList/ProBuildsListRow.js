@@ -48,10 +48,18 @@ const styles = StyleSheet.create({
 
   championName: {
     fontSize: 13,
+    fontWeight: 'bold',
   },
 
   goldText: {
     marginRight: 8,
+    color: colors.tiers.gold,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 0.2,
+      height: 0.2,
+    },
   },
 
   gameDataRow: {
@@ -90,7 +98,12 @@ const styles = StyleSheet.create({
   goldImage: {
     width: 15,
     height: 15,
-    marginRight: 4,
+    marginRight: 2,
+  },
+
+  scoreText: {
+    fontSize: 15,
+    fontWeight: 'bold',
   },
 
   killsText: {
@@ -99,10 +112,6 @@ const styles = StyleSheet.create({
 
   deathsText: {
     color: colors.defeat,
-  },
-
-  assistsText: {
-    color: colors.primary,
   },
 
   win: {
@@ -153,7 +162,7 @@ class ProBuild extends Component {
             </View>
             <View style={styles.championNameAndScore} >
               <Text numberOfLines={1} style={styles.championName}>{build.championData.name}</Text>
-              <Text>
+              <Text style={styles.scoreText}>
                 <Text style={styles.killsText}>{build.stats.kills}</Text>/
                 <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
                 <Text style={styles.assistsText}>{build.stats.assists}</Text>

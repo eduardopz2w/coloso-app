@@ -15,8 +15,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  noBuildsMessage: {
     padding: 16,
   },
 });
@@ -47,18 +45,22 @@ class ProBuildSearchView extends Component {
           onPressBuild={buildId => Actions.probuild_view({ buildId })}
         />);
       } else {
-        content = (<Text style={styles.noBuildsMessage}>
-          Actualmente no hay builds para este campeon, pronto estaran disponibles
-        </Text>);
+        content = (<View style={styles.container}>
+          <Text style={styles.noBuildsMessage}>
+            Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+          </Text>
+        </View>);
       }
     } else if (builds.isFetching) {
       content = <LoadingScreen />;
     } else {
-      content = (<ErrorScreen
-        message={builds.errorMessage}
-        onPressRetryButton={() => { this.props.fetchBuilds(); }}
-        retryButton
-      />);
+      content = (<View style={styles.container}>
+        <ErrorScreen
+          message={builds.errorMessage}
+          onPressRetryButton={() => { this.props.fetchBuilds(); }}
+          retryButton
+        />
+      </View>);
     }
 
     return (<View style={styles.root}>
@@ -69,9 +71,7 @@ class ProBuildSearchView extends Component {
         style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
         onChangeSelected={this.handleOnChangeChampionSelected}
       />
-      <View style={styles.container}>
-        {content}
-      </View>
+      {content}
     </View>);
   }
 }
