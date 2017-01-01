@@ -51,7 +51,7 @@ class SummonerSumaryView extends Component {
           <View style={styles.container}>
             <ListView
               dataSource={this.dataSource.cloneWithRows(summaries)}
-              renderRow={summary => <Summary summary={summary} />}
+              renderRow={(summary, sectionId, rowId) => <Summary key={rowId} summary={summary} />}
             />
           </View>
         </View>

@@ -170,7 +170,10 @@ class SearchView extends Component {
 
 
     return (<View style={styles.root}>
-      <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
+      <SearchViewToolbar
+        onPressHistoryButton={this.handleOnPressHistoryButton}
+        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+      />
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.container}>

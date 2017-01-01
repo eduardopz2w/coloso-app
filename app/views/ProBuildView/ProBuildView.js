@@ -1,8 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Image, Text, Dimensions, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
+import { Actions } from 'react-native-router-flux';
+import { connect } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Toolbar from './Toolbar';
+import ProBuildViewActions from '../../redux/actions/ProBuildViewActions';
+import LoadingScreen from '../../components/LoadingScreen';
+import ErrorScreen from '../../components/ErrorScreen';
+import PlayerToolbar from './components/PlayerToolbar';
+import BasicToolbar from './components/BasicToolbar';
 import colors from '../../utils/colors';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
@@ -17,6 +23,11 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 16,
     paddingRight: 16,
+  },
+
+  basicContainer: {
+    padding: 16,
+    flex: 1,
   },
 
   championImage: {
@@ -103,12 +114,16 @@ class ProBuildView extends Component {
     this.getItemStyle = this.getItemStyle.bind(this);
   }
 
+  componentWillMount() {
+    this.props.fetchBuild();
+  }
+
   getItemStyle() {
     let width = this.deviceDimensions.width - 32;
     const numCols = 5;
 
     width -= numCols * itemsArrowSize;
-    width = width / numCols;
+    width /= numCols;
 
     return {
       width,
@@ -121,297 +136,174 @@ class ProBuildView extends Component {
     const itemsAndSeparators = [];
     let itemData;
 
-    for (let i = 0; i < build.itemsOrder.length; i++) {
-      itemData = build.itemsOrder[i];
+    if (this.props.fetched) {
+      for (let i = 0; i < build.itemsOrder.length; i += 1) {
+        itemData = build.itemsOrder[i];
 
-      itemsAndSeparators.push(<Image
-        style={[styles.item, this.getItemStyle()]}
-        source={{ uri: `item_${itemData.itemId}` }}
-      />);
-
-      if (i !== build.itemsOrder.length - 1) {
-        itemsAndSeparators.push(<Icon
-          style={styles.itemsArrow}
-          name="keyboard-arrow-right"
-          color="rgba(0,0,0,0.5)"
-          size={18}
+        itemsAndSeparators.push(<Image
+          key={`item_${i}`}
+          style={[styles.item, this.getItemStyle()]}
+          source={{ uri: `item_${itemData.itemId}` }}
         />);
+
+        if (i !== build.itemsOrder.length - 1) {
+          itemsAndSeparators.push(<Icon
+            key={`arrow_${i}`}
+            style={styles.itemsArrow}
+            name="keyboard-arrow-right"
+            color="rgba(0,0,0,0.5)"
+            size={18}
+          />);
+        }
       }
+
+      return (<View style={styles.root}>
+        <PlayerToolbar
+          playerName={build.profPlayerData.name}
+          playerImageUrl={build.profPlayerData.imageUrl}
+          onPressBackButton={() => { Actions.pop(); }}
+        />
+        <ScrollableTabView
+          initialPage={0}
+          renderTabBar={() => <DefaultTabBar />}
+          tabBarBackgroundColor={colors.primary}
+          tabBarActiveTextColor={colors.accent}
+          tabBarInactiveTextColor="rgba(255,255,255,0.8)"
+          tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
+          onChangeTab={this.handleOnChangeTab}
+        >
+          <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
+            <Text style={styles.title}>Informacion</Text>
+            <View style={styles.championDataRow}>
+              <Image source={{ uri: `champion_square_${build.championId}` }} style={styles.championImage} />
+              <View>
+                <Image source={{ uri: `summoner_spell_${build.spell1Id}` }} style={styles.summonerSpell} />
+                <Image source={{ uri: `summoner_spell_${build.spell2Id}` }} style={styles.summonerSpell} />
+              </View>
+              <View>
+                <Text style={styles.championName}>{build.championData.name}</Text>
+                <Text style={styles.championTitle}>{build.championData.title}</Text>
+              </View>
+            </View>
+
+            <View style={styles.summaryRow}>
+              <Text style={build.stats.winner ? styles.winText : styles.lossText}>
+                {build.stats.winner ? 'Victoria' : 'Derrota'}
+              </Text>
+              <View style={{ flexDirection: 'row' }}>
+                <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
+                <Text>{build.stats.kills}/{build.stats.deaths}/{build.stats.assists}</Text>
+              </View>
+              <View style={{ flexDirection: 'row' }}>
+                <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
+                <Text>{build.stats.goldEarned}</Text>
+              </View>
+            </View>
+
+            <Text style={styles.title}>Objetos Comprados</Text>
+
+            <View style={styles.itemsContainer}>
+              {itemsAndSeparators}
+            </View>
+          </ScrollView>
+          <RuneTab tabLabel="Runas" runes={this.props.build.runes} />
+          <MasteryTab tabLabel="Maestrias" masteries={this.props.build.masteries} />
+        </ScrollableTabView>
+      </View>);
+    } else if (this.props.isFetching) {
+      return (<View style={styles.root}>
+        <BasicToolbar
+          onPressBackButton={() => { Actions.pop(); }}
+        />
+        <View style={styles.basicContainer}>
+          <LoadingScreen />
+        </View>
+      </View>);
     }
 
     return (<View style={styles.root}>
-      <Toolbar
-        playerName={build.profPlayerData.name}
-        playerImageUrl={build.profPlayerData.imageUrl}
+      <BasicToolbar
+        onPressBackButton={() => { Actions.pop(); }}
       />
-      <ScrollableTabView
-        initialPage={0}
-        renderTabBar={() => <DefaultTabBar />}
-        tabBarBackgroundColor={colors.primary}
-        tabBarActiveTextColor={colors.accent}
-        tabBarInactiveTextColor="rgba(255,255,255,0.8)"
-        tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
-        onChangeTab={this.handleOnChangeTab}
-      >
-        <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
-          <Text style={styles.title}>Informacion</Text>
-          <View style={styles.championDataRow}>
-            <Image source={{ uri: `champion_square_${build.championId}` }} style={styles.championImage} />
-            <View>
-              <Image source={{ uri: `summoner_spell_${build.spell1Id}` }} style={styles.summonerSpell} />
-              <Image source={{ uri: `summoner_spell_${build.spell2Id}` }} style={styles.summonerSpell} />
-            </View>
-            <View>
-              <Text style={styles.championName}>{build.championData.name}</Text>
-              <Text style={styles.championTitle}>{build.championData.title}</Text>
-            </View>
-          </View>
-
-          <View style={styles.summaryRow}>
-            <Text style={build.stats.winner ? styles.winText : styles.lossText}>
-              {build.stats.winner ? 'Victoria' : 'Derrota'}
-            </Text>
-            <View style={{ flexDirection: 'row' }}>
-              <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
-              <Text>{build.stats.kills}/{build.stats.deaths}/{build.stats.assists}</Text>
-            </View>
-            <View style={{ flexDirection: 'row' }}>
-              <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
-              <Text>{build.stats.goldEarned}</Text>
-            </View>
-          </View>
-
-          <Text style={styles.title}>Objetos Comprados</Text>
-
-          <View style={styles.itemsContainer}>
-            {itemsAndSeparators}
-          </View>
-        </ScrollView>
-        <RuneTab tabLabel="Runas" runes={this.props.build.runes} />
-        <MasteryTab tabLabel="Maestrias" masteries={this.props.build.masteries} />
-      </ScrollableTabView>
+      <View style={styles.basicContainer}>
+        <ErrorScreen
+          message={this.props.errorMessage}
+          onPressRetryButton={this.props.fetchBuild}
+          retryButton
+        />
+      </View>
     </View>);
   }
 }
 
 ProBuildView.propTypes = {
   build: PropTypes.shape({
-    spell1Id: PropTypes.number.isRequired,
-    spell2Id: PropTypes.number.isRequired,
-    championId: PropTypes.number.isRequired,
-    championData: {
+    spell1Id: PropTypes.number,
+    spell2Id: PropTypes.number,
+    championId: PropTypes.number,
+    championData: PropTypes.shape({
       name: PropTypes.string,
       title: PropTypes.string,
-    },
-    matchCreation: PropTypes.number.isRequired,
+    }),
+    matchCreation: PropTypes.number,
     highestAchievedSeasonTier: PropTypes.string,
     masteries: PropTypes.arrayOf(PropTypes.shape({
-      masteryId: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
+      masteryId: PropTypes.number,
+      rank: PropTypes.number,
     })),
     runes: PropTypes.arrayOf(PropTypes.shape({
-      runeId: PropTypes.number.isRequired,
-      count: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
+      runeId: PropTypes.number,
+      rank: PropTypes.number,
+      name: PropTypes.string,
+      description: PropTypes.string,
       image: PropTypes.shape({
-        full: PropTypes.string.isRequired,
+        full: PropTypes.string,
       }),
     })),
     stats: PropTypes.shape({
       winner: PropTypes.bool,
       champLevel: PropTypes.number,
-      item0: PropTypes.number.isRequired,
-      item1: PropTypes.number.isRequired,
-      item2: PropTypes.number.isRequired,
-      item3: PropTypes.number.isRequired,
-      item4: PropTypes.number.isRequired,
-      item5: PropTypes.number.isRequired,
-      item6: PropTypes.number.isRequired,
-      kills: PropTypes.number.isRequired,
-      deaths: PropTypes.number.isRequired,
-      assists: PropTypes.number.isRequired,
-      goldEarned: PropTypes.number.isRequired,
-      largestMultiKill: PropTypes.number.isRequired,
+      item0: PropTypes.number,
+      item1: PropTypes.number,
+      item2: PropTypes.number,
+      item3: PropTypes.number,
+      item4: PropTypes.number,
+      item5: PropTypes.number,
+      item6: PropTypes.number,
+      kills: PropTypes.number,
+      deaths: PropTypes.number,
+      assists: PropTypes.number,
+      goldEarned: PropTypes.number,
+      largestMultiKill: PropTypes.number,
     }),
-    itemsOrder: PropTypes.arrayOf({
-      itemId: PropTypes.number.isRequired,
-    }),
+    itemsOrder: PropTypes.arrayOf(PropTypes.shape({
+      itemId: PropTypes.number,
+    })),
     skillsOrder: PropTypes.arrayOf(PropTypes.number),
     profPlayerData: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
+      name: PropTypes.string,
+      imageUrl: PropTypes.string,
     }),
   }),
+  isFetching: PropTypes.bool,
+  fetched: PropTypes.bool,
+  errorMessage: PropTypes.string,
+  fetchBuild: PropTypes.func,
 };
 
-ProBuildView.defaultProps = {
-  build: {
-    spell1Id: 7,
-    spell2Id: 4,
-    championId: 202,
-    highestAchievedSeasonTier: 'CHALLENGER',
-    matchCreation: 1482952685012,
-    matchId: 2565458545,
-    profPlayerData: {
-      name: 'Xpeke',
-      imageUrl: 'http://solomid-resources.s3-website-us-east-1.amazonaws.com/probuilds/img/pros/170x240/hjarnan.png',
-    },
-    championData: {
-      name: 'Jhin',
-      title: 'El encantador de penes',
-    },
-    masteries: [
-      {
-        masteryId: 6111,
-        rank: 5,
-      },
-      {
-        masteryId: 6121,
-        rank: 1,
-      },
-      {
-        masteryId: 6131,
-        rank: 5,
-      },
-      {
-        masteryId: 6141,
-        rank: 1,
-      },
-      {
-        masteryId: 6151,
-        rank: 5,
-      },
-      {
-        masteryId: 6164,
-        rank: 1,
-      },
-      {
-        masteryId: 6312,
-        rank: 5,
-      },
-      {
-        masteryId: 6322,
-        rank: 1,
-      },
-      {
-        masteryId: 6331,
-        rank: 5,
-      },
-      {
-        masteryId: 6343,
-        rank: 1,
-      },
-    ],
-    stats: {
-      winner: true,
-      champLevel: 18,
-      item0: 3508,
-      item1: 3072,
-      item2: 3111,
-      item3: 3094,
-      item4: 3102,
-      item5: 3156,
-      item6: 3363,
-      kills: 15,
-      deaths: 8,
-      assists: 12,
-      goldEarned: 21648,
-      largestMultiKill: 3,
-    },
-    itemsOrder: [
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-      {
-        itemId: 2003,
-        itemName: 'Nombre del item',
-      },
-    ],
-    runes: [
-      {
-        runeId: 5253,
-        count: 9,
-        name: 'Nombre de runa',
-        description: 'Descripcion de la runa',
-        image: {
-          full: 'y_4_3.png',
-        },
-      },
-      {
-        runeId: 5289,
-        count: 9,
-        name: 'Nombre de runa',
-        description: 'Descripcion de la runa',
-        image: {
-          full: 'y_4_3.png',
-        },
-      },
-      {
-        runeId: 5317,
-        count: 9,
-        name: 'Nombre de runa',
-        description: 'Descripcion de la runa',
-        image: {
-          full: 'y_4_3.png',
-        },
-      },
-      {
-        runeId: 5335,
-        count: 3,
-        name: 'Nombre de runa',
-        description: 'Descripcion de la runa',
-        image: {
-          full: 'y_4_3.png',
-        },
-      },
-    ],
-  },
-};
+function mapStateToProps(state) {
+  return state.proBuildView.toJS();
+}
 
-export default ProBuildView;
+function mapDispatchToProps(dispatch, props) {
+  return {
+    fetchBuild: () => {
+      dispatch(ProBuildViewActions.fetchBuild(props.buildId));
+    },
+  };
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ProBuildView);

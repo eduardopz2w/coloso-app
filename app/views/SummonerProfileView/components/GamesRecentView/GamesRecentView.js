@@ -24,7 +24,7 @@ class GamesRecentView extends PureComponent {
     if (fetched) {
       return (<ListView
         dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
-        renderRow={game => <GameRecent game={game} />}
+        renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
       />);
     } else if (isFetching) {
       return (<LoadingScreen />);

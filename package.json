@@ -17,6 +17,7 @@
     "react-native-admob": "^1.1.5",
     "react-native-bar-collapsible": "^1.5.0",
     "react-native-circular-progress": "0.0.7",
+    "react-native-drawer": "^2.3.0",
     "react-native-easy-grid": "^0.1.7",
     "react-native-fit-image": "^1.4.7",
     "react-native-google-analytics-bridge": "^4.0.2",

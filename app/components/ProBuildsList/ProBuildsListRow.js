@@ -73,6 +73,8 @@ const styles = StyleSheet.create({
     height: 20,
     borderWidth: 1.5,
     borderColor: 'black',
+    backgroundColor: 'black',
+    marginBottom: 1,
   },
 
   summonerSpell: {
@@ -101,7 +103,7 @@ const styles = StyleSheet.create({
 });
 
 function renderItem(itemId) {
-  if (itemId) {
+  if (itemId !== 0) {
     return <Image source={{ uri: `item_${itemId}` }} style={styles.item} />;
   }
 
@@ -129,7 +131,7 @@ class ProBuild extends Component {
           <View style={styles.playerData}>
             <Image source={{ uri: build.profPlayerData.imageUrl }} style={styles.playerImage} />
             <Text style={styles.playerName}>{this.props.build.profPlayerData.name}</Text>
-            <Text>{getTimeAgo(build.matchC)}</Text>
+            <Text>{getTimeAgo(build.matchCreation)}</Text>
           </View>
           <View style={styles.gameDataRow}>
             <Image source={{ uri: `champion_square_${build.championId}` }} style={styles.championImage} />
@@ -166,10 +168,10 @@ ProBuild.propTypes = {
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
-    championData: {
+    championData: PropTypes.shape({
       name: PropTypes.string,
       title: PropTypes.string,
-    },
+    }),
     matchCreation: PropTypes.number.isRequired,
     highestAchievedSeasonTier: PropTypes.string,
     masteries: PropTypes.arrayOf(PropTypes.shape({
@@ -178,7 +180,7 @@ ProBuild.propTypes = {
     })),
     runes: PropTypes.arrayOf(PropTypes.shape({
       runeId: PropTypes.number.isRequired,
-      count: PropTypes.number.isRequired,
+      rank: PropTypes.number.isRequired,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       image: PropTypes.shape({
@@ -201,13 +203,13 @@ ProBuild.propTypes = {
       goldEarned: PropTypes.number.isRequired,
       largestMultiKill: PropTypes.number.isRequired,
     }),
-    itemsOrder: PropTypes.arrayOf({
+    itemsOrder: PropTypes.arrayOf(PropTypes.shape({
       itemId: PropTypes.number.isRequired,
-    }),
+    })),
     skillsOrder: PropTypes.arrayOf(PropTypes.number),
     profPlayerData: PropTypes.shape({
       name: PropTypes.string.isRequired,
-      imageUrl: PropTypes.string.isRequired,
+      imageUrl: PropTypes.string,
     }),
   }),
   onPress: PropTypes.func,
