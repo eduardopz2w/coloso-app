@@ -84,13 +84,25 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'black',
     marginLeft: -5,
-    marginRight: 16,
+    marginRight: 8,
   },
 
   goldImage: {
     width: 15,
     height: 15,
     marginRight: 4,
+  },
+
+  killsText: {
+    color: colors.victory,
+  },
+
+  deathsText: {
+    color: colors.defeat,
+  },
+
+  assistsText: {
+    color: colors.primary,
   },
 
   win: {
@@ -140,9 +152,11 @@ class ProBuild extends Component {
               <Image source={{ uri: `summoner_spell_${build.spell2Id}` }} style={styles.summonerSpell} />
             </View>
             <View style={styles.championNameAndScore} >
-              <Text style={styles.championName}>{build.championData.name}</Text>
+              <Text numberOfLines={1} style={styles.championName}>{build.championData.name}</Text>
               <Text>
-                {build.stats.kills}/{build.stats.deaths}/{build.stats.assists}
+                <Text style={styles.killsText}>{build.stats.kills}</Text>/
+                <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
+                <Text style={styles.assistsText}>{build.stats.assists}</Text>
               </Text>
             </View>
             <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />

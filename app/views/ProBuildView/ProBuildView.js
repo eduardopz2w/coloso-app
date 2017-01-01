@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Image, Text, Dimensions, ScrollView } from 'react-native';
+import { View, StyleSheet, Image, Text, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
+import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -127,14 +128,42 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+
+  modal: {
+    width: 300,
+    height: null,
+  },
+
+  killsText: {
+    color: colors.victory,
+  },
+
+  deathsText: {
+    color: colors.defeat,
+  },
+
+  assistsText: {
+    color: colors.primary,
+  },
 });
 
 class ProBuildView extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      modalData: {
+        itemName: '',
+        itemPlainText: '',
+        itemId: 0,
+        itemGold: 0,
+      },
+    };
+
     this.deviceDimensions = Dimensions.get('window');
     this.getItemStyle = this.getItemStyle.bind(this);
     this.renderSkillOrder = this.renderSkillOrder.bind(this);
+    this.handleOnPressItem = this.handleOnPressItem.bind(this);
   }
 
   componentWillMount() {
@@ -152,6 +181,19 @@ class ProBuildView extends Component {
       width,
       height: width,
     };
+  }
+
+  handleOnPressItem(itemData) {
+    this.setState({
+      modalData: {
+        itemName: itemData.name,
+        itemPlainText: itemData.plaintext,
+        itemId: itemData.itemId,
+        itemGold: itemData.gold.total,
+      },
+    }, () => {
+      this.modal.open();
+    });
   }
 
   renderSkillOrder() {
@@ -202,11 +244,15 @@ class ProBuildView extends Component {
       for (let i = 0; i < build.itemsOrder.length; i += 1) {
         itemData = build.itemsOrder[i];
 
-        itemsAndSeparators.push(<Image
+        itemsAndSeparators.push(<TouchableWithoutFeedback
           key={`item_${i}`}
-          style={[styles.item, this.getItemStyle()]}
-          source={{ uri: `item_${itemData.itemId}` }}
-        />);
+          onPress={this.handleOnPressItem.bind(this, itemData)}
+        >
+          <Image
+            style={[styles.item, this.getItemStyle()]}
+            source={{ uri: `item_${itemData.itemId}` }}
+          />
+        </TouchableWithoutFeedback>);
 
         if (i !== build.itemsOrder.length - 1) {
           itemsAndSeparators.push(<Icon
@@ -254,7 +300,11 @@ class ProBuildView extends Component {
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
-                <Text>{build.stats.kills}/{build.stats.deaths}/{build.stats.assists}</Text>
+                <Text>
+                  <Text style={styles.killsText}>{build.stats.kills}</Text>/
+                  <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
+                  <Text style={styles.assistsText}>{build.stats.assists}</Text>
+                </Text>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
@@ -275,6 +325,30 @@ class ProBuildView extends Component {
           <RuneTab tabLabel="Runas" runes={this.props.build.runes} />
           <MasteryTab tabLabel="Maestrias" masteries={this.props.build.masteries} />
         </ScrollableTabView>
+
+        <Modal
+          position="bottom"
+          style={styles.modal}
+          backdrop={false}
+          ref={(modal) => { this.modal = modal; }}
+        >
+          <View style={{ flexDirection: 'row', padding: 16 }}>
+            <View style={{ marginRight: 8 }}>
+              <Image
+                style={styles.item}
+                source={{ uri: `item_${this.state.modalData.itemId}` }}
+              />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: 'bold' }}>{this.state.modalData.itemName}</Text>
+              <View style={{ flexDirection: 'row', marginVertical: 4 }}>
+                <Image style={{ width: 20, height: 20, marginRight: 8 }} source={{ uri: 'ui_gold' }} />
+                <Text>{this.state.modalData.itemGold}</Text>
+              </View>
+              <Text>{this.state.modalData.itemPlainText}</Text>
+            </View>
+          </View>
+        </Modal>
       </View>);
     } else if (this.props.isFetching) {
       return (<View style={styles.root}>
@@ -344,6 +418,11 @@ ProBuildView.propTypes = {
     }),
     itemsOrder: PropTypes.arrayOf(PropTypes.shape({
       itemId: PropTypes.number,
+      name: PropTypes.string,
+      plaintext: PropTypes.string,
+      gold: PropTypes.shape({
+        total: PropTypes.number,
+      }),
     })),
     skillsOrder: PropTypes.arrayOf(PropTypes.number),
     profPlayerData: PropTypes.shape({
