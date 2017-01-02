@@ -22,6 +22,8 @@ class ProBuildsList extends Component {
     return (<View style={styles.root}>
       <ListView
         dataSource={this.dataSource.cloneWithRows(this.props.builds)}
+        initialListSize={10}
+        pageSize={7}
         renderRow={(build, sectionId, rowId) => <ProBuildListRow
           key={rowId}
           build={build}
