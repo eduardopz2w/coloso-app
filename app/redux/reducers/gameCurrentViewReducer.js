@@ -18,6 +18,13 @@ function searchView(state = initialState, action) {
   if (action.type === 'SEARCH_VIEW/SEARCH_GAME_FULFILLED') {
     newState = newState.merge({
       gameData: action.payload,
+      builds: {
+        fetched: false,
+        fetchError: false,
+        errorMessage: '',
+        isFetching: true,
+        builds: [],
+      }
     });
   }
 
