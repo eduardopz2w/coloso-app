@@ -4,7 +4,7 @@
  * @flow
  */
  // TODO: Usar appbar en el router
-import { Scene, Router } from 'react-native-router-flux';
+import { Scene, Router, ActionConst } from 'react-native-router-flux';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -19,9 +19,12 @@ import moment from 'moment';
 import 'moment/locale/es';
 
 import lolcenaApp from './app/redux/reducers';
+import Drawer from './app/components/Drawer';
 // -------- Views --------------
 import SearchView from './app/views/SearchView';
 import SummonerProfileView from './app/views/SummonerProfileView';
+import ProBuildsSearchView from './app/views/ProBuildsSearchView';
+import ProBuildView from './app/views/ProBuildView';
 import GameCurrentView from './app/views/GameCurrentView';
 import StorageInstance from './app/utils/Storage';
 
@@ -60,10 +63,14 @@ const lolcena = function lolcena() {
   return (<Provider store={store}>
     <View style={{ flex: 1 }}>
       <Router>
-        <Scene key="root">
-          <Scene key="search_view" component={SearchView} hideNavBar initial />
-          <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
-          <Scene key="game_current" component={GameCurrentView} hideNavBar />
+        <Scene key="drawer" component={Drawer} open={false}>
+          <Scene key="root">
+            <Scene key="search_view" component={SearchView} hideNavBar initial type={ActionConst.RESET} />
+            <Scene key="probuilds_search_view" component={ProBuildsSearchView} hideNavBar type={ActionConst.RESET} />
+            <Scene key="probuild_view" component={ProBuildView} hideNavBar />
+            <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
+            <Scene key="game_current" component={GameCurrentView} hideNavBar />
+          </Scene>
         </Scene>
       </Router>
 

@@ -118,7 +118,8 @@ class ChampionsMasteryView extends Component {
           pageSize={pageSize}
           contentContainerStyle={styles.listViewContainer}
           dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-          renderRow={mastery => <ChampionMastery
+          renderRow={(mastery, sectionId, rowId) => <ChampionMastery
+            key={rowId}
             onPress={this.handleOnPressChampion}
             mastery={mastery}
             championImageSize={championImageSize}

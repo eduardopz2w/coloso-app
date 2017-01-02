@@ -45,8 +45,9 @@ class History extends Component {
     this.props.onPressHistoryEntry(summonerName, region);
   }
 
-  renderRow(historyEntry) {
+  renderRow(historyEntry, sectionId, rowId) {
     return (<MKButton
+      key={rowId}
       rippleColor="rgba(0,0,0,0.1)"
       style={styles.historyRow}
       onPress={() => {

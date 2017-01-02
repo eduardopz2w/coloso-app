@@ -45,38 +45,16 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 12,
     },
   },
-  {
-    '@media (min-device-width: 600)': {
-      runeImage: {
-        width: 80,
-        height: 80,
-      },
-      countText: {
-        fontSize: 16,
-        width: 24,
-        height: 24,
-      },
-      titleText: {
-        fontSize: 20,
-      },
-      descriptionText: {
-        fontSize: 18,
-      },
-      messageText: {
-        fontSize: 18,
-      },
-    },
-  },
 );
 
 function getRuneImageUri(runeImage) {
   return `rune_${runeImage}`.replace('.png', '');
 }
 
-function renderRow(rune) {
-  return (<View style={styles.runeRow}>
+function renderRow(rune, sectionId, rowId) {
+  return (<View style={styles.runeRow} key={rowId}>
     <Image style={styles.runeImage} source={{ uri: getRuneImageUri(rune.image.full) }} >
-      <Text style={styles.countText}>x{rune.count}</Text>
+      <Text style={styles.countText}>x{rune.count || rune.rank}</Text>
     </Image>
     <View style={styles.dataCol}>
       <Text style={styles.titleText}>{rune.name}</Text>
@@ -115,7 +93,8 @@ RunePage.propTypes = {
     name: PropTypes.string,
     runes: PropTypes.arrayOf(PropTypes.shape({
       runeId: PropTypes.number.isRequired,
-      count: PropTypes.number.isRequired,
+      count: PropTypes.number,
+      rank: PropTypes.number,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       image: PropTypes.shape({
