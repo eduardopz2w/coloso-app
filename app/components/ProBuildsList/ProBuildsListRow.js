@@ -1,127 +1,153 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 import moment from 'moment';
 import numeral from 'numeral';
 import colors from '../../utils/colors';
 
-const styles = StyleSheet.create({
-  root: {
-    paddingLeft: 10,
-    paddingRight: 16,
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderLeftWidth: 6,
-  },
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      paddingLeft: 10,
+      paddingRight: 16,
+      paddingTop: 8,
+      paddingBottom: 8,
+      borderLeftWidth: 6,
+    },
 
-  playerData: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    playerData: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  playerImage: {
-    width: 45,
-    height: 45,
-    borderRadius: 50,
-    marginRight: 16,
-    borderWidth: 2,
-    borderColor: 'black',
-  },
+    playerImage: {
+      width: 45,
+      height: 45,
+      borderRadius: 50,
+      marginRight: 16,
+      borderWidth: 2,
+      borderColor: 'black',
+    },
 
-  playerName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    flex: 1,
-  },
+    playerName: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      flex: 1,
+    },
 
-  championImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: 'black',
-    zIndex: 1,
-  },
+    championImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: 'black',
+      zIndex: 1,
+    },
 
-  championNameAndScore: {
-    flex: 1,
-  },
+    championNameAndScore: {
+      flex: 1,
+    },
 
-  championName: {
-    fontSize: 13,
-    fontWeight: 'bold',
-  },
+    championName: {
+      fontSize: 13,
+      fontWeight: 'bold',
+    },
 
-  goldText: {
-    marginRight: 8,
-    color: colors.tiers.gold,
-    fontWeight: 'bold',
-    textShadowColor: '#000',
-    textShadowOffset: {
-      width: 0.2,
-      height: 0.2,
+    goldText: {
+      marginRight: 8,
+      color: colors.tiers.gold,
+      fontWeight: 'bold',
+      textShadowColor: '#000',
+      textShadowOffset: {
+        width: 0.2,
+        height: 0.2,
+      },
+    },
+
+    gameDataRow: {
+      paddingLeft: 16,
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginTop: 8,
+    },
+
+    itemsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      width: 70,
+      justifyContent: 'space-around',
+    },
+
+    item: {
+      width: 20,
+      height: 20,
+      borderWidth: 1.5,
+      borderColor: 'black',
+      backgroundColor: 'black',
+      marginBottom: 1,
+    },
+
+    summonerSpell: {
+      width: 20,
+      height: 20,
+      borderRadius: 50,
+      borderWidth: 1,
+      borderColor: 'black',
+      marginLeft: -5,
+      marginRight: 8,
+    },
+
+    goldImage: {
+      width: 15,
+      height: 15,
+      marginRight: 2,
+    },
+
+    scoreText: {
+      fontSize: 15,
+      fontWeight: 'bold',
+    },
+
+    killsText: {
+      color: colors.victory,
+    },
+
+    deathsText: {
+      color: colors.defeat,
+    },
+
+    win: {
+      borderLeftColor: colors.victory,
+    },
+
+    loss: {
+      borderLeftColor: colors.defeat,
+    },
+  }, {
+    '@media (min-device-width: 600)': {
+      itemsContainer: {
+        width: null,
+        marginLeft: 8,
+      },
+      item: {
+        marginRight: 4,
+        width: 25,
+        height: 25,
+      },
+      championNameAndScore: {
+        flexDirection: 'row',
+      },
+      championName: {
+        flex: 0.60,
+        fontSize: 16,
+      },
+      scoreText: {
+        flex: 0.40,
+        fontSize: 16,
+      },
     },
   },
-
-  gameDataRow: {
-    paddingLeft: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 8,
-  },
-
-  itemsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    width: 70,
-    justifyContent: 'space-around',
-  },
-
-  item: {
-    width: 20,
-    height: 20,
-    borderWidth: 1.5,
-    borderColor: 'black',
-    backgroundColor: 'black',
-    marginBottom: 1,
-  },
-
-  summonerSpell: {
-    width: 20,
-    height: 20,
-    borderRadius: 50,
-    borderWidth: 1,
-    borderColor: 'black',
-    marginLeft: -5,
-    marginRight: 8,
-  },
-
-  goldImage: {
-    width: 15,
-    height: 15,
-    marginRight: 2,
-  },
-
-  scoreText: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-
-  killsText: {
-    color: colors.victory,
-  },
-
-  deathsText: {
-    color: colors.defeat,
-  },
-
-  win: {
-    borderLeftColor: colors.victory,
-  },
-
-  loss: {
-    borderLeftColor: colors.defeat,
-  },
-});
+);
 
 function renderItem(itemId) {
   if (itemId !== 0) {
@@ -169,7 +195,12 @@ class ProBuild extends Component {
               </Text>
             </View>
             <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
-            <Text style={styles.goldText}>{numeral(build.stats.goldEarned).format('0a')}</Text>
+            <MediaQuery maxDeviceWidth={599}>
+              <Text style={styles.goldText}>{numeral(build.stats.goldEarned).format('0a')}</Text>
+            </MediaQuery>
+            <MediaQuery minDeviceWidth={600}>
+              <Text style={styles.goldText}>{numeral(build.stats.goldEarned).format('0,0')}</Text>
+            </MediaQuery>
             <View style={styles.itemsContainer} >
               {renderItem(build.stats.item0)}
               {renderItem(build.stats.item1)}
