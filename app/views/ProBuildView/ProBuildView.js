@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Image, Text, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, Image, Text, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -18,146 +19,156 @@ import MasteryTab from './MasteryTab';
 
 const itemsArrowSize = 20;
 
-const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-  },
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      flex: 1,
+    },
 
-  container: {
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
+    container: {
+      paddingLeft: 16,
+      paddingRight: 16,
+    },
 
-  basicContainer: {
-    padding: 16,
-    flex: 1,
-  },
+    basicContainer: {
+      padding: 16,
+      flex: 1,
+    },
 
-  championImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: 'black',
-    zIndex: 1,
-  },
+    championImage: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      borderWidth: 3,
+      borderColor: 'black',
+      zIndex: 1,
+    },
 
-  championDataRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
+    championDataRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
 
-  summonerSpell: {
-    width: 25,
-    height: 25,
-    borderRadius: 50,
-    marginLeft: -8,
-    marginRight: 16,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
+    summonerSpell: {
+      width: 25,
+      height: 25,
+      borderRadius: 50,
+      marginLeft: -8,
+      marginRight: 16,
+      borderWidth: 1,
+      borderColor: 'black',
+    },
 
-  championName: {
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+    championName: {
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
 
-  summaryRow: {
-    marginTop: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
+    summaryRow: {
+      marginTop: 8,
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+    },
 
-  winText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colors.victory,
-  },
+    winText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: colors.victory,
+    },
 
-  lossText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colors.defeat,
-  },
+    lossText: {
+      fontWeight: 'bold',
+      fontSize: 16,
+      color: colors.defeat,
+    },
 
-  summaryIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 4,
-  },
+    summaryIcon: {
+      width: 20,
+      height: 20,
+      marginRight: 4,
+    },
 
-  title: {
-    backgroundColor: colors.titlesBackground,
-    marginVertical: 8,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-  },
+    title: {
+      backgroundColor: colors.titlesBackground,
+      marginVertical: 8,
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+    },
 
-  item: {
-    width: 40,
-    height: 40,
-    borderWidth: 3,
-    borderColor: 'black',
-    marginBottom: 16,
-  },
+    item: {
+      width: 40,
+      height: 40,
+      borderWidth: 3,
+      borderColor: 'black',
+      marginBottom: 16,
+    },
 
-  itemsContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-  },
+    itemsContainer: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      alignItems: 'center',
+    },
 
-  itemsArrow: {
-    width: itemsArrowSize,
-  },
+    itemsArrow: {
+      width: itemsArrowSize,
+    },
 
-  skillsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-  },
+    skillsContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+      paddingHorizontal: 16,
+    },
 
-  goldText: {
-    color: colors.tiers.gold,
-    fontWeight: 'bold',
-    textShadowColor: '#000',
-    textShadowOffset: {
-      width: 0.2,
-      height: 0.2,
+    goldText: {
+      color: colors.tiers.gold,
+      fontWeight: 'bold',
+      textShadowColor: '#000',
+      textShadowOffset: {
+        width: 0.2,
+        height: 0.2,
+      },
+    },
+
+    skillLabel: {
+      width: 35,
+      height: 35,
+      backgroundColor: colors.primary,
+      color: 'white',
+      textAlign: 'center',
+      textAlignVertical: 'center',
+      borderRadius: 50,
+      fontWeight: 'bold',
+      fontSize: 16,
+    },
+
+    modal: {
+      width: 300,
+      height: null,
+    },
+
+    scoreText: {
+      fontSize: 15,
+      fontWeight: 'bold',
+    },
+
+    killsText: {
+      color: colors.victory,
+    },
+
+    deathsText: {
+      color: colors.defeat,
+    },
+  }, {
+    '@media (min-device-width: 600)': {
+      modal: {
+        width: 450,
+        borderWidth: 1,
+        borderColor: 'rgba(0,0,0,0.2)',
+      },
     },
   },
-
-  skillLabel: {
-    width: 35,
-    height: 35,
-    backgroundColor: colors.primary,
-    color: 'white',
-    textAlign: 'center',
-    textAlignVertical: 'center',
-    borderRadius: 50,
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-
-  modal: {
-    width: 300,
-    height: null,
-  },
-
-  scoreText: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-
-  killsText: {
-    color: colors.victory,
-  },
-
-  deathsText: {
-    color: colors.defeat,
-  },
-});
+);
 
 class ProBuildView extends Component {
   constructor(props) {
@@ -183,8 +194,13 @@ class ProBuildView extends Component {
   }
 
   getItemStyle() {
+    let numCols = 5;
+
+    if (this.deviceDimensions.width >= 600) {
+      numCols = 8;
+    }
+
     let width = this.deviceDimensions.width - 32;
-    const numCols = 5;
 
     width -= numCols * itemsArrowSize;
     width /= numCols;

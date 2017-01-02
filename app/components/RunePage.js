@@ -45,28 +45,6 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 12,
     },
   },
-  {
-    '@media (min-device-width: 600)': {
-      runeImage: {
-        width: 80,
-        height: 80,
-      },
-      countText: {
-        fontSize: 16,
-        width: 24,
-        height: 24,
-      },
-      titleText: {
-        fontSize: 20,
-      },
-      descriptionText: {
-        fontSize: 18,
-      },
-      messageText: {
-        fontSize: 18,
-      },
-    },
-  },
 );
 
 function getRuneImageUri(runeImage) {
