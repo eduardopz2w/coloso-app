@@ -9,6 +9,10 @@ const initialState = Immutable.fromJS({
     errorMessage: '',
     isFetching: true,
     builds: [],
+    pagination: {
+      page: 1,
+      pageSize: 1,
+    },
   },
 });
 
@@ -29,19 +33,29 @@ function searchView(state = initialState, action) {
   }
 
   if (action.type === 'GAME_CURRENT_VIEW/FETCH_BUILDS_PENDING') {
-    newState = newState.mergeIn(['builds'], {
-      fetched: false,
-      isFetching: true,
-      fetchError: false,
-      builds: [],
+    const page = action.payload.page;
+
+    newState = newState.withMutations((mutator) => {
+      if (page === 1) {
+        mutator.setIn(['builds', 'fetched'], false);
+        mutator.setIn(['builds', 'builds'], []);
+        mutator.setIn(['builds', 'pagination'], {
+          page: 1,
+          pageCount: 1,
+        });
+      }
+
+      mutator.setIn(['builds', 'fetchError'], false);
+      mutator.setIn(['builds', 'isFetching'], true);
     });
   }
 
   if (action.type === 'GAME_CURRENT_VIEW/FETCH_BUILDS_FULFILLED') {
-    newState = newState.mergeIn(['builds'], {
-      fetched: true,
-      isFetching: false,
-      builds: action.payload,
+    newState = newState.withMutations((mutator) => {
+      mutator.setIn(['builds', 'fetched'], true);
+      mutator.setIn(['builds', 'isFetching'], false);
+      mutator.updateIn(['builds', 'builds'], builds => builds.concat(action.payload.probuilds));
+      mutator.setIn(['builds', 'pagination'], action.payload.pagination);
     });
   }
 

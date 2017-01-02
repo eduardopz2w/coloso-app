@@ -47,8 +47,11 @@ cenaClient.interceptors.response.use((response) => {
 });
 
 
-function getBuilds(championId) {
-  const params = {};
+function getBuilds(championId, page, pageSize) {
+  const params = {
+    page,
+    pageSize,
+  };
 
   if (_.isFinite(championId) && championId > 0) {
     params.championId = championId;
