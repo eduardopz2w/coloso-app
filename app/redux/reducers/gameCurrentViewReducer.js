@@ -41,7 +41,7 @@ function searchView(state = initialState, action) {
     newState = newState.mergeIn(['builds'], {
       fetched: true,
       isFetching: false,
-      builds: action.payload,
+      builds: action.payload.probuilds,
     });
   }
 
