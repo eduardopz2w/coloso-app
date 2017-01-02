@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
 import ProBuildSearchActions from '../../redux/actions/ProBuildsSearchActions';
 import LoadingScreen from '../../components/LoadingScreen';
+import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
 import ChampionSelector from '../../components/ChampionSelector';
 import ErrorScreen from '../../components/ErrorScreen';
@@ -31,6 +32,10 @@ class ProBuildSearchView extends Component {
 
   componentWillMount() {
     this.props.fetchBuilds(null, 1);
+  }
+
+  componentDidMount() {
+    tracker.trackScreenView('ProbuildsSearchView');
   }
 
   handleOnChangeChampionSelected(championId) {
