@@ -268,10 +268,10 @@ GameCurrentView.propTypes = {
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
     builds: PropTypes.arrayOf(PropTypes.shape({})),
-    pagination: {
+    pagination: PropTypes.shape({
       page: PropTypes.number,
       pageSize: PropTypes.number,
-    },
+    }),
   }),
   fetchBuilds: PropTypes.func,
 };
