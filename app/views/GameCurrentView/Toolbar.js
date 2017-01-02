@@ -38,14 +38,22 @@ const styles = StyleSheet.create({
   },
 });
 
-function getParsedTime(startTime) {
-  return moment().subtract(startTime).format('mm:ss');
+function getParsedTime(gameLength) {
+  return moment(gameLength / 0.001).format('mm:ss');
 }
 
 class Toolbar extends Component {
+  componentWillMount() {
+    this.setState({
+      gameLength: this.props.gameLength,
+    });
+  }
+
   componentDidMount() {
     this.timer = setInterval(() => {
-      this.forceUpdate();
+      this.setState({
+        gameLength: this.state.gameLength + 1,
+      });
     }, 1000);
   }
 
@@ -54,7 +62,7 @@ class Toolbar extends Component {
   }
 
   render() {
-    const { mapId, gameQueueConfigId, gameStartTime } = this.props;
+    const { mapId, gameQueueConfigId } = this.props;
 
     return (<View style={styles.root}>
       <IconButton iconName="arrow-back" onPress={this.props.onPressBackButton} />
@@ -64,7 +72,7 @@ class Toolbar extends Component {
       </View>
       <View style={styles.gameTimeCol}>
         <Icon name="access-time" size={18} color="#FFF" />
-        <Text style={styles.gameTime}>{getParsedTime(gameStartTime)}</Text>
+        <Text style={styles.gameTime}>{getParsedTime(this.state.gameLength)}</Text>
       </View>
     </View>);
   }
@@ -73,7 +81,7 @@ class Toolbar extends Component {
 Toolbar.propTypes = {
   mapId: PropTypes.number.isRequired,
   gameQueueConfigId: PropTypes.number.isRequired,
-  gameStartTime: PropTypes.number.isRequired,
+  gameLength: PropTypes.number.isRequired,
   onPressBackButton: PropTypes.func.isRequired,
 };
 

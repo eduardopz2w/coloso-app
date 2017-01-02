@@ -192,7 +192,7 @@ class GameCurrentView extends Component {
       <Toolbar
         mapId={this.props.gameData.mapId}
         gameQueueConfigId={this.props.gameData.gameQueueConfigId}
-        gameStartTime={this.props.gameData.gameStartTime}
+        gameLength={this.props.gameData.gameLength}
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
@@ -242,6 +242,7 @@ GameCurrentView.propTypes = {
     participants: PropTypes.array.isRequired,
     mapId: PropTypes.number.isRequired,
     gameQueueConfigId: PropTypes.number.isRequired,
+    gameLength: PropTypes.number,
     region: PropTypes.string.isRequired,
     gameStartTime: PropTypes.number.isRequired,
     focusSummonerId: PropTypes.number,
