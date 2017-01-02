@@ -3,7 +3,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native'
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {MKButton} from 'react-native-material-kit'
 
 class IconButton extends Component {

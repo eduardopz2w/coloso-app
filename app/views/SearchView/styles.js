@@ -6,7 +6,6 @@ export default MediaQueryStyleSheet.create(
     root: {
       flex: 1,
       position: 'relative',
-      backgroundColor: colors.primary,
     },
 
     wrapper: {
@@ -60,14 +59,14 @@ export default MediaQueryStyleSheet.create(
     },
 
     searchButton: {
-      backgroundColor: 'white',
+      backgroundColor: colors.primary,
       justifyContent: 'center',
       alignItems: 'center',
       height: 40,
     },
 
     searchButtonText: {
-      color: colors.primary,
+      color: 'white',
     },
 
     whiteText: {

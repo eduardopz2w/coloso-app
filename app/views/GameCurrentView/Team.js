@@ -7,12 +7,11 @@ const styles = StyleSheet.create({
   root: {},
 });
 
-class TeamTab extends Component {
+class Team extends Component {
   render() {
     const { bannedChampions, participants } = this.props;
 
     return (<View style={styles.root}>
-      <ScrollView>
         {bannedChampions.length > 0 &&
           <BannedChampions champions={bannedChampions} />
         }
@@ -23,12 +22,11 @@ class TeamTab extends Component {
           onPressMasteriesButton={this.props.onPressMasteriesButton}
           onPressProfileButton={this.props.onPressProfileButton}
         />)}
-      </ScrollView>
     </View>);
   }
 }
 
-TeamTab.propTypes = {
+Team.propTypes = {
   participants: PropTypes.arrayOf(PropTypes.shape({})),
   bannedChampions: PropTypes.arrayOf(PropTypes.shape({})),
   onPressRunesButton: PropTypes.func.isRequired,
@@ -36,4 +34,4 @@ TeamTab.propTypes = {
   onPressProfileButton: PropTypes.func.isRequired,
 };
 
-export default TeamTab;
+export default Team;

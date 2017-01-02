@@ -23,20 +23,18 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-class SearchViewToolbar extends PureComponent {
+class Toolbar extends PureComponent {
   render() {
     return (<View style={[styles.root, this.props.style]}>
       <IconButton iconName="menu" onPress={this.props.onPressMenuButton} />
-      <Text style={styles.title}>Buscar Invocador</Text>
-      <IconButton iconName="history" onPress={this.props.onPressHistoryButton} />
+      <Text style={styles.title}>Builds Profesionales</Text>
     </View>);
   }
 }
 
-SearchViewToolbar.propTypes = {
+Toolbar.propTypes = {
   style: View.propTypes.style,
-  onPressHistoryButton: PropTypes.func,
   onPressMenuButton: PropTypes.func,
 };
 
-export default SearchViewToolbar;
+export default Toolbar;

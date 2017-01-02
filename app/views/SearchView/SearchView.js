@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import { tracker } from '../../utils/analytics';
+import colors from '../../utils/colors';
 import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
 import regionHumanize from '../../utils/regionHumanize';
@@ -144,7 +145,7 @@ class SearchView extends Component {
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
-        <MKSpinner strokeColor="white" />
+        <MKSpinner strokeColor={colors.spinnerColor} />
       </View>);
     }
 
@@ -170,7 +171,10 @@ class SearchView extends Component {
 
 
     return (<View style={styles.root}>
-      <SearchViewToolbar onPressHistoryButton={this.handleOnPressHistoryButton} />
+      <SearchViewToolbar
+        onPressHistoryButton={this.handleOnPressHistoryButton}
+        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+      />
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.container}>

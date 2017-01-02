@@ -1,14 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Dimensions, BackAndroid, Text } from 'react-native';
+import { View, StyleSheet, Dimensions, BackAndroid, Text, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import _ from 'lodash';
 import colors from '../../utils/colors';
-import TeamTab from './TeamTab';
+import Team from './Team';
+import GameCurrentViewActions from '../../redux/actions/GameCurrentViewActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
+import ProBuildsList from '../../components/ProBuildsList';
+import LoadingScreen from '../../components/LoadingScreen';
+import ErrorScreen from '../../components/ErrorScreen';
 import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
 
@@ -20,6 +24,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+  },
+  container: {
+    padding: 16,
+    flex: 1,
   },
 });
 
@@ -33,6 +41,8 @@ class GameCurrentView extends Component {
     this.handleOnPressRunesButton = this.handleOnPressRunesButton.bind(this);
     this.handleOnPressMasteriesButton = this.handleOnPressMasteriesButton.bind(this);
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
+    this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
+    this.fetchBuilds = this.fetchBuilds.bind(this);
     this.getModalStyle = this.getModalStyle.bind(this);
     this.state = {
       summonerSelectedId: null,
@@ -113,8 +123,54 @@ class GameCurrentView extends Component {
     return false;
   }
 
+  handleOnChangeTab({ i: tabIndex }) {
+    if (tabIndex === 1 && !this.props.builds.fetched) {
+      this.fetchBuilds();
+    }
+  }
+
+  fetchBuilds() {
+    if (this.props.gameData && this.props.gameData.focusSummonerId) {
+      const focusSummonerId = this.props.gameData.focusSummonerId;
+      const participant = _.find(this.props.gameData.participants, { summonerId: focusSummonerId });
+
+      if (participant) {
+        const championId = participant.championId;
+
+        this.props.fetchBuilds(championId);
+      }
+    }
+  }
+
   render() {
+    const { builds } = this.props;
     let modalContent;
+    let proBuildsContent;
+
+    if (builds.fetched) {
+      if (builds.builds.length > 0) {
+        proBuildsContent = (<ProBuildsList
+          builds={builds.builds}
+          onPressBuild={buildId => Actions.probuild_view({ buildId })}
+        />);
+      } else {
+        proBuildsContent = (<View style={styles.container}>
+          <Text>
+            Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+          </Text>
+        </View>);
+      }
+    } else if (builds.isFetching) {
+      proBuildsContent = <LoadingScreen />;
+    } else {
+      proBuildsContent = (<View style={styles.container}>
+        <ErrorScreen
+          message={builds.errorMessage}
+          onPressRetryButton={() => { this.fetchBuilds(); }}
+          retryButton
+        />
+      </View>);
+    }
 
     if (this.state.modalType === 'RUNES') {
       modalContent = (<View>
@@ -140,29 +196,32 @@ class GameCurrentView extends Component {
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
-        initialPage={0}
-        prerenderingSiblingsNumber={2}
         tabBarBackgroundColor={colors.primary}
         tabBarActiveTextColor={colors.accent}
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         renderTabBar={() => <DefaultTabBar />}
+        onChangeTab={this.handleOnChangeTab}
       >
-        <TeamTab
-          tabLabel="Equipo Azul"
-          {...this.getTeamData(100)}
-          onPressRunesButton={this.handleOnPressRunesButton}
-          onPressMasteriesButton={this.handleOnPressMasteriesButton}
-          onPressProfileButton={this.handleOnPressProfileButton}
-        />
-
-        <TeamTab
-          tabLabel="Equipo Rojo"
-          {...this.getTeamData(200)}
-          onPressRunesButton={this.handleOnPressRunesButton}
-          onPressMasteriesButton={this.handleOnPressMasteriesButton}
-          onPressProfileButton={this.handleOnPressProfileButton}
-        />
+        <View style={{ flex: 1 }} tabLabel="Jugadores">
+          <ScrollView>
+            <Team
+              {...this.getTeamData(100)}
+              onPressRunesButton={this.handleOnPressRunesButton}
+              onPressMasteriesButton={this.handleOnPressMasteriesButton}
+              onPressProfileButton={this.handleOnPressProfileButton}
+            />
+            <Team
+              {...this.getTeamData(200)}
+              onPressRunesButton={this.handleOnPressRunesButton}
+              onPressMasteriesButton={this.handleOnPressMasteriesButton}
+              onPressProfileButton={this.handleOnPressProfileButton}
+            />
+          </ScrollView>
+        </View>
+        <View tabLabel="Builds Profesionales" style={{ flex: 1 }}>
+          {proBuildsContent}
+        </View>
       </ScrollableTabView>
       <Modal
         position="center"
@@ -185,17 +244,31 @@ GameCurrentView.propTypes = {
     gameQueueConfigId: PropTypes.number.isRequired,
     region: PropTypes.string.isRequired,
     gameStartTime: PropTypes.number.isRequired,
+    focusSummonerId: PropTypes.number,
   }).isRequired,
+  builds: PropTypes.shape({
+    isFetching: PropTypes.bool,
+    fetched: PropTypes.bool,
+    fetchError: PropTypes.bool,
+    errorMessage: PropTypes.string,
+    builds: PropTypes.arrayOf(PropTypes.shape({})),
+  }),
+  fetchBuilds: PropTypes.func,
 };
 
 function mapStateToProps(state) {
-  const gameData = state.gameCurrent.get('gameData').toJS();
+  const gameData = state.gameCurrentView.get('gameData').toJS();
+  const builds = state.gameCurrentView.get('builds').toJS();
 
-  return { gameData };
+  return { gameData, builds };
 }
 
-function mapDispatchToProps() {
-  return {};
+function mapDispatchToProps(dispatch) {
+  return {
+    fetchBuilds: (championId) => {
+      dispatch(GameCurrentViewActions.fetchBuilds(championId));
+    },
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(GameCurrentView);

@@ -11,8 +11,11 @@ const styles = MediaQueryStyleSheet.create(
     root: {
       padding: 8,
       flexDirection: 'row',
-      borderBottomWidth: 1,
-      borderColor: 'rgba(0,0,0,0.2)',
+      borderLeftWidth: 6,
+      borderColor: colors.blueTeam,
+    },
+    redTeam: {
+      borderColor: colors.redTeam,
     },
     championImage: {
       width: 60,
@@ -221,11 +224,11 @@ class Participant extends Component {
   }
 
   render() {
-    const { championId, spell1Id, spell2Id, summonerName, summonerId } = this.props.participant;
+    const { championId, spell1Id, spell2Id, summonerName, summonerId, teamId } = this.props.participant;
     const rankedSoloEntry = this.getRankedSoloEntry();
     const { division, wins, losses, leaguePoints, miniSeries } = rankedSoloEntry.entries[0];
 
-    return (<View style={styles.root}>
+    return (<View style={[styles.root, teamId === 200 && styles.redTeam]}>
       <View>
         <View style={styles.flexRow}>
           <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
@@ -310,6 +313,7 @@ Participant.propTypes = {
     leagueEntries: PropTypes.arrayOf(PropTypes.shape({
       queue: PropTypes.string.isRequired,
     })),
+    teamId: PropTypes.number,
   }).isRequired,
   onPressRunesButton: PropTypes.func.isRequired,
   onPressMasteriesButton: PropTypes.func.isRequired,
