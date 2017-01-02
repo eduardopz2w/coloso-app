@@ -1,9 +1,15 @@
 import CenaApi from '../../utils/CenaApi';
 
-function fetchBuilds(championId) {
+function fetchBuilds(championId, page, pageSize) {
   return {
     type: 'GAME_CURRENT_VIEW/FETCH_BUILDS',
-    payload: CenaApi.getBuilds(championId),
+    payload: {
+      promise: CenaApi.getBuilds(championId, page, pageSize),
+      data: {
+        page,
+        pageSize,
+      },
+    },
   };
 }
 

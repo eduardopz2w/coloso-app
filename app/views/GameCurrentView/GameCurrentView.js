@@ -31,6 +31,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const PAGESIZE = 25;
+
 class GameCurrentView extends Component {
   constructor(props) {
     super(props);
@@ -42,6 +44,7 @@ class GameCurrentView extends Component {
     this.handleOnPressMasteriesButton = this.handleOnPressMasteriesButton.bind(this);
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
+    this.handleOnLoadMoreBuilds = this.handleOnLoadMoreBuilds.bind(this);
     this.fetchBuilds = this.fetchBuilds.bind(this);
     this.getModalStyle = this.getModalStyle.bind(this);
     this.state = {
@@ -125,11 +128,21 @@ class GameCurrentView extends Component {
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1 && !this.props.builds.fetched) {
-      this.fetchBuilds();
+      this.fetchBuilds(1);
     }
   }
 
-  fetchBuilds() {
+  handleOnLoadMoreBuilds() {
+    const pagData = this.props.builds.pagination;
+    if (!this.props.builds.isFetching && pagData.pageCount > pagData.page) {
+      this.fetchBuilds(
+        pagData.page + 1,
+        PAGESIZE,
+      );
+    }
+  }
+
+  fetchBuilds(page) {
     if (this.props.gameData && this.props.gameData.focusSummonerId) {
       const focusSummonerId = this.props.gameData.focusSummonerId;
       const participant = _.find(this.props.gameData.participants, { summonerId: focusSummonerId });
@@ -137,7 +150,7 @@ class GameCurrentView extends Component {
       if (participant) {
         const championId = participant.championId;
 
-        this.props.fetchBuilds(championId);
+        this.props.fetchBuilds(championId, page);
       }
     }
   }
@@ -152,6 +165,8 @@ class GameCurrentView extends Component {
         proBuildsContent = (<ProBuildsList
           builds={builds.builds}
           onPressBuild={buildId => Actions.probuild_view({ buildId })}
+          isFetching={builds.isFetching}
+          onLoadMore={this.handleOnLoadMoreBuilds}
         />);
       } else {
         proBuildsContent = (<View style={styles.container}>
@@ -253,6 +268,10 @@ GameCurrentView.propTypes = {
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
     builds: PropTypes.arrayOf(PropTypes.shape({})),
+    pagination: {
+      page: PropTypes.number,
+      pageSize: PropTypes.number,
+    },
   }),
   fetchBuilds: PropTypes.func,
 };
@@ -266,8 +285,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (championId) => {
-      dispatch(GameCurrentViewActions.fetchBuilds(championId));
+    fetchBuilds: (championId, page) => {
+      dispatch(GameCurrentViewActions.fetchBuilds(championId, page, PAGESIZE));
     },
   };
 }

@@ -30,11 +30,11 @@ class ProBuildSearchView extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchBuilds(null, 1, PAGESIZE);
+    this.props.fetchBuilds(null, 1);
   }
 
   handleOnChangeChampionSelected(championId) {
-    this.props.fetchBuilds(championId, 1, PAGESIZE);
+    this.props.fetchBuilds(championId, 1);
   }
 
   handleOnLoadMore() {
@@ -43,7 +43,6 @@ class ProBuildSearchView extends Component {
       this.props.fetchBuilds(
         this.props.builds.championSelected,
         pagData.page + 1,
-        PAGESIZE,
       );
     }
   }
@@ -119,8 +118,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (championId, page, pageSize) => {
-      dispatch(ProBuildSearchActions.fetchBuilds(championId, page, pageSize));
+    fetchBuilds: (championId, page) => {
+      dispatch(ProBuildSearchActions.fetchBuilds(championId, page, PAGESIZE));
     },
   };
 }
