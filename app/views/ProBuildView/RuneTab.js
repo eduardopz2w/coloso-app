@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import React, { PureComponent, PropTypes } from 'react';
+import { View, StyleSheet } from 'react-native';
 import RunePage from '../../components/RunePage';
 
 const styles = StyleSheet.create({
@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class RuneTab extends Component {
+class RuneTab extends PureComponent {
   render() {
     return (<View style={styles.root}>
       <RunePage page={{ runes: this.props.runes }} />

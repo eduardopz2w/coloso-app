@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
 import rankedQueueParser from '../../../../utils/rankedQueueParser';

@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
@@ -46,7 +46,7 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-class BannedChampions extends Component {
+class BannedChampions extends PureComponent {
   render() {
     const champions = this.props.champions;
 

@@ -33,6 +33,24 @@ const styles = StyleSheet.create({
 
 const PAGESIZE = 25;
 
+function getModalStyle() {
+  const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
+  const modalStyle = {
+    height: null,
+    maxHeight: deviceHeight * 0.8,
+    padding: 16,
+  };
+
+  // Mobil
+  if (deviceWidth < 600) {
+    modalStyle.width = 300;
+  } else {
+    modalStyle.width = 550;
+  }
+
+  return modalStyle;
+}
+
 class GameCurrentView extends Component {
   constructor(props) {
     super(props);
@@ -46,7 +64,6 @@ class GameCurrentView extends Component {
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
     this.handleOnLoadMoreBuilds = this.handleOnLoadMoreBuilds.bind(this);
     this.fetchBuilds = this.fetchBuilds.bind(this);
-    this.getModalStyle = this.getModalStyle.bind(this);
     this.state = {
       summonerSelectedId: null,
       modalType: null,
@@ -82,25 +99,6 @@ class GameCurrentView extends Component {
 
   getSummonerMasteries(summonerId) {
     return _.find(this.props.gameData.participants, { summonerId }).masteries;
-  }
-
-
-  getModalStyle() {
-    const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
-    const modalStyle = {
-      height: null,
-      maxHeight: deviceHeight * 0.8,
-      padding: 16,
-    };
-
-    // Mobil
-    if (deviceWidth < 600) {
-      modalStyle.width = 300;
-    } else {
-      modalStyle.width = 550;
-    }
-
-    return modalStyle;
   }
 
   handleOnPressRunesButton(summonerId) {
@@ -240,7 +238,7 @@ class GameCurrentView extends Component {
       </ScrollableTabView>
       <Modal
         position="center"
-        style={this.getModalStyle()}
+        style={getModalStyle()}
         swipeToClose={false}
         ref={(modal) => { this.modal = modal; }}
         onOpened={() => this.setState({ modalIsOpen: true })}

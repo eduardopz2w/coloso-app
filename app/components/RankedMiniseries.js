@@ -16,13 +16,6 @@ class RankedMiniseries extends Component {
     this.renderIcon = this.renderIcon.bind(this);
   }
 
-  render() {
-    const progressArray = this.props.progress.split('');
-    return (<View style={[styles.root, this.props.style]}>
-      {progressArray.map((progress, key) => this.renderIcon(progress, key))}
-    </View>);
-  }
-
   renderIcon(progress, key) {
     const iconSize = this.props.iconsSize || 20;
 
@@ -34,11 +27,19 @@ class RankedMiniseries extends Component {
 
     return <Icon key={key} name="remove" size={iconSize} color="#000" />;
   }
+
+  render() {
+    const progressArray = this.props.progress.split('');
+    return (<View style={[styles.root, this.props.style]}>
+      {progressArray.map((progress, key) => this.renderIcon(progress, key))}
+    </View>);
+  }
+
 }
 
 RankedMiniseries.propTypes = {
   progress: PropTypes.string.isRequired,
-  style: PropTypes.object,
+  style: View.propTypes.style,
   iconsSize: PropTypes.number,
 };
 

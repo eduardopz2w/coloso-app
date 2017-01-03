@@ -20,4 +20,4 @@ export default function (queueName) {
   }
 
   return queueName;
-};
+}

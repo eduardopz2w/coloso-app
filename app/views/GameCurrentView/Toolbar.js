@@ -1,10 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import moment from 'moment';
-import Icon from 'react-native-vector-icons/MaterialIcons'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconButton from '../../components/IconButton';
 import colors from '../../utils/colors';
-import styleUtils from '../../utils/styleUtils';
 import mapName from '../../utils/mapName';
 import queueIdParser from '../../utils/queueIdParser';
 
