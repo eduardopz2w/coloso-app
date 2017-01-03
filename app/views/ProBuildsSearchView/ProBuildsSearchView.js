@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
 import ProBuildSearchActions from '../../redux/actions/ProBuildsSearchActions';
 import LoadingScreen from '../../components/LoadingScreen';
+import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
 import ChampionSelector from '../../components/ChampionSelector';
 import ErrorScreen from '../../components/ErrorScreen';
@@ -19,19 +20,36 @@ const styles = StyleSheet.create({
   },
 });
 
+const PAGESIZE = 25;
+
 class ProBuildSearchView extends Component {
   constructor(props) {
     super(props);
 
     this.handleOnChangeChampionSelected = this.handleOnChangeChampionSelected.bind(this);
+    this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
   }
 
   componentWillMount() {
-    this.props.fetchBuilds();
+    this.props.fetchBuilds(null, 1);
+  }
+
+  componentDidMount() {
+    tracker.trackScreenView('ProbuildsSearchView');
   }
 
   handleOnChangeChampionSelected(championId) {
-    this.props.fetchBuilds(championId);
+    this.props.fetchBuilds(championId, 1);
+  }
+
+  handleOnLoadMore() {
+    const pagData = this.props.builds.pagination;
+    if (!this.props.builds.isFetching && pagData.pageCount > pagData.page) {
+      this.props.fetchBuilds(
+        this.props.builds.championSelected,
+        pagData.page + 1,
+      );
+    }
   }
 
   render() {
@@ -43,6 +61,8 @@ class ProBuildSearchView extends Component {
         content = (<ProBuildsList
           builds={builds.builds}
           onPressBuild={buildId => Actions.probuild_view({ buildId })}
+          onLoadMore={this.handleOnLoadMore}
+          isFetching={builds.isFetching}
         />);
       } else {
         content = (<View style={styles.container}>
@@ -84,6 +104,12 @@ ProBuildSearchView.propTypes = {
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
     builds: PropTypes.arrayOf(PropTypes.shape({})),
+    pagination: PropTypes.shape({
+      page: PropTypes.number,
+      pageSize: PropTypes.number,
+      pageCount: PropTypes.number,
+    }),
+    championSelected: PropTypes.number,
   }),
 };
 
@@ -97,8 +123,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (championId) => {
-      dispatch(ProBuildSearchActions.fetchBuilds(championId));
+    fetchBuilds: (championId, page) => {
+      dispatch(ProBuildSearchActions.fetchBuilds(championId, page, PAGESIZE));
     },
   };
 }

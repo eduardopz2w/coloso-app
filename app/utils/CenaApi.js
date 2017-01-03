@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 10000;
-const VERSION_CODE = 9;
+const VERSION_CODE = 10;
 let BASEURL = 'http://lolcena.ddns.net:1338/';
 
 if (__DEV__) {
@@ -47,8 +47,11 @@ cenaClient.interceptors.response.use((response) => {
 });
 
 
-function getBuilds(championId) {
-  const params = {};
+function getBuilds(championId, page, pageSize) {
+  const params = {
+    page,
+    pageSize,
+  };
 
   if (_.isFinite(championId) && championId > 0) {
     params.championId = championId;

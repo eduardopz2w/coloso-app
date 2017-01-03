@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 function getParsedTime(gameLength) {
-  return moment(gameLength / 0.001).format('mm:ss');
+  return moment(moment.duration({ seconds: gameLength }).asMilliseconds()).format('mm:ss');
 }
 
 class Toolbar extends Component {
