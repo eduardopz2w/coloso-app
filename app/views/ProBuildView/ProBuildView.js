@@ -275,6 +275,7 @@ class ProBuildView extends Component {
 
         itemsAndSeparators.push(<Item
           key={`item_${i}`}
+          style={this.getItemStyle()}
           itemData={itemData}
           onPress={this.handleOnPressItem}
         />);
