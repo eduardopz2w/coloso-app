@@ -64,7 +64,7 @@ const lolcena = function lolcena() {
   return (<Provider store={store}>
     <View style={{ flex: 1 }}>
       <Router>
-        <Scene key="drawer" component={Drawer} open={false}>
+        <Scene key="drawer" component={Drawer} open>
           <Scene key="root">
             <Scene
               key="search_view"

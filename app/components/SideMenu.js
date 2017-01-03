@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     width: 230,
   },
   header: {
-    width: 250,
+    width: 230,
     height: 170,
     position: 'relative',
     justifyContent: 'center',
