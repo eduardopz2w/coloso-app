@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import MasteryPage from '../../components/MasteryPage';
 
@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   root: {},
 });
 
-class MasteryTab extends Component {
+class MasteryTab extends PureComponent {
   render() {
     return (<View style={styles.root}>
       <MasteryPage page={{ masteries: this.props.masteries }} />

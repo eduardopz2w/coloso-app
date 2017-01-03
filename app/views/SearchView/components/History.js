@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
     flexDirection: 'row',
     height: 50,
+    width: null,
     alignItems: 'center',
   },
   region: {
@@ -49,12 +50,12 @@ class History extends Component {
     return (<MKButton
       key={rowId}
       rippleColor="rgba(0,0,0,0.1)"
-      style={styles.historyRow}
+      style={[styles.historyRow, parseInt(rowId, 10) === 0 && { borderTopWidth: 1 }]}
       onPress={() => {
         this.handleOnPressHistoryEntry(historyEntry.summonerName, historyEntry.region);
       }}
     >
-      <View style={styles.historyRow}>
+      <View style={{ flexDirection: 'row', alignItems: 'center' }}>
         <Text style={styles.region}>{historyEntry.region.toUpperCase()}</Text>
         <Text style={styles.summonerName}>{historyEntry.summonerName}</Text>
       </View>

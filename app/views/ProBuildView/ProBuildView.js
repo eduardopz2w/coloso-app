@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Text, Dimensions, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View, Image, Text, Dimensions, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Modal from 'react-native-modalbox';
@@ -13,6 +13,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import ErrorScreen from '../../components/ErrorScreen';
 import PlayerToolbar from './components/PlayerToolbar';
 import BasicToolbar from './components/BasicToolbar';
+import Item from './components/Item';
 import colors from '../../utils/colors';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
@@ -272,15 +273,12 @@ class ProBuildView extends Component {
       for (let i = 0; i < build.itemsOrder.length; i += 1) {
         itemData = build.itemsOrder[i];
 
-        itemsAndSeparators.push(<TouchableWithoutFeedback
+        itemsAndSeparators.push(<Item
           key={`item_${i}`}
-          onPress={this.handleOnPressItem.bind(this, itemData)}
-        >
-          <Image
-            style={[styles.item, this.getItemStyle()]}
-            source={{ uri: `item_${itemData.itemId}` }}
-          />
-        </TouchableWithoutFeedback>);
+          style={this.getItemStyle()}
+          itemData={itemData}
+          onPress={this.handleOnPressItem}
+        />);
 
         if (i !== build.itemsOrder.length - 1) {
           itemsAndSeparators.push(<Icon

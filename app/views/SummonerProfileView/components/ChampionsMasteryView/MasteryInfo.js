@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { Col } from 'react-native-easy-grid';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import { MKProgress } from 'react-native-material-kit';
@@ -127,7 +127,7 @@ class MasteryInfo extends Component {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.championName}>{championData.name}</Text>
-          <Text style={styles.championTitle}>{championData.title}</Text>
+          <Text numberOfLines={1} style={styles.championTitle}>{championData.title}</Text>
           {this.renderProgress()}
           <View style={{ flexDirection: 'row' }}>
             <Text style={[styleUtils.boldText, styles.text]}>Cofre Disponible: </Text>
