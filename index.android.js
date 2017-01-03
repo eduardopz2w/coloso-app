@@ -14,6 +14,7 @@ import Immutable from 'immutable';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
+import DeviceInfo from 'react-native-device-info';
 import _ from 'lodash';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -65,8 +66,18 @@ const lolcena = function lolcena() {
       <Router>
         <Scene key="drawer" component={Drawer} open={false}>
           <Scene key="root">
-            <Scene key="search_view" component={SearchView} hideNavBar initial type={ActionConst.RESET} />
-            <Scene key="probuilds_search_view" component={ProBuildsSearchView} hideNavBar type={ActionConst.RESET} />
+            <Scene
+              key="search_view"
+              component={SearchView}
+              hideNavBar initial
+              type={ActionConst.RESET}
+            />
+            <Scene
+              key="probuilds_search_view"
+              component={ProBuildsSearchView}
+              hideNavBar
+              type={ActionConst.RESET}
+            />
             <Scene key="probuild_view" component={ProBuildView} hideNavBar />
             <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
             <Scene key="game_current" component={GameCurrentView} hideNavBar />
@@ -77,7 +88,7 @@ const lolcena = function lolcena() {
       <AdMobBanner
         bannerSize="smartBannerPortrait"
         adUnitID={ADMOB_BANNER_ID}
-        didFailToReceiveAdWithError={console.log}
+        testDeviceID={DeviceInfo.getUniqueID()}
       />
     </View>
   </Provider>);
