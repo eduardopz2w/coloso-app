@@ -254,14 +254,14 @@ class GameCurrentView extends Component {
 
 GameCurrentView.propTypes = {
   gameData: PropTypes.shape({
-    participants: PropTypes.array.isRequired,
-    mapId: PropTypes.number.isRequired,
-    gameQueueConfigId: PropTypes.number.isRequired,
+    participants: PropTypes.array,
+    mapId: PropTypes.number,
+    gameQueueConfigId: PropTypes.number,
     gameLength: PropTypes.number,
-    region: PropTypes.string.isRequired,
-    gameStartTime: PropTypes.number.isRequired,
+    region: PropTypes.string,
+    gameStartTime: PropTypes.number,
     focusSummonerId: PropTypes.number,
-  }).isRequired,
+  }),
   builds: PropTypes.shape({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
