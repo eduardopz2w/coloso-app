@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import numeral from 'numeral';
 import _ from 'lodash';
 import CollapsibleBar from 'react-native-bar-collapsible';
 import colors from '../../../../utils/colors';
@@ -27,7 +28,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   dataContent: {
-    width: 45,
+    width: 55,
   },
   collapsible: {
     backgroundColor: 'rgba(0,0,0,0.06)',
@@ -63,7 +64,7 @@ class Summary extends PureComponent {
 
     return (<View style={[styles.dataBox, { width }]}>
       <Text style={styles.dataTitle} numberOfLines={1}>{title}</Text>
-      <Text style={styles.dataContent}>{content}</Text>
+      <Text style={styles.dataContent}>{numeral(content).format('0,0')}</Text>
     </View>);
   }
 

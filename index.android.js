@@ -58,13 +58,11 @@ const ADMOB_BANNER_ID = 'ca-app-pub-9850680385333731/3213566801';
 moment.locale('es');
 global.Storage = StorageInstance;
 
-console.disableYellowBox = true;
-
 const lolcena = function lolcena() {
   return (<Provider store={store}>
     <View style={{ flex: 1 }}>
       <Router>
-        <Scene key="drawer" component={Drawer} open>
+        <Scene key="drawer" component={Drawer} open={false}>
           <Scene key="root">
             <Scene
               key="search_view"

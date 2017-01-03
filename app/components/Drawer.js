@@ -22,10 +22,10 @@ class MainDrawer extends PureComponent {
       onClose={() => Actions.refresh({ key: state.key, open: false })}
       type="overlay"
       content={<SideMenu />}
-      tapToClose
       captureGestures
-      openDrawerOffset={0.2}
-      panCloseMask={0.2}
+      panOpenMask={0.05}
+      panCloseMask={0.5}
+      tapToClose
       negotiatePan
     >
       <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
