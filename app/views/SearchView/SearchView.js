@@ -22,9 +22,6 @@ class SearchView extends Component {
     super(props);
 
     this.state = {
-      summonerName: '',
-      region: 'na',
-      searchType: PROFILE_SEARCH,
       visibleHeight: Dimensions.get('window').height,
     };
 
@@ -57,14 +54,14 @@ class SearchView extends Component {
     }
 
     if (this.props.summonerFoundId > 0) {
-      this.props.addSearchEntry(this.state.summonerName, this.state.region);
+      this.props.addSearchEntry(this.props.summonerName, this.props.region);
       Actions.summoner_profile_view({
         summonerId: this.props.summonerFoundId,
         region: this.props.summonerFoundRegion,
       });
       this.props.clearFoundData();
     } else if (this.props.gameFound) {
-      this.props.addSearchEntry(this.state.summonerName, this.state.region);
+      this.props.addSearchEntry(this.props.summonerName, this.props.region);
       this.props.clearFoundData();
       Actions.game_current();
     }
@@ -88,26 +85,16 @@ class SearchView extends Component {
   }
 
   handleChangeRegion(newRegion) {
-    if (!this.props.isSearching) {
-      this.setState({ region: newRegion });
-    }
+    this.props.setRegion(newRegion);
   }
 
-  handleTextChangeSummonerName(newSummonerName) {
-    if (!this.props.isSearching) {
-      this.setState({ summonerName: newSummonerName });
-    }
+  handleTextChangeSummonerName(summonerName) {
+    this.props.setSummonerName(summonerName);
   }
 
   handlePressSearchButton() {
-    if (this.state.summonerName !== '') {
-      Keyboard.dismiss();
-
-      if (this.state.searchType === PROFILE_SEARCH) {
-        this.props.searchSummoner(this.state.summonerName, this.state.region);
-      } else if (this.state.searchType === GAME_SEARCH) {
-        this.props.searchGame(this.state.summonerName, this.state.region);
-      }
+    if (this.props.summonerName !== '') {
+      this.performSearch();
     }
   }
 
@@ -119,9 +106,9 @@ class SearchView extends Component {
 
   handleOnChekedChangeProfileButton({ checked }) {
     if (checked) {
-      this.setState({ searchType: PROFILE_SEARCH });
+      this.props.setSearchType(PROFILE_SEARCH);
     } else {
-      this.setState({ searchType: GAME_SEARCH });
+      this.props.setSearchType(GAME_SEARCH);
     }
   }
 
@@ -140,6 +127,18 @@ class SearchView extends Component {
   handleOnPressHistoryEntry(summonerName, region) {
     this.historyModal.close();
     this.setState({ summonerName, region });
+  }
+
+  performSearch() {
+    Keyboard.dismiss();
+
+    if (!this.props.isSearching) {
+      if (this.props.searchType === PROFILE_SEARCH) {
+        this.props.searchSummoner(this.props.summonerName, this.props.region);
+      } else if (this.props.searchType === GAME_SEARCH) {
+        this.props.searchGame(this.props.summonerName, this.props.region);
+      }
+    }
   }
 
   renderSpinner() {
@@ -183,7 +182,7 @@ class SearchView extends Component {
                 <Text style={[styles.label]}>Nombre de Invocador: </Text>
                 <MKTextField
                   style={styles.inputName}
-                  value={this.state.summonerName}
+                  value={this.props.summonerName}
                   onTextChange={this.handleTextChangeSummonerName}
                   placeholder="Nombre de invocador"
                 />
@@ -193,7 +192,7 @@ class SearchView extends Component {
                 <Picker
                   style={styles.inputRegion}
                   onValueChange={this.handleChangeRegion}
-                  selectedValue={this.state.region}
+                  selectedValue={this.props.region}
                 >
                   {regions.map((region, index) => <Picker.Item
                     key={index}
@@ -207,12 +206,15 @@ class SearchView extends Component {
                   <MKRadioButton
                     group={this.radioGroup}
                     onCheckedChange={this.handleOnChekedChangeProfileButton}
-                    checked
+                    checked={this.props.searchType === PROFILE_SEARCH}
                   />
                   <Text>Perfil de invocador</Text>
                 </View>
                 <View style={styles.radioGroup}>
-                  <MKRadioButton group={this.radioGroup} />
+                  <MKRadioButton
+                    group={this.radioGroup}
+                    checked={this.props.searchType === GAME_SEARCH}
+                  />
                   <Text>Juego actual</Text>
                 </View>
               </View>
@@ -235,6 +237,9 @@ class SearchView extends Component {
 }
 
 SearchView.propTypes = {
+  summonerName: PropTypes.string,
+  region: PropTypes.string,
+  searchType: PropTypes.string,
   isSearching: PropTypes.bool,
   searchSummoner: PropTypes.func,
   clearSearchError: PropTypes.func,
@@ -248,6 +253,9 @@ SearchView.propTypes = {
   searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({
     entries: PropTypes.arrayOf(PropTypes.shape({})),
   })),
+  setSummonerName: PropTypes.func,
+  setRegion: PropTypes.func,
+  setSearchType: PropTypes.func,
   loadSearchHistory: PropTypes.func.isRequired,
   addSearchEntry: PropTypes.func.isRequired,
 };
@@ -256,6 +264,9 @@ function mapStateToProps(state) {
   const searchViewState = state.searchView;
 
   return {
+    summonerName: searchViewState.get('summonerName'),
+    region: searchViewState.get('region'),
+    searchType: searchViewState.get('searchType'),
     isSearching: searchViewState.get('isSearching'),
     searchError: searchViewState.get('searchError'),
     errorMessage: searchViewState.get('errorMessage'),
@@ -292,6 +303,18 @@ function mapDispatchToProps(dispatch) {
 
     addSearchEntry: (summonerName, region) => {
       dispatch(SearchHistoryActions.addEntry(summonerName, region));
+    },
+
+    setSummonerName: (summonerName) => {
+      dispatch(SearchViewActions.setSummonerName(summonerName));
+    },
+
+    setRegion: (region) => {
+      dispatch(SearchViewActions.setRegion(region));
+    },
+
+    setSearchType: (searchType) => {
+      dispatch(SearchViewActions.setSearchType(searchType));
     },
   };
 }
