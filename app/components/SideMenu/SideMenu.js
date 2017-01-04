@@ -61,6 +61,7 @@ class SideMenu extends PureComponent {
 
     this.renderAccountData = this.renderAccountData.bind(this);
     this.handleOnPressProfile = this.handleOnPressProfile.bind(this);
+    this.handleOnPressSearchGame = this.handleOnPressSearchGame.bind(this);
   }
 
   handleOnPressProfile() {
@@ -74,6 +75,16 @@ class SideMenu extends PureComponent {
         region: ownerAccount.region,
       });
       this.context.drawer.close();
+    }
+  }
+
+  handleOnPressSearchGame() {
+    const { ownerAccount } = this.props;
+
+    if (ownerAccount.summonerId === 0) {
+      Alert.alert(null, 'Debes agregar tu cuenta de invocador');
+    } else {
+      this.props.onPressSearchGame();
     }
   }
 
@@ -128,6 +139,12 @@ class SideMenu extends PureComponent {
       />
 
       <MenuItem
+        iconName="games"
+        title="Mi Juego"
+        onPress={this.handleOnPressSearchGame}
+      />
+
+      <MenuItem
         title="Busquedas"
         iconName="search"
         onPress={() => {
@@ -155,6 +172,7 @@ SideMenu.propTypes = {
     profileIconId: PropTypes.number,
     region: PropTypes.string,
   }),
+  onPressSearchGame: PropTypes.func,
 };
 
 SideMenu.contextTypes = {
