@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
 import MenuItem from './MenuItem';
-import headerImage from '../../assets/header.jpg';
 
 const styles = StyleSheet.create({
   root: {

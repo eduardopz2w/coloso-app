@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 10000;
-const VERSION_CODE = 11;
+const VERSION_CODE = 12;
 let BASEURL = 'http://lolcena.ddns.net:1338/';
 
 if (__DEV__) {
