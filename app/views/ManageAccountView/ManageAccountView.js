@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Picker, Alert } from 'react-native';
+import { View, StyleSheet, Text, Alert } from 'react-native';
 import { MKTextField, MKButton, MKSpinner } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
-import regionHumanize from '../../utils/regionHumanize';
 import RiotApi from '../../utils/RiotApi';
 import OwnerAccountActions from '../../redux/actions/OwnerAccountActions';
 import colors from '../../utils/colors';
+import RegionSelector from '../../components/RegionSelector';
 
 const styles = StyleSheet.create({
   root: {
@@ -87,8 +87,6 @@ class ManageAccountView extends Component {
     }
   }
   render() {
-    const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
-
     return (<View style={styles.root}>
       <Toolbar
         onPressBackButton={() => {
@@ -107,17 +105,11 @@ class ManageAccountView extends Component {
         </View>
         <View style={styles.formGroup}>
           <Text style={[styles.label]}>Region: </Text>
-          <Picker
+          <RegionSelector
             style={styles.inputRegion}
-            onValueChange={this.handleChangeRegion}
+            onChangeRegion={this.handleChangeRegion}
             selectedValue={this.state.region}
-          >
-            {regions.map((region, index) => <Picker.Item
-              key={index}
-              label={regionHumanize(region)}
-              value={region}
-            />)}
-          </Picker>
+          />
         </View>
         {!this.state.isFetching &&
           <MKButton
