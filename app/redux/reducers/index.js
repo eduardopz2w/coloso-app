@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import searchView from './searchViewReducer';
+import searchView from './searchView';
 import summonerProfileView from './summonerProfileViewReducer';
 import gameCurrentView from './gameCurrentViewReducer';
 import searchHistory from './searchHistoryReducer';

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Picker, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
+import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
@@ -7,9 +7,17 @@ import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import { tracker } from '../../utils/analytics';
 import colors from '../../utils/colors';
-import SearchViewActions from '../../redux/actions/SearchViewActions';
 import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
-import regionHumanize from '../../utils/regionHumanize';
+import RegionSelector from '../../components/RegionSelector';
+import {
+  setSummonerName,
+  setRegion,
+  setSearchType,
+  searchSummoner,
+  searchGame,
+  clearSearchError,
+  clearFoundData,
+} from '../../redux/actions/SearchViewActions';
 import styles from './styles';
 
 // TODO: Agregar busquedas recientes
@@ -23,6 +31,7 @@ class SearchView extends Component {
 
     this.state = {
       visibleHeight: Dimensions.get('window').height,
+      region: 'na',
     };
 
     this.handlePressSearchButton = this.handlePressSearchButton.bind(this);
@@ -126,7 +135,8 @@ class SearchView extends Component {
 
   handleOnPressHistoryEntry(summonerName, region) {
     this.historyModal.close();
-    this.setState({ summonerName, region });
+    this.props.setSummonerName(summonerName);
+    this.props.setRegion(region);
   }
 
   performSearch() {
@@ -166,9 +176,6 @@ class SearchView extends Component {
   }
 
   render() {
-    const regions = ['na', 'lan', 'las', 'br', 'eunw', 'eune', 'oce', 'jp', 'kr', 'ru', 'tr'];
-
-
     return (<View style={styles.root}>
       <SearchViewToolbar
         onPressHistoryButton={this.handleOnPressHistoryButton}
@@ -189,17 +196,10 @@ class SearchView extends Component {
               </View>
               <View style={styles.formGroup}>
                 <Text style={[styles.label]}>Region: </Text>
-                <Picker
-                  style={styles.inputRegion}
-                  onValueChange={this.handleChangeRegion}
+                <RegionSelector
                   selectedValue={this.props.region}
-                >
-                  {regions.map((region, index) => <Picker.Item
-                    key={index}
-                    label={regionHumanize(region)}
-                    value={region}
-                  />)}
-                </Picker>
+                  onChangeRegion={this.handleChangeRegion}
+                />
               </View>
               <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                 <View style={styles.radioGroup}>
@@ -281,20 +281,20 @@ function mapDispatchToProps(dispatch) {
   return {
     searchSummoner: (summonerName, region) => {
       tracker.trackEvent('search profile', `name: ${summonerName} region: ${region}`);
-      dispatch(SearchViewActions.searchSummoner(summonerName, region));
+      dispatch(searchSummoner(summonerName, region));
     },
 
     searchGame: (summonerName, region) => {
       tracker.trackEvent('search game', `name: ${summonerName} region: ${region}`);
-      dispatch(SearchViewActions.searchGame(summonerName, region));
+      dispatch(searchGame(summonerName, region));
     },
 
     clearSearchError: () => {
-      dispatch(SearchViewActions.clearSearchError());
+      dispatch(clearSearchError());
     },
 
     clearFoundData: () => {
-      dispatch(SearchViewActions.clearFoundData());
+      dispatch(clearFoundData());
     },
 
     loadSearchHistory: () => {
@@ -306,15 +306,15 @@ function mapDispatchToProps(dispatch) {
     },
 
     setSummonerName: (summonerName) => {
-      dispatch(SearchViewActions.setSummonerName(summonerName));
+      dispatch(setSummonerName(summonerName));
     },
 
     setRegion: (region) => {
-      dispatch(SearchViewActions.setRegion(region));
+      dispatch(setRegion(region));
     },
 
     setSearchType: (searchType) => {
-      dispatch(SearchViewActions.setSearchType(searchType));
+      dispatch(setSearchType(searchType));
     },
   };
 }

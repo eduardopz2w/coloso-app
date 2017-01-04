@@ -3,7 +3,12 @@ import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import OwnerAccountActions from '../redux/actions/OwnerAccountActions';
-import SearchViewActions from '../redux/actions/SearchViewActions';
+import {
+  setSummonerName,
+  setRegion,
+  setSearchType,
+  searchGame,
+} from '../redux/actions/SearchViewActions';
 import SideMenu from './SideMenu';
 
 class MainDrawer extends PureComponent {
@@ -82,10 +87,10 @@ function mapDispatchToProps(dispatch) {
     },
 
     searchGame: (summonerName, region) => {
-      dispatch(SearchViewActions.setSummonerName(summonerName));
-      dispatch(SearchViewActions.setRegion(region));
-      dispatch(SearchViewActions.setSearchType('GAME_SEARCH'));
-      dispatch(SearchViewActions.searchGame(summonerName, region));
+      dispatch(setSummonerName(summonerName));
+      dispatch(setRegion(region));
+      dispatch(setSearchType('GAME_SEARCH'));
+      dispatch(searchGame(summonerName, region));
     },
   };
 }

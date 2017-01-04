@@ -1,36 +1,14 @@
+import { createAction } from 'redux-actions';
 import RiotApi from '../../utils/RiotApi';
 
-function setSummonerName(summonerName) {
-  return {
-    type: 'SEARCH_VIEW/SET_SUMMONER_NAME',
-    payload: { summonerName },
-  };
-}
+export const setSummonerName = createAction('SEARCH_VIEW/SET_SUMMONER_NAME');
+export const setRegion = createAction('SEARCH_VIEW/SET_REGION');
+export const setSearchType = createAction('SEARCH_VIEW/SET_SEARCH_TYPE');
+export const searchSummoner = createAction('SEARCH_VIEW/SEARCH_SUMMONER', (summonerName, region) => RiotApi.summoner.findByName(summonerName, region));
+export const clearSearchError = createAction('SEARCH_VIEW/CLEAR_SEARCH_ERROR');
+export const clearFoundData = createAction('SEARCH_VIEW/CLEAR_FOUND_DATA');
 
-function setRegion(region) {
-  return {
-    type: 'SEARCH_VIEW/SET_REGION',
-    payload: { region },
-  };
-}
-
-function setSearchType(searchType) {
-  return {
-    type: 'SEARCH_VIEW/SET_SEARCH_TYPE',
-    payload: { searchType },
-  };
-}
-
-function searchSummoner(summonerName, region) {
-  return {
-    type: 'SEARCH_VIEW/SEARCH_SUMMONER',
-    payload: {
-      promise: RiotApi.summoner.findByName(summonerName, region),
-    },
-  };
-}
-
-function searchGame(summonerName, region) {
+export function searchGame(summonerName, region) {
   return (dispatch) => {
     dispatch({
       type: 'SEARCH_VIEW/SEARCH_GAME_PENDING',
@@ -52,27 +30,3 @@ function searchGame(summonerName, region) {
       }));
   };
 }
-
-function clearSearchError() {
-  return {
-    type: 'SEARCH_VIEW/CLEAR_SEARCH_ERROR',
-  };
-}
-
-function clearFoundData() {
-  return {
-    type: 'SEARCH_VIEW/CLEAR_FOUND_DATA',
-  };
-}
-
-const actions = {
-  searchSummoner,
-  clearSearchError,
-  clearFoundData,
-  searchGame,
-  setSummonerName,
-  setRegion,
-  setSearchType,
-};
-
-export default actions;
