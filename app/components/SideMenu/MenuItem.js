@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   icon: {
-    marginRight: 8,
+    marginRight: 16,
   },
 });
 
@@ -28,7 +28,7 @@ class MenuItem extends PureComponent {
       onPress={this.props.onPress}
     >
       <View style={{ flexDirection: 'row' }}>
-        <Icon style={styles.icon} name={this.props.iconName} size={18} color="rgba(0,0,0,0.7)" />
+        <Icon style={styles.icon} name={this.props.iconName} size={22} color="rgba(0,0,0,0.7)" />
         <Text style={styles.menuItemText} >{this.props.title}</Text>
       </View>
     </MKButton>);

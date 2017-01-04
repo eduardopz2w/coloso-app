@@ -1,6 +1,9 @@
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
+  summonerName: '',
+  region: 'na',
+  searchType: 'PROFILE_SEARCH',
   isSearching: false,
   searchError: false,
   errorMessage: null,
@@ -11,6 +14,18 @@ const initialState = Immutable.fromJS({
 
 function searchView(state = initialState, action) {
   let newState = state;
+
+  if (action.type === 'SEARCH_VIEW/SET_SUMMONER_NAME') {
+    newState = newState.set('summonerName', action.payload.summonerName);
+  }
+
+  if (action.type === 'SEARCH_VIEW/SET_REGION') {
+    newState = newState.set('region', action.payload.region);
+  }
+
+  if (action.type === 'SEARCH_VIEW/SET_SEARCH_TYPE') {
+    newState = newState.set('searchType', action.payload.searchType);
+  }
 
   if (action.type === 'SEARCH_VIEW/SEARCH_SUMMONER_PENDING') {
     newState = newState.set('isSearching', true);

@@ -1,5 +1,26 @@
 import RiotApi from '../../utils/RiotApi';
 
+function setSummonerName(summonerName) {
+  return {
+    type: 'SEARCH_VIEW/SET_SUMMONER_NAME',
+    payload: { summonerName },
+  };
+}
+
+function setRegion(region) {
+  return {
+    type: 'SEARCH_VIEW/SET_REGION',
+    payload: { region },
+  };
+}
+
+function setSearchType(searchType) {
+  return {
+    type: 'SEARCH_VIEW/SET_SEARCH_TYPE',
+    payload: { searchType },
+  };
+}
+
 function searchSummoner(summonerName, region) {
   return {
     type: 'SEARCH_VIEW/SEARCH_SUMMONER',
@@ -49,6 +70,9 @@ const actions = {
   clearSearchError,
   clearFoundData,
   searchGame,
+  setSummonerName,
+  setRegion,
+  setSearchType,
 };
 
 export default actions;

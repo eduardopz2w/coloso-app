@@ -10,21 +10,22 @@ class MainDrawer extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.handleOnpressSearchGame = this.handleOnpressSearchGame.bind(this);
+    this.handleOnPressSearchGame = this.handleOnPressSearchGame.bind(this);
   }
+
   componentWillMount() {
     this.props.loadAccount();
   }
 
-  handleOnpressSearchGame() {
+  handleOnPressSearchGame() {
     if (!this.props.isSearchingGame) {
-      const ownerAccount = this.props.ownerAccount;
-
+      const { ownerAccount } = this.props;
       Actions.search_view();
       this.drawer.close();
       this.props.searchGame(ownerAccount.summonerName, ownerAccount.region);
     }
   }
+
   render() {
     const state = this.props.navigationState;
     const children = state.children;
@@ -44,11 +45,11 @@ class MainDrawer extends PureComponent {
       type="overlay"
       content={<SideMenu
         ownerAccount={this.props.ownerAccount}
-        onPressSearchGame={this.handleOnpressSearchGame}
+        onPressSearchGame={this.handleOnPressSearchGame}
       />}
       captureGestures
       panOpenMask={0.05}
-      panCloseMask={0.5}
+      panCloseMask={0.2}
       tapToClose
       negotiatePan
       ref={(drawer) => { this.drawer = drawer; }}
@@ -60,11 +61,11 @@ class MainDrawer extends PureComponent {
 
 MainDrawer.propTypes = {
   navigationState: PropTypes.shape({}),
+  isSearchingGame: PropTypes.bool,
   onNavigate: PropTypes.func,
   ownerAccount: PropTypes.shape({}),
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
-  isSearchingGame: PropTypes.bool,
 };
 
 function mapStateToProps(state) {
@@ -81,6 +82,9 @@ function mapDispatchToProps(dispatch) {
     },
 
     searchGame: (summonerName, region) => {
+      dispatch(SearchViewActions.setSummonerName(summonerName));
+      dispatch(SearchViewActions.setRegion(region));
+      dispatch(SearchViewActions.setSearchType('GAME_SEARCH'));
       dispatch(SearchViewActions.searchGame(summonerName, region));
     },
   };

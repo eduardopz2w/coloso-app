@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
 import MenuItem from './MenuItem';
+import headerImage from '../../assets/header.jpg';
 
 const styles = StyleSheet.create({
   root: {
@@ -20,9 +21,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.primary,
   },
-  appIcon: {
-    width: 100,
-    height: 100,
+  headerImage: {
+    width: 240,
+    height: 150,
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   accountDataContainer: {
     flexDirection: 'row',
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   noAccountCircle: {
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(0,0,0,0.7)',
     width: 50,
     height: 50,
   },
@@ -47,11 +51,21 @@ const styles = StyleSheet.create({
   },
   accountDataText: {
     color: '#FFF',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 1.5,
+      height: 1.5,
+    },
   },
   summonerName: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#FFF',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 1.5,
+      height: 1.5,
+    },
   },
 });
 
