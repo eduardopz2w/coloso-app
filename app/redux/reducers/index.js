@@ -5,6 +5,7 @@ import gameCurrentView from './gameCurrentViewReducer';
 import searchHistory from './searchHistoryReducer';
 import proBuildsSearchView from './proBuildsSearchViewReducer';
 import proBuildView from './proBuildViewReducer';
+import ownerAccount from './ownerAccountReducer';
 
 export default combineReducers({
   searchView,
@@ -13,4 +14,5 @@ export default combineReducers({
   searchHistory,
   proBuildsSearchView,
   proBuildView,
+  ownerAccount,
 });
