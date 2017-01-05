@@ -219,7 +219,6 @@ class ProBuildView extends Component {
     let j;
 
     for (let i = 0; i < items.length + 1; i += 1) {
-      console.log(i);
       let count = 1;
 
       for (j = i + 1; j < items.length; j += 1) {
@@ -236,7 +235,7 @@ class ProBuildView extends Component {
         final: false,
       });
 
-      i = j;
+      i = j - 1;
     }
 
     _.each(countedItems, (item) => {
@@ -246,8 +245,6 @@ class ProBuildView extends Component {
         }
       }
     });
-
-    console.log(countedItems);
 
     return countedItems;
   }
