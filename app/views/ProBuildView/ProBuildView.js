@@ -186,6 +186,7 @@ class ProBuildView extends Component {
 
     this.deviceDimensions = Dimensions.get('window');
     this.getItemStyle = this.getItemStyle.bind(this);
+    this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillOrder = this.renderSkillOrder.bind(this);
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
   }
@@ -210,6 +211,45 @@ class ProBuildView extends Component {
       width,
       height: width,
     };
+  }
+
+  getParsedItems() {
+    const countedItems = [];
+    const items = this.props.build.itemsOrder;
+    let j;
+
+    for (let i = 0; i < items.length + 1; i += 1) {
+      console.log(i);
+      let count = 1;
+
+      for (j = i + 1; j < items.length; j += 1) {
+        if (items[i].itemId === items[j].itemId) {
+          count += 1;
+        } else {
+          break;
+        }
+      }
+
+      countedItems.push({
+        ...items[i],
+        count,
+        final: false,
+      });
+
+      i = j;
+    }
+
+    _.each(countedItems, (item) => {
+      for (let i = 0; i <= 6; i += 1) {
+        if (item.itemId === this.props.build.stats[`item${i}`]) {
+          _.assign(item, { final: true });
+        }
+      }
+    });
+
+    console.log(countedItems);
+
+    return countedItems;
   }
 
   handleOnPressItem(itemData) {
@@ -270,8 +310,9 @@ class ProBuildView extends Component {
     let itemData;
 
     if (this.props.fetched) {
-      for (let i = 0; i < build.itemsOrder.length; i += 1) {
-        itemData = build.itemsOrder[i];
+      const items = this.getParsedItems();
+      for (let i = 0; i < items.length; i += 1) {
+        itemData = items[i];
 
         itemsAndSeparators.push(<Item
           key={`item_${i}`}
@@ -280,7 +321,7 @@ class ProBuildView extends Component {
           onPress={this.handleOnPressItem}
         />);
 
-        if (i !== build.itemsOrder.length - 1) {
+        if (i !== items.length - 1) {
           itemsAndSeparators.push(<Icon
             key={`arrow_${i}`}
             style={styles.itemsArrow}

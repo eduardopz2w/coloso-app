@@ -1,14 +1,28 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Image, TouchableWithoutFeedback, Text } from 'react-native';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    position: 'relative',
+    marginBottom: 16,
+  },
   item: {
     width: 40,
     height: 40,
     borderWidth: 3,
     borderColor: 'black',
-    marginBottom: 16,
+  },
+  count: {
+    backgroundColor: 'black',
+    padding: 3,
+    position: 'absolute',
+    color: 'white',
+    bottom: 0,
+    right: 0,
+    fontSize: 12,
+  },
+  final: {
+    borderColor: '#3F51B5',
   },
 });
 
@@ -19,10 +33,13 @@ class Item extends PureComponent {
     return (<TouchableWithoutFeedback
       onPress={() => this.props.onPress(itemData)}
     >
-      <Image
-        style={[styles.item, this.props.style]}
-        source={{ uri: `item_${itemData.itemId}` }}
-      />
+      <View style={styles.root}>
+        <Image
+          style={[styles.item, itemData.final && styles.final, this.props.style]}
+          source={{ uri: `item_${itemData.itemId}` }}
+        />
+        {itemData.count > 1 && <Text style={styles.count}>x{itemData.count}</Text>}
+      </View>
     </TouchableWithoutFeedback>);
   }
 }
@@ -30,6 +47,8 @@ class Item extends PureComponent {
 Item.propTypes = {
   itemData: PropTypes.shape({
     itemId: PropTypes.number,
+    count: PropTypes.number,
+    final: PropTypes.bool,
   }),
   onPress: PropTypes.func,
   style: View.propTypes.style,
