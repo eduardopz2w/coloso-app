@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import moment from 'moment';
+import BackgroundTimer from 'react-native-background-timer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import IconButton from '../../components/IconButton';
 import colors from '../../utils/colors';
@@ -43,23 +44,29 @@ function getParsedTime(gameLength) {
 
 class Toolbar extends Component {
   componentWillMount() {
-    this.setState({
-      gameLength: this.props.gameLength,
-    });
-  }
+    const gameLength = this.props.gameLength;
 
-  componentDidMount() {
-    if (this.state.gameLength > 0) {
-      this.timer = setInterval(() => {
-        this.setState({
-          gameLength: this.state.gameLength + 1,
-        });
-      }, 1000);
+    if (gameLength >= 0) {
+      this.setState({
+        gameLength: gameLength + 180,
+      });
+    } else {
+      this.setState({
+        gameLength: 0,
+      });
     }
   }
 
+  componentDidMount() {
+    this.timer = BackgroundTimer.setInterval(() => {
+      this.setState({
+        gameLength: this.state.gameLength + 1,
+      });
+    }, 1000);
+  }
+
   componentWillUnmount() {
-    clearInterval(this.timer);
+    BackgroundTimer.clearInterval(this.timer);
   }
 
   render() {
@@ -71,12 +78,10 @@ class Toolbar extends Component {
         <Text style={styles.mapName}>{mapName(mapId)}</Text>
         <Text style={styles.queueName}>{queueIdParser(gameQueueConfigId)}</Text>
       </View>
-      {this.state.gameLength > 0 &&
-        <View style={styles.gameTimeCol}>
-          <Icon name="access-time" size={18} color="#FFF" />
-          <Text style={styles.gameTime}>{getParsedTime(this.state.gameLength)}</Text>
-        </View>
-      }
+      <View style={styles.gameTimeCol}>
+        <Icon name="access-time" size={18} color="#FFF" />
+        <Text style={styles.gameTime}>{getParsedTime(this.state.gameLength)}</Text>
+      </View>
     </View>);
   }
 }
