@@ -7,7 +7,7 @@ import Modal from 'react-native-modalbox';
 import _ from 'lodash';
 import colors from '../../utils/colors';
 import Team from './Team';
-import GameCurrentViewActions from '../../redux/actions/GameCurrentViewActions';
+import { fetchBuilds } from '../../redux/actions/GameCurrentViewActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
 import ProBuildsList from '../../components/ProBuildsList';
@@ -284,7 +284,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchBuilds: (championId, page) => {
-      dispatch(GameCurrentViewActions.fetchBuilds(championId, page, PAGESIZE));
+      dispatch(fetchBuilds(championId, page, PAGESIZE));
     },
   };
 }

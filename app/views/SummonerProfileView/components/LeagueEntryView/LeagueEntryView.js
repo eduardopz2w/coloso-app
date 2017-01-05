@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import LeagueEntry from './LeagueEntry';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import ErrorScreen from '../../../../components/ErrorScreen';
@@ -24,6 +24,11 @@ const styles = StyleSheet.create({
   rootScrollViewContainer: {
     paddingBottom: 16,
   },
+
+  container: {
+    flex: 1,
+    padding: 16,
+  }
 });
 
 class LeagueEntryView extends PureComponent {
@@ -53,11 +58,13 @@ class LeagueEntryView extends PureComponent {
       return <LoadingScreen />;
     }
 
-    return (<ErrorScreen
-      message={this.props.leagueEntry.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.leagueEntry.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 

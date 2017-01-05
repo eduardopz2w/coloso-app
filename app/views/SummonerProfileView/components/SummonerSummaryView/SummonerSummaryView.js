@@ -8,12 +8,16 @@ import Summary from './Summary';
 
 const styles = StyleSheet.create({
   root: {},
-  container: {
+  summaryContainer: {
     marginTop: 8,
   },
   headerSelector: {
     paddingLeft: 16,
     backgroundColor: 'rgba(0,0,0,0.1)',
+  },
+  container: {
+    flex: 1,
+    padding: 16,
   },
 });
 
@@ -48,7 +52,7 @@ class SummonerSumaryView extends Component {
               disabled={this.props.summary.isFetching}
             />
           </View>
-          <View style={styles.container}>
+          <View style={styles.summaryContainer}>
             <ListView
               dataSource={this.dataSource.cloneWithRows(summaries)}
               renderRow={(summary, sectionId, rowId) => <Summary key={rowId} summary={summary} />}
@@ -60,11 +64,13 @@ class SummonerSumaryView extends Component {
       return <LoadingScreen />;
     }
 
-    return (<ErrorScreen
-      message={this.props.summary.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.summary.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 

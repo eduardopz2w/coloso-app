@@ -14,11 +14,15 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     backgroundColor: 'rgba(0,0,0,0.1)',
   },
-  container: {
+  runesContainer: {
     paddingTop: 8,
     paddingRight: 16,
     paddingLeft: 16,
     flex: 1,
+  },
+  container: {
+    flex: 1,
+    padding: 16,
   },
 });
 
@@ -46,7 +50,7 @@ class RunesView extends Component {
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
-        <View style={styles.container}>
+        <View style={styles.runesContainer}>
           <RunePage page={pages[this.state.pageSelected]} />
         </View>
       </View>);
@@ -54,11 +58,13 @@ class RunesView extends Component {
       return <LoadingScreen />;
     }
 
-    return (<ErrorScreen
-      message={this.props.runes.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.runes.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 

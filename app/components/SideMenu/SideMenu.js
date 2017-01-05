@@ -82,6 +82,8 @@ class SideMenu extends PureComponent {
 
     if (ownerAccount.summonerId === 0) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
+      Actions.manage_account_view();
+      this.context.drawer.close();
     } else {
       Actions.summoner_profile_view({
         summonerId: ownerAccount.summonerId,
@@ -96,6 +98,8 @@ class SideMenu extends PureComponent {
 
     if (ownerAccount.summonerId === 0) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
+      Actions.manage_account_view();
+      this.context.drawer.close();
     } else {
       this.props.onPressSearchGame();
     }

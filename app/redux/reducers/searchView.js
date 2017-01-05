@@ -1,3 +1,4 @@
+import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
 import { handleActions } from 'redux-actions';
 import {
@@ -5,6 +6,7 @@ import {
   setRegion,
   setSearchType,
   searchSummoner,
+  searchGame,
   clearSearchError,
   clearFoundData,
 } from '../actions/SearchViewActions';
@@ -21,31 +23,39 @@ const initialState = Immutable.fromJS({
   gameFound: false,
 });
 
-const reducer = handleActions({
+export default typeToReducer({
   [setSummonerName]: (state, action) => state.set('summonerName', action.payload),
   [setRegion]: (state, action) => state.set('region', action.payload),
   [setSearchType]: (state, action) => state.set('searchType', action.payload),
-  [`${searchSummoner}_PENDING`]: state => state.set('isSearching', true),
-  [`${searchSummoner}_REJECTED`]: (state, action) => state.merge({
-    isSearching: false,
-    searchError: true,
-    errorMessage: action.payload.errorMessage,
-  }),
-  [`${searchSummoner}_FULFILLED`]: (state, action) => state.merge({
-    isSearching: false,
-    summonerFoundId: action.payload.id,
-    summonerFoundRegion: action.payload.region,
-  }),
-  'SEARCH_VIEW/SEARCH_GAME_PENDING': state => state.set('isSearching', true),
-  'SEARCH_VIEW/SEARCH_GAME_FULFILLED': state => state.merge({
-    isSearching: false,
-    gameFound: true,
-  }),
-  'SEARCH_VIEW/SEARCH_GAME_REJECTED': (state, action) => state.merge({
-    isSearching: false,
-    searchError: true,
-    errorMessage: action.payload.errorMessage,
-  }),
+  [searchSummoner]: {
+    PENDING: state => state.set('isSearching', true),
+
+    REJECTED: (state, action) => state.merge({
+      isSearching: false,
+      searchError: true,
+      errorMessage: action.payload.errorMessage,
+    }),
+
+    FULFILLED: (state, action) => state.merge({
+      isSearching: false,
+      summonerFoundId: action.payload.id,
+      summonerFoundRegion: action.payload.region,
+    }),
+  },
+  [searchGame]: {
+    PENDING: state => state.set('isSearching', true),
+
+    FULFILLED: state => state.merge({
+      isSearching: false,
+      gameFound: true,
+    }),
+
+    REJECTED: (state, action) => state.merge({
+      isSearching: false,
+      searchError: true,
+      errorMessage: action.payload.errorMessage,
+    }),
+  },
   [clearSearchError]: state => state.merge({
     isSearching: false,
     searchError: false,
@@ -56,5 +66,3 @@ const reducer = handleActions({
     gameFound: false,
   }),
 }, initialState);
-
-export default reducer;

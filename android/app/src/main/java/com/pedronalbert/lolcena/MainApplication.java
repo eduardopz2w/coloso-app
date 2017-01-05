@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.facebook.react.ReactApplication;
+import com.ocetnik.timer.BackgroundTimerPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.sbugert.rnadmob.RNAdMobPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundTimerPackage(),
             new RNDeviceInfo(),
             new GoogleAnalyticsBridgePackage(),
             new RNAdMobPackage(),

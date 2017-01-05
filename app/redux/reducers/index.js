@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 import searchView from './searchView';
-import summonerProfileView from './summonerProfileViewReducer';
-import gameCurrentView from './gameCurrentViewReducer';
-import searchHistory from './searchHistoryReducer';
-import proBuildsSearchView from './proBuildsSearchViewReducer';
-import proBuildView from './proBuildViewReducer';
-import ownerAccount from './ownerAccountReducer';
+import summonerProfileView from './summonerProfileView';
+import gameCurrentView from './gameCurrentView';
+import searchHistory from './searchHistory';
+import proBuildsSearchView from './proBuildsSearchView';
+import proBuildView from './proBuildView';
+import ownerAccount from './ownerAccount';
 
 export default combineReducers({
   searchView,

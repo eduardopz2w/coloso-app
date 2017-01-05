@@ -107,7 +107,7 @@ class MasteryPage extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.page !== this.props.page) {
-      this.mainScroll.scrollTo(0);
+      this.mainScroll.scrollTo({ x: 0, y: 0, animated: false });
     }
   }
 

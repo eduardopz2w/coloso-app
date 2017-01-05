@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
-import ProBuildSearchActions from '../../redux/actions/ProBuildsSearchActions';
+import { fetchBuilds } from '../../redux/actions/ProBuildsSearchActions';
 import LoadingScreen from '../../components/LoadingScreen';
 import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
@@ -124,7 +124,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchBuilds: (championId, page) => {
-      dispatch(ProBuildSearchActions.fetchBuilds(championId, page, PAGESIZE));
+      dispatch(fetchBuilds(championId, page, PAGESIZE));
     },
   };
 }

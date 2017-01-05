@@ -4,7 +4,15 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar';
-import SummonerProfileViewActions from '../../redux/actions/SummonerProfileViewActions';
+import {
+  fetchSummonerData,
+  fetchLeagueEntry,
+  fetchChampionsMastery,
+  fetchGamesRecent,
+  fetchMasteries,
+  fetchRunes,
+  fetchSummary,
+} from '../../redux/actions/SummonerProfileViewActions';
 import LeagueEntryView from './components/LeagueEntryView';
 import ChampionsMasteryView from './components/ChampionsMasteryView';
 import GamesRecentView from './components/GamesRecentView';
@@ -200,31 +208,31 @@ function mapDispatchToProps(dispatch, ownProps) {
 
   return {
     fetchSummonerData: () => {
-      dispatch(SummonerProfileViewActions.fetchSummonerData(summonerId, region));
+      dispatch(fetchSummonerData(summonerId, region));
     },
 
     fetchLeagueEntry: () => {
-      dispatch(SummonerProfileViewActions.fetchLeagueEntry(summonerId, region));
+      dispatch(fetchLeagueEntry(summonerId, region));
     },
 
     fetchChampionsMastery: () => {
-      dispatch(SummonerProfileViewActions.fetchChampionsMastery(summonerId, region));
+      dispatch(fetchChampionsMastery(summonerId, region));
     },
 
     fetchGamesRecent: () => {
-      dispatch(SummonerProfileViewActions.fetchGamesRecent(summonerId, region));
+      dispatch(fetchGamesRecent(summonerId, region));
     },
 
     fetchMasteries: () => {
-      dispatch(SummonerProfileViewActions.fetchMasteries(summonerId, region));
+      dispatch(fetchMasteries(summonerId, region));
     },
 
     fetchRunes: () => {
-      dispatch(SummonerProfileViewActions.fetchRunes(summonerId, region));
+      dispatch(fetchRunes(summonerId, region));
     },
 
     fetchSummary: (season) => {
-      dispatch(SummonerProfileViewActions.fetchSummary(summonerId, region, season));
+      dispatch(fetchSummary(summonerId, region, season));
     },
   };
 }

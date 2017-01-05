@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
 import RiotApi from '../../utils/RiotApi';
-import OwnerAccountActions from '../../redux/actions/OwnerAccountActions';
+import { saveAccount } from '../../redux/actions/OwnerAccountActions';
 import colors from '../../utils/colors';
 import RegionSelector from '../../components/RegionSelector';
 
@@ -142,7 +142,7 @@ function mapStateToProps() {
 function mapDispatchToProps(dispatch) {
   return {
     saveAccount: (ownerAccount) => {
-      dispatch(OwnerAccountActions.saveAccount(ownerAccount));
+      dispatch(saveAccount(ownerAccount));
     },
   };
 }

@@ -140,11 +140,13 @@ class ChampionsMasteryView extends Component {
       return <LoadingScreen />;
     }
 
-    return (<ErrorScreen
-      message={this.props.championsMastery.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.championsMastery.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 

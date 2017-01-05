@@ -1,9 +1,17 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ListView } from 'react-native';
+import { ListView, View, StyleSheet } from 'react-native';
 import LoadingScreen from '../../../../components/LoadingScreen';
 import GameRecent from './GameRecent';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+});
 
 class GamesRecentView extends PureComponent {
   constructor(props) {
@@ -30,11 +38,13 @@ class GamesRecentView extends PureComponent {
       return (<LoadingScreen />);
     }
 
-    return (<ErrorScreen
-      message={this.props.gamesRecent.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.gamesRecent.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 

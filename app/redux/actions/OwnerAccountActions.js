@@ -1,20 +1,8 @@
-function loadAccount() {
-  return {
-    type: 'OWNER_ACCOUNT/LOAD_ACCOUNT',
-    payload: Storage.load({ key: 'ownerAccount' }),
-  };
-}
+import { createAction } from 'redux-actions';
 
-function saveAccount(ownerAccount) {
+export const loadAccount = createAction('OWNER_ACCOUNT/LOAD_ACCOUNT', () => Storage.load({ key: 'ownerAccount' }));
+export const saveAccount = createAction('OWNER_ACCOUNT/SAVE_ACCOUNT', (ownerAccount) => {
   Storage.save({ key: 'ownerAccount', rawData: ownerAccount });
 
-  return {
-    type: 'OWNER_ACCOUNT/SAVE_ACCOUNT',
-    payload: ownerAccount,
-  };
-}
-
-export default {
-  loadAccount,
-  saveAccount,
-};
+  return ownerAccount;
+});
