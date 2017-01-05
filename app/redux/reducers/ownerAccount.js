@@ -11,5 +11,7 @@ const initialState = Immutable.fromJS({
 
 export default typeToReducer({
   [saveAccount]: (state, action) => state.merge(action.payload),
-  [loadAccount]: (state, action) => state.merge(action.payload),
+  [loadAccount]: {
+    FULFILLED: (state, action) => state.merge(action.payload),
+  },
 }, initialState);
