@@ -5,6 +5,7 @@ import {
   setRegion,
   setSearchType,
   searchSummoner,
+  searchGame,
   clearSearchError,
   clearFoundData,
 } from '../actions/SearchViewActions';
@@ -36,12 +37,12 @@ const reducer = handleActions({
     summonerFoundId: action.payload.id,
     summonerFoundRegion: action.payload.region,
   }),
-  'SEARCH_VIEW/SEARCH_GAME_PENDING': state => state.set('isSearching', true),
-  'SEARCH_VIEW/SEARCH_GAME_FULFILLED': state => state.merge({
+  [`${searchGame}_PENDING`]: state => state.set('isSearching', true),
+  [`${searchGame}_FULFILLED`]: state => state.merge({
     isSearching: false,
     gameFound: true,
   }),
-  'SEARCH_VIEW/SEARCH_GAME_REJECTED': (state, action) => state.merge({
+  [`${searchGame}_REJECTED`]: (state, action) => state.merge({
     isSearching: false,
     searchError: true,
     errorMessage: action.payload.errorMessage,
