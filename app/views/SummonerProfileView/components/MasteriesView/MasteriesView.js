@@ -13,6 +13,10 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     backgroundColor: colors.titlesBackground,
   },
+  container: {
+    flex: 1,
+    padding: 16,
+  },
 });
 
 class MasteriesView extends Component {
@@ -45,11 +49,13 @@ class MasteriesView extends Component {
       return <LoadingScreen />;
     }
 
-    return (<ErrorScreen
-      message={this.props.masteries.errorMessage}
-      onPressRetryButton={this.props.onPressRetryButton}
-      retryButton
-    />);
+    return (<View style={styles.container}>
+      <ErrorScreen
+        message={this.props.masteries.errorMessage}
+        onPressRetryButton={this.props.onPressRetryButton}
+        retryButton
+      />
+    </View>);
   }
 }
 
