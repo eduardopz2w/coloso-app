@@ -7,7 +7,7 @@ import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import { tracker } from '../../utils/analytics';
 import colors from '../../utils/colors';
-import SearchHistoryActions from '../../redux/actions/SearchHistoryActions';
+import { loadEntries, addEntry, deleteEntry } from '../../redux/actions/SearchHistoryActions';
 import RegionSelector from '../../components/RegionSelector';
 import {
   setSummonerName,
@@ -40,6 +40,7 @@ class SearchView extends Component {
     this.handleOnChekedChangeProfileButton = this.handleOnChekedChangeProfileButton.bind(this);
     this.handleOnPressHistoryButton = this.handleOnPressHistoryButton.bind(this);
     this.handleOnPressHistoryEntry = this.handleOnPressHistoryEntry.bind(this);
+    this.handleOnPressDeleteEntry = this.handleOnPressDeleteEntry.bind(this);
     this.renderButton = this.renderButton.bind(this);
     this.renderSpinner = this.renderSpinner.bind(this);
     this.radioGroup = new MKRadioButton.Group();
@@ -139,6 +140,10 @@ class SearchView extends Component {
     this.props.setRegion(region);
   }
 
+  handleOnPressDeleteEntry(summonerName, region) {
+    this.props.deleteSearchEntry(summonerName, region);
+  }
+
   performSearch() {
     Keyboard.dismiss();
 
@@ -231,6 +236,7 @@ class SearchView extends Component {
         ref={(historyModal) => { this.historyModal = historyModal; }}
         historyEntries={this.props.searchHistoryEntries}
         onPressHistoryEntry={this.handleOnPressHistoryEntry}
+        onPressDeleteEntry={this.handleOnPressDeleteEntry}
       />
     </View>);
   }
@@ -258,6 +264,7 @@ SearchView.propTypes = {
   setSearchType: PropTypes.func,
   loadSearchHistory: PropTypes.func.isRequired,
   addSearchEntry: PropTypes.func.isRequired,
+  deleteSearchEntry: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -298,11 +305,15 @@ function mapDispatchToProps(dispatch) {
     },
 
     loadSearchHistory: () => {
-      dispatch(SearchHistoryActions.loadEntries());
+      dispatch(loadEntries());
     },
 
     addSearchEntry: (summonerName, region) => {
-      dispatch(SearchHistoryActions.addEntry(summonerName, region));
+      dispatch(addEntry(summonerName, region));
+    },
+
+    deleteSearchEntry: (summonerName, region) => {
+      dispatch(deleteEntry(summonerName, region));
     },
 
     setSummonerName: (summonerName) => {

@@ -72,6 +72,7 @@ class HistoryModal extends Component {
       <History
         historyEntries={this.props.historyEntries}
         onPressHistoryEntry={this.props.onPressHistoryEntry}
+        onPressDelete={this.props.onPressDeleteEntry}
       />
     </Modal>);
   }

@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import OwnerAccountActions from '../redux/actions/OwnerAccountActions';
+import { loadAccount } from '../redux/actions/OwnerAccountActions';
 import {
   setSummonerName,
   setRegion,
@@ -83,7 +83,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     loadAccount: () => {
-      dispatch(OwnerAccountActions.loadAccount());
+      dispatch(loadAccount());
     },
 
     searchGame: (summonerName, region) => {

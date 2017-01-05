@@ -8,10 +8,4 @@ const StorageInstance = new Storage({
   enableCache: true,
 });
 
-StorageInstance.load({ key: 'searchHistoryEntries' })
-  .then()
-  .catch(() => {
-    StorageInstance.save({ key: 'searchHistoryEntries', rawData: { entries: [] } });
-  });
-
 export default StorageInstance;

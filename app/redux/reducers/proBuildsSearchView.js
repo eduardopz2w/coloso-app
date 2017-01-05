@@ -1,11 +1,13 @@
+import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
+import { fetchBuilds } from '../actions/ProBuildsSearchActions';
 
 const initialState = Immutable.fromJS({
   builds: {
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    isFetching: true,
+    isFetching: false,
     builds: [],
     pagination: {
       page: 1,
@@ -15,14 +17,10 @@ const initialState = Immutable.fromJS({
   },
 });
 
-function proBuildsSearchViewReducer(state = initialState, action) {
-  let newState = state;
-
-  if (action.type === 'PROBUILDS_SEARCH_VIEW/FETCH_BUILDS_PENDING') {
-    const page = action.payload.page;
-
-    newState = newState.withMutations((mutator) => {
-      if (page === 1) {
+export default typeToReducer({
+  [fetchBuilds]: {
+    PENDING: (state, action) => state.withMutations((mutator) => {
+      if (action.payload.page === 1) {
         mutator.setIn(['builds', 'fetched'], false);
         mutator.setIn(['builds', 'builds'], []);
         mutator.setIn(['builds', 'pagination'], {
@@ -34,28 +32,19 @@ function proBuildsSearchViewReducer(state = initialState, action) {
 
       mutator.setIn(['builds', 'fetchError'], false);
       mutator.setIn(['builds', 'isFetching'], true);
-    });
-  }
-
-  if (action.type === 'PROBUILDS_SEARCH_VIEW/FETCH_BUILDS_FULFILLED') {
-    newState = newState.withMutations((mutator) => {
+    }),
+    FULFILLED: (state, action) => state.withMutations((mutator) => {
       mutator.setIn(['builds', 'fetched'], true);
       mutator.setIn(['builds', 'isFetching'], false);
       mutator.updateIn(['builds', 'builds'], builds => builds.concat(action.payload.probuilds));
       mutator.setIn(['builds', 'pagination'], action.payload.pagination);
-    });
-  }
-
-  if (action.type === 'PROBUILDS_SEARCH_VIEW/FETCH_BUILDS_REJECTED') {
-    newState = newState.mergeIn(['builds'], {
+    }),
+    REJECTED: (state, action) => state.mergeIn(['builds'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
       errorMessage: action.payload.errorMessage,
-    });
-  }
+    }),
+  },
 
-  return newState;
-}
-
-export default proBuildsSearchViewReducer;
+}, initialState);

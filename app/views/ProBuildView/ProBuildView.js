@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import numeral from 'numeral';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import ProBuildViewActions from '../../redux/actions/ProBuildViewActions';
+import { fetchBuild } from '../../redux/actions/ProBuildViewActions';
 import LoadingScreen from '../../components/LoadingScreen';
 import ErrorScreen from '../../components/ErrorScreen';
 import PlayerToolbar from './components/PlayerToolbar';
@@ -471,7 +471,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch, props) {
   return {
     fetchBuild: () => {
-      dispatch(ProBuildViewActions.fetchBuild(props.buildId));
+      dispatch(fetchBuild(props.buildId));
     },
   };
 }
