@@ -240,15 +240,20 @@ class ProBuildView extends Component {
       i = j - 1;
     }
 
-    _.each(countedItems, (item) => {
-      for (let i = 0; i <= 6; i += 1) {
-        if (item.itemId === this.props.build.stats[`item${i}`]) {
-          _.assign(item, { final: true });
-        }
-      }
-    });
+    for (let i = 6; i >= 0; i -= 1) {
+      const finalItemId = this.props.build.stats[`item${i}`];
 
-    console.log(countedItems);
+      if (finalItemId > 0) {
+        _.eachRight(countedItems, (countedItem) => {
+          if (countedItem.itemId === finalItemId) {
+            _.assign(countedItem, { final: true });
+            return false;
+          }
+
+          return true;
+        });
+      }
+    }
 
     return countedItems;
   }
