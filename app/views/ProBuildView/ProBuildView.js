@@ -229,11 +229,13 @@ class ProBuildView extends Component {
         }
       }
 
-      countedItems.push({
-        ...items[i],
-        count,
-        final: false,
-      });
+      if (items[i]) {
+        countedItems.push({
+          ...items[i],
+          count,
+          final: false,
+        });
+      }
 
       i = j - 1;
     }
@@ -245,6 +247,8 @@ class ProBuildView extends Component {
         }
       }
     });
+
+    console.log(countedItems);
 
     return countedItems;
   }
