@@ -189,6 +189,7 @@ class ProBuildView extends Component {
     this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillOrder = this.renderSkillOrder.bind(this);
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
+    this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
   }
 
   componentWillMount() {
@@ -271,6 +272,15 @@ class ProBuildView extends Component {
     });
   }
 
+  handleOnPressProfileButton() {
+    const build = this.props.build;
+
+    Actions.summoner_profile_view({
+      summonerId: build.profSummonerData.summonerId,
+      region: build.profSummonerData.region,
+    });
+  }
+
   renderSkillOrder() {
     const skillsNodes = [];
     const skills = [
@@ -343,6 +353,7 @@ class ProBuildView extends Component {
           playerName={build.profPlayerData.name}
           playerImageUrl={build.profPlayerData.imageUrl}
           onPressBackButton={() => { Actions.pop(); }}
+          onPressProfileButton={this.handleOnPressProfileButton}
         />
         <ScrollableTabView
           initialPage={0}
@@ -503,6 +514,10 @@ ProBuildView.propTypes = {
     profPlayerData: PropTypes.shape({
       name: PropTypes.string,
       imageUrl: PropTypes.string,
+    }),
+    profSummonerData: PropTypes.shape({
+      summonerId: PropTypes.number,
+      region: PropTypes.string,
     }),
   }),
   isFetching: PropTypes.bool,
