@@ -6,7 +6,7 @@ const regions = [
   { shortName: 'las', longName: 'Latinoamérica Sur' },
   { shortName: 'oce', longName: 'Oceanía' },
   { shortName: 'eune', longName: 'Europa Nórdica y Este' },
-  { shortName: 'eunw', longName: 'Europa Oeste' },
+  { shortName: 'euw', longName: 'Europa Oeste' },
   { shortName: 'jp', longName: 'Japón' },
   { shortName: 'kr', longName: 'Corea' },
   { shortName: 'tr', longName: 'Turquía' },
