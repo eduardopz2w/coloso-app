@@ -189,6 +189,7 @@ class ProBuildView extends Component {
     this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillOrder = this.renderSkillOrder.bind(this);
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
+    this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
   }
 
   componentWillMount() {
@@ -229,22 +230,31 @@ class ProBuildView extends Component {
         }
       }
 
-      countedItems.push({
-        ...items[i],
-        count,
-        final: false,
-      });
+      if (items[i]) {
+        countedItems.push({
+          ...items[i],
+          count,
+          final: false,
+        });
+      }
 
       i = j - 1;
     }
 
-    _.each(countedItems, (item) => {
-      for (let i = 0; i <= 6; i += 1) {
-        if (item.itemId === this.props.build.stats[`item${i}`]) {
-          _.assign(item, { final: true });
-        }
+    for (let i = 6; i >= 0; i -= 1) {
+      const finalItemId = this.props.build.stats[`item${i}`];
+
+      if (finalItemId > 0) {
+        _.eachRight(countedItems, (countedItem) => {
+          if (countedItem.itemId === finalItemId) {
+            _.assign(countedItem, { final: true });
+            return false;
+          }
+
+          return true;
+        });
       }
-    });
+    }
 
     return countedItems;
   }
@@ -259,6 +269,15 @@ class ProBuildView extends Component {
       },
     }, () => {
       this.modal.open();
+    });
+  }
+
+  handleOnPressProfileButton() {
+    const build = this.props.build;
+
+    Actions.summoner_profile_view({
+      summonerId: build.profSummonerData.summonerId,
+      region: build.profSummonerData.region,
     });
   }
 
@@ -334,6 +353,7 @@ class ProBuildView extends Component {
           playerName={build.profPlayerData.name}
           playerImageUrl={build.profPlayerData.imageUrl}
           onPressBackButton={() => { Actions.pop(); }}
+          onPressProfileButton={this.handleOnPressProfileButton}
         />
         <ScrollableTabView
           initialPage={0}
@@ -494,6 +514,10 @@ ProBuildView.propTypes = {
     profPlayerData: PropTypes.shape({
       name: PropTypes.string,
       imageUrl: PropTypes.string,
+    }),
+    profSummonerData: PropTypes.shape({
+      summonerId: PropTypes.number,
+      region: PropTypes.string,
     }),
   }),
   isFetching: PropTypes.bool,

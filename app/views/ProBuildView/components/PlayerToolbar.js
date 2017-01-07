@@ -11,6 +11,7 @@ const styles = MediaQueryStyleSheet.create(
     },
     toolbar: {
       height: 56,
+      flexDirection: 'row',
     },
 
     profileToolbar: {
@@ -43,14 +44,19 @@ class SummonerProfileViewToolbar extends Component {
     super(props);
 
     this.handleOnPressBackButton = this.handleOnPressBackButton.bind(this);
+    this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
   }
 
   handleOnPressBackButton() {
     if (this.props.onPressBackButton) {
-      return this.props.onPressBackButton();
+      this.props.onPressBackButton();
     }
+  }
 
-    return null;
+  handleOnPressProfileButton() {
+    if (this.props.onPressProfileButton) {
+      this.props.onPressProfileButton();
+    }
   }
 
   render() {
@@ -59,6 +65,8 @@ class SummonerProfileViewToolbar extends Component {
     return (<View style={styles.root}>
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
+        <View style={{ flex: 1 }} />
+        <IconButton iconName="account-circle" onPress={this.handleOnPressProfileButton} />
       </View>
 
       <View style={styles.profileToolbar}>
@@ -80,6 +88,7 @@ SummonerProfileViewToolbar.propTypes = {
   playerName: PropTypes.string.isRequired,
   playerImageUrl: PropTypes.string.isRequired,
   onPressBackButton: PropTypes.func,
+  onPressProfileButton: PropTypes.func,
 };
 
 export default SummonerProfileViewToolbar;

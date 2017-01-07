@@ -180,7 +180,7 @@ class LeagueEntry extends Component {
               </View>
             ) : (
               <Text style={styles.leaguePointsTitleText}>
-                <Text style={styles.dataText}>League Points: </Text>
+                <Text style={styles.dataText}>Puntos de Liga: </Text>
                 <Text style={styles.leaguePointsText}> {entries.leaguePoints || 0}</Text>
               </Text>
             )}

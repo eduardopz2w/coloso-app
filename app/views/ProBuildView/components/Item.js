@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   final: {
-    borderColor: '#3F51B5',
+    borderColor: '#FF5722',
   },
 });
 
