@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image, ListView } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -53,12 +54,12 @@ function getRuneImageUri(runeImage) {
 
 function renderRow(rune, sectionId, rowId) {
   return (<View style={styles.runeRow} key={rowId}>
-    <Image style={styles.runeImage} source={{ uri: getRuneImageUri(rune.image.full) }} >
-      <Text style={styles.countText}>x{rune.count || rune.rank}</Text>
+    <Image style={styles.runeImage} source={{ uri: getRuneImageUri(rune.getIn(['image', 'full'])) }} >
+      <Text style={styles.countText}>x{rune.get('count') || rune.get('rank')}</Text>
     </Image>
     <View style={styles.dataCol}>
-      <Text style={styles.titleText}>{rune.name}</Text>
-      <Text style={styles.descriptionText}>{rune.description}</Text>
+      <Text style={styles.titleText}>{rune.get('name')}</Text>
+      <Text style={styles.descriptionText}>{rune.get('description')}</Text>
     </View>
   </View>);
 }
@@ -68,36 +69,36 @@ class RunePage extends Component {
     super(props);
 
     this.ds = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
 
   render() {
-    const { runes } = this.props.page;
+    const runes = this.props.page.get('runes');
 
-    if (runes.length === 0) {
+    if (runes.size === 0) {
       return <Text style={styles.messageText}>Esta página de runas está vacía.</Text>;
     }
 
     return (<ListView
       style={styles.root}
       contentContainerStyle={styles.container}
-      dataSource={this.ds.cloneWithRows(runes)}
+      dataSource={this.ds.cloneWithRows(runes.toArray())}
       renderRow={renderRow}
     />);
   }
 }
 
 RunePage.propTypes = {
-  page: PropTypes.shape({
+  page: ImmutablePropTypes.mapContains({
     name: PropTypes.string,
-    runes: PropTypes.arrayOf(PropTypes.shape({
+    runes: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       runeId: PropTypes.number.isRequired,
       count: PropTypes.number,
       rank: PropTypes.number,
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
-      image: PropTypes.shape({
+      image: ImmutablePropTypes.mapContains({
         full: PropTypes.string.isRequired,
       }),
     })).isRequired,

@@ -21,14 +21,14 @@ const initialState = Immutable.fromJS({
 export default typeToReducer({
   [searchGame]: {
     FULFILLED: (state, action) => state.merge({
-      gameData: action.payload,
-      builds: {
+      gameData: Immutable.fromJS(action.payload),
+      builds: Immutable.fromJS({
         fetched: false,
         fetchError: false,
         errorMessage: '',
         isFetching: true,
         builds: [],
-      },
+      }),
     }),
   },
 
@@ -36,11 +36,11 @@ export default typeToReducer({
     PENDING: (state, action) => state.withMutations((mutator) => {
       if (action.payload.page === 1) {
         mutator.setIn(['builds', 'fetched'], false);
-        mutator.setIn(['builds', 'builds'], []);
-        mutator.setIn(['builds', 'pagination'], {
+        mutator.setIn(['builds', 'builds'], Immutable.List([]));
+        mutator.setIn(['builds', 'pagination'], Immutable.Map({
           page: 1,
           pageCount: 1,
-        });
+        }));
       }
 
       mutator.setIn(['builds', 'fetchError'], false);
@@ -50,8 +50,8 @@ export default typeToReducer({
     FULFILLED: (state, action) => state.withMutations((mutator) => {
       mutator.setIn(['builds', 'fetched'], true);
       mutator.setIn(['builds', 'isFetching'], false);
-      mutator.updateIn(['builds', 'builds'], builds => builds.concat(action.payload.probuilds));
-      mutator.setIn(['builds', 'pagination'], action.payload.pagination);
+      mutator.updateIn(['builds', 'builds'], builds => builds.concat(Immutable.fromJS(action.payload.probuilds)));
+      mutator.setIn(['builds', 'pagination'], Immutable.fromJS(action.payload.pagination));
     }),
 
     REJECTED: (state, action) => state.mergeIn(['builds'], {

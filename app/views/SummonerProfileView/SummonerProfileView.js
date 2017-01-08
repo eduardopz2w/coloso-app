@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar';
@@ -47,18 +48,16 @@ class SummonerProfileView extends Component {
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1) {
       // championsMastery
-      const { isFetching, fetched } = this.props.championsMastery;
 
-      if (!isFetching && !fetched) {
+      if (!this.props.championsMastery.get('isFetching') && !this.props.championsMastery.get('fetched')) {
         this.props.fetchChampionsMastery();
       }
     }
 
     if (tabIndex === 2) {
       // GamesRecent
-      const { isFetching, fetched } = this.props.gamesRecent;
 
-      if (!isFetching && !fetched) {
+      if (!this.props.gamesRecent.get('isFetching') && !this.props.gamesRecent.get('fetched')) {
         this.props.fetchGamesRecent();
       }
     }
@@ -66,27 +65,24 @@ class SummonerProfileView extends Component {
 
     if (tabIndex === 3) {
       // Runes
-      const { isFetching, fetched } = this.props.runes;
 
-      if (!isFetching && !fetched) {
+      if (!this.props.runes.get('isFetching') && !this.props.runes.get('fetched')) {
         this.props.fetchRunes();
       }
     }
 
     if (tabIndex === 4) {
       // Masteries
-      const { isFetching, fetched } = this.props.masteries;
 
-      if (!isFetching && !fetched) {
+      if (!this.props.masteries.get('isFetching') && !this.props.masteries.get('fetched')) {
         this.props.fetchMasteries();
       }
     }
 
     if (tabIndex === 5) {
-      // Masteries
-      const { isFetching, fetched } = this.props.summary;
+      // Summary
 
-      if (!isFetching && !fetched) {
+      if (!this.props.summary.get('isFetching') && !this.props.summary.get('fetched')) {
         this.props.fetchSummary('SEASON2016');
       }
     }
@@ -154,43 +150,43 @@ SummonerProfileView.propTypes = {
   fetchMasteries: PropTypes.func,
   fetchSummary: PropTypes.func,
   fetchRunes: PropTypes.func,
-  leagueEntry: PropTypes.shape({
+  leagueEntry: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
   }),
-  summonerData: PropTypes.shape({}),
-  championsMastery: PropTypes.shape({
+  summonerData: ImmutablePropTypes.map,
+  championsMastery: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
   }),
-  gamesRecent: PropTypes.shape({
+  gamesRecent: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
-  masteries: PropTypes.shape({
+  masteries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
-  runes: PropTypes.shape({
+  runes: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
   }),
-  summary: PropTypes.shape({
+  summary: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    playerStatSummaries: ImmutablePropTypes.list,
     season: PropTypes.string,
   }),
 };
 
 function mapStateToProps(state) {
-  const summonerData = state.summonerProfileView.get('summonerData').toJS();
-  const leagueEntry = state.summonerProfileView.get('leagueEntry').toJS();
-  const championsMastery = state.summonerProfileView.get('championsMastery').toJS();
-  const gamesRecent = state.summonerProfileView.get('gamesRecent').toJS();
-  const masteries = state.summonerProfileView.get('masteries').toJS();
-  const runes = state.summonerProfileView.get('runes').toJS();
-  const summary = state.summonerProfileView.get('summary').toJS();
+  const summonerData = state.summonerProfileView.get('summonerData');
+  const leagueEntry = state.summonerProfileView.get('leagueEntry');
+  const championsMastery = state.summonerProfileView.get('championsMastery');
+  const gamesRecent = state.summonerProfileView.get('gamesRecent');
+  const masteries = state.summonerProfileView.get('masteries');
+  const runes = state.summonerProfileView.get('runes');
+  const summary = state.summonerProfileView.get('summary');
 
   return {
     summonerData,

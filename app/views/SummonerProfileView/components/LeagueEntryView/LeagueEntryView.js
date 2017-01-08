@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, View, ListView, RefreshControl } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import LeagueEntry from './LeagueEntry';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import colors from '../../../../utils/colors';
@@ -44,12 +45,12 @@ class LeagueEntryView extends Component {
   }
 
   render() {
-    const { isFetching, fetchError, entries } = this.props.leagueEntry;
+    const { leagueEntry } = this.props;
 
-    if (fetchError) {
+    if (leagueEntry.get('fetchError')) {
       return (<View style={styles.container}>
         <ErrorScreen
-          message={this.props.leagueEntry.errorMessage}
+          message={leagueEntry.get('errorMessage')}
           onPressRetryButton={this.props.onPressRetryButton}
           retryButton
         />
@@ -58,10 +59,10 @@ class LeagueEntryView extends Component {
 
     return (<ListView
       style={styles.rootScrollView}
-      dataSource={this.dataSource.cloneWithRows(entries)}
+      dataSource={this.dataSource.cloneWithRows(leagueEntry.get('entries').toArray())}
       refreshControl={
         <RefreshControl
-          refreshing={isFetching}
+          refreshing={leagueEntry.get('isFetching')}
           enabled={false}
           colors={[colors.spinnerColor]}
         />
@@ -81,11 +82,11 @@ class LeagueEntryView extends Component {
 }
 
 LeagueEntryView.propTypes = {
-  leagueEntry: PropTypes.shape({
+  leagueEntry: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
-    entries: PropTypes.array,
+    entries: ImmutablePropTypes.list,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, ListView, TouchableWithoutFeedback } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { MKButton } from 'react-native-material-kit';
 import colors from '../../../utils/colors';
@@ -49,7 +51,7 @@ class History extends Component {
     this.handleOnPressDeleteIcon = this.handleOnPressDeleteIcon.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
 
@@ -64,23 +66,26 @@ class History extends Component {
   }
 
   renderRow(historyEntry, sectionId, rowId) {
+    const summonerName = historyEntry.get('summonerName');
+    const region = historyEntry.get('region');
+
     return (<View style={[styles.root, parseInt(rowId, 10) === 0 && { borderTopWidth: 1 }]}>
       <MKButton
         key={rowId}
         rippleColor="rgba(0,0,0,0.1)"
         style={styles.dataContainer}
         onPress={() => {
-          this.handleOnPressHistoryEntry(historyEntry.summonerName, historyEntry.region);
+          this.handleOnPressHistoryEntry(summonerName, region);
         }}
       >
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <Text style={styles.region}>{historyEntry.region.toUpperCase()}</Text>
-          <Text style={styles.summonerName}>{historyEntry.summonerName}</Text>
+          <Text style={styles.region}>{region.toUpperCase()}</Text>
+          <Text style={styles.summonerName}>{summonerName}</Text>
         </View>
       </MKButton>
       <TouchableWithoutFeedback
         onPress={() => {
-          this.handleOnPressDeleteIcon(historyEntry.summonerName, historyEntry.region);
+          this.handleOnPressDeleteIcon(summonerName, region);
         }}
       >
         <Icon name="delete" size={24} style={styles.removeIcon} />
@@ -89,27 +94,31 @@ class History extends Component {
   }
 
   render() {
-    if (this.props.historyEntries.length <= 0) {
+    const { historyEntries } = this.props;
+
+    if (historyEntries.size <= 0) {
       return <Text>El historial está vacío</Text>;
     }
 
+
     return (<ListView
       style={[styles.listView, this.props.style]}
-      dataSource={this.dataSource.cloneWithRows(this.props.historyEntries)}
+      dataSource={this.dataSource.cloneWithRows(this.props.historyEntries.toArray())}
       renderRow={this.renderRow}
       automaticallyAdjustContentInsets={false}
+      enableEmptySections
     />);
   }
 }
 
 History.defaultProps = {
-  historyEntries: [],
+  historyEntries: Immutable.List([]),
 };
 
 History.propTypes = {
-  historyEntries: PropTypes.arrayOf(PropTypes.shape({
-    summonerName: PropTypes.string.isRequired,
-    region: PropTypes.string.isRequired,
+  historyEntries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
+    summonerName: PropTypes.string,
+    region: PropTypes.string,
   })),
   style: View.propTypes.style,
   onPressHistoryEntry: PropTypes.func.isRequired,

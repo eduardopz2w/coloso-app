@@ -3,6 +3,7 @@ import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { loadAccount } from '../redux/actions/OwnerAccountActions';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   setSummonerName,
   setRegion,
@@ -65,14 +66,14 @@ MainDrawer.propTypes = {
   navigationState: PropTypes.shape({}),
   isSearchingGame: PropTypes.bool,
   onNavigate: PropTypes.func,
-  ownerAccount: PropTypes.shape({}),
+  ownerAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return {
-    ownerAccount: state.ownerAccount.toJS(),
+    ownerAccount: state.ownerAccount,
     isSearchingGame: state.searchView.get('isSearching'),
   };
 }

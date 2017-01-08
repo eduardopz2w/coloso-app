@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
@@ -256,9 +257,7 @@ SearchView.propTypes = {
   searchError: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
   searchGame: PropTypes.func,
-  searchHistoryEntries: PropTypes.arrayOf(PropTypes.shape({
-    entries: PropTypes.arrayOf(PropTypes.shape({})),
-  })),
+  searchHistoryEntries: ImmutablePropTypes.list,
   setSummonerName: PropTypes.func,
   setRegion: PropTypes.func,
   setSearchType: PropTypes.func,
@@ -280,7 +279,7 @@ function mapStateToProps(state) {
     summonerFoundId: searchViewState.get('summonerFoundId'),
     summonerFoundRegion: searchViewState.get('summonerFoundRegion'),
     gameFound: searchViewState.get('gameFound'),
-    searchHistoryEntries: state.searchHistory.get('entries').toJS(),
+    searchHistoryEntries: state.searchHistory.get('entries'),
   };
 }
 

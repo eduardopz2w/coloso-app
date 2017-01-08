@@ -1,7 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -55,14 +55,14 @@ class BannedChampions extends PureComponent {
       {champions.map((champion, key) => <Image
         key={key}
         style={styles.championImage}
-        source={{ uri: `champion_square_${champion.championId}` }}
+        source={{ uri: `champion_square_${champion.get('championId')}` }}
       />)}
     </View>);
   }
 }
 
 BannedChampions.propTypes = {
-  champions: PropTypes.arrayOf(PropTypes.shape({
+  champions: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     championId: PropTypes.number.isRequired,
   })),
 };

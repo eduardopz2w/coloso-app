@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 
 const styles = MediaQueryStyleSheet.create(
@@ -62,11 +63,13 @@ class Summary extends Component {
     };
 
     this.props.masteries.forEach((mastery) => {
-      if (mastery.championLevel === 5) {
+      const championLevel = mastery.get('championLevel');
+
+      if (championLevel === 5) {
         summary.level5 += 1;
-      } else if (mastery.championLevel === 6) {
+      } else if (championLevel === 6) {
         summary.level6 += 1;
-      } else if (mastery.championLevel === 7) {
+      } else if (championLevel === 7) {
         summary.level7 += 1;
       }
     });
@@ -94,7 +97,7 @@ class Summary extends Component {
 }
 
 Summary.propTypes = {
-  masteries: PropTypes.arrayOf(PropTypes.shape({
+  masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     championLevel: PropTypes.number,
   })),
 };

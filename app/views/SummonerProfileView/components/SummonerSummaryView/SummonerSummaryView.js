@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, ListView, View } from 'react-native';
-import _ from 'lodash';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import SeasonSelector from '../../../../components/SeasonSelector';
@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
 });
 
 function filterEmpty(summaries) {
-  return _.filter(summaries, (summary) => {
-    if (_.isNumber(summary.wins) || _.isNumber(summary.losses)) {
+  return summaries.filter((summary) => {
+    if (summary.get('wins') >= 0 || summary.get('losses') >= 0) {
       return true;
     }
 
@@ -40,27 +40,29 @@ class SummonerSumaryView extends Component {
     });
   }
   render() {
-    if (this.props.summary.fetched) {
-      const summaries = filterEmpty(this.props.summary.playerStatSummaries);
+    const summonerSummary = this.props.summary;
+
+    if (summonerSummary.get('fetched')) {
+      const summaries = filterEmpty(summonerSummary.get('playerStatSummaries'));
 
       return (
         <View>
           <View style={styles.headerSelector}>
             <SeasonSelector
-              initialValue={this.props.summary.season}
+              initialValue={summonerSummary.get('season')}
               onChangeSelected={this.props.onChangeSeason}
-              disabled={this.props.summary.isFetching}
+              disabled={summonerSummary.get('isFetching')}
             />
           </View>
           <View style={styles.summaryContainer}>
             <ListView
-              dataSource={this.dataSource.cloneWithRows(summaries)}
+              dataSource={this.dataSource.cloneWithRows(summaries.toArray())}
               renderRow={(summary, sectionId, rowId) => <Summary key={rowId} summary={summary} />}
             />
           </View>
         </View>
       );
-    } else if (this.props.summary.isFetching) {
+    } else if (summonerSummary.get('isFetching')) {
       return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
         <LoadingIndicator />
       </View>);
@@ -68,7 +70,7 @@ class SummonerSumaryView extends Component {
 
     return (<View style={styles.container}>
       <ErrorScreen
-        message={this.props.summary.errorMessage}
+        message={summonerSummary.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
         retryButton
       />
@@ -77,10 +79,10 @@ class SummonerSumaryView extends Component {
 }
 
 SummonerSumaryView.propTypes = {
-  summary: PropTypes.shape({
+  summary: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
-    playerStatSummaries: PropTypes.arrayOf(PropTypes.shape({})),
+    playerStatSummaries: ImmutablePropTypes.list,
     season: PropTypes.string.isRequired,
     errorMessage: PropTypes.string,
   }),

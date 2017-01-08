@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, ListView, RefreshControl } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ProBuildListRow from './ProBuildsListRow';
 import colors from '../../utils/colors';
@@ -20,7 +22,7 @@ class ProBuildsList extends Component {
     super(props);
 
     this.dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
     this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
     this.handleOnRefresh = this.handleOnRefresh.bind(this);
@@ -40,7 +42,7 @@ class ProBuildsList extends Component {
   }
 
   renderFooter() {
-    if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.length > 0) {
+    if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.size > 0) {
       return (<View style={{ alignItems: 'center', paddingVertical: 8 }}>
         <LoadingIndicator />
       </View>);
@@ -52,12 +54,12 @@ class ProBuildsList extends Component {
   render() {
     return (<ListView
       style={styles.root}
-      dataSource={this.dataSource.cloneWithRows(this.props.builds)}
+      dataSource={this.dataSource.cloneWithRows(this.props.builds.toArray())}
       initialListSize={25}
       pageSize={25}
       refreshControl={
         <RefreshControl
-          refreshing={(this.props.isFetching && this.props.builds.length === 0) ||
+          refreshing={(this.props.isFetching && this.props.builds.size === 0) ||
             this.props.isRefreshing
           }
           enabled={this.props.refreshControl}
@@ -69,7 +71,7 @@ class ProBuildsList extends Component {
       renderRow={(build, sectionId, rowId) => <ProBuildListRow
         key={rowId}
         build={build}
-        onPress={() => { this.props.onPressBuild(build.id); }}
+        onPress={() => { this.props.onPressBuild(build.get('id')); }}
       />}
       renderFooter={this.renderFooter}
       renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
@@ -81,7 +83,7 @@ class ProBuildsList extends Component {
 }
 
 ProBuildsList.propTypes = {
-  builds: PropTypes.arrayOf(PropTypes.shape({})),
+  builds: ImmutablePropTypes.list,
   isFetching: PropTypes.bool,
   isRefreshing: PropTypes.bool,
   onPressBuild: PropTypes.func,

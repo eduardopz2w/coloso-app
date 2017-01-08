@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, Alert, TouchableWithoutFeedback } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import regionHumanize from '../../utils/regionHumanize';
@@ -80,14 +81,14 @@ class SideMenu extends PureComponent {
   handleOnPressProfile() {
     const { ownerAccount } = this.props;
 
-    if (ownerAccount.summonerId === 0) {
+    if (ownerAccount.get('summonerId') === 0) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
       Actions.summoner_profile_view({
-        summonerId: ownerAccount.summonerId,
-        region: ownerAccount.region,
+        summonerId: ownerAccount.get('summonerId'),
+        region: ownerAccount.get('region'),
       });
       this.context.drawer.close();
     }
@@ -96,7 +97,7 @@ class SideMenu extends PureComponent {
   handleOnPressSearchGame() {
     const { ownerAccount } = this.props;
 
-    if (ownerAccount.summonerId === 0) {
+    if (ownerAccount.get('summonerId') === 0) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
       Actions.manage_account_view();
       this.context.drawer.close();
@@ -108,7 +109,7 @@ class SideMenu extends PureComponent {
   renderAccountData() {
     const ownerAccount = this.props.ownerAccount;
 
-    if (ownerAccount.summonerId === 0) {
+    if (ownerAccount.get('summonerId') === 0) {
       return (<TouchableWithoutFeedback
         onPress={() => {
           Actions.manage_account_view();
@@ -126,7 +127,7 @@ class SideMenu extends PureComponent {
       </TouchableWithoutFeedback>);
     }
 
-    const url = `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${ownerAccount.profileIconId}.png`;
+    const url = `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${ownerAccount.get('profileIconId')}.png`;
 
     return (<TouchableWithoutFeedback
       onPress={() => {
@@ -137,8 +138,8 @@ class SideMenu extends PureComponent {
       <View style={styles.accountDataContainer}>
         <Image source={{ uri: url }} style={styles.accountImage} />
         <View style={styles.accountDataRow}>
-          <Text style={styles.summonerName}>{ownerAccount.summonerName}</Text>
-          <Text style={styles.accountDataText}>{regionHumanize(ownerAccount.region)}</Text>
+          <Text style={styles.summonerName}>{ownerAccount.get('summonerName')}</Text>
+          <Text style={styles.accountDataText}>{regionHumanize(ownerAccount.get('region'))}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>);
@@ -183,7 +184,7 @@ class SideMenu extends PureComponent {
 }
 
 SideMenu.propTypes = {
-  ownerAccount: PropTypes.shape({
+  ownerAccount: ImmutablePropTypes.mapContains({
     summonerId: PropTypes.number,
     summonerName: PropTypes.string,
     profileIconId: PropTypes.number,

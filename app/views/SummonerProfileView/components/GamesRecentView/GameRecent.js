@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Dimensions, Image, Text } from 'react-native';
 import { Grid, Row } from 'react-native-easy-grid';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import _ from 'lodash';
@@ -193,10 +194,11 @@ class GameRecent extends PureComponent {
   }
 
   getBorderLeftStyle() {
-    const { win } = this.props.game.stats;
+    const win = this.props.game.getIn(['stats', 'win']);
+    const invalid = this.props.game.get('invalid');
     let borderColor;
 
-    if (this.props.game.invalid) {
+    if (invalid) {
       borderColor = '#BBB';
     } else if (win) {
       borderColor = colors.victory;
@@ -211,7 +213,7 @@ class GameRecent extends PureComponent {
   }
 
   getGameTitleLabel() {
-    const { subType } = this.props.game;
+    const subType = this.props.game.get('subType');
 
     if (subType.includes('RANKED') && !subType.includes('UNRANKED')) {
       return 'Clasificatoria';
@@ -221,7 +223,7 @@ class GameRecent extends PureComponent {
   }
 
   renderMultiKillBadge() {
-    const { largestMultiKill } = this.props.game.stats;
+    const largestMultiKill = this.props.game.getIn(['stats', 'largestMultiKill']);
     let multikillText;
 
     if (_.isUndefined(largestMultiKill) || largestMultiKill <= 1) {
@@ -243,65 +245,47 @@ class GameRecent extends PureComponent {
   }
 
   render() {
-    // TODO: Parsear los gametype
-    const { championId, spell1, spell2, createDate, gameMode, ipEarned } = this.props.game;
-    const {
-      championsKilled,
-      assists,
-      numDeaths,
-      minionsKilled,
-      goldEarned,
-      item0,
-      item1,
-      item2,
-      item3,
-      item4,
-      item5,
-      item6,
-      level,
-      timePlayed,
-      wardPlaced,
-    } = this.props.game.stats;
-    const timePlayedMomentDuration = moment.duration({ seconds: timePlayed });
+    const { game } = this.props;
+    const timePlayedMomentDuration = moment.duration({ seconds: game.getIn(['stats', 'timePlayed']) });
 
     return (<View style={styles.root}>
       <View style={[styles.container, this.getBorderLeftStyle()]}>
         <View>
           <View style={styleUtils.flexRow}>
             <View style={styles.championImageContainer}>
-              <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
+              <Image style={styles.championImage} source={{ uri: `champion_square_${game.get('championId')}` }} />
               <View style={styles.championLevelContainer}>
-                <Text style={styles.championLevelText}>{level}</Text>
+                <Text style={styles.championLevelText}>{game.getIn(['stats', 'level'])}</Text>
               </View>
             </View>
             <View style={styles.spellsConainer}>
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${spell1}` }} />
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${spell2}` }} />
+              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${game.get('spell1')}` }} />
+              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${game.get('spell2')}` }} />
             </View>
           </View>
           {this.renderMultiKillBadge()}
         </View>
         <View style={styles.dataCol}>
           <Text style={styles.gameTitle}>
-            {gameModeParser(gameMode)} ({this.getGameTitleLabel()})
+            {gameModeParser(game.get('gameMode'))} ({this.getGameTitleLabel()})
           </Text>
           <Grid>
             <View style={styles.iconDataRow}>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text style={styles.dataText}>{championsKilled || '0'}/{numDeaths || '0'}/{assists || '0'}</Text>
+                <Text style={styles.dataText}>{game.getIn(['stats', 'championsKilled']) || '0'}/{game.getIn(['stats', 'numDeaths']) || '0'}/{game.getIn(['stats', 'assists']) || '0'}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
-                <Text style={styles.dataText}>{minionsKilled}</Text>
+                <Text style={styles.dataText}>{game.getIn(['stats', 'minionsKilled'])}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <Text style={styles.dataText}>{goldEarned}</Text>
+                <Text style={styles.dataText}>{game.getIn(['stats', 'goldEarned'])}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_ward' }} />
-                <Text style={styles.dataText}>{wardPlaced || 0}</Text>
+                <Text style={styles.dataText}>{game.getIn(['stats', 'wardPlaced']) || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Icon style={styles.iconImage} name="timer" size={getIconSize()} />
@@ -309,21 +293,21 @@ class GameRecent extends PureComponent {
               </View>
               <View style={styles.iconDataCol}>
                 <Text style={styles.dataText}>IP: </Text>
-                <Text style={styles.dataText}>+{ipEarned || 0}</Text>
+                <Text style={styles.dataText}>+{game.get('ipEar') || 0}</Text>
               </View>
             </View>
             <Row style={styles.itemsRow}>
-              {renderItemImage(item0)}
-              {renderItemImage(item1)}
-              {renderItemImage(item2)}
-              {renderItemImage(item3)}
-              {renderItemImage(item4)}
-              {renderItemImage(item5)}
-              {renderItemImage(item6)}
+              {renderItemImage(game.getIn(['stats', 'item0']))}
+              {renderItemImage(game.getIn(['stats', 'item1']))}
+              {renderItemImage(game.getIn(['stats', 'item2']))}
+              {renderItemImage(game.getIn(['stats', 'item3']))}
+              {renderItemImage(game.getIn(['stats', 'item4']))}
+              {renderItemImage(game.getIn(['stats', 'item5']))}
+              {renderItemImage(game.getIn(['stats', 'item6']))}
             </Row>
             <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
               <Icon style={styles.iconImage} name="access-time" size={getIconSize()} />
-              <Text style={styles.dataText}> {moment(createDate).fromNow()}</Text>
+              <Text style={styles.dataText}> {moment(game.get('createDate')).fromNow()}</Text>
             </Row>
           </Grid>
         </View>
@@ -333,7 +317,7 @@ class GameRecent extends PureComponent {
 }
 
 GameRecent.propTypes = {
-  game: PropTypes.shape({
+  game: ImmutablePropTypes.mapContains({
     championId: PropTypes.number,
     spell1: PropTypes.number,
     spell2: PropTypes.number,
@@ -343,7 +327,7 @@ GameRecent.propTypes = {
     invalid: PropTypes.bool,
     createDate: PropTypes.number,
     ipEarned: PropTypes.number,
-    stats: PropTypes.shape({
+    stats: ImmutablePropTypes.mapContains({
       win: PropTypes.bool,
       championsKilled: PropTypes.number,
       assists: PropTypes.number,
