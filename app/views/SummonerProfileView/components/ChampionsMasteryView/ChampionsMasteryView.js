@@ -1,18 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, Dimensions, Text, View } from 'react-native';
+import { ListView, Dimensions, Text, View, RefreshControl } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Modal from 'react-native-modalbox';
 import _ from 'lodash';
 import ChampionMastery from './ChampionMastery';
 import MasteryInfo from './MasteryInfo';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import colors from '../../../../utils/colors';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
 import Summary from './Summary';
 
 const styles = MediaQueryStyleSheet.create(
   {
-    roowScrollView: {
+    rootListView: {
       flex: 1,
     },
 
@@ -84,7 +84,7 @@ class ChampionsMasteryView extends Component {
 
 
   render() {
-    const { isFetching, masteries, fetched } = this.props.championsMastery;
+    const { isFetching, masteries, fetched, fetchError } = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -99,53 +99,57 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
-    if (fetched) {
-      if (masteries.length === 0) {
-        return (<View style={{ flex: 1 }}>
-          <Summary masteries={masteries} />
-          <View style={styles.container}>
-            <Text style={styles.messageText}>
-              Este invocador no tiene puntos de maestria con ningún campeón.
-            </Text>
-          </View>
-        </View>);
-      }
-
-      return (<View>
-        <Summary masteries={masteries} />
-        <ListView
-          style={styles.rootScrollView}
-          pageSize={pageSize}
-          contentContainerStyle={styles.listViewContainer}
-          dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-          renderRow={(mastery, sectionId, rowId) => <ChampionMastery
-            key={rowId}
-            onPress={this.handleOnPressChampion}
-            mastery={mastery}
-            championImageSize={championImageSize}
-            progressWidth={progressWidth}
-          />}
+    if (fetchError) {
+      return (<View style={styles.container}>
+        <ErrorScreen
+          message={this.props.championsMastery.errorMessage}
+          onPressRetryButton={this.props.onPressRetryButton}
+          retryButton
         />
-        <Modal
-          style={styles.modal}
-          position="center"
-          ref={(modal) => { this.modal = modal; }}
-          onOpened={() => this.setState({ modalIsOpen: true })}
-          onClosed={() => this.setState({ modalIsOpen: false })}
-        >
-          {this.getModalContent()}
-        </Modal>
       </View>);
-    } else if (isFetching) {
-      return <LoadingScreen />;
+    } else if (masteries.length === 0 && fetched) {
+      return (<View style={{ flex: 1 }}>
+        <Summary masteries={masteries} />
+        <View style={styles.container}>
+          <Text style={styles.messageText}>
+            Este invocador no tiene puntos de maestria con ningún campeón.
+          </Text>
+        </View>
+      </View>);
     }
 
-    return (<View style={styles.container}>
-      <ErrorScreen
-        message={this.props.championsMastery.errorMessage}
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
+    return (<View style={{ flex: 1 }}>
+      <Summary masteries={masteries} />
+      <ListView
+        style={styles.rootListView}
+        pageSize={pageSize}
+        contentContainerStyle={styles.listViewContainer}
+        dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
+        renderRow={(mastery, sectionId, rowId) => <ChampionMastery
+          key={rowId}
+          onPress={this.handleOnPressChampion}
+          mastery={mastery}
+          championImageSize={championImageSize}
+          progressWidth={progressWidth}
+        />}
+        refreshControl={
+          <RefreshControl
+            refreshing={isFetching}
+            enabled={false}
+            colors={[colors.spinnerColor]}
+          />
+        }
+        enableEmptySections
       />
+      <Modal
+        style={styles.modal}
+        position="center"
+        ref={(modal) => { this.modal = modal; }}
+        onOpened={() => this.setState({ modalIsOpen: true })}
+        onClosed={() => this.setState({ modalIsOpen: false })}
+      >
+        {this.getModalContent()}
+      </Modal>
     </View>);
   }
 }

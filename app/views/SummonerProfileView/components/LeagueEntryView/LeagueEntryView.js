@@ -75,6 +75,7 @@ class LeagueEntryView extends Component {
 
         return <LeagueEntry key={rowId} leagueEntry={entry} reverse={reverse} />;
       }}
+      enableEmptySections
     />);
   }
 }
