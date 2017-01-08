@@ -21,12 +21,27 @@ class ProBuildsList extends Component {
   constructor(props) {
     super(props);
 
-    this.dataSource = new ListView.DataSource({
+    const dataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
+
+    this.state = {
+      dataSource: dataSource.cloneWithRows(props.builds.toArray()),
+    };
+
     this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
     this.handleOnRefresh = this.handleOnRefresh.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.builds.size === 0) {
+      this.listView.scrollTo({ x: 0, y: 0, animated: false });
+    }
+
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(nextProps.builds.toArray()),
+    });
   }
 
   handleOnLoadMore() {
@@ -54,9 +69,10 @@ class ProBuildsList extends Component {
   render() {
     return (<ListView
       style={styles.root}
-      dataSource={this.dataSource.cloneWithRows(this.props.builds.toArray())}
+      dataSource={this.state.dataSource}
       initialListSize={25}
       pageSize={25}
+      ref={(listView) => { this.listView = listView; }}
       refreshControl={
         <RefreshControl
           refreshing={(this.props.isFetching && this.props.builds.size === 0) ||
@@ -90,6 +106,10 @@ ProBuildsList.propTypes = {
   onLoadMore: PropTypes.func,
   onRefresh: PropTypes.func,
   refreshControl: PropTypes.bool,
+};
+
+ProBuildsList.defaultProps = {
+  builds: Immutable.List([]),
 };
 
 ProBuildsList.defaultProps = {
