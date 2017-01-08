@@ -11,7 +11,6 @@ import { fetchBuilds } from '../../redux/actions/GameCurrentViewActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
 import ProBuildsList from '../../components/ProBuildsList';
-import LoadingScreen from '../../components/LoadingScreen';
 import ErrorScreen from '../../components/ErrorScreen';
 import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
@@ -158,30 +157,26 @@ class GameCurrentView extends Component {
     let modalContent;
     let proBuildsContent;
 
-    if (builds.fetched) {
-      if (builds.builds.length > 0) {
-        proBuildsContent = (<ProBuildsList
-          builds={builds.builds}
-          onPressBuild={buildId => Actions.probuild_view({ buildId })}
-          isFetching={builds.isFetching}
-          onLoadMore={this.handleOnLoadMoreBuilds}
-        />);
-      } else {
-        proBuildsContent = (<View style={styles.container}>
-          <Text>
-            Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
-          </Text>
-        </View>);
-      }
-    } else if (builds.isFetching) {
-      proBuildsContent = <LoadingScreen />;
-    } else {
+    if (builds.fetchError) {
       proBuildsContent = (<View style={styles.container}>
         <ErrorScreen
           message={builds.errorMessage}
           onPressRetryButton={() => { this.fetchBuilds(); }}
           retryButton
         />
+      </View>);
+    } else if (builds.builds.length > 0 || builds.isFetching) {
+      proBuildsContent = (<ProBuildsList
+        builds={builds.builds}
+        onPressBuild={buildId => Actions.probuild_view({ buildId })}
+        isFetching={builds.isFetching}
+        onLoadMore={this.handleOnLoadMoreBuilds}
+      />);
+    } else {
+      proBuildsContent = (<View style={styles.container}>
+        <Text>
+          Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+        </Text>
       </View>);
     }
 
