@@ -128,13 +128,13 @@ const styles = MediaQueryStyleSheet.create(
   {
     '@media (min-device-width: 600)': {
       championImage: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
         borderWidth: 3,
       },
       championImageContainer: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
       },
       championLevelContainer: {
         width: 25,
@@ -144,8 +144,8 @@ const styles = MediaQueryStyleSheet.create(
         fontSize: 16,
       },
       spellImage: {
-        width: 45,
-        height: 45,
+        width: 40,
+        height: 40,
       },
       multikillText: {
         fontSize: 18,
@@ -166,15 +166,15 @@ const styles = MediaQueryStyleSheet.create(
         marginRight: 8,
       },
       dataText: {
-        fontSize: 19,
+        fontSize: 16,
       },
       noItem: {
-        width: 45,
-        height: 45,
+        width: 40,
+        height: 40,
       },
       itemImage: {
-        width: 45,
-        height: 45,
+        width: 40,
+        height: 40,
       },
     },
   },

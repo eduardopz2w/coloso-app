@@ -98,13 +98,12 @@ const styles = MediaQueryStyleSheet.create(
   {
     '@media (min-device-width: 600)': {
       profileToolbar: {
-        marginTop: 0,
-        minHeight: 130,
+        minHeight: 100,
       },
 
       profileToolbarContainer: {
-        marginLeft: 70,
-        marginRight: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
       },
 
       summonerImageContainer: {
@@ -122,17 +121,20 @@ const styles = MediaQueryStyleSheet.create(
         height: 30,
       },
 
+      summonerLevelText: {
+        fontSize: 16,
+      },
+
       summonerDataContainer: {
-        flex: 1,
         marginLeft: 40,
         justifyContent: 'center',
       },
       summonerNameText: {
-        fontSize: 30,
+        fontSize: 26,
         textAlign: 'left',
       },
       regionText: {
-        fontSize: 21,
+        fontSize: 18,
         textAlign: 'left',
       },
     },

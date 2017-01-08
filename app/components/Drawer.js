@@ -46,7 +46,7 @@ class MainDrawer extends PureComponent {
         onPressSearchGame={this.handleOnPressSearchGame}
       />}
       captureGestures
-      panOpenMask={0.05}
+      panOpenMask={0.02}
       panCloseMask={0.2}
       tapToClose
       negotiatePan
