@@ -104,7 +104,7 @@ class ChampionsMasteryView extends Component {
     if (championsMastery.get('fetchError')) {
       return (<View style={styles.container}>
         <ErrorScreen
-          message={this.props.championsMastery.errorMessage}
+          message={championsMastery.get('errorMessage')}
           onPressRetryButton={this.props.onPressRetryButton}
           retryButton
         />
