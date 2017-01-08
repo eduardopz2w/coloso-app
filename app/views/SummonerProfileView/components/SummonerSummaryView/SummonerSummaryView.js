@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, ListView, View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import SeasonSelector from '../../../../components/SeasonSelector';
@@ -36,7 +37,7 @@ class SummonerSumaryView extends Component {
     super(props);
 
     this.dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
   render() {

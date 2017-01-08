@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, View, ListView, RefreshControl } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import LeagueEntry from './LeagueEntry';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import colors from '../../../../utils/colors';
@@ -37,7 +38,7 @@ class LeagueEntryView extends Component {
     super(props);
 
     this.dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
   componentDidMount() {
