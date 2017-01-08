@@ -1,6 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ListView, View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import { ListView, View, StyleSheet, RefreshControl } from 'react-native';
+import colors from '../../../../utils/colors';
 import GameRecent from './GameRecent';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
@@ -27,24 +27,29 @@ class GamesRecentView extends PureComponent {
   }
 
   render() {
-    const { isFetching, games, fetched } = this.props.gamesRecent;
+    const { isFetching, games, fetchError } = this.props.gamesRecent;
 
-    if (fetched) {
-      return (<ListView
-        dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
-        renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
-      />);
-    } else if (isFetching) {
-      return (<LoadingScreen />);
+    if (fetchError) {
+      return (<View style={styles.container}>
+        <ErrorScreen
+          message={this.props.gamesRecent.errorMessage}
+          onPressRetryButton={this.props.onPressRetryButton}
+          retryButton
+        />
+      </View>);
     }
 
-    return (<View style={styles.container}>
-      <ErrorScreen
-        message={this.props.gamesRecent.errorMessage}
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />
-    </View>);
+    return (<ListView
+      dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
+      renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
+      refreshControl={
+        <RefreshControl
+          refreshing={isFetching}
+          enabled={false}
+          colors={[colors.spinnerColor]}
+        />
+      }
+    />);
   }
 }
 
