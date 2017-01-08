@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, ListView } from 'react-native';
+import { View, StyleSheet, ListView, RefreshControl } from 'react-native';
 import { MKSpinner } from 'react-native-material-kit';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ProBuildListRow from './ProBuildsListRow';
@@ -23,6 +23,7 @@ class ProBuildsList extends Component {
       rowHasChanged: (r1, r2) => r1 !== r2,
     });
     this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
+    this.handleOnRefresh = this.handleOnRefresh.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
   }
 
@@ -32,8 +33,14 @@ class ProBuildsList extends Component {
     }
   }
 
+  handleOnRefresh() {
+    if (this.props.onRefresh) {
+      this.props.onRefresh();
+    }
+  }
+
   renderFooter() {
-    if (this.props.isFetching) {
+    if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.length > 0) {
       return (<View style={{ alignItems: 'center', paddingVertical: 8 }}>
         <MKSpinner strokeColor={colors.spinnerColor} />
       </View>);
@@ -48,16 +55,27 @@ class ProBuildsList extends Component {
       dataSource={this.dataSource.cloneWithRows(this.props.builds)}
       initialListSize={25}
       pageSize={25}
+      refreshControl={
+        <RefreshControl
+          refreshing={(this.props.isFetching && this.props.builds.length === 0) ||
+            this.props.isRefreshing
+          }
+          enabled={this.props.refreshControl}
+          onRefresh={this.handleOnRefresh}
+          colors={[colors.primary]}
+        />
+      }
       renderScrollComponent={props => <InfiniteScrollView {...props} />}
       renderRow={(build, sectionId, rowId) => <ProBuildListRow
         key={rowId}
         build={build}
         onPress={() => { this.props.onPressBuild(build.id); }}
       />}
-      renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       renderFooter={this.renderFooter}
+      renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
       onLoadMoreAsync={this.handleOnLoadMore}
       canLoadMore
+      enableEmptySections
     />);
   }
 }
@@ -65,8 +83,16 @@ class ProBuildsList extends Component {
 ProBuildsList.propTypes = {
   builds: PropTypes.arrayOf(PropTypes.shape({})),
   isFetching: PropTypes.bool,
+  isRefreshing: PropTypes.bool,
   onPressBuild: PropTypes.func,
   onLoadMore: PropTypes.func,
+  onRefresh: PropTypes.func,
+  refreshControl: PropTypes.bool,
+};
+
+ProBuildsList.defaultProps = {
+  refreshControl: false,
+  isRefreshing: false,
 };
 
 export default ProBuildsList;

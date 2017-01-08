@@ -3,8 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
-import { fetchBuilds } from '../../redux/actions/ProBuildsSearchActions';
-import LoadingScreen from '../../components/LoadingScreen';
+import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsSearchActions';
 import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
 import ChampionSelector from '../../components/ChampionSelector';
@@ -56,30 +55,29 @@ class ProBuildSearchView extends Component {
     const { builds } = this.props;
     let content;
 
-    if (builds.fetched) {
-      if (builds.builds.length > 0) {
-        content = (<ProBuildsList
-          builds={builds.builds}
-          onPressBuild={buildId => Actions.probuild_view({ buildId })}
-          onLoadMore={this.handleOnLoadMore}
-          isFetching={builds.isFetching}
-        />);
-      } else {
-        content = (<View style={styles.container}>
-          <Text style={styles.noBuildsMessage}>
-            Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
-          </Text>
-        </View>);
-      }
-    } else if (builds.isFetching) {
-      content = <LoadingScreen />;
-    } else {
+    if (builds.fetchError) {
       content = (<View style={styles.container}>
         <ErrorScreen
           message={builds.errorMessage}
           onPressRetryButton={() => { this.props.fetchBuilds(); }}
           retryButton
         />
+      </View>);
+    } else if (builds.builds.length > 0 || builds.isFetching) {
+      content = (<ProBuildsList
+        builds={builds.builds}
+        onPressBuild={buildId => Actions.probuild_view({ buildId })}
+        onLoadMore={this.handleOnLoadMore}
+        isFetching={builds.isFetching}
+        isRefreshing={builds.isRefreshing}
+        onRefresh={() => { this.props.refreshBuilds(this.props.builds.championSelected); }}
+        refreshControl
+      />);
+    } else {
+      content = (<View style={styles.container}>
+        <Text style={styles.noBuildsMessage}>
+          Actualmente no hay builds disponibles para este campeón, pronto estaran disponibles!.
+        </Text>
       </View>);
     }
 
@@ -98,9 +96,10 @@ class ProBuildSearchView extends Component {
 
 ProBuildSearchView.propTypes = {
   fetchBuilds: PropTypes.func,
+  refreshBuilds: PropTypes.func,
   builds: PropTypes.shape({
     isFetching: PropTypes.bool,
-    fetched: PropTypes.bool,
+    isRefreshing: PropTypes.bool,
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
     builds: PropTypes.arrayOf(PropTypes.shape({})),
@@ -125,6 +124,9 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchBuilds: (championId, page) => {
       dispatch(fetchBuilds(championId, page, PAGESIZE));
+    },
+    refreshBuilds: (championId) => {
+      dispatch(refreshBuilds(championId, PAGESIZE));
     },
   };
 }
