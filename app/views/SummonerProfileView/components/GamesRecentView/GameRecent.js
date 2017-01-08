@@ -4,8 +4,9 @@ import { Grid, Row } from 'react-native-easy-grid';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
+import numeral from 'numeral';
 import _ from 'lodash';
-import { MediaQueryStyleSheet } from 'react-native-responsive';
+import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 import gameModeParser from '../../../../utils/gameModeParser';
@@ -55,6 +56,9 @@ const styles = MediaQueryStyleSheet.create(
       borderRadius: 50,
       marginLeft: -9,
     },
+    scoreText: {
+      fontWeight: 'bold',
+    },
     dataCol: {
       flex: 1,
       paddingLeft: 8,
@@ -68,6 +72,7 @@ const styles = MediaQueryStyleSheet.create(
     iconImage: {
       width: 15,
       height: 15,
+      marginRight: 4,
     },
     itemImage: {
       width: 25,
@@ -82,12 +87,13 @@ const styles = MediaQueryStyleSheet.create(
     },
     iconDataRow: {
       flexDirection: 'row',
-      flexWrap: 'wrap',
     },
     iconDataCol: {
-      minWidth: 70,
-      height: 20,
+      flex: 1,
       flexDirection: 'row',
+    },
+    firstIconDataCol: {
+      flex: 1.25,
     },
     itemsRow: {
       flexDirection: 'row',
@@ -109,6 +115,14 @@ const styles = MediaQueryStyleSheet.create(
     timeAgoRow: {
       justifyContent: 'flex-end',
       alignItems: 'center',
+    },
+    gold: {
+      color: colors.tiers.gold,
+      textShadowColor: '#000',
+      textShadowOffset: {
+        width: 0.2,
+        height: 0.2,
+      },
     },
   },
   {
@@ -140,6 +154,9 @@ const styles = MediaQueryStyleSheet.create(
         paddingLeft: 16,
         paddingRight: 16,
       },
+      firstIconDataCol: {
+        flex: 1,
+      },
       gameTitle: {
         fontSize: 18,
       },
@@ -150,11 +167,6 @@ const styles = MediaQueryStyleSheet.create(
       },
       dataText: {
         fontSize: 19,
-      },
-      iconDataCol: {
-        minWidth: 130,
-        height: 30,
-        flexDirection: 'row',
       },
       noItem: {
         width: 45,
@@ -271,9 +283,13 @@ class GameRecent extends PureComponent {
           </Text>
           <Grid>
             <View style={styles.iconDataRow}>
-              <View style={styles.iconDataCol}>
+              <View style={[styles.iconDataCol, styles.firstIconDataCol]}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
-                <Text style={styles.dataText}>{game.getIn(['stats', 'championsKilled']) || '0'}/{game.getIn(['stats', 'numDeaths']) || '0'}/{game.getIn(['stats', 'assists']) || '0'}</Text>
+                <Text style={[styles.dataText, styles.scoreText]}>
+                  <Text style={{ color: colors.victory }}>{game.getIn(['stats', 'championsKilled']) || '0'}</Text>/
+                  <Text style={{ color: colors.defeat }}>{game.getIn(['stats', 'numDeaths']) || '0'}</Text>/
+                  {game.getIn(['stats', 'assists']) || '0'}
+                </Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
@@ -281,9 +297,16 @@ class GameRecent extends PureComponent {
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <Text style={styles.dataText}>{game.getIn(['stats', 'goldEarned'])}</Text>
+                <MediaQuery maxDeviceWidth={599}>
+                  <Text style={[styles.dataText, styles.gold]}>{numeral(game.getIn(['stats', 'goldEarned'])).format('0.0 a')}</Text>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={600}>
+                  <Text style={[styles.dataText, styles.gold]}>{numeral(game.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
+                </MediaQuery>
               </View>
-              <View style={styles.iconDataCol}>
+            </View>
+            <View style={styles.iconDataRow}>
+              <View style={[styles.iconDataCol, styles.firstIconDataCol]}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_ward' }} />
                 <Text style={styles.dataText}>{game.getIn(['stats', 'wardPlaced']) || 0}</Text>
               </View>
