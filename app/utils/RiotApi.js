@@ -23,7 +23,7 @@ riotClient.interceptors.response.use((response) => {
     return Promise.reject({
       response: {
         data: {
-          message: 'Algo ha salido mal, asegurate de tener la ultima version de la aplicación',
+          message: 'Algo ha salido mal, asegurate de tener buena conexión a internet y la ultima version de la aplicación',
         },
       },
     });
