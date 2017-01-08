@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, ListView, RefreshControl } from 'react-native';
-import { MKSpinner } from 'react-native-material-kit';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import ProBuildListRow from './ProBuildsListRow';
 import colors from '../../utils/colors';
+import LoadingIndicator from '../../components/LoadingIndicator';
 
 const styles = StyleSheet.create({
   root: {
@@ -42,7 +42,7 @@ class ProBuildsList extends Component {
   renderFooter() {
     if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.length > 0) {
       return (<View style={{ alignItems: 'center', paddingVertical: 8 }}>
-        <MKSpinner strokeColor={colors.spinnerColor} />
+        <LoadingIndicator />
       </View>);
     }
 

@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
 import colors from '../../../../utils/colors';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
@@ -46,7 +46,9 @@ class MasteriesView extends Component {
         <MasteryPage page={pages[this.state.pageSelected]} />
       </View>);
     } else if (isFetching) {
-      return <LoadingScreen />;
+      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+        <LoadingIndicator />
+      </View>);
     }
 
     return (<View style={styles.container}>

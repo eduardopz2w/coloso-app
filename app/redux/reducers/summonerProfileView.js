@@ -76,6 +76,7 @@ export default typeToReducer({
   [fetchLeagueEntry]: {
     PENDING: state => state.mergeIn(['leagueEntry'], {
       isFetching: true,
+      fetchError: false,
     }),
     FULFILLED: (state, action) => state.mergeIn(['leagueEntry'], {
       fetched: true,
@@ -93,6 +94,7 @@ export default typeToReducer({
   [fetchChampionsMastery]: {
     PENDING: state => state.mergeIn(['championsMastery'], {
       isFetching: true,
+      fetchError: false,
     }),
     FULFILLED: (state, action) => state.mergeIn(['championsMastery'], {
       fetched: true,
@@ -110,6 +112,7 @@ export default typeToReducer({
   [fetchGamesRecent]: {
     PENDING: state => state.mergeIn(['gamesRecent'], {
       isFetching: true,
+      fetchError: false,
     }),
     FULFILLED: (state, action) => state.mergeIn(['gamesRecent'], {
       fetched: true,
@@ -127,6 +130,7 @@ export default typeToReducer({
   [fetchMasteries]: {
     PENDING: state => state.mergeIn(['masteries'], {
       isFetching: true,
+      fetchError: false,
     }),
     FULFILLED: (state, action) => state.mergeIn(['masteries'], {
       fetched: true,
@@ -144,6 +148,7 @@ export default typeToReducer({
   [fetchRunes]: {
     PENDING: state => state.mergeIn(['runes'], {
       isFetching: true,
+      fetchError: false,
     }),
     FULFILLED: (state, action) => state.mergeIn(['runes'], {
       fetched: true,
@@ -161,6 +166,7 @@ export default typeToReducer({
   [fetchSummary]: {
     PENDING: (state, action) => state.mergeIn(['summary'], {
       isFetching: true,
+      fetchError: false,
       fetched: false,
       season: action.payload.season,
     }),

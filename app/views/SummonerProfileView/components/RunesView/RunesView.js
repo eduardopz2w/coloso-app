@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
 import ErrorScreen from '../../../../components/ErrorScreen';
@@ -55,7 +55,9 @@ class RunesView extends Component {
         </View>
       </View>);
     } else if (isFetching) {
-      return <LoadingScreen />;
+      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+        <LoadingIndicator />
+      </View>);
     }
 
     return (<View style={styles.container}>

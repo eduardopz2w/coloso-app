@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { StyleSheet, ListView, View } from 'react-native';
 import _ from 'lodash';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import SeasonSelector from '../../../../components/SeasonSelector';
 import Summary from './Summary';
@@ -61,7 +61,9 @@ class SummonerSumaryView extends Component {
         </View>
       );
     } else if (this.props.summary.isFetching) {
-      return <LoadingScreen />;
+      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+        <LoadingIndicator />
+      </View>);
     }
 
     return (<View style={styles.container}>

@@ -8,6 +8,7 @@ import RiotApi from '../../utils/RiotApi';
 import { saveAccount } from '../../redux/actions/OwnerAccountActions';
 import colors from '../../utils/colors';
 import RegionSelector from '../../components/RegionSelector';
+import LoadingIndicator from '../../components/LoadingIndicator';
 
 const styles = StyleSheet.create({
   root: {
@@ -123,7 +124,7 @@ class ManageAccountView extends Component {
 
         {this.state.isFetching &&
           <View style={{ alignItems: 'center' }}>
-            <MKSpinner strokeColor={colors.spinnerColor} />
+            <LoadingIndicator />
           </View>
         }
       </View>

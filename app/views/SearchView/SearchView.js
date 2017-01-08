@@ -1,12 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { MKTextField, MKButton, MKSpinner, MKRadioButton } from 'react-native-material-kit';
+import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
 import HistoryModal from './components//HistoryModal';
 import { tracker } from '../../utils/analytics';
-import colors from '../../utils/colors';
+import LoadingIndicator from '../../components/LoadingIndicator';
 import { loadEntries, addEntry, deleteEntry } from '../../redux/actions/SearchHistoryActions';
 import RegionSelector from '../../components/RegionSelector';
 import {
@@ -159,7 +159,7 @@ class SearchView extends Component {
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
-        <MKSpinner strokeColor={colors.spinnerColor} />
+        <LoadingIndicator />
       </View>);
     }
 
