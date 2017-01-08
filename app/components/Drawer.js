@@ -1,9 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import { loadAccount } from '../redux/actions/OwnerAccountActions';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   setSummonerName,
   setRegion,
@@ -28,7 +28,7 @@ class MainDrawer extends PureComponent {
       const { ownerAccount } = this.props;
       Actions.search_view();
       this.drawer.close();
-      this.props.searchGame(ownerAccount.summonerName, ownerAccount.region);
+      this.props.searchGame(ownerAccount.get('summonerName'), ownerAccount.get('region'));
     }
   }
 
