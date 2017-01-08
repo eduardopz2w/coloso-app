@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 10000;
-const VERSION_CODE = 16;
+const VERSION_CODE = 17;
 let BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
 
 if (__DEV__) {
