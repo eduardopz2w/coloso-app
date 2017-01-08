@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, Image, Text, Dimensions, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -216,7 +217,7 @@ class ProBuildView extends Component {
 
   getParsedItems() {
     const countedItems = [];
-    const items = this.props.build.itemsOrder;
+    const items = this.props.build.get('itemsOrder').toJS();
     let j;
 
     for (let i = 0; i < items.length + 1; i += 1) {
@@ -242,7 +243,7 @@ class ProBuildView extends Component {
     }
 
     for (let i = 6; i >= 0; i -= 1) {
-      const finalItemId = this.props.build.stats[`item${i}`];
+      const finalItemId = this.props.build.getIn(['stats', `item${i}`]);
 
       if (finalItemId > 0) {
         _.eachRight(countedItems, (countedItem) => {
@@ -276,8 +277,8 @@ class ProBuildView extends Component {
     const build = this.props.build;
 
     Actions.summoner_profile_view({
-      summonerId: build.profSummonerData.summonerId,
-      region: build.profSummonerData.region,
+      summonerId: build.getIn(['profSummonerData', 'summonerId']),
+      region: build.getIn(['profSummonerData', 'region']),
     });
   }
 
@@ -350,8 +351,8 @@ class ProBuildView extends Component {
 
       return (<View style={styles.root}>
         <PlayerToolbar
-          playerName={build.profPlayerData.name}
-          playerImageUrl={build.profPlayerData.imageUrl}
+          playerName={build.getIn(['profPlayerData', 'name'])}
+          playerImageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
         />
@@ -367,33 +368,33 @@ class ProBuildView extends Component {
           <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
             <Text style={styles.title}>Informacion</Text>
             <View style={styles.championDataRow}>
-              <Image source={{ uri: `champion_square_${build.championId}` }} style={styles.championImage} />
+              <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
               <View>
-                <Image source={{ uri: `summoner_spell_${build.spell1Id}` }} style={styles.summonerSpell} />
-                <Image source={{ uri: `summoner_spell_${build.spell2Id}` }} style={styles.summonerSpell} />
+                <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
+                <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
               </View>
               <View>
-                <Text style={styles.championName}>{build.championData.name}</Text>
-                <Text style={styles.championTitle}>{build.championData.title}</Text>
+                <Text style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
+                <Text style={styles.championTitle}>{build.getIn(['championData', 'title'])}</Text>
               </View>
             </View>
 
             <View style={styles.summaryRow}>
-              <Text style={build.stats.winner ? styles.winText : styles.lossText}>
-                {build.stats.winner ? 'Victoria' : 'Derrota'}
+              <Text style={build.getIn(['stats', 'winner']) ? styles.winText : styles.lossText}>
+                {build.getIn(['stats', 'winner']) ? 'Victoria' : 'Derrota'}
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
                 <Text style={styles.scoreText}>
-                  <Text style={styles.killsText}>{build.stats.kills}</Text>/
-                  <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
-                  <Text style={styles.assistsText}>{build.stats.assists}</Text>
+                  <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+                  <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+                  <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
                 </Text>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
                 <Text style={styles.goldText}>
-                  {numeral(build.stats.goldEarned).format('0,0')}
+                  {numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}
                 </Text>
               </View>
             </View>
@@ -408,8 +409,8 @@ class ProBuildView extends Component {
               {itemsAndSeparators}
             </View>
           </ScrollView>
-          <RuneTab tabLabel="Runas" runes={this.props.build.runes} />
-          <MasteryTab tabLabel="Maestrias" masteries={this.props.build.masteries} />
+          <RuneTab tabLabel="Runas" runes={build.get('runes')} />
+          <MasteryTab tabLabel="Maestrias" masteries={build.get('masteries')} />
         </ScrollableTabView>
 
         <Modal
@@ -463,30 +464,30 @@ class ProBuildView extends Component {
 }
 
 ProBuildView.propTypes = {
-  build: PropTypes.shape({
+  build: ImmutablePropTypes.mapContains({
     spell1Id: PropTypes.number,
     spell2Id: PropTypes.number,
     championId: PropTypes.number,
-    championData: PropTypes.shape({
+    championData: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       title: PropTypes.string,
     }),
     matchCreation: PropTypes.number,
     highestAchievedSeasonTier: PropTypes.string,
-    masteries: PropTypes.arrayOf(PropTypes.shape({
+    masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       masteryId: PropTypes.number,
       rank: PropTypes.number,
     })),
-    runes: PropTypes.arrayOf(PropTypes.shape({
+    runes: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       runeId: PropTypes.number,
       rank: PropTypes.number,
       name: PropTypes.string,
       description: PropTypes.string,
-      image: PropTypes.shape({
+      image: ImmutablePropTypes.mapContains({
         full: PropTypes.string,
       }),
     })),
-    stats: PropTypes.shape({
+    stats: ImmutablePropTypes.mapContains({
       winner: PropTypes.bool,
       champLevel: PropTypes.number,
       item0: PropTypes.number,
@@ -502,20 +503,20 @@ ProBuildView.propTypes = {
       goldEarned: PropTypes.number,
       largestMultiKill: PropTypes.number,
     }),
-    itemsOrder: PropTypes.arrayOf(PropTypes.shape({
+    itemsOrder: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       itemId: PropTypes.number,
       name: PropTypes.string,
       plaintext: PropTypes.string,
-      gold: PropTypes.shape({
+      gold: ImmutablePropTypes.mapContains({
         total: PropTypes.number,
       }),
     })),
-    skillsOrder: PropTypes.arrayOf(PropTypes.number),
-    profPlayerData: PropTypes.shape({
+    skillsOrder: ImmutablePropTypes.listOf(PropTypes.number),
+    profPlayerData: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       imageUrl: PropTypes.string,
     }),
-    profSummonerData: PropTypes.shape({
+    profSummonerData: ImmutablePropTypes.mapContains({
       summonerId: PropTypes.number,
       region: PropTypes.string,
     }),
@@ -527,7 +528,12 @@ ProBuildView.propTypes = {
 };
 
 function mapStateToProps(state) {
-  return state.proBuildView.toJS();
+  return {
+    build: state.proBuildView.get('build'),
+    isFetching: state.proBuildView.get('isFetching'),
+    fetched: state.proBuildView.get('fetched'),
+    errorMessage: state.proBuildView.get('errorMessage'),
+  };
 }
 
 function mapDispatchToProps(dispatch, props) {

@@ -1,6 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ListView, View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import { ListView, View, StyleSheet, RefreshControl } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
+import colors from '../../../../utils/colors';
 import GameRecent from './GameRecent';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
@@ -18,7 +20,7 @@ class GamesRecentView extends PureComponent {
     super(props);
 
     this.gamesRecentDataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
 
@@ -27,34 +29,40 @@ class GamesRecentView extends PureComponent {
   }
 
   render() {
-    const { isFetching, games, fetched } = this.props.gamesRecent;
+    const { gamesRecent } = this.props;
 
-    if (fetched) {
-      return (<ListView
-        dataSource={this.gamesRecentDataSource.cloneWithRows(games)}
-        renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
-      />);
-    } else if (isFetching) {
-      return (<LoadingScreen />);
+    if (gamesRecent.get('fetchError')) {
+      return (<View style={styles.container}>
+        <ErrorScreen
+          message={gamesRecent.get('errorMessage')}
+          onPressRetryButton={this.props.onPressRetryButton}
+          retryButton
+        />
+      </View>);
     }
 
-    return (<View style={styles.container}>
-      <ErrorScreen
-        message={this.props.gamesRecent.errorMessage}
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />
-    </View>);
+    return (<ListView
+      dataSource={this.gamesRecentDataSource.cloneWithRows(gamesRecent.get('games').toArray())}
+      renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
+      refreshControl={
+        <RefreshControl
+          refreshing={gamesRecent.get('isFetching')}
+          enabled={false}
+          colors={[colors.spinnerColor]}
+        />
+      }
+      enableEmptySections
+    />);
   }
 }
 
 GamesRecentView.propTypes = {
-  gamesRecent: PropTypes.shape({
+  gamesRecent: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
     errorMessage: PropTypes.string,
-    games: PropTypes.array,
+    games: ImmutablePropTypes.list,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Image, Text, Dimensions } from 'react-native';
-import _ from 'lodash';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../components/RankedMiniseries';
@@ -190,13 +190,13 @@ class Participant extends Component {
   }
 
   getRankedSoloEntry() {
-    return _.find(this.props.participant.leagueEntries, { queue: 'RANKED_SOLO_5x5' });
+    return this.props.participant.get('leagueEntries').find(entry => entry.get('queue') === 'RANKED_SOLO_5x5');
   }
 
   renderTierImage() {
     const leagueEntry = this.getRankedSoloEntry();
 
-    return <Image style={styles.tierImage} source={{ uri: leagueEntry.tier }} />;
+    return <Image style={styles.tierImage} source={{ uri: leagueEntry.get('tier') }} />;
   }
 
   renderTierText(tier) {
@@ -224,17 +224,16 @@ class Participant extends Component {
   }
 
   render() {
-    const { championId, spell1Id, spell2Id, summonerName, summonerId, teamId } = this.props.participant;
+    const { participant } = this.props;
     const rankedSoloEntry = this.getRankedSoloEntry();
-    const { division, wins, losses, leaguePoints, miniSeries } = rankedSoloEntry.entries[0];
 
-    return (<View style={[styles.root, teamId === 200 && styles.redTeam]}>
+    return (<View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam]}>
       <View>
         <View style={styles.flexRow}>
-          <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
+          <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
           <View style={styles.spellsCol}>
-            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${spell1Id}` }} />
-            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${spell2Id}` }} />
+            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell1Id')}` }} />
+            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell2Id')}` }} />
           </View>
         </View>
 
@@ -242,42 +241,42 @@ class Participant extends Component {
       </View>
       <View style={styles.dataCol}>
         <View style={styles.flexRow}>
-          <Text style={styles.summonerName}>{summonerName}</Text>
+          <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
           <MKButton
             style={[styles.profileButton]}
-            onPress={() => this.props.onPressProfileButton(summonerId)}
+            onPress={() => this.props.onPressProfileButton(participant.get('summonerId'))}
           >
             <Text style={styles.profileButtonText}>PERFIL</Text>
           </MKButton>
         </View>
         <View style={styles.flexRow}>
-          <Text style={styles.flexText}>Tier: {this.renderTierText(rankedSoloEntry.tier)}</Text>
-          {division &&
+          <Text style={styles.flexText}>Tier: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
+          {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
             <Text style={styles.flexText}>
-              Division: <Text style={styles.blackText}>{division}</Text>
+              Division: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
             </Text>
           }
         </View>
         <View style={styles.flexRow}>
           <Text style={styles.flexText}>
-            Victorias: <Text style={styles.victoriesNumberText}>{wins}</Text>
+            Victorias: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
           </Text>
           <Text style={styles.flexText}>
-            Derrotas: <Text style={styles.defeatsNumberText}>{losses}</Text>
+            Derrotas: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
           </Text>
         </View>
         <View style={styles.flexRow}>
-          {miniSeries ? (
+          {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
             <View style={styles.flexRow}>
               <Text style={styles.dataText}>Progreso: </Text>
               <RankedMiniseries
-                progress={miniSeries.progress}
+                progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
                 iconsSize={getMiniseriesIconsSize()}
               />
             </View>
           ) : (
             <Text style={styles.flexText}>
-              Puntos de Liga: <Text style={styles.blackText}>{leaguePoints || 0}</Text>
+              Puntos de Liga: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
             </Text>
           )}
         </View>
@@ -285,7 +284,7 @@ class Participant extends Component {
           <MKButton
             style={styles.roundedButton}
             rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressRunesButton(summonerId)}
+            onPress={() => this.props.onPressRunesButton(participant.get('summonerId'))}
           >
             <Text style={styles.roundedButtonText}>RUNAS</Text>
           </MKButton>
@@ -293,7 +292,7 @@ class Participant extends Component {
           <MKButton
             style={styles.roundedButton}
             rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressMasteriesButton(summonerId)}
+            onPress={() => this.props.onPressMasteriesButton(participant.get('summonerId'))}
           >
             <Text style={styles.roundedButtonText}>MAESTRIAS</Text>
           </MKButton>
@@ -304,14 +303,20 @@ class Participant extends Component {
 }
 
 Participant.propTypes = {
-  participant: PropTypes.shape({
+  participant: ImmutablePropTypes.mapContains({
     summonerId: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     summonerName: PropTypes.string.isRequired,
-    leagueEntries: PropTypes.arrayOf(PropTypes.shape({
+    leagueEntries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       queue: PropTypes.string.isRequired,
+      division: PropTypes.string,
+      wins: PropTypes.number,
+      losses: PropTypes.string,
+      miniSeries: ImmutablePropTypes.mapContains({
+        progress: PropTypes.string,
+      }),
     })),
     teamId: PropTypes.number,
   }).isRequired,

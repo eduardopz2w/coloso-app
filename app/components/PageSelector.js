@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -58,9 +58,9 @@ class PageSelector extends Component {
         selectedValue={this.state.selectedValue}
         onValueChange={this.handleOnValueChange}
       >
-        {pages.map((page, index) => <Picker.Item
+        {pages.toArray().map((page, index) => <Picker.Item
           key={index}
-          label={page.name}
+          label={page.get('name')}
           value={index}
         />)}
       </Picker>
@@ -69,7 +69,7 @@ class PageSelector extends Component {
 }
 
 PageSelector.propTypes = {
-  pages: PropTypes.arrayOf(PropTypes.shape({
+  pages: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     name: PropTypes.string.isRequired,
   })),
   onChangeSelected: PropTypes.func,

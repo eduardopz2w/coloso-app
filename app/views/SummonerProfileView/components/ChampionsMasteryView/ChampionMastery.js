@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Image, TouchableWithoutFeedback } from 'react-native';
 import { CircularProgress } from 'react-native-circular-progress';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 class ChampionsMastery extends Component {
   constructor(props) {
@@ -51,11 +52,11 @@ class ChampionsMastery extends Component {
   }
 
   handleOnPress() {
-    return this.props.onPress(this.props.mastery.championId);
+    return this.props.onPress(this.props.mastery.get('championId'));
   }
 
   renderMastery(styles) {
-    const { championLevel } = this.props.mastery;
+    const championLevel = this.props.mastery.get('championLevel');
     if (championLevel === 0) {
       return null;
     }
@@ -68,7 +69,9 @@ class ChampionsMastery extends Component {
   renderProgress() {
     let fill;
     let tintColor = '#2196F3'; // Default color
-    const { championPointsUntilNextLevel, championPoints } = this.props.mastery;
+    const championPoints = this.props.mastery.get('championPoints');
+    const championPointsUntilNextLevel = this.props.mastery.get('championPointsUntilNextLevel');
+
     const nextLevelPoints = championPoints + championPointsUntilNextLevel;
 
     if (championPointsUntilNextLevel === 0) {
@@ -92,7 +95,7 @@ class ChampionsMastery extends Component {
   }
 
   renderChestStatus(styles) {
-    const { chestGranted } = this.props.mastery;
+    const chestGranted = this.props.mastery.get('chestGranted');
     let chestUri = 'chest_available';
 
     if (chestGranted) {
@@ -103,14 +106,13 @@ class ChampionsMastery extends Component {
   }
 
   render() {
-    const { championId } = this.props.mastery;
     const styles = this.getStyles();
 
     return (<TouchableWithoutFeedback onPress={this.handleOnPress}>
       <View style={styles.root}>
         <View style={styles.imageAndProgressContainer}>
           {this.renderProgress()}
-          <Image style={styles.championImage} source={{ uri: `champion_square_${championId}` }} />
+          <Image style={styles.championImage} source={{ uri: `champion_square_${this.props.mastery.get('championId')}` }} />
           {this.renderMastery(styles)}
           {this.renderChestStatus(styles)}
         </View>
@@ -121,7 +123,7 @@ class ChampionsMastery extends Component {
 }
 
 ChampionsMastery.propTypes = {
-  mastery: PropTypes.shape({
+  mastery: ImmutablePropTypes.mapContains({
     championId: PropTypes.number.isRequired,
     championLevel: PropTypes.number,
     championPoints: PropTypes.number,

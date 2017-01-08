@@ -21,7 +21,7 @@ export default typeToReducer({
     FULFILLED: (state, action) => state.merge({
       fetched: true,
       isFetching: false,
-      build: action.payload,
+      build: Immutable.fromJS(action.payload),
     }),
 
     REJECTED: (state, action) => state.merge({

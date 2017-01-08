@@ -1,18 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, Dimensions, Text, View } from 'react-native';
+import { ListView, Dimensions, Text, View, RefreshControl } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import Modal from 'react-native-modalbox';
-import _ from 'lodash';
 import ChampionMastery from './ChampionMastery';
 import MasteryInfo from './MasteryInfo';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import colors from '../../../../utils/colors';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
 import Summary from './Summary';
 
 const styles = MediaQueryStyleSheet.create(
   {
-    roowScrollView: {
+    rootListView: {
       flex: 1,
     },
 
@@ -58,22 +59,23 @@ class ChampionsMasteryView extends Component {
     this.handleOnPressChampion = this.handleOnPressChampion.bind(this);
     this.getModalContent = this.getModalContent.bind(this);
     this.championsMasteryDataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1 !== r2,
+      rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
   }
 
   componentDidMount() {
     tracker.trackScreenView('ChampionsMasteryView');
   }
+
   getModalContent() {
     if (this.state.championSelected === 0) {
       return null;
     }
 
-    const masteries = this.props.championsMastery.masteries;
+    const masteries = this.props.championsMastery.get('masteries');
+    const masteryFound = masteries.find(mastery => mastery.get('championId') === this.state.championSelected);
 
-    const mastery = _.find(masteries, { championId: this.state.championSelected });
-    return <MasteryInfo mastery={mastery} />;
+    return <MasteryInfo mastery={masteryFound} />;
   }
 
   handleOnPressChampion(championId) {
@@ -84,7 +86,7 @@ class ChampionsMasteryView extends Component {
 
 
   render() {
-    const { isFetching, masteries, fetched } = this.props.championsMastery;
+    const championsMastery = this.props.championsMastery;
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -99,63 +101,67 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
-    if (fetched) {
-      if (masteries.length === 0) {
-        return (<View style={{ flex: 1 }}>
-          <Summary masteries={masteries} />
-          <View style={styles.container}>
-            <Text style={styles.messageText}>
-              Este invocador no tiene puntos de maestria con ningún campeón.
-            </Text>
-          </View>
-        </View>);
-      }
-
-      return (<View>
-        <Summary masteries={masteries} />
-        <ListView
-          style={styles.rootScrollView}
-          pageSize={pageSize}
-          contentContainerStyle={styles.listViewContainer}
-          dataSource={this.championsMasteryDataSource.cloneWithRows(masteries)}
-          renderRow={(mastery, sectionId, rowId) => <ChampionMastery
-            key={rowId}
-            onPress={this.handleOnPressChampion}
-            mastery={mastery}
-            championImageSize={championImageSize}
-            progressWidth={progressWidth}
-          />}
+    if (championsMastery.get('fetchError')) {
+      return (<View style={styles.container}>
+        <ErrorScreen
+          message={championsMastery.get('errorMessage')}
+          onPressRetryButton={this.props.onPressRetryButton}
+          retryButton
         />
-        <Modal
-          style={styles.modal}
-          position="center"
-          ref={(modal) => { this.modal = modal; }}
-          onOpened={() => this.setState({ modalIsOpen: true })}
-          onClosed={() => this.setState({ modalIsOpen: false })}
-        >
-          {this.getModalContent()}
-        </Modal>
       </View>);
-    } else if (isFetching) {
-      return <LoadingScreen />;
+    } else if (championsMastery.get('masteries').size === 0 && championsMastery.get('fetched')) {
+      return (<View style={{ flex: 1 }}>
+        <Summary masteries={championsMastery.get('masteries')} />
+        <View style={styles.container}>
+          <Text style={styles.messageText}>
+            Este invocador no tiene puntos de maestria con ningún campeón.
+          </Text>
+        </View>
+      </View>);
     }
 
-    return (<View style={styles.container}>
-      <ErrorScreen
-        message={this.props.championsMastery.errorMessage}
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
+    return (<View style={{ flex: 1 }}>
+      <Summary masteries={championsMastery.get('masteries')} />
+      <ListView
+        style={styles.rootListView}
+        pageSize={pageSize}
+        contentContainerStyle={styles.listViewContainer}
+        dataSource={this.championsMasteryDataSource.cloneWithRows(championsMastery.get('masteries').toArray())}
+        renderRow={(mastery, sectionId, rowId) => <ChampionMastery
+          key={rowId}
+          onPress={this.handleOnPressChampion}
+          mastery={mastery}
+          championImageSize={championImageSize}
+          progressWidth={progressWidth}
+        />}
+        refreshControl={
+          <RefreshControl
+            refreshing={championsMastery.get('isFetching')}
+            enabled={false}
+            colors={[colors.spinnerColor]}
+          />
+        }
+        enableEmptySections
       />
+      <Modal
+        style={styles.modal}
+        position="center"
+        ref={(modal) => { this.modal = modal; }}
+        onOpened={() => this.setState({ modalIsOpen: true })}
+        onClosed={() => this.setState({ modalIsOpen: false })}
+      >
+        {this.getModalContent()}
+      </Modal>
     </View>);
   }
 }
 
 ChampionsMasteryView.propTypes = {
-  championsMastery: PropTypes.shape({
+  championsMastery: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequied,
     fetched: PropTypes.bool.isRequied,
     fetchError: PropTypes.bool.isRequied,
-    masteries: PropTypes.arrayOf(PropTypes.shape({
+    masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       championId: PropTypes.number.isRequied,
     })),
     errorMessage: PropTypes.string,

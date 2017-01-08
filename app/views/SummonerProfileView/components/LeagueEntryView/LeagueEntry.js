@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
 import rankedQueueParser from '../../../../utils/rankedQueueParser';
 import colors from '../../../../utils/colors';
@@ -105,7 +106,7 @@ class LeagueEntry extends Component {
 
   getTierTextStyle() {
     // TODO add color
-    const { tier } = this.props.leagueEntry;
+    const tier = this.props.leagueEntry.get('tier');
 
     return {
       color: colors.tiers[tier.toLowerCase()],
@@ -118,45 +119,44 @@ class LeagueEntry extends Component {
   }
 
   renderTierImage() {
-    return <Image style={styles.tierImage} source={{ uri: this.props.leagueEntry.tier }} />;
+    return <Image style={styles.tierImage} source={{ uri: this.props.leagueEntry.get('tier') }} />;
   }
 
   render() {
-    const { reverse } = this.props;
-    const { name: leagueName, queue, tier } = this.props.leagueEntry;
+    const { leagueEntry } = this.props;
     let entries = {};
 
-    if (this.props.leagueEntry.entries) {
-      entries = this.props.leagueEntry.entries[0];
+    if (leagueEntry.get('entries').size > 0) {
+      entries = leagueEntry.get('entries').get(0);
     }
 
     return (<View style={styles.root}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}><Text style={styleUtils.boldText}>{rankedQueueParser(queue)}:</Text> {leagueName || 'Unranked'}</Text>
+        <Text style={styles.title}><Text style={styleUtils.boldText}>{rankedQueueParser(leagueEntry.get('queue'))}:</Text> {leagueEntry.get('leagueName') || 'Unranked'}</Text>
       </View>
 
-      <View style={[styles.entryContainer, reverse && { flexDirection: 'row-reverse' }]}>
+      <View style={[styles.entryContainer, this.props.reverse && { flexDirection: 'row-reverse' }]}>
         <View>
           {this.renderTierImage()}
         </View>
 
         <View style={styleUtils.flexOne}>
-          {entries.playerOrTeamName &&
+          {entries.get('playerOrTeamName') &&
             <Text style={[styleUtils.centerText, styles.nameText]}>
               <Text style={styleUtils.boldText}>Nombre: </Text>
-              {entries.playerOrTeamName}
+              {entries.get('playerOrTeamName')}
             </Text>
           }
 
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
               <Text style={styles.dataText}>Tier: </Text>
-              <Text style={[this.getTierTextStyle(), styles.dataText]}>{tier}</Text>
+              <Text style={[this.getTierTextStyle(), styles.dataText]}>{leagueEntry.get('tier')}</Text>
             </Text>
-            {entries.division &&
+            {entries.get('division') &&
               <Text style={[styleUtils.flexOne, styleUtils.centerText, styles.dataText]}>
                 <Text style={styleUtils.boldText}>Division: </Text>
-                {entries.division}
+                {entries.get('division')}
               </Text>
             }
           </View>
@@ -164,11 +164,11 @@ class LeagueEntry extends Component {
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
               <Text style={[styles.victoriesTitleText, styles.dataText]}>Victorias: </Text>
-              <Text style={styles.victoriesNumberText}>{entries.wins}</Text>
+              <Text style={styles.victoriesNumberText}>{entries.get('wins')}</Text>
             </Text>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
               <Text style={[styles.defeatsTitleText, styles.dataText]}>Derrotas: </Text>
-              <Text style={styles.defeatsNumberText}>{entries.losses}</Text>
+              <Text style={styles.defeatsNumberText}>{entries.get('losses')}</Text>
             </Text>
           </View>
 
@@ -176,12 +176,12 @@ class LeagueEntry extends Component {
             {entries.miniSeries ? (
               <View style={[styleUtils.flexRow, styles.miniSeriesContainer]}>
                 <Text style={[styleUtils.boldText, styles.dataText]}>Progreso: </Text>
-                <RankedMiniseries progress={entries.miniSeries.progress} style={{ flex: 1 }} />
+                <RankedMiniseries progress={entries.getIn(['miniSeries', 'progress'])} style={{ flex: 1 }} />
               </View>
             ) : (
               <Text style={styles.leaguePointsTitleText}>
                 <Text style={styles.dataText}>Puntos de Liga: </Text>
-                <Text style={styles.leaguePointsText}> {entries.leaguePoints || 0}</Text>
+                <Text style={styles.leaguePointsText}> {entries.get('leaguePoints') || 0}</Text>
               </Text>
             )}
           </View>
@@ -192,11 +192,12 @@ class LeagueEntry extends Component {
 }
 
 LeagueEntry.propTypes = {
-  leagueEntry: PropTypes.shape({
+  leagueEntry: ImmutablePropTypes.mapContains({
     tier: PropTypes.string,
     name: PropTypes.string,
     queue: PropTypes.string,
-    entries: PropTypes.array,
+    leagueName: PropTypes.string,
+    entries: ImmutablePropTypes.list,
   }),
   reverse: PropTypes.bool,
 };

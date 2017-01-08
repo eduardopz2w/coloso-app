@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import BannedChampions from './BannedChampions';
 import Participant from './Participant';
 
@@ -12,7 +13,7 @@ class Team extends PureComponent {
     const { bannedChampions, participants } = this.props;
 
     return (<View style={styles.root}>
-      {bannedChampions.length > 0 &&
+      {bannedChampions.size > 0 &&
         <BannedChampions champions={bannedChampions} />
       }
       {participants.map((participant, key) => <Participant
@@ -27,8 +28,8 @@ class Team extends PureComponent {
 }
 
 Team.propTypes = {
-  participants: PropTypes.arrayOf(PropTypes.shape({})),
-  bannedChampions: PropTypes.arrayOf(PropTypes.shape({})),
+  participants: ImmutablePropTypes.list,
+  bannedChampions: ImmutablePropTypes.list,
   onPressRunesButton: PropTypes.func.isRequired,
   onPressMasteriesButton: PropTypes.func.isRequired,
   onPressProfileButton: PropTypes.func.isRequired,

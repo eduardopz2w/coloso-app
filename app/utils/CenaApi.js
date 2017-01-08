@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 
 const TIMEOUT = 10000;
-const VERSION_CODE = 16;
+const VERSION_CODE = 17;
 let BASEURL = 'http://lolcena.ddns.net:1338/';
 
 if (__DEV__) {
@@ -23,7 +23,7 @@ cenaClient.interceptors.response.use((response) => {
     return Promise.reject({
       response: {
         data: {
-          message: 'Algo ha salido mal, asegurate de tener la ultima version de la aplicación',
+          message: 'Algo ha salido mal, asegurate de tener buena conexión a internet y la ultima version de la aplicación',
         },
       },
     });

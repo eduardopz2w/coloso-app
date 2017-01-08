@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 import moment from 'moment';
@@ -172,44 +173,44 @@ class ProBuild extends Component {
   render() {
     const { build } = this.props;
 
-    return (<View style={[styles.root, build.stats.winner ? styles.win : styles.loss]}>
+    return (<View style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}>
       <TouchableWithoutFeedback onPress={this.props.onPress}>
         <View>
           <View style={styles.playerData}>
-            <Image source={{ uri: build.profPlayerData.imageUrl }} style={styles.playerImage} />
-            <Text style={styles.playerName}>{this.props.build.profPlayerData.name}</Text>
-            <Text>{getTimeAgo(build.matchCreation)}</Text>
+            <Image source={{ uri: build.getIn(['profPlayerData', 'imageUrl']) }} style={styles.playerImage} />
+            <Text style={styles.playerName}>{build.getIn(['profPlayerData', 'name'])}</Text>
+            <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
           </View>
           <View style={styles.gameDataRow}>
-            <Image source={{ uri: `champion_square_${build.championId}` }} style={styles.championImage} />
+            <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
             <View>
-              <Image source={{ uri: `summoner_spell_${build.spell1Id}` }} style={styles.summonerSpell} />
-              <Image source={{ uri: `summoner_spell_${build.spell2Id}` }} style={styles.summonerSpell} />
+              <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
+              <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
             </View>
             <View style={styles.championNameAndScore} >
-              <Text numberOfLines={1} style={styles.championName}>{build.championData.name}</Text>
+              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
               <Text style={styles.scoreText}>
-                <Text style={styles.killsText}>{build.stats.kills}</Text>/
-                <Text style={styles.deathsText}>{build.stats.deaths}</Text>/
-                <Text style={styles.assistsText}>{build.stats.assists}</Text>
+                <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+                <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+                <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
               </Text>
             </View>
             <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
             <MediaQuery maxDeviceWidth={599}>
-              <Text style={styles.goldText}>{numeral(build.stats.goldEarned).format('0a')}</Text>
+              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
             </MediaQuery>
             <MediaQuery minDeviceWidth={600}>
-              <Text style={styles.goldText}>{numeral(build.stats.goldEarned).format('0,0')}</Text>
+              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
             </MediaQuery>
             <View style={styles.itemsContainer} >
-              {renderItem(build.stats.item0)}
-              {renderItem(build.stats.item1)}
-              {renderItem(build.stats.item2)}
-              {renderItem(build.stats.item3)}
-              {renderItem(build.stats.item4)}
-              {renderItem(build.stats.item5)}
+              {renderItem(build.getIn(['stats', 'item0']))}
+              {renderItem(build.getIn(['stats', 'item1']))}
+              {renderItem(build.getIn(['stats', 'item2']))}
+              {renderItem(build.getIn(['stats', 'item3']))}
+              {renderItem(build.getIn(['stats', 'item4']))}
+              {renderItem(build.getIn(['stats', 'item5']))}
             </View>
-            {renderItem(build.stats.item6)}
+            {renderItem(build.getIn(['stats', 'item6']))}
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -218,30 +219,16 @@ class ProBuild extends Component {
 }
 
 ProBuild.propTypes = {
-  build: PropTypes.shape({
+  build: ImmutablePropTypes.mapContains({
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
-    championData: PropTypes.shape({
+    championData: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       title: PropTypes.string,
     }),
     matchCreation: PropTypes.number.isRequired,
-    highestAchievedSeasonTier: PropTypes.string,
-    masteries: PropTypes.arrayOf(PropTypes.shape({
-      masteryId: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
-    })),
-    runes: PropTypes.arrayOf(PropTypes.shape({
-      runeId: PropTypes.number.isRequired,
-      rank: PropTypes.number.isRequired,
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      image: PropTypes.shape({
-        full: PropTypes.string.isRequired,
-      }),
-    })),
-    stats: PropTypes.shape({
+    stats: ImmutablePropTypes.mapContains({
       winner: PropTypes.bool,
       champLevel: PropTypes.number,
       item0: PropTypes.number.isRequired,
@@ -257,11 +244,7 @@ ProBuild.propTypes = {
       goldEarned: PropTypes.number.isRequired,
       largestMultiKill: PropTypes.number.isRequired,
     }),
-    itemsOrder: PropTypes.arrayOf(PropTypes.shape({
-      itemId: PropTypes.number.isRequired,
-    })),
-    skillsOrder: PropTypes.arrayOf(PropTypes.number),
-    profPlayerData: PropTypes.shape({
+    profPlayerData: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
       imageUrl: PropTypes.string,
     }),

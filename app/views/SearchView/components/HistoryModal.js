@@ -1,4 +1,6 @@
 import React, { Component, PropTypes } from 'react';
+import Immutable from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { StyleSheet, Text, Dimensions } from 'react-native';
 import Modal from 'react-native-modalbox';
 import History from './History';
@@ -79,16 +81,14 @@ class HistoryModal extends Component {
 }
 
 HistoryModal.defaultProps = {
-  historyEntries: [],
+  historyEntries: Immutable.List([]),
 };
 
 HistoryModal.propTypes = {
   style: PropTypes.shape({}),
-  historyEntries: PropTypes.arrayOf(PropTypes.shape({
-    summonerName: PropTypes.string.isRequired,
-    region: PropTypes.string.isRequired,
-  })),
+  historyEntries: ImmutablePropTypes.list,
   onPressHistoryEntry: PropTypes.func.isRequired,
+  onPressDeleteEntry: PropTypes.func.isRequired,
 };
 
 export default HistoryModal;

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
 import ErrorScreen from '../../../../components/ErrorScreen';
@@ -31,7 +32,7 @@ class RunesView extends Component {
     super(props);
 
     this.state = {
-      pageSelected: 0,
+      pageSelected: 1,
     };
   }
 
@@ -40,27 +41,29 @@ class RunesView extends Component {
   }
 
   render() {
-    const { isFetching, fetched, pages } = this.props.runes;
+    const { runes } = this.props;
 
-    if (fetched) {
+    if (runes.get('fetched')) {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={pages}
+            pages={runes.get('pages')}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
         <View style={styles.runesContainer}>
-          <RunePage page={pages[this.state.pageSelected]} />
+          <RunePage page={runes.getIn(['pages', this.state.pageSelected])} />
         </View>
       </View>);
-    } else if (isFetching) {
-      return <LoadingScreen />;
+    } else if (runes.get('isFetching')) {
+      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+        <LoadingIndicator />
+      </View>);
     }
 
     return (<View style={styles.container}>
       <ErrorScreen
-        message={this.props.runes.errorMessage}
+        message={runes.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
         retryButton
       />
@@ -69,11 +72,11 @@ class RunesView extends Component {
 }
 
 RunesView.propTypes = {
-  runes: PropTypes.shape({
+  runes: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
-    pages: PropTypes.array,
+    pages: ImmutablePropTypes.list,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

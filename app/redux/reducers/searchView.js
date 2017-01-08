@@ -1,6 +1,5 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { handleActions } from 'redux-actions';
 import {
   setSummonerName,
   setRegion,

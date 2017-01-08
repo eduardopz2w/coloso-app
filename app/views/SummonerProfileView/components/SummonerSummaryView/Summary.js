@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import numeral from 'numeral';
 import _ from 'lodash';
 import CollapsibleBar from 'react-native-bar-collapsible';
@@ -69,9 +70,9 @@ class Summary extends PureComponent {
   }
 
   render() {
-    const { summary } = this.props;
-    const { aggregatedStats } = summary;
-    const title = constantsParser.playerStatSummaryType(summary.playerStatSummaryType);
+    const summary = this.props.summary;
+    const aggregatedStats = summary.get('aggregatedStats');
+    const title = constantsParser.playerStatSummaryType(summary.get('playerStatSummaryType'));
 
     return (<CollapsibleBar
       style={styles.collapsible}
@@ -83,65 +84,65 @@ class Summary extends PureComponent {
       activeSection
     >
       <View style={styles.dataContainer}>
-        {this.renderDataBox('Victorias', summary.wins)}
-        {this.renderDataBox('Derrotas', summary.losses)}
-        {this.renderDataBox('Partidas', aggregatedStats.botGamesPlayed)}
-        {this.renderDataBox('Prom. Asistidos', aggregatedStats.averageAssists)}
-        {this.renderDataBox('Prom. Asesinatos', aggregatedStats.averageChampionsKilled)}
-        {this.renderDataBox('Prom. Pts Combate', aggregatedStats.averageCombatPlayerScore)}
-        {this.renderDataBox('Prom. Nodos Capturados', aggregatedStats.averageNodeCapture)}
-        {this.renderDataBox('Prom. Nodos Neutralizados', aggregatedStats.averageNodeNeutralize)}
-        {this.renderDataBox('Prom. Puntos', aggregatedStats.averageTotalPlayerScore)}
-        {this.renderDataBox('Racha de Asesinatos', aggregatedStats.killingSpree)}
-        {this.renderDataBox('Max. Asistidos', aggregatedStats.maxAssists)}
-        {this.renderDataBox('Max. Asesinatos', aggregatedStats.maxChampionsKilled)}
-        {this.renderDataBox('Puntos de Combate', aggregatedStats.maxCombatPlayerScore)}
-        {this.renderDataBox('Max. Golpe Critico', aggregatedStats.maxLargestCriticalStrike)}
-        {this.renderDataBox('Max. Racha Asesnatos', aggregatedStats.maxLargestKillingSpree)}
-        {this.renderDataBox('Max. Nodos Capturados', aggregatedStats.maxNodeCapture)}
-        {this.renderDataBox('Max. Nodos Neutralizados', aggregatedStats.maxNodeNeutralize)}
-        {this.renderDataBox('Max. Muertes', aggregatedStats.maxNumDeaths)}
-        {this.renderDataBox('Max. Tiempo Jugado', aggregatedStats.maxTimePlayed)}
-        {this.renderDataBox('Max. Tiempo Muerto', aggregatedStats.maxTimeSpentLiving)}
-        {this.renderDataBox('Max. Puntos', aggregatedStats.maxTotalPlayerScore)}
-        {this.renderDataBox('Max. Campeones Asesinados', aggregatedStats.mostChampionKillsPerSession)}
-        {this.renderDataBox('Max. Hechizos Lanzados', aggregatedStats.mostSpellsCast)}
-        {this.renderDataBox('Partidas', aggregatedStats.normalGamesPlayed)}
-        {this.renderDataBox('Partidas (Premade)', aggregatedStats.rankedPremadeGamesPlayed)}
-        {this.renderDataBox('Partidas (Solo)', aggregatedStats.rankedSoloGamesPlayed)}
-        {this.renderDataBox('Asistencias', aggregatedStats.totalAssists)}
-        {this.renderDataBox('Asesinatos', aggregatedStats.totalChampionKills)}
-        {this.renderDataBox('Daño Hecho', aggregatedStats.totalDamageDealt)}
-        {this.renderDataBox('Daño Recibido', aggregatedStats.totalDamageTaken)}
-        {this.renderDataBox('Muertes por Partida', aggregatedStats.totalDeathsPerSession)}
-        {this.renderDataBox('Double Kills', aggregatedStats.totalDoubleKills)}
-        {this.renderDataBox('Primeras Sangre', aggregatedStats.totalFirstBlood)}
-        {this.renderDataBox('Oro Ganado', aggregatedStats.totalGoldEarned)}
-        {this.renderDataBox('Vida Restaurada', aggregatedStats.totalHeal)}
-        {this.renderDataBox('Daño Magico Recibido', aggregatedStats.totalMagicDamageDealt)}
-        {this.renderDataBox('Minions', aggregatedStats.totalMinionKills)}
-        {this.renderDataBox('Monstruos Neutrales', aggregatedStats.totalNeutralMinionsKilled)}
-        {this.renderDataBox('Nodos Capturados', aggregatedStats.totalNodeCapture)}
-        {this.renderDataBox('Nodos Neutralizados', aggregatedStats.totalNodeNeutralize)}
-        {this.renderDataBox('Penta Kills', aggregatedStats.totalPentaKills)}
-        {this.renderDataBox('Daño Fisico', aggregatedStats.totalPhysicalDamageDealt)}
-        {this.renderDataBox('Quadra Kills', aggregatedStats.totalQuadraKills)}
-        {this.renderDataBox('Perdidas', aggregatedStats.totalSessionsLost)}
-        {this.renderDataBox('Jugadas', aggregatedStats.totalSessionsPlayed)}
-        {this.renderDataBox('Ganadas', aggregatedStats.totalSessionsWon)}
-        {this.renderDataBox('Triple Kills', aggregatedStats.totalTripleKills)}
-        {this.renderDataBox('Torretas', aggregatedStats.totalTurretsKilled)}
-        {this.renderDataBox('Unreal Kills', aggregatedStats.totalUnrealKills)}
+        {this.renderDataBox('Victorias', summary.get('wins'))}
+        {this.renderDataBox('Derrotas', summary.get('losses'))}
+        {this.renderDataBox('Partidas', aggregatedStats.get('botGamesPlayed'))}
+        {this.renderDataBox('Prom. Asistidos', aggregatedStats.get('averageAssists'))}
+        {this.renderDataBox('Prom. Asesinatos', aggregatedStats.get('averageChampionsKilled'))}
+        {this.renderDataBox('Prom. Pts Combate', aggregatedStats.get('averageCombatPlayerScore'))}
+        {this.renderDataBox('Prom. Nodos Capturados', aggregatedStats.get('averageNodeCapture'))}
+        {this.renderDataBox('Prom. Nodos Neutralizados', aggregatedStats.get('averageNodeNeutralize'))}
+        {this.renderDataBox('Prom. Puntos', aggregatedStats.get('averageTotalPlayerScore'))}
+        {this.renderDataBox('Racha de Asesinatos', aggregatedStats.get('killingSpree'))}
+        {this.renderDataBox('Max. Asistidos', aggregatedStats.get('maxAssists'))}
+        {this.renderDataBox('Max. Asesinatos', aggregatedStats.get('maxChampionsKilled'))}
+        {this.renderDataBox('Puntos de Combate', aggregatedStats.get('maxCombatPlayerScore'))}
+        {this.renderDataBox('Max. Golpe Critico', aggregatedStats.get('maxLargestCriticalStrike'))}
+        {this.renderDataBox('Max. Racha Asesnatos', aggregatedStats.get('maxLargestKillingSpree'))}
+        {this.renderDataBox('Max. Nodos Capturados', aggregatedStats.get('maxNodeCapture'))}
+        {this.renderDataBox('Max. Nodos Neutralizados', aggregatedStats.get('maxNodeNeutralize'))}
+        {this.renderDataBox('Max. Muertes', aggregatedStats.get('maxNumDeaths'))}
+        {this.renderDataBox('Max. Tiempo Jugado', aggregatedStats.get('maxTimePlayed'))}
+        {this.renderDataBox('Max. Tiempo Muerto', aggregatedStats.get('maxTimeSpentLiving'))}
+        {this.renderDataBox('Max. Puntos', aggregatedStats.get('maxTotalPlayerScore'))}
+        {this.renderDataBox('Max. Campeones Asesinados', aggregatedStats.get('mostChampionKillsPerSession'))}
+        {this.renderDataBox('Max. Hechizos Lanzados', aggregatedStats.get('mostSpellsCast'))}
+        {this.renderDataBox('Partidas', aggregatedStats.get('normalGamesPlayed'))}
+        {this.renderDataBox('Partidas (Premade)', aggregatedStats.get('rankedPremadeGamesPlayed'))}
+        {this.renderDataBox('Partidas (Solo)', aggregatedStats.get('rankedSoloGamesPlayed'))}
+        {this.renderDataBox('Asistencias', aggregatedStats.get('totalAssists'))}
+        {this.renderDataBox('Asesinatos', aggregatedStats.get('totalChampionKills'))}
+        {this.renderDataBox('Daño Hecho', aggregatedStats.get('totalDamageDealt'))}
+        {this.renderDataBox('Daño Recibido', aggregatedStats.get('totalDamageTaken'))}
+        {this.renderDataBox('Muertes por Partida', aggregatedStats.get('totalDeathsPerSession'))}
+        {this.renderDataBox('Double Kills', aggregatedStats.get('totalDoubleKills'))}
+        {this.renderDataBox('Primeras Sangre', aggregatedStats.get('totalFirstBlood'))}
+        {this.renderDataBox('Oro Ganado', aggregatedStats.get('totalGoldEarned'))}
+        {this.renderDataBox('Vida Restaurada', aggregatedStats.get('totalHeal'))}
+        {this.renderDataBox('Daño Magico Recibido', aggregatedStats.get('totalMagicDamageDealt'))}
+        {this.renderDataBox('Minions', aggregatedStats.get('totalMinionKills'))}
+        {this.renderDataBox('Monstruos Neutrales', aggregatedStats.get('totalNeutralMinionsKilled'))}
+        {this.renderDataBox('Nodos Capturados', aggregatedStats.get('totalNodeCapture'))}
+        {this.renderDataBox('Nodos Neutralizados', aggregatedStats.get('totalNodeNeutralize'))}
+        {this.renderDataBox('Penta Kills', aggregatedStats.get('totalPentaKills'))}
+        {this.renderDataBox('Daño Fisico', aggregatedStats.get('totalPhysicalDamageDealt'))}
+        {this.renderDataBox('Quadra Kills', aggregatedStats.get('totalQuadraKills'))}
+        {this.renderDataBox('Perdidas', aggregatedStats.get('totalSessionsLost'))}
+        {this.renderDataBox('Jugadas', aggregatedStats.get('totalSessionsPlayed'))}
+        {this.renderDataBox('Ganadas', aggregatedStats.get('totalSessionsWon'))}
+        {this.renderDataBox('Triple Kills', aggregatedStats.get('totalTripleKills'))}
+        {this.renderDataBox('Torretas', aggregatedStats.get('totalTurretsKilled'))}
+        {this.renderDataBox('Unreal Kills', aggregatedStats.get('totalUnrealKills'))}
       </View>
     </CollapsibleBar>);
   }
 }
 
 Summary.propTypes = {
-  summary: PropTypes.shape({
+  summary: ImmutablePropTypes.mapContains({
     losses: PropTypes.number,
     playerStatSummaryType: PropTypes.string,
-    aggregatedStats: PropTypes.shape({
+    aggregatedStats: ImmutablePropTypes.mapContains({
       averageAssists: PropTypes.number,
       averageChampionsKilled: PropTypes.number,
       averageCombatPlayerScore: PropTypes.number,

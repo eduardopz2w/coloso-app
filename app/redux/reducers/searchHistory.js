@@ -8,18 +8,12 @@ const initialState = Immutable.fromJS({
 
 export default typeToReducer({
   [addEntry]: {
-    FULFILLED: (state, action) => state.merge({
-      entries: action.payload.entries,
-    }),
+    FULFILLED: (state, action) => state.set('entries', Immutable.fromJS(action.payload.entries)),
   },
   [deleteEntry]: {
-    FULFILLED: (state, action) => state.merge({
-      entries: action.payload.entries,
-    }),
+    FULFILLED: (state, action) => state.set('entries', Immutable.fromJS(action.payload.entries)),
   },
   [loadEntries]: {
-    FULFILLED: (state, action) => state.merge({
-      entries: action.payload,
-    }),
+    FULFILLED: (state, action) => state.set('entries', Immutable.fromJS(action.payload)),
   },
 }, initialState);

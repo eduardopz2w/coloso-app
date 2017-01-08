@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
 import LoadingScreen from '../../../components/LoadingScreen';
@@ -97,13 +98,12 @@ const styles = MediaQueryStyleSheet.create(
   {
     '@media (min-device-width: 600)': {
       profileToolbar: {
-        marginTop: 0,
-        minHeight: 130,
+        minHeight: 100,
       },
 
       profileToolbarContainer: {
-        marginLeft: 70,
-        marginRight: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
       },
 
       summonerImageContainer: {
@@ -121,17 +121,20 @@ const styles = MediaQueryStyleSheet.create(
         height: 30,
       },
 
+      summonerLevelText: {
+        fontSize: 16,
+      },
+
       summonerDataContainer: {
-        flex: 1,
         marginLeft: 40,
         justifyContent: 'center',
       },
       summonerNameText: {
-        fontSize: 30,
+        fontSize: 26,
         textAlign: 'left',
       },
       regionText: {
-        fontSize: 21,
+        fontSize: 18,
         textAlign: 'left',
       },
     },
@@ -159,7 +162,7 @@ class SummonerProfileViewToolbar extends Component {
   }
 
   render() {
-    const { isFetching, profileIconId, name, summonerLevel, region } = this.props.summonerData;
+    const { summonerData } = this.props;
 
     return (<View style={styles.root}>
       <View style={styles.toolbar}>
@@ -167,23 +170,23 @@ class SummonerProfileViewToolbar extends Component {
       </View>
 
       <View style={styles.profileToolbar}>
-        {isFetching ? (
+        {summonerData.get('isFetching') ? (
           <LoadingScreen />
         ) : (
           <View style={styles.profileToolbarContainer}>
             <View style={styles.summonerImageContainer}>
               <Image
                 style={styles.summonerImage}
-                source={{ uri: getImageUri(profileIconId) }}
+                source={{ uri: getImageUri(summonerData.get('profileIconId')) }}
               />
               <View style={styles.summonerLevelContainer}>
-                <Text style={styles.summonerLevelText}>{summonerLevel}</Text>
+                <Text style={styles.summonerLevelText}>{summonerData.get('summonerLevel')}</Text>
               </View>
             </View>
 
             <View style={styles.summonerDataContainer}>
-              <Text style={styles.summonerNameText}>{name}</Text>
-              <Text style={styles.regionText}>{regionHumanize(region)}</Text>
+              <Text style={styles.summonerNameText}>{summonerData.get('name')}</Text>
+              <Text style={styles.regionText}>{regionHumanize(summonerData.get('region'))}</Text>
             </View>
           </View>
         )}
@@ -194,7 +197,7 @@ class SummonerProfileViewToolbar extends Component {
 }
 
 SummonerProfileViewToolbar.propTypes = {
-  summonerData: PropTypes.shape({
+  summonerData: ImmutablePropTypes.mapContains({
     profileIconId: PropTypes.number,
     name: PropTypes.string,
     summonerLevel: PropTypes.number,

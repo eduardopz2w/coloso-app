@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import LoadingScreen from '../../../../components/LoadingScreen';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
 import colors from '../../../../utils/colors';
 import ErrorScreen from '../../../../components/ErrorScreen';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
@@ -33,25 +34,27 @@ class MasteriesView extends Component {
   }
 
   render() {
-    const { isFetching, fetched, pages } = this.props.masteries;
+    const { masteries } = this.props;
 
-    if (fetched) {
+    if (masteries.get('fetched')) {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={pages}
+            pages={masteries.get('pages')}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
-        <MasteryPage page={pages[this.state.pageSelected]} />
+        <MasteryPage page={masteries.getIn(['pages', this.state.pageSelected])} />
       </View>);
-    } else if (isFetching) {
-      return <LoadingScreen />;
+    } else if (masteries.get('isFetching')) {
+      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+        <LoadingIndicator />
+      </View>);
     }
 
     return (<View style={styles.container}>
       <ErrorScreen
-        message={this.props.masteries.errorMessage}
+        message={masteries.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
         retryButton
       />
@@ -60,11 +63,11 @@ class MasteriesView extends Component {
 }
 
 MasteriesView.propTypes = {
-  masteries: PropTypes.shape({
+  masteries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
-    pages: PropTypes.array,
+    pages: ImmutablePropTypes.list,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import _ from 'lodash';
 
 const styles = StyleSheet.create({
@@ -106,21 +108,26 @@ class MasteryPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.page !== this.props.page) {
+    if (!Immutable.is(nextProps.page, this.props.page)) {
       this.mainScroll.scrollTo({ x: 0, y: 0, animated: false });
     }
   }
 
   renderMasteryImage(masteryId) {
-    let indexFound = _.findIndex(this.props.page.masteries, { id: masteryId });
+    const masteries = this.props.page.get('masteries');
 
-    // Si el array usa "masteryId" en lugar de solo "id" DONT DELETE
-    if (indexFound === -1) {
-      indexFound = _.findIndex(this.props.page.masteries, { masteryId });
-    }
+    const indexFound = masteries.findIndex((mastery) => {
+      if (mastery.get('id') === masteryId) {
+        return true;
+      } else if (mastery.get('masteryId') === masteryId) {
+        return true;
+      }
+
+      return false;
+    });
 
     if (indexFound >= 0) {
-      const rank = this.props.page.masteries[indexFound].rank;
+      const rank = masteries.getIn([indexFound, 'rank']);
 
       return (<View style={styles.masteryImageContainer}>
         <Image style={[styles.masteryImage, styles.masteryActive]} source={{ uri: `mastery_${masteryId}` }} />
@@ -157,9 +164,9 @@ class MasteryPage extends Component {
 }
 
 MasteryPage.propTypes = {
-  page: PropTypes.shape({
+  page: ImmutablePropTypes.mapContains({
     name: PropTypes.string,
-    masteries: PropTypes.arrayOf(PropTypes.shape({
+    masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       id: PropTypes.number,
       masteryId: PropTypes.number,
       rank: PropTypes.number.isRequired,

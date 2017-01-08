@@ -9,3 +9,5 @@ export const fetchBuilds = createAction('PROBUILDS_SEARCH_VIEW/FETCH_BUILDS', (c
     pageSize,
   },
 }));
+
+export const refreshBuilds = createAction('PROBUILDS_SEARCH_VIEW/REFRESH_BUILDS', (championId, pageSize) => CenaApi.getBuilds(championId, 1, pageSize));

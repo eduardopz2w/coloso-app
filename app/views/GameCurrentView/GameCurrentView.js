@@ -4,14 +4,14 @@ import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-vi
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
-import _ from 'lodash';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 import colors from '../../utils/colors';
 import Team from './Team';
 import { fetchBuilds } from '../../redux/actions/GameCurrentViewActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
 import ProBuildsList from '../../components/ProBuildsList';
-import LoadingScreen from '../../components/LoadingScreen';
 import ErrorScreen from '../../components/ErrorScreen';
 import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
@@ -82,10 +82,10 @@ class GameCurrentView extends Component {
   componentWillUnmount() {
     this.backAndroidListener.remove();
   }
+
   getTeamData(teamId) {
-    const { gameData } = this.props;
-    const participants = _.filter(gameData.participants, { teamId });
-    const bannedChampions = _.filter(gameData.bannedChampions, { teamId });
+    const participants = this.props.gameData.get('participants').filter(participant => participant.get('teamId') === teamId);
+    const bannedChampions = this.props.gameData.get('bannedChampions').filter(bannedChamp => bannedChamp.get('teamId') === teamId);
 
     return {
       participants,
@@ -94,11 +94,11 @@ class GameCurrentView extends Component {
   }
 
   getSummonerRunes(summonerId) {
-    return _.find(this.props.gameData.participants, { summonerId }).runes;
+    return this.props.gameData.get('participants').find(participant => participant.get('summonerId') === summonerId).get('runes');
   }
 
   getSummonerMasteries(summonerId) {
-    return _.find(this.props.gameData.participants, { summonerId }).masteries;
+    return this.props.gameData.get('participants').find(participant => participant.get('summonerId') === summonerId).get('masteries');
   }
 
   handleOnPressRunesButton(summonerId) {
@@ -112,7 +112,7 @@ class GameCurrentView extends Component {
   }
 
   handleOnPressProfileButton(summonerId) {
-    Actions.summoner_profile_view({ summonerId, region: this.props.gameData.region });
+    Actions.summoner_profile_view({ summonerId, region: this.props.gameData.get('region') });
   }
 
   handleOnBackAndroid() {
@@ -125,14 +125,14 @@ class GameCurrentView extends Component {
   }
 
   handleOnChangeTab({ i: tabIndex }) {
-    if (tabIndex === 1 && !this.props.builds.fetched) {
+    if (tabIndex === 1 && !this.props.builds.get('fetched')) {
       this.fetchBuilds(1);
     }
   }
 
   handleOnLoadMoreBuilds() {
-    const pagData = this.props.builds.pagination;
-    if (!this.props.builds.isFetching && pagData.pageCount > pagData.page) {
+    const pagData = this.props.builds.get('pagination');
+    if (!this.props.builds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
       this.fetchBuilds(
         pagData.page + 1,
         PAGESIZE,
@@ -141,12 +141,13 @@ class GameCurrentView extends Component {
   }
 
   fetchBuilds(page) {
-    if (this.props.gameData && this.props.gameData.focusSummonerId) {
-      const focusSummonerId = this.props.gameData.focusSummonerId;
-      const participant = _.find(this.props.gameData.participants, { summonerId: focusSummonerId });
+    const focusSummonerId = this.props.gameData.get('focusSummonerId');
 
-      if (participant) {
-        const championId = participant.championId;
+    if (focusSummonerId > 0) {
+      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerId') === focusSummonerId);
+
+      if (participantFound) {
+        const championId = participantFound.get('championId');
 
         this.props.fetchBuilds(championId, page);
       }
@@ -154,34 +155,30 @@ class GameCurrentView extends Component {
   }
 
   render() {
-    const { builds } = this.props;
+    const { builds, gameData } = this.props;
     let modalContent;
     let proBuildsContent;
 
-    if (builds.fetched) {
-      if (builds.builds.length > 0) {
-        proBuildsContent = (<ProBuildsList
-          builds={builds.builds}
-          onPressBuild={buildId => Actions.probuild_view({ buildId })}
-          isFetching={builds.isFetching}
-          onLoadMore={this.handleOnLoadMoreBuilds}
-        />);
-      } else {
-        proBuildsContent = (<View style={styles.container}>
-          <Text>
-            Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
-          </Text>
-        </View>);
-      }
-    } else if (builds.isFetching) {
-      proBuildsContent = <LoadingScreen />;
-    } else {
+    if (builds.fetchError) {
       proBuildsContent = (<View style={styles.container}>
         <ErrorScreen
-          message={builds.errorMessage}
+          message={builds.get('errorMessage')}
           onPressRetryButton={() => { this.fetchBuilds(); }}
           retryButton
         />
+      </View>);
+    } else if (builds.get('builds').size > 0 || builds.get('isFetching')) {
+      proBuildsContent = (<ProBuildsList
+        builds={builds.get('builds')}
+        onPressBuild={buildId => Actions.probuild_view({ buildId })}
+        isFetching={builds.get('isFetching')}
+        onLoadMore={this.handleOnLoadMoreBuilds}
+      />);
+    } else {
+      proBuildsContent = (<View style={styles.container}>
+        <Text>
+          Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+        </Text>
       </View>);
     }
 
@@ -189,23 +186,25 @@ class GameCurrentView extends Component {
       modalContent = (<View>
         <Text style={styles.modalTitle}>Runas</Text>
         <RunePage
-          page={{ runes: this.getSummonerRunes(this.state.summonerSelectedId) }}
+          page={Immutable.Map({ runes: this.getSummonerRunes(this.state.summonerSelectedId) })}
         />
       </View>);
     } else if (this.state.modalType === 'MASTERIES') {
       modalContent = (<View>
         <Text style={styles.modalTitle}>Maestrias</Text>
         <MasteryPage
-          page={{ masteries: this.getSummonerMasteries(this.state.summonerSelectedId) }}
+          page={Immutable.Map({
+            masteries: this.getSummonerMasteries(this.state.summonerSelectedId),
+          })}
         />
       </View>);
     }
 
     return (<View style={styles.root}>
       <Toolbar
-        mapId={this.props.gameData.mapId}
-        gameQueueConfigId={this.props.gameData.gameQueueConfigId}
-        gameLength={this.props.gameData.gameLength}
+        mapId={gameData.get('mapId')}
+        gameQueueConfigId={gameData.get('gameQueueConfigId')}
+        gameLength={gameData.get('gameLength')}
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
@@ -251,8 +250,8 @@ class GameCurrentView extends Component {
 }
 
 GameCurrentView.propTypes = {
-  gameData: PropTypes.shape({
-    participants: PropTypes.array,
+  gameData: ImmutablePropTypes.mapContains({
+    participants: ImmutablePropTypes.list,
     mapId: PropTypes.number,
     gameQueueConfigId: PropTypes.number,
     gameLength: PropTypes.number,
@@ -260,13 +259,13 @@ GameCurrentView.propTypes = {
     gameStartTime: PropTypes.number,
     focusSummonerId: PropTypes.number,
   }),
-  builds: PropTypes.shape({
+  builds: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
-    builds: PropTypes.arrayOf(PropTypes.shape({})),
-    pagination: PropTypes.shape({
+    builds: ImmutablePropTypes.list,
+    pagination: ImmutablePropTypes.mapContains({
       page: PropTypes.number,
       pageSize: PropTypes.number,
     }),
@@ -275,8 +274,8 @@ GameCurrentView.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const gameData = state.gameCurrentView.get('gameData').toJS();
-  const builds = state.gameCurrentView.get('builds').toJS();
+  const gameData = state.gameCurrentView.get('gameData');
+  const builds = state.gameCurrentView.get('builds');
 
   return { gameData, builds };
 }

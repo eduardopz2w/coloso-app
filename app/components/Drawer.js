@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
@@ -27,24 +28,16 @@ class MainDrawer extends PureComponent {
       const { ownerAccount } = this.props;
       Actions.search_view();
       this.drawer.close();
-      this.props.searchGame(ownerAccount.summonerName, ownerAccount.region);
+      this.props.searchGame(ownerAccount.get('summonerName'), ownerAccount.get('region'));
     }
   }
 
   render() {
     const state = this.props.navigationState;
     const children = state.children;
-    const styles = {};
-
-    if (state.open) {
-      styles.mainOverlay = {
-        backgroundColor: 'rgba(0,0,0,0.4)',
-      };
-    }
 
     return (<Drawer
       open={state.open}
-      styles={styles}
       onOpen={() => Actions.refresh({ key: state.key, open: true })}
       onClose={() => Actions.refresh({ key: state.key, open: false })}
       type="overlay"
@@ -53,11 +46,16 @@ class MainDrawer extends PureComponent {
         onPressSearchGame={this.handleOnPressSearchGame}
       />}
       captureGestures
-      panOpenMask={0.05}
+      panOpenMask={0.02}
       panCloseMask={0.2}
       tapToClose
       negotiatePan
       ref={(drawer) => { this.drawer = drawer; }}
+      tweenHandler={ratio => ({
+        mainOverlay: {
+          backgroundColor: `rgba(0,0,0,0.${ratio * 3})`,
+        },
+      })}
     >
       <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
     </Drawer>);
@@ -68,14 +66,14 @@ MainDrawer.propTypes = {
   navigationState: PropTypes.shape({}),
   isSearchingGame: PropTypes.bool,
   onNavigate: PropTypes.func,
-  ownerAccount: PropTypes.shape({}),
+  ownerAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return {
-    ownerAccount: state.ownerAccount.toJS(),
+    ownerAccount: state.ownerAccount,
     isSearchingGame: state.searchView.get('isSearching'),
   };
 }
