@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
+import ProPlayerImage from '../../../components/ProPlayerImage';
 import colors from '../../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
@@ -29,11 +30,23 @@ const styles = MediaQueryStyleSheet.create(
       marginBottom: 4,
     },
 
-    playerName: {
+    profileToolbarContainer: {
+      flexDirection: 'row',
+    },
+
+    dataContainer: {
+      justifyContent: 'center',
+    },
+
+    name: {
       fontSize: 18,
       fontWeight: 'bold',
       color: 'white',
-      textAlign: 'center',
+    },
+
+    realName: {
+      fontSize: 14,
+      color: 'white',
     },
   },
 );
@@ -60,8 +73,6 @@ class SummonerProfileViewToolbar extends Component {
   }
 
   render() {
-    const { playerName, playerImageUrl } = this.props;
-
     return (<View style={styles.root}>
       <View style={styles.toolbar}>
         <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
@@ -71,12 +82,15 @@ class SummonerProfileViewToolbar extends Component {
 
       <View style={styles.profileToolbar}>
         <View style={styles.profileToolbarContainer}>
-          <Image
-            style={styles.playerImage}
-            source={{ uri: playerImageUrl }}
+          <ProPlayerImage
+            imageUrl={this.props.imageUrl}
+            role={this.props.role}
+            size={65}
           />
-
-          <Text style={styles.playerName}>{playerName}</Text>
+          <View style={styles.dataContainer}>
+            <Text style={styles.name}>{this.props.name}</Text>
+            <Text numberOfLines={1} style={styles.realName}>{this.props.realName}</Text>
+          </View>
         </View>
       </View>
     </View>);
@@ -85,8 +99,10 @@ class SummonerProfileViewToolbar extends Component {
 }
 
 SummonerProfileViewToolbar.propTypes = {
-  playerName: PropTypes.string.isRequired,
-  playerImageUrl: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  imageUrl: PropTypes.string.isRequired,
+  realName: PropTypes.string,
+  role: PropTypes.string,
   onPressBackButton: PropTypes.func,
   onPressProfileButton: PropTypes.func,
 };

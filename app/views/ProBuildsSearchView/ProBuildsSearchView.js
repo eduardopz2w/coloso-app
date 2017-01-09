@@ -68,7 +68,7 @@ class ProBuildSearchView extends Component {
       content = (<View style={styles.container}>
         <ErrorScreen
           message={probuilds.get('errorMessage')}
-          onPressRetryButton={() => { this.props.fetchBuilds(); }}
+          onPressRetryButton={() => { this.props.fetchBuilds(championSelected, 1); }}
           retryButton
         />
       </View>);
