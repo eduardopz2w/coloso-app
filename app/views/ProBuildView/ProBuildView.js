@@ -351,8 +351,10 @@ class ProBuildView extends Component {
 
       return (<View style={styles.root}>
         <PlayerToolbar
-          playerName={build.getIn(['profPlayerData', 'name'])}
-          playerImageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
+          name={build.getIn(['profPlayerData', 'name'])}
+          imageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
+          role={build.getIn(['profPlayerData', 'role'])}
+          realName={build.getIn(['profPlayerData', 'realName'])}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
         />
@@ -519,6 +521,8 @@ ProBuildView.propTypes = {
     profSummonerData: ImmutablePropTypes.mapContains({
       summonerId: PropTypes.number,
       region: PropTypes.string,
+      role: PropTypes.string,
+      realName: PropTypes.string,
     }),
   }),
   isFetching: PropTypes.bool,

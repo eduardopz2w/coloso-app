@@ -4,6 +4,7 @@ import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 import moment from 'moment';
 import numeral from 'numeral';
+import ProPlayerImage from '../ProPlayerImage';
 import colors from '../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
@@ -19,15 +20,6 @@ const styles = MediaQueryStyleSheet.create(
     playerData: {
       flexDirection: 'row',
       alignItems: 'center',
-    },
-
-    playerImage: {
-      width: 45,
-      height: 45,
-      borderRadius: 50,
-      marginRight: 16,
-      borderWidth: 2,
-      borderColor: 'black',
     },
 
     playerName: {
@@ -177,7 +169,10 @@ class ProBuild extends Component {
       <TouchableWithoutFeedback onPress={this.props.onPress}>
         <View>
           <View style={styles.playerData}>
-            <Image source={{ uri: build.getIn(['profPlayerData', 'imageUrl']) }} style={styles.playerImage} />
+            <ProPlayerImage
+              imageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
+              role={build.getIn(['profPlayerData', 'role'])}
+            />
             <Text style={styles.playerName}>{build.getIn(['profPlayerData', 'name'])}</Text>
             <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
           </View>
@@ -247,6 +242,7 @@ ProBuild.propTypes = {
     profPlayerData: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
       imageUrl: PropTypes.string,
+      role: PropTypes.string,
     }),
   }),
   onPress: PropTypes.func,
