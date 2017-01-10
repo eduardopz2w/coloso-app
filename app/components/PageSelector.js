@@ -13,17 +13,12 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
     },
     picker: {
-      width: 200,
+      flex: 1,
     },
   },
   {
     '@media (min-device-width: 600)': {
-      titleText: {
-        fontSize: 18,
-        marginRight: 10,
-      },
       picker: {
-        width: 350,
         height: 50,
       },
     },

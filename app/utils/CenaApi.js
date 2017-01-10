@@ -47,14 +47,18 @@ cenaClient.interceptors.response.use((response) => {
 });
 
 
-function getBuilds(championId, page, pageSize) {
+function getBuilds(filters, page, pageSize) {
   const params = {
     page,
     pageSize,
   };
 
-  if (_.isFinite(championId) && championId > 0) {
-    params.championId = championId;
+  if (filters.championId > 0) {
+    params.championId = filters.championId;
+  }
+
+  if (filters.proPlayerId > 0) {
+    params.proPlayerId = filters.proPlayerId;
   }
 
   return new Promise((resolve, reject) => {
@@ -63,6 +67,22 @@ function getBuilds(championId, page, pageSize) {
     return cenaClient.get(url, {
       params,
     })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getProPlayers() {
+  return new Promise((resolve, reject) => {
+    const url = 'pro-players';
+
+    return cenaClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
@@ -93,4 +113,5 @@ function getBuild(buildId) {
 export default {
   getBuilds,
   getBuild,
+  getProPlayers,
 };
