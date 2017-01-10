@@ -198,7 +198,10 @@ class GameCurrentView extends Component {
     } else {
       proBuildsContent = (<View style={styles.container}>
         <Text>
-          Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+          {builds.get('proPlayerSelected') > 0 ?
+            'Actualmente no tenemos builds de este jugador con el campeón que estás jugando, pronto estarán disponbiles' :
+            'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles'
+          }
         </Text>
       </View>);
     }
