@@ -9,10 +9,12 @@ import Immutable from 'immutable';
 import colors from '../../utils/colors';
 import Team from './Team';
 import { fetchBuilds } from '../../redux/actions/GameCurrentViewActions';
+import { fetchPlayers as fetchProPlayers } from '../../redux/actions/ProPlayersActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
 import ProBuildsList from '../../components/ProBuildsList';
 import ErrorScreen from '../../components/ErrorScreen';
+import ProPlayersSelector from '../../components/ProPlayersSelector';
 import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
 
@@ -63,7 +65,7 @@ class GameCurrentView extends Component {
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
     this.handleOnLoadMoreBuilds = this.handleOnLoadMoreBuilds.bind(this);
-    this.fetchBuilds = this.fetchBuilds.bind(this);
+    this.handleOnChangeProPlayerSelected = this.handleOnChangeProPlayerSelected.bind(this);
     this.state = {
       summonerSelectedId: null,
       modalType: null,
@@ -73,6 +75,10 @@ class GameCurrentView extends Component {
 
   componentWillMount() {
     this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
+
+    if (!this.props.proPlayers.get('isFetched')) {
+      this.props.fetchProPlayers();
+    }
   }
 
   componentDidMount() {
@@ -101,6 +107,22 @@ class GameCurrentView extends Component {
     return this.props.gameData.get('participants').find(participant => participant.get('summonerId') === summonerId).get('masteries');
   }
 
+  getFocusChampionId() {
+    const focusSummonerId = this.props.gameData.get('focusSummonerId');
+
+    if (focusSummonerId > 0) {
+      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerId') === focusSummonerId);
+
+      if (participantFound) {
+        const championId = participantFound.get('championId');
+
+        return championId;
+      }
+    }
+
+    return 0;
+  }
+
   handleOnPressRunesButton(summonerId) {
     this.setState({ summonerSelectedId: summonerId, modalType: 'RUNES' });
     this.modal.open();
@@ -126,32 +148,26 @@ class GameCurrentView extends Component {
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1 && !this.props.builds.get('fetched')) {
-      this.fetchBuilds(1);
+      this.props.fetchBuilds({ championId: this.getFocusChampionId() }, 1);
     }
   }
 
   handleOnLoadMoreBuilds() {
     const pagData = this.props.builds.get('pagination');
     if (!this.props.builds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
-      this.fetchBuilds(
-        pagData.page + 1,
-        PAGESIZE,
-      );
+      console.log('Se cunple');
+      this.props.fetchBuilds({
+        championId: this.getFocusChampionId(),
+        proPlayerId: this.props.builds.get('proPlayerSelected'),
+      }, pagData.get('page') + 1);
     }
   }
 
-  fetchBuilds(page) {
-    const focusSummonerId = this.props.gameData.get('focusSummonerId');
-
-    if (focusSummonerId > 0) {
-      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerId') === focusSummonerId);
-
-      if (participantFound) {
-        const championId = participantFound.get('championId');
-
-        this.props.fetchBuilds(championId, page);
-      }
-    }
+  handleOnChangeProPlayerSelected(proPlayerId) {
+    this.props.fetchBuilds({
+      championId: this.getFocusChampionId(),
+      proPlayerId,
+    }, 1);
   }
 
   render() {
@@ -163,7 +179,12 @@ class GameCurrentView extends Component {
       proBuildsContent = (<View style={styles.container}>
         <ErrorScreen
           message={builds.get('errorMessage')}
-          onPressRetryButton={() => { this.fetchBuilds(); }}
+          onPressRetryButton={() => {
+            this.props.fetchBuilds({
+              championId: this.getFocusChampionId(),
+              proPlayerId: this.props.builds.get('proPlayerSelected'),
+            }, 1);
+          }}
           retryButton
         />
       </View>);
@@ -177,7 +198,10 @@ class GameCurrentView extends Component {
     } else {
       proBuildsContent = (<View style={styles.container}>
         <Text>
-          Actualmente no hay builds disponibles para este campeon, pronto estaran disponibles!.
+          {builds.get('proPlayerSelected') > 0 ?
+            'Actualmente no tenemos builds de este jugador con el campeón que estás jugando, pronto estarán disponbiles' :
+            'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles'
+          }
         </Text>
       </View>);
     }
@@ -232,6 +256,12 @@ class GameCurrentView extends Component {
           </ScrollView>
         </View>
         <View tabLabel="Builds Profesionales" style={{ flex: 1 }}>
+          <ProPlayersSelector
+            proPlayers={this.props.proPlayers.get('proPlayers')}
+            style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
+            disabled={this.props.builds.get('isFetching')}
+            onChangeSelected={this.handleOnChangeProPlayerSelected}
+          />
           {proBuildsContent}
         </View>
       </ScrollableTabView>
@@ -270,20 +300,29 @@ GameCurrentView.propTypes = {
       pageSize: PropTypes.number,
     }),
   }),
+  proPlayers: ImmutablePropTypes.mapContains({
+    isFetching: PropTypes.bool,
+    proPlayers: ImmutablePropTypes.list,
+  }),
   fetchBuilds: PropTypes.func,
+  fetchProPlayers: PropTypes.func,
 };
 
 function mapStateToProps(state) {
   const gameData = state.gameCurrentView.get('gameData');
   const builds = state.gameCurrentView.get('builds');
+  const proPlayers = state.proPlayers;
 
-  return { gameData, builds };
+  return { gameData, builds, proPlayers };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (championId, page) => {
-      dispatch(fetchBuilds(championId, page, PAGESIZE));
+    fetchBuilds: (filters, page) => {
+      dispatch(fetchBuilds(filters, page, PAGESIZE));
+    },
+    fetchProPlayers: () => {
+      dispatch(fetchProPlayers());
     },
   };
 }

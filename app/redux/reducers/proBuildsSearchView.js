@@ -12,7 +12,8 @@ const initialState = Immutable.fromJS({
     page: 1,
     pageCount: 1,
   },
-  championSelected: null,
+  championSelected: 0,
+  proPlayerSelected: 0,
 });
 
 export default typeToReducer({
@@ -25,6 +26,7 @@ export default typeToReducer({
           pageCount: 1,
         }));
         mutator.set('championSelected', action.payload.championId);
+        mutator.set('proPlayerSelected', action.payload.proPlayerId);
       }
 
       mutator.set('fetchError', false);

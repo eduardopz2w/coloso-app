@@ -277,8 +277,8 @@ class ProBuildView extends Component {
     const build = this.props.build;
 
     Actions.summoner_profile_view({
-      summonerId: build.getIn(['profSummonerData', 'summonerId']),
-      region: build.getIn(['profSummonerData', 'region']),
+      summonerId: build.getIn(['proSummonerData', 'summonerId']),
+      region: build.getIn(['proSummonerData', 'region']),
     });
   }
 
@@ -351,10 +351,10 @@ class ProBuildView extends Component {
 
       return (<View style={styles.root}>
         <PlayerToolbar
-          name={build.getIn(['profPlayerData', 'name'])}
-          imageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
-          role={build.getIn(['profPlayerData', 'role'])}
-          realName={build.getIn(['profPlayerData', 'realName'])}
+          name={build.getIn(['proPlayerData', 'name'])}
+          imageUrl={build.getIn(['proPlayerData', 'imageUrl'])}
+          role={build.getIn(['proPlayerData', 'role'])}
+          realName={build.getIn(['proPlayerData', 'realName'])}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
         />
@@ -514,11 +514,11 @@ ProBuildView.propTypes = {
       }),
     })),
     skillsOrder: ImmutablePropTypes.listOf(PropTypes.number),
-    profPlayerData: ImmutablePropTypes.mapContains({
+    proPlayerData: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       imageUrl: PropTypes.string,
     }),
-    profSummonerData: ImmutablePropTypes.mapContains({
+    proSummonerData: ImmutablePropTypes.mapContains({
       summonerId: PropTypes.number,
       region: PropTypes.string,
       role: PropTypes.string,

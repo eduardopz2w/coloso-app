@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
 import ProPlayerImage from '../../../components/ProPlayerImage';

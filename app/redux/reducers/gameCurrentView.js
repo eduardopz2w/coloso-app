@@ -15,6 +15,7 @@ const initialState = Immutable.fromJS({
       page: 1,
       pageSize: 1,
     },
+    proPlayerSelected: 0,
   },
 });
 
@@ -43,6 +44,7 @@ export default typeToReducer({
         }));
       }
 
+      mutator.setIn(['builds', 'proPlayerSelected'], action.payload.proPlayerId);
       mutator.setIn(['builds', 'fetchError'], false);
       mutator.setIn(['builds', 'isFetching'], true);
     }),

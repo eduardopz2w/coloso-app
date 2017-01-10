@@ -7,7 +7,7 @@ const regions = [
   { label: regionHumanize('lan'), value: 'lan' },
   { label: regionHumanize('las'), value: 'las' },
   { label: regionHumanize('br'), value: 'br' },
-  { label: regionHumanize('eunw'), value: 'eunw' },
+  { label: regionHumanize('euw'), value: 'euw' },
   { label: regionHumanize('eune'), value: 'eune' },
   { label: regionHumanize('oce'), value: 'oce' },
   { label: regionHumanize('jp'), value: 'jp' },

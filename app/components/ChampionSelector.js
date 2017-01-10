@@ -13,17 +13,12 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
     },
     picker: {
-      width: 200,
+      flex: 1,
     },
   },
   {
     '@media (min-device-width: 600)': {
-      titleText: {
-        fontSize: 18,
-        marginRight: 10,
-      },
       picker: {
-        width: 350,
         height: 50,
       },
     },
@@ -53,7 +48,7 @@ class ChampionSelector extends Component {
 
   render() {
     const champions = [
-      { label: 'Seleccionar Campeon', value: 0 },
+      { label: 'Seleccionar Campeón', value: 0 },
       { label: 'Aatrox', value: 266 },
       { label: 'Ahri', value: 103 },
       { label: 'Akali', value: 84 },
@@ -123,7 +118,7 @@ class ChampionSelector extends Component {
       { label: 'Maokai', value: 57 },
       { label: 'MasterYi', value: 11 },
       { label: 'MissFortune', value: 21 },
-      { label: 'MonkeyKing', value: 62 },
+      { label: 'Wukong', value: 62 },
       { label: 'Mordekaiser', value: 82 },
       { label: 'Morgana', value: 25 },
       { label: 'Nami', value: 267 },
@@ -190,11 +185,12 @@ class ChampionSelector extends Component {
     ];
 
     return (<View style={[styles.root, this.props.style]}>
-      <Text style={styles.titleText}>Campeon: </Text>
+      <Text style={[styles.titleText, this.props.titleStyle]}>Campeón: </Text>
       <Picker
         style={styles.picker}
         selectedValue={this.state.selectedValue}
         onValueChange={this.handleOnValueChange}
+        enabled={!this.props.disabled}
       >
         {champions.map((season, index) => <Picker.Item
           key={index}
@@ -211,10 +207,12 @@ ChampionSelector.propTypes = {
   initialValue: PropTypes.number,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
+  titleStyle: Text.propTypes.style,
 };
 
 ChampionSelector.defaultProps = {
   initialValue: 0,
+  disabled: false,
 };
 
 export default ChampionSelector;
