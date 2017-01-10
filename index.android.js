@@ -84,11 +84,6 @@ class lolcena extends Component {
           </Scene>
         </Router>
 
-        <AdMobBanner
-          bannerSize="smartBannerPortrait"
-          adUnitID={ADMOB_BANNER_ID}
-          testDeviceID={DeviceInfo.getUniqueID()}
-        />
       </View>
     </Provider>);
   }

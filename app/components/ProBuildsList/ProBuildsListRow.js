@@ -170,10 +170,10 @@ class ProBuild extends Component {
         <View>
           <View style={styles.playerData}>
             <ProPlayerImage
-              imageUrl={build.getIn(['profPlayerData', 'imageUrl'])}
-              role={build.getIn(['profPlayerData', 'role'])}
+              imageUrl={build.getIn(['proPlayerData', 'imageUrl'])}
+              role={build.getIn(['proPlayerData', 'role'])}
             />
-            <Text style={styles.playerName}>{build.getIn(['profPlayerData', 'name'])}</Text>
+            <Text style={styles.playerName}>{build.getIn(['proPlayerData', 'name'])}</Text>
             <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
           </View>
           <View style={styles.gameDataRow}>
@@ -239,7 +239,7 @@ ProBuild.propTypes = {
       goldEarned: PropTypes.number.isRequired,
       largestMultiKill: PropTypes.number.isRequired,
     }),
-    profPlayerData: ImmutablePropTypes.mapContains({
+    proPlayerData: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
       imageUrl: PropTypes.string,
       role: PropTypes.string,
