@@ -80,6 +80,7 @@ class ProBuildSearchView extends Component {
     const isFetching = probuilds.get('isFetching');
     const isRefreshing = probuilds.get('isRefreshing');
     const championSelected = probuilds.get('championSelected');
+    const proPlayerSelected = probuilds.get('proPlayerSelected');
     const builds = probuilds.get('builds');
 
     let content;
@@ -88,7 +89,12 @@ class ProBuildSearchView extends Component {
       content = (<View style={styles.container}>
         <ErrorScreen
           message={probuilds.get('errorMessage')}
-          onPressRetryButton={() => { this.props.fetchBuilds(championSelected, 1); }}
+          onPressRetryButton={() => {
+            this.props.fetchBuilds({
+              championId: championSelected,
+              proPlayerId: proPlayerSelected,
+            }, 1);
+          }}
           retryButton
         />
       </View>);
@@ -99,7 +105,12 @@ class ProBuildSearchView extends Component {
         onLoadMore={this.handleOnLoadMore}
         isFetching={isFetching}
         isRefreshing={isRefreshing}
-        onRefresh={() => { this.props.refreshBuilds(championSelected); }}
+        onRefresh={() => {
+          this.props.refreshBuilds({
+            championId: championSelected,
+            proPlayerId: proPlayerSelected,
+          }, 1);
+        }}
         refreshControl
       />);
     } else {
