@@ -188,7 +188,8 @@ class ProBuildView extends Component {
     this.deviceDimensions = Dimensions.get('window');
     this.getItemStyle = this.getItemStyle.bind(this);
     this.getParsedItems = this.getParsedItems.bind(this);
-    this.renderSkillOrder = this.renderSkillOrder.bind(this);
+    this.renderSkillsPriority = this.renderSkillsPriority.bind(this);
+    this.renderSkillsOrder = this.renderSkillsOrder.bind(this);
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
   }
@@ -282,7 +283,7 @@ class ProBuildView extends Component {
     });
   }
 
-  renderSkillOrder() {
+  renderSkillsPriority() {
     const skillsNodes = [];
     const skills = [
       { label: 'Q', value: 0 },
@@ -291,7 +292,7 @@ class ProBuildView extends Component {
       { label: 'R', value: -3 },
     ];
 
-    _.each(this.props.build.skillsOrder, (skillNumber) => {
+    this.props.build.get('skillsOrder').forEach((skillNumber) => {
       if (skillNumber === 1) {
         skills[0].value += 1;
       } else if (skillNumber === 2) {
@@ -319,6 +320,48 @@ class ProBuildView extends Component {
     return (<View style={styles.skillsContainer}>
       {skillsNodes}
     </View>);
+  }
+
+  renderSkillsOrder() {
+    const skills = [];
+    const skillNodes = [];
+
+    this.props.build.get('skillsOrder').forEach((skillNumber) => {
+      if (skillNumber === 1) {
+        skills.push('Q');
+      } else if (skillNumber === 2) {
+        skills.push('W');
+      } else if (skillNumber === 3) {
+        skills.push('E');
+      } else {
+        skills.push('R');
+      }
+    });
+
+    _.each(skills, (skill, index) => {
+      skillNodes.push(<View key={`sk_${index}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
+        <Text style={styles.skillLabel}>{skill}</Text>
+        <Text style={{ textAlign: 'center' }}>Nivel {index + 1}</Text>
+      </View>);
+
+      if (index !== skills.length - 1) {
+        skillNodes.push(<Icon
+          key={`ar_${index}`}
+          style={styles.itemsArrow}
+          name="keyboard-arrow-right"
+          color="rgba(0,0,0,0.5)"
+          size={18}
+        />);
+      }
+    });
+
+    return (<ScrollView
+      contentContainerStyle={{ flexDirection: 'row', alignItems: 'center' }}
+      showsHorizontalScrollIndicator={false}
+      horizontal
+    >
+      {skillNodes}
+    </ScrollView>);
   }
 
   render() {
@@ -366,6 +409,7 @@ class ProBuildView extends Component {
           tabBarInactiveTextColor="rgba(255,255,255,0.8)"
           tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
           onChangeTab={this.handleOnChangeTab}
+          locked
         >
           <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
             <Text style={styles.title}>Informacion</Text>
@@ -403,7 +447,11 @@ class ProBuildView extends Component {
 
             <Text style={styles.title}>Prioridad de Habilidades</Text>
 
-            {this.renderSkillOrder()}
+            {this.renderSkillsPriority()}
+
+            <Text style={styles.title}>Orden de Habilidades</Text>
+
+            {this.renderSkillsOrder()}
 
             <Text style={styles.title}>Orden de Compra</Text>
 
