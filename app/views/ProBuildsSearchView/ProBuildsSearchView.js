@@ -125,6 +125,8 @@ class ProBuildSearchView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+        championSelected={this.props.probuilds.get('championSelected')}
+        proPlayerSelected={this.props.probuilds.get('proPlayerSelected')}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
         onChangeProPlayerSelected={this.handleOnChangeProPlayerSelected}
         disabledFilters={isFetching || isRefreshing}

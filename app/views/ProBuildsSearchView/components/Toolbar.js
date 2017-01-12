@@ -54,12 +54,14 @@ class Toolbar extends PureComponent {
         <View>
           <ChampionSelector
             titleStyle={{ width: 70 }}
+            initialValue={this.props.championSelected}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeChampionSelected}
           />
           <ProPlayersSelector
             titleStyle={{ width: 70 }}
+            initialValue={this.props.proPlayerSelected}
             proPlayers={this.props.proPlayers.get('proPlayers')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}
@@ -78,6 +80,8 @@ Toolbar.propTypes = {
   }),
   onPressMenuButton: PropTypes.func,
   disabledFilters: PropTypes.bool,
+  championSelected: PropTypes.number,
+  proPlayerSelected: PropTypes.number,
   onChangeChampionSelected: PropTypes.func.isRequired,
   onChangeProPlayerSelected: PropTypes.func.isRequired,
 };
