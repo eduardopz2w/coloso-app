@@ -36,7 +36,7 @@ class SeasonSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: 'SEASON3',
+      selectedValue: 'SEASON2017',
     };
   }
 

@@ -6,7 +6,7 @@ const VERSION_CODE = 20;
 let BASEURL = 'http://lolcena.ddns.net:1338/riot-api/';
 
 if (__DEV__) {
-  BASEURL = 'http://192.168.1.2:1337/riot-api/';
+  BASEURL = 'http://192.168.1.2:3000/riot-api/';
 }
 
 const riotClient = axios.create({
@@ -15,6 +15,7 @@ const riotClient = axios.create({
   responseType: 'json',
   headers: {
     'x-version-code': VERSION_CODE,
+    'Content-Type': 'application/json',
   },
 });
 
@@ -48,7 +49,23 @@ riotClient.interceptors.response.use((response) => {
 
 function getSummonerByName(summonerName, region) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/by-name/${summonerName}`;
+    const url = `summoner/by-name/${summonerName}`;
+
+    return riotClient.get(url, { params: { region } })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getSummonerByUrid(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `summoner/${sumUrid}`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -62,9 +79,9 @@ function getSummonerByName(summonerName, region) {
   });
 }
 
-function getSummonerById(summonerId, region) {
+function getLeagueEntry(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/by-id/${summonerId}`;
+    const url = `summoner/${sumUrid}/league/entry`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -78,25 +95,9 @@ function getSummonerById(summonerId, region) {
   });
 }
 
-function getSummonerLeagueEntry(summonerId, region) {
+function getChampionsMasteries(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/league/by-summoner/${summonerId}/entry`;
-
-    return riotClient.get(url)
-      .then((response) => {
-        resolve(response.data[0]);
-      })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
-  });
-}
-
-function getSummonerChampionsMastery(summonerId, region) {
-  return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/${summonerId}/champions-mastery`;
+    const url = `summoner/${sumUrid}/champions-mastery`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -110,9 +111,9 @@ function getSummonerChampionsMastery(summonerId, region) {
   });
 }
 
-function getSummonerGamesRecent(summonerId, region) {
+function getGamesRecent(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/game/by-summoner/${summonerId}/recent`;
+    const url = `summoner/${sumUrid}/games/recent`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -126,9 +127,9 @@ function getSummonerGamesRecent(summonerId, region) {
   });
 }
 
-function getSummonerMasteries(summonerId, region) {
+function getMasteries(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/${summonerId}/masteries`;
+    const url = `summoner/${sumUrid}/masteries`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -142,9 +143,9 @@ function getSummonerMasteries(summonerId, region) {
   });
 }
 
-function getSummonerRunes(summonerId, region) {
+function getRunes(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/${summonerId}/runes`;
+    const url = `summoner/${sumUrid}/runes`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -160,7 +161,7 @@ function getSummonerRunes(summonerId, region) {
 
 function getSummonerGameCurrent(summonerId, region) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/game/by-summoner/${summonerId}/current`;
+    const url = `${region}/summoner/${summonerId}/games/current`;
 
     return riotClient.get(url)
       .then((response) => {
@@ -174,11 +175,15 @@ function getSummonerGameCurrent(summonerId, region) {
   });
 }
 
-function getSummonerStatsSummary(summonerId, region, season) {
+function getStatsSummary(sumUrid, season) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/${summonerId}/stats/summary/${season}`;
+    const url = `summoner/${sumUrid}/stats/summary`;
 
-    return riotClient.get(url)
+    return riotClient.get(url, {
+      params: {
+        season,
+      },
+    })
       .then((response) => {
         resolve(response.data);
       })
@@ -193,15 +198,15 @@ function getSummonerStatsSummary(summonerId, region, season) {
 export default {
   summoner: {
     findByName: getSummonerByName,
-    findById: getSummonerById,
-    leagueEntry: getSummonerLeagueEntry,
-    championsMastery: getSummonerChampionsMastery,
-    gamesRecent: getSummonerGamesRecent,
-    masteries: getSummonerMasteries,
-    runes: getSummonerRunes,
+    findByUrid: getSummonerByUrid,
+    leagueEntry: getLeagueEntry,
+    championsMastery: getChampionsMasteries,
+    gamesRecent: getGamesRecent,
+    masteries: getMasteries,
+    runes: getRunes,
     gameCurrent: getSummonerGameCurrent,
     stats: {
-      summary: getSummonerStatsSummary,
+      summary: getStatsSummary,
     },
   },
 };

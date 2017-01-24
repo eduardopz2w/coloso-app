@@ -8,7 +8,7 @@ import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar'
 import {
   fetchSummonerData,
   fetchLeagueEntry,
-  fetchChampionsMastery,
+  fetchChampionsMasteries,
   fetchGamesRecent,
   fetchMasteries,
   fetchRunes,
@@ -47,10 +47,10 @@ class SummonerProfileView extends Component {
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1) {
-      // championsMastery
+      // championsMasteries
 
-      if (!this.props.championsMastery.get('isFetching') && !this.props.championsMastery.get('fetched')) {
-        this.props.fetchChampionsMastery();
+      if (!this.props.championsMasteries.get('isFetching') && !this.props.championsMasteries.get('fetched')) {
+        this.props.fetchChampionsMasteries();
       }
     }
 
@@ -110,8 +110,8 @@ class SummonerProfileView extends Component {
         />
         <ChampionsMasteryView
           tabLabel="Campeones"
-          championsMastery={this.props.championsMastery}
-          onPressRetryButton={() => this.props.fetchChampionsMastery()}
+          championsMasteries={this.props.championsMasteries}
+          onPressRetryButton={() => this.props.fetchChampionsMasteries()}
         />
         <GamesRecentView
           tabLabel="Historial"
@@ -131,7 +131,7 @@ class SummonerProfileView extends Component {
         <SummonerSummaryView
           summary={this.props.summary}
           tabLabel="Estadisticas"
-          onPressRetryButton={() => this.props.fetchSummary(this.props.summary.season)}
+          onPressRetryButton={() => this.props.fetchSummary(this.props.summary.get('season'))}
           onChangeSeason={season => this.props.fetchSummary(season)}
         />
       </ScrollableTabView>
@@ -140,22 +140,41 @@ class SummonerProfileView extends Component {
 
 }
 
+
 SummonerProfileView.propTypes = {
-  summonerId: PropTypes.number,
-  region: PropTypes.string,
   fetchSummonerData: PropTypes.func,
   fetchLeagueEntry: PropTypes.func,
-  fetchChampionsMastery: PropTypes.func,
+  fetchChampionsMasteries: PropTypes.func,
   fetchGamesRecent: PropTypes.func,
   fetchMasteries: PropTypes.func,
   fetchSummary: PropTypes.func,
   fetchRunes: PropTypes.func,
   leagueEntry: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
-    fetched: PropTypes.bool,
+    fetched: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
+    errorMessage: PropTypes.string,
+    data: ImmutablePropTypes.mapContains({
+      attributes: ImmutablePropTypes.mapContains({
+        entires: PropTypes.array,
+      }),
+    }),
   }),
-  summonerData: ImmutablePropTypes.map,
-  championsMastery: ImmutablePropTypes.mapContains({
+  summonerData: ImmutablePropTypes.mapContains({
+    isFetching: PropTypes.bool,
+    fetched: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
+    errorMessage: PropTypes.string,
+    data: ImmutablePropTypes.mapContains({
+      attributes: ImmutablePropTypes.mapContains({
+        name: PropTypes.string.isRequired,
+        profileIconId: PropTypes.number.isRequired,
+        summonerLevel: PropTypes.number.isRequired,
+        region: PropTypes.string.isRequired,
+      }),
+    }),
+  }),
+  championsMasteries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
   }),
@@ -180,18 +199,60 @@ SummonerProfileView.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const summonerData = state.summonerProfileView.get('summonerData');
-  const leagueEntry = state.summonerProfileView.get('leagueEntry');
-  const championsMastery = state.summonerProfileView.get('championsMastery');
-  const gamesRecent = state.summonerProfileView.get('gamesRecent');
-  const masteries = state.summonerProfileView.get('masteries');
-  const runes = state.summonerProfileView.get('runes');
-  const summary = state.summonerProfileView.get('summary');
+  let summonerData = state.summonerProfileView.get('summonerData');
+  let leagueEntry = state.summonerProfileView.get('leagueEntry');
+  let championsMasteries = state.summonerProfileView.get('championsMasteries');
+  let gamesRecent = state.summonerProfileView.get('gamesRecent');
+  let masteries = state.summonerProfileView.get('masteries');
+  let runes = state.summonerProfileView.get('runes');
+  let summary = state.summonerProfileView.get('summary');
+
+  if (summonerData.get('fetched')) {
+    summonerData = summonerData.merge({
+      data: state.entities.getIn(['summoners', summonerData.get('summonerUrid')]),
+    });
+  }
+
+  if (leagueEntry.get('fetched')) {
+    leagueEntry = leagueEntry.merge({
+      data: state.entities.getIn(['leagueEntries', leagueEntry.get('leagueEntryId')]),
+    });
+  }
+
+  if (championsMasteries.get('fetched')) {
+    championsMasteries = championsMasteries.merge({
+      data: state.entities.getIn(['championsMasteries', championsMasteries.get('championsMasteriesId')]),
+    });
+  }
+
+  if (gamesRecent.get('fetched')) {
+    gamesRecent = gamesRecent.merge({
+      data: state.entities.getIn(['gamesRecent', gamesRecent.get('gamesRecentId')]),
+    });
+  }
+
+  if (masteries.get('fetched')) {
+    masteries = masteries.merge({
+      data: state.entities.getIn(['masteries', masteries.get('masteriesId')]),
+    });
+  }
+
+  if (runes.get('fetched')) {
+    runes = runes.merge({
+      data: state.entities.getIn(['runes', runes.get('runesId')]),
+    });
+  }
+
+  if (summary.get('fetched')) {
+    summary = summary.merge({
+      data: state.entities.getIn(['statsSummaries', summary.get('statsSummariesId')]),
+    });
+  }
 
   return {
     summonerData,
     leagueEntry,
-    championsMastery,
+    championsMasteries,
     gamesRecent,
     masteries,
     runes,
@@ -200,35 +261,35 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { summonerId, region } = ownProps;
+  const { summonerUrid } = ownProps;
 
   return {
     fetchSummonerData: () => {
-      dispatch(fetchSummonerData(summonerId, region));
+      dispatch(fetchSummonerData(summonerUrid));
     },
 
     fetchLeagueEntry: () => {
-      dispatch(fetchLeagueEntry(summonerId, region));
+      dispatch(fetchLeagueEntry(summonerUrid));
     },
 
-    fetchChampionsMastery: () => {
-      dispatch(fetchChampionsMastery(summonerId, region));
+    fetchChampionsMasteries: () => {
+      dispatch(fetchChampionsMasteries(summonerUrid));
     },
 
     fetchGamesRecent: () => {
-      dispatch(fetchGamesRecent(summonerId, region));
+      dispatch(fetchGamesRecent(summonerUrid));
     },
 
     fetchMasteries: () => {
-      dispatch(fetchMasteries(summonerId, region));
+      dispatch(fetchMasteries(summonerUrid));
     },
 
     fetchRunes: () => {
-      dispatch(fetchRunes(summonerId, region));
+      dispatch(fetchRunes(summonerUrid));
     },
 
     fetchSummary: (season) => {
-      dispatch(fetchSummary(summonerId, region, season));
+      dispatch(fetchSummary(summonerUrid, season));
     },
   };
 }

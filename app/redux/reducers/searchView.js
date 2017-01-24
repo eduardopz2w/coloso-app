@@ -11,14 +11,13 @@ import {
 } from '../actions/SearchViewActions';
 
 const initialState = Immutable.fromJS({
-  summonerName: '',
-  region: 'na',
+  summonerName: 'armaghyon',
+  region: 'lan',
   searchType: 'PROFILE_SEARCH',
   isSearching: false,
   searchError: false,
   errorMessage: null,
-  summonerFoundId: 0,
-  summonerFoundRegion: '',
+  summonerFoundUrid: null,
   gameFound: false,
 });
 
@@ -37,8 +36,7 @@ export default typeToReducer({
 
     FULFILLED: (state, action) => state.merge({
       isSearching: false,
-      summonerFoundId: action.payload.id,
-      summonerFoundRegion: action.payload.region,
+      summonerFoundUrid: action.payload.summonerUrid,
     }),
   },
   [searchGame]: {
@@ -61,7 +59,7 @@ export default typeToReducer({
     errorMessage: null,
   }),
   [clearFoundData]: state => state.merge({
-    summonerFoundId: 0,
+    summonerFoundUrid: null,
     gameFound: false,
   }),
 }, initialState);

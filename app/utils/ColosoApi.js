@@ -6,7 +6,7 @@ const VERSION_CODE = 20;
 let BASEURL = 'http://lolcena.ddns.net:1338/';
 
 if (__DEV__) {
-  BASEURL = 'http://192.168.1.2:1337/';
+  BASEURL = 'http://192.168.1.2:3000/';
 }
 
 const cenaClient = axios.create({
@@ -15,6 +15,7 @@ const cenaClient = axios.create({
   responseType: 'json',
   headers: {
     'x-version-code': VERSION_CODE,
+    'Content-Type': 'application/json',
   },
 });
 

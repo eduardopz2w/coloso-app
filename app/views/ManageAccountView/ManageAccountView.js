@@ -74,7 +74,7 @@ class ManageAccountView extends Component {
         .then((summonerData) => {
           this.props.saveAccount({
             summonerName: summonerData.name,
-            summonerId: summonerData.id,
+            summonerId: summonerData.summonerId,
             profileIconId: summonerData.profileIconId,
             region: summonerData.region,
           });

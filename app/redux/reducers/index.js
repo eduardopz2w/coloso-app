@@ -7,6 +7,7 @@ import proBuildsSearchView from './proBuildsSearchView';
 import proBuildView from './proBuildView';
 import ownerAccount from './ownerAccount';
 import proPlayers from './proPlayers';
+import entities from './entities';
 
 export default combineReducers({
   searchView,
@@ -17,4 +18,5 @@ export default combineReducers({
   proBuildView,
   ownerAccount,
   proPlayers,
+  entities,
 });

@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import ColosoApi from '../../utils/ColosoApi';
 
 export const fetchBuilds = createAction('PROBUILDS_SEARCH_VIEW/FETCH_BUILDS', (filters, page, pageSize) => ({
-  promise: CenaApi.getBuilds(filters, page, pageSize),
+  promise: ColosoApi.getBuilds(filters, page, pageSize),
   data: {
     championId: filters.championId,
     proPlayerId: filters.proPlayerId,
@@ -11,4 +11,4 @@ export const fetchBuilds = createAction('PROBUILDS_SEARCH_VIEW/FETCH_BUILDS', (f
   },
 }));
 
-export const refreshBuilds = createAction('PROBUILDS_SEARCH_VIEW/REFRESH_BUILDS', (filters, pageSize) => CenaApi.getBuilds(filters, 1, pageSize));
+export const refreshBuilds = createAction('PROBUILDS_SEARCH_VIEW/REFRESH_BUILDS', (filters, pageSize) => ColosoApi.getBuilds(filters, 1, pageSize));

@@ -1,4 +1,4 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import ColosoApi from '../../utils/ColosoApi';
 
-export const fetchPlayers = createAction('PRO_PLAYERS_FETCH', CenaApi.getProPlayers);
+export const fetchPlayers = createAction('PRO_PLAYERS_FETCH', ColosoApi.getProPlayers);

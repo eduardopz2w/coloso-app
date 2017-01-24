@@ -1,4 +1,4 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import ColosoApi from '../../utils/ColosoApi';
 
-export const fetchBuild = createAction('PROBUILD_VIEW/FETCH_BUILD', CenaApi.getBuild);
+export const fetchBuild = createAction('PROBUILD_VIEW/FETCH_BUILD', ColosoApi.getBuild);

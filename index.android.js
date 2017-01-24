@@ -15,6 +15,7 @@ import 'moment/locale/es';
 
 import lolcenaApp from './app/redux/reducers';
 import Drawer from './app/components/Drawer';
+import RiotApiMiddleware from './app/redux/middlewares/RiotApiMiddleware';
 // -------- Views --------------
 import SearchView from './app/views/SearchView';
 import SummonerProfileView from './app/views/SummonerProfileView';
@@ -25,7 +26,7 @@ import GameCurrentView from './app/views/GameCurrentView';
 import StorageInstance from './app/utils/Storage';
 
 
-let middlewares = [thunk, promiseMiddleware()];
+let middlewares = [thunk, promiseMiddleware(), RiotApiMiddleware];
 
 if (__DEV__) {
   const logger = createLogger({
@@ -55,7 +56,7 @@ global.Storage = StorageInstance;
 
 class lolcena extends Component {
   componentDidMount() {
-    Actions.refresh({ key: 'drawer', open: true });
+    // Actions.refresh({ key: 'drawer', open: true });
   }
 
   render() {

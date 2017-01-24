@@ -47,12 +47,12 @@ class RunesView extends Component {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={runes.get('pages')}
+            pages={runes.getIn(['data', 'attributes', 'pages'])}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
         <View style={styles.runesContainer}>
-          <RunePage page={runes.getIn(['pages', this.state.pageSelected])} />
+          <RunePage page={runes.getIn(['data', 'attributes', 'pages', this.state.pageSelected])} />
         </View>
       </View>);
     } else if (runes.get('isFetching')) {

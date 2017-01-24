@@ -177,33 +177,27 @@ class SummonerProfileViewToolbar extends Component {
             <View style={styles.summonerImageContainer}>
               <Image
                 style={styles.summonerImage}
-                source={{ uri: getImageUri(summonerData.get('profileIconId')) }}
+                source={{ uri: getImageUri(summonerData.getIn(['data', 'attributes', 'profileIconId'])) }}
               />
               <View style={styles.summonerLevelContainer}>
-                <Text style={styles.summonerLevelText}>{summonerData.get('summonerLevel')}</Text>
+                <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'attributes', 'summonerLevel'])}</Text>
               </View>
             </View>
 
             <View style={styles.summonerDataContainer}>
-              <Text style={styles.summonerNameText}>{summonerData.get('name')}</Text>
-              <Text style={styles.regionText}>{regionHumanize(summonerData.get('region'))}</Text>
+              <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'attributes', 'name'])}</Text>
+              <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'attributes', 'region']))}</Text>
             </View>
           </View>
         )}
       </View>
     </View>);
   }
-
 }
 
+
 SummonerProfileViewToolbar.propTypes = {
-  summonerData: ImmutablePropTypes.mapContains({
-    profileIconId: PropTypes.number,
-    name: PropTypes.string,
-    summonerLevel: PropTypes.number,
-    isFetching: PropTypes.bool,
-    region: PropTypes.string,
-  }),
+  summonerData: ImmutablePropTypes.map,
   onPressBackButton: PropTypes.func,
 };
 

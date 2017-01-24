@@ -10,7 +10,7 @@ import numeral from 'numeral';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { fetchBuild } from '../../redux/actions/ProBuildViewActions';
-import LoadingScreen from '../../components/LoadingScreen';
+import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorScreen from '../../components/ErrorScreen';
 import PlayerToolbar from './components/PlayerToolbar';
 import BasicToolbar from './components/BasicToolbar';
@@ -278,8 +278,8 @@ class ProBuildView extends Component {
     const build = this.props.build;
 
     Actions.summoner_profile_view({
-      summonerId: build.getIn(['proSummonerData', 'summonerId']),
-      region: build.getIn(['proSummonerData', 'region']),
+      summonerId: build.getIn(['proSummoner', 'summonerId']),
+      region: build.getIn(['proSummoner', 'region']),
     });
   }
 
@@ -292,12 +292,12 @@ class ProBuildView extends Component {
       { label: 'R', value: -3 },
     ];
 
-    this.props.build.get('skillsOrder').forEach((skillNumber) => {
-      if (skillNumber === 1) {
+    this.props.build.get('skillsOrder').forEach((skill) => {
+      if (skill.get('skillSlot') === 1) {
         skills[0].value += 1;
-      } else if (skillNumber === 2) {
+      } else if (skill.get('skillSlot') === 2) {
         skills[1].value += 1;
-      } else if (skillNumber === 3) {
+      } else if (skill.get('skillSlot') === 3) {
         skills[2].value += 1;
       } else {
         skills[3].value += 1;
@@ -326,12 +326,12 @@ class ProBuildView extends Component {
     const skills = [];
     const skillNodes = [];
 
-    this.props.build.get('skillsOrder').forEach((skillNumber) => {
-      if (skillNumber === 1) {
+    this.props.build.get('skillsOrder').forEach((skill) => {
+      if (skill.get('skillSlot') === 1) {
         skills.push('Q');
-      } else if (skillNumber === 2) {
+      } else if (skill.get('skillSlot') === 2) {
         skills.push('W');
-      } else if (skillNumber === 3) {
+      } else if (skill.get('skillSlot') === 3) {
         skills.push('E');
       } else {
         skills.push('R');
@@ -394,10 +394,10 @@ class ProBuildView extends Component {
 
       return (<View style={styles.root}>
         <PlayerToolbar
-          name={build.getIn(['proPlayerData', 'name'])}
-          imageUrl={build.getIn(['proPlayerData', 'imageUrl'])}
-          role={build.getIn(['proPlayerData', 'role'])}
-          realName={build.getIn(['proPlayerData', 'realName'])}
+          name={build.getIn(['proPlayer', 'name'])}
+          imageUrl={build.getIn(['proPlayer', 'imageUrl'])}
+          role={build.getIn(['proPlayer', 'role'])}
+          realName={build.getIn(['proPlayer', 'realName'])}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
         />
@@ -493,7 +493,7 @@ class ProBuildView extends Component {
           onPressBackButton={() => { Actions.pop(); }}
         />
         <View style={styles.basicContainer}>
-          <LoadingScreen />
+          <LoadingIndicator />
         </View>
       </View>);
     }
@@ -561,18 +561,21 @@ ProBuildView.propTypes = {
         total: PropTypes.number,
       }),
     })),
-    skillsOrder: ImmutablePropTypes.listOf(PropTypes.number),
-    proPlayerData: ImmutablePropTypes.mapContains({
+    skillsOrder: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
+      skillSlot: PropTypes.number.isRequired,
+      levelUpType: PropTypes.string.isRequired,
+    }).isRequired),
+    proPlayer: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       imageUrl: PropTypes.string,
     }),
-    proSummonerData: ImmutablePropTypes.mapContains({
+    proSummoner: ImmutablePropTypes.mapContains({
       summonerId: PropTypes.number,
       region: PropTypes.string,
       role: PropTypes.string,
       realName: PropTypes.string,
     }),
-  }),
+  }).isRequired,
   isFetching: PropTypes.bool,
   fetched: PropTypes.bool,
   errorMessage: PropTypes.string,

@@ -58,6 +58,7 @@ class ChampionsMasteryView extends Component {
 
     this.handleOnPressChampion = this.handleOnPressChampion.bind(this);
     this.getModalContent = this.getModalContent.bind(this);
+    this.getMasteriesList = this.getMasteriesList.bind(this);
     this.championsMasteryDataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
@@ -72,10 +73,20 @@ class ChampionsMasteryView extends Component {
       return null;
     }
 
-    const masteries = this.props.championsMastery.get('masteries');
+    const masteries = this.getMasteriesList();
     const masteryFound = masteries.find(mastery => mastery.get('championId') === this.state.championSelected);
 
     return <MasteryInfo mastery={masteryFound} />;
+  }
+
+  getMasteriesList() {
+    const masteriesList = this.props.championsMasteries.getIn(['data', 'attributes', 'masteries']);
+
+    if (masteriesList) {
+      return masteriesList;
+    }
+
+    return Immutable.List();
   }
 
   handleOnPressChampion(championId) {
@@ -84,9 +95,9 @@ class ChampionsMasteryView extends Component {
     });
   }
 
-
   render() {
-    const championsMastery = this.props.championsMastery;
+    const championsMasteries = this.props.championsMasteries;
+    const masteriesList = this.getMasteriesList();
     let championImageSize;
     let progressWidth;
     let pageSize;
@@ -101,17 +112,17 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
-    if (championsMastery.get('fetchError')) {
+    if (championsMasteries.get('fetchError')) {
       return (<View style={styles.container}>
         <ErrorScreen
-          message={championsMastery.get('errorMessage')}
+          message={championsMasteries.get('errorMessage')}
           onPressRetryButton={this.props.onPressRetryButton}
           retryButton
         />
       </View>);
-    } else if (championsMastery.get('masteries').size === 0 && championsMastery.get('fetched')) {
+    } else if (masteriesList.size === 0 && championsMasteries.get('fetched')) {
       return (<View style={{ flex: 1 }}>
-        <Summary masteries={championsMastery.get('masteries')} />
+        <Summary masteries={masteriesList} />
         <View style={styles.container}>
           <Text style={styles.messageText}>
             Este invocador no tiene puntos de maestria con ningún campeón.
@@ -121,12 +132,12 @@ class ChampionsMasteryView extends Component {
     }
 
     return (<View style={{ flex: 1 }}>
-      <Summary masteries={championsMastery.get('masteries')} />
+      <Summary masteries={masteriesList} />
       <ListView
         style={styles.rootListView}
         pageSize={pageSize}
         contentContainerStyle={styles.listViewContainer}
-        dataSource={this.championsMasteryDataSource.cloneWithRows(championsMastery.get('masteries').toArray())}
+        dataSource={this.championsMasteryDataSource.cloneWithRows(masteriesList.toArray())}
         renderRow={(mastery, sectionId, rowId) => <ChampionMastery
           key={rowId}
           onPress={this.handleOnPressChampion}
@@ -136,7 +147,7 @@ class ChampionsMasteryView extends Component {
         />}
         refreshControl={
           <RefreshControl
-            refreshing={championsMastery.get('isFetching')}
+            refreshing={championsMasteries.get('isFetching')}
             enabled={false}
             colors={[colors.spinnerColor]}
           />
@@ -157,7 +168,7 @@ class ChampionsMasteryView extends Component {
 }
 
 ChampionsMasteryView.propTypes = {
-  championsMastery: ImmutablePropTypes.mapContains({
+  championsMasteries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequied,
     fetched: PropTypes.bool.isRequied,
     fetchError: PropTypes.bool.isRequied,
