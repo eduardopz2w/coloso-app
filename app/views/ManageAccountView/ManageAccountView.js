@@ -4,7 +4,7 @@ import { MKTextField, MKButton, MKSpinner } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
-import RiotApi from '../../utils/RiotApi';
+import ColosoApi from '../../utils/ColosoApi';
 import { saveAccount } from '../../redux/actions/OwnerAccountActions';
 import colors from '../../utils/colors';
 import RegionSelector from '../../components/RegionSelector';
@@ -70,7 +70,7 @@ class ManageAccountView extends Component {
     if (state.summonerName !== '') {
       this.setState({ isFetching: true });
 
-      RiotApi.summoner.findByName(state.summonerName, state.region)
+      ColosoApi.summoner.findByName(state.summonerName, state.region)
         .then((summonerData) => {
           this.props.saveAccount({
             summonerName: summonerData.name,

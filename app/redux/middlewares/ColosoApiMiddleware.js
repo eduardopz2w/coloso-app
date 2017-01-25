@@ -1,35 +1,35 @@
 import _ from 'lodash';
 import normalize from 'json-api-normalizer';
-import RiotApi from '../../utils/RiotApi';
+import ColosoApi from '../../utils/ColosoApi';
 import { mergeEntities } from '../actions/EntitiesActions';
 
-export const RIOT_CALL = 'RIOT_API_MIDDLEWARE/RIOT_CALL';
-export const RIOT_CALL_TYPES = {
-  SUMMONER_BY_NAME: 'RIOT_CALL/SUMMONER_BY_NAME',
-  SUMMONER: 'RIOT_CALL/SUMMONER',
-  LEAGUE_ENTRY: 'RIOT_CALL/LEAGUE_ENTRY',
-  CHAMPIONS_MASTERIES: 'RIOT_CALL/CHAMPIONS_MASTERIES',
-  GAMES_RECENT: 'RIOT_CALL/GAMES_RECENT',
-  MASTERIES: 'RIOT_CALL/MASTERIES',
-  RUNES: 'RIOT_CALL/RUNES',
+export const COLOSO_CALL = 'RIOT_API_MIDDLEWARE/COLOSO_CALL';
+export const COLOSO_CALL_TYPES = {
+  SUMMONER_BY_NAME: 'COLOSO_CALL/SUMMONER_BY_NAME',
+  SUMMONER: 'COLOSO_CALL/SUMMONER',
+  LEAGUE_ENTRY: 'COLOSO_CALL/LEAGUE_ENTRY',
+  CHAMPIONS_MASTERIES: 'COLOSO_CALL/CHAMPIONS_MASTERIES',
+  GAMES_RECENT: 'COLOSO_CALL/GAMES_RECENT',
+  MASTERIES: 'COLOSO_CALL/MASTERIES',
+  RUNES: 'COLOSO_CALL/RUNES',
 };
 
 // TODO: Handle errors
 
-const middleware = ({ dispatch }) => next => action => {
-  if (!_.has(action, ['payload', RIOT_CALL])) {
+const middleware = ({ dispatch }) => next => (action) => {
+  if (!_.has(action, ['payload', COLOSO_CALL])) {
     return next(action);
   }
 
   dispatch({
     type: `${action.type}_PENDING`,
-    payload: _.omit(action.payload, RIOT_CALL),
+    payload: _.omit(action.payload, COLOSO_CALL),
   });
 
-  const callData = action.payload[RIOT_CALL];
+  const callData = action.payload[COLOSO_CALL];
 
-  if (callData.type === RIOT_CALL_TYPES.SUMMONER_BY_NAME) {
-    RiotApi.summoner.findByName(action.payload.summonerName, action.payload.region)
+  if (callData.type === COLOSO_CALL_TYPES.SUMMONER_BY_NAME) {
+    ColosoApi.getSummonerByName(action.payload.summonerName, action.payload.region)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -43,8 +43,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.SUMMONER) {
-    RiotApi.summoner.findByUrid(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.SUMMONER) {
+    ColosoApi.getSummonerByUrid(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -58,8 +58,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.LEAGUE_ENTRY) {
-    RiotApi.summoner.leagueEntry(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.LEAGUE_ENTRY) {
+    ColosoApi.getLeagueEntry(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -73,8 +73,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.CHAMPIONS_MASTERIES) {
-    RiotApi.summoner.championsMastery(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.CHAMPIONS_MASTERIES) {
+    ColosoApi.getChampionsMasteries(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -88,8 +88,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.GAMES_RECENT) {
-    RiotApi.summoner.gamesRecent(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.GAMES_RECENT) {
+    ColosoApi.getGamesRecent(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -103,8 +103,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.MASTERIES) {
-    RiotApi.summoner.masteries(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.MASTERIES) {
+    ColosoApi.getMasteries(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -118,8 +118,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.RUNES) {
-    RiotApi.summoner.runes(action.payload.summonerUrid)
+  if (callData.type === COLOSO_CALL_TYPES.RUNES) {
+    ColosoApi.getRunes(action.payload.summonerUrid)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -133,8 +133,8 @@ const middleware = ({ dispatch }) => next => action => {
       });
   }
 
-  if (callData.type === RIOT_CALL_TYPES.STATS_SUMMARY) {
-    RiotApi.summoner.stats.summary(action.payload.summonerUrid, action.payload.season)
+  if (callData.type === COLOSO_CALL_TYPES.STATS_SUMMARY) {
+    ColosoApi.getStatsSummary(action.payload.summonerUrid, action.payload.season)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -147,6 +147,8 @@ const middleware = ({ dispatch }) => next => action => {
         });
       });
   }
+
+  return null;
 };
 
 export default middleware;

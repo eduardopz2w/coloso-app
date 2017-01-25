@@ -6,10 +6,10 @@ const VERSION_CODE = 20;
 let BASEURL = 'http://lolcena.ddns.net:1338/';
 
 if (__DEV__) {
-  BASEURL = 'http://192.168.1.2:3000/';
+  BASEURL = 'http://192.168.1.2:3000';
 }
 
-const cenaClient = axios.create({
+const colosoClient = axios.create({
   baseURL: BASEURL,
   timeout: TIMEOUT,
   responseType: 'json',
@@ -19,7 +19,7 @@ const cenaClient = axios.create({
   },
 });
 
-cenaClient.interceptors.response.use((response) => {
+colosoClient.interceptors.response.use((response) => {
   if (!_.isObject(response.data) && !_.isArray(response.data)) {
     return Promise.reject({
       response: {
@@ -65,7 +65,7 @@ function getBuilds(filters, page, pageSize) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
 
-    return cenaClient.get(url, {
+    return colosoClient.get(url, {
       params,
     })
       .then((response) => {
@@ -83,7 +83,7 @@ function getProPlayers() {
   return new Promise((resolve, reject) => {
     const url = 'pro-players';
 
-    return cenaClient.get(url)
+    return colosoClient.get(url)
       .then((response) => {
         resolve(response.data);
       })
@@ -99,7 +99,155 @@ function getBuild(buildId) {
   return new Promise((resolve, reject) => {
     const url = `pro-builds/${buildId}`;
 
-    return cenaClient.get(url)
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getSummonerByName(summonerName, region) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/by-name/${summonerName}`;
+
+    return colosoClient.get(url, { params: { region } })
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getSummonerByUrid(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getLeagueEntry(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/league/entry`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getChampionsMasteries(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/champions-mastery`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getGamesRecent(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/games/recent`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getMasteries(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/masteries`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getRunes(sumUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/runes`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getGameCurrent(summonerId, region) {
+  return new Promise((resolve, reject) => {
+    const url = `${region}/summoner/${summonerId}/games/current`;
+
+    return colosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch((err) => {
+        const { message: errorMessage } = err.response.data;
+
+        reject({ errorMessage });
+      });
+  });
+}
+
+function getStatsSummary(sumUrid, season) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/summoner/${sumUrid}/stats/summary`;
+
+    return colosoClient.get(url, {
+      params: {
+        season,
+      },
+    })
       .then((response) => {
         resolve(response.data);
       })
@@ -115,4 +263,13 @@ export default {
   getBuilds,
   getBuild,
   getProPlayers,
+  getSummonerByName,
+  getSummonerByUrid,
+  getLeagueEntry,
+  getChampionsMasteries,
+  getGamesRecent,
+  getGameCurrent,
+  getMasteries,
+  getRunes,
+  getStatsSummary,
 };
