@@ -80,7 +80,7 @@ class ChampionsMasteryView extends Component {
   }
 
   getMasteriesList() {
-    const masteriesList = this.props.championsMasteries.getIn(['data', 'attributes', 'masteries']);
+    const masteriesList = this.props.championsMasteries.getIn(['data', 'masteries']);
 
     if (masteriesList) {
       return masteriesList;

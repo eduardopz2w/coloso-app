@@ -40,11 +40,11 @@ class MasteriesView extends Component {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={masteries.getIn(['data', 'attributes', 'pages'])}
+            pages={masteries.getIn(['data', 'pages'])}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
-        <MasteryPage page={masteries.getIn(['data', 'attributes', 'pages', this.state.pageSelected])} />
+        <MasteryPage page={masteries.getIn(['data', 'pages', this.state.pageSelected])} />
       </View>);
     } else if (masteries.get('isFetching')) {
       return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>

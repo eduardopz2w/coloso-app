@@ -177,16 +177,16 @@ class SummonerProfileViewToolbar extends Component {
             <View style={styles.summonerImageContainer}>
               <Image
                 style={styles.summonerImage}
-                source={{ uri: getImageUri(summonerData.getIn(['data', 'attributes', 'profileIconId'])) }}
+                source={{ uri: getImageUri(summonerData.getIn(['data', 'profileIconId'])) }}
               />
               <View style={styles.summonerLevelContainer}>
-                <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'attributes', 'summonerLevel'])}</Text>
+                <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'summonerLevel'])}</Text>
               </View>
             </View>
 
             <View style={styles.summonerDataContainer}>
-              <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'attributes', 'name'])}</Text>
-              <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'attributes', 'region']))}</Text>
+              <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'name'])}</Text>
+              <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'region']))}</Text>
             </View>
           </View>
         )}

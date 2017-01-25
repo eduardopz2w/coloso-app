@@ -21,6 +21,7 @@ import MasteriesView from './components/MasteriesView';
 import SummonerSummaryView from './components/SummonerSummaryView';
 import RunesView from './components/RunesView';
 import colors from '../../utils/colors';
+import denormalize from '../../utils/denormalize';
 import { tracker } from '../../utils/analytics';
 
 const styles = StyleSheet.create({
@@ -154,25 +155,14 @@ SummonerProfileView.propTypes = {
     fetched: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    data: ImmutablePropTypes.mapContains({
-      attributes: ImmutablePropTypes.mapContains({
-        entires: PropTypes.array,
-      }),
-    }),
+    data: ImmutablePropTypes.map,
   }),
   summonerData: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    data: ImmutablePropTypes.mapContains({
-      attributes: ImmutablePropTypes.mapContains({
-        name: PropTypes.string.isRequired,
-        profileIconId: PropTypes.number.isRequired,
-        summonerLevel: PropTypes.number.isRequired,
-        region: PropTypes.string.isRequired,
-      }),
-    }),
+    data: ImmutablePropTypes.map,
   }),
   championsMasteries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
@@ -206,46 +196,47 @@ function mapStateToProps(state) {
   let masteries = state.summonerProfileView.get('masteries');
   let runes = state.summonerProfileView.get('runes');
   let summary = state.summonerProfileView.get('summary');
+  const entities = state.entities;
 
   if (summonerData.get('fetched')) {
     summonerData = summonerData.merge({
-      data: state.entities.getIn(['summoners', summonerData.get('summonerUrid')]),
+      data: denormalize(summonerData.get('summonerUrid'), 'summoners', entities),
     });
   }
 
   if (leagueEntry.get('fetched')) {
     leagueEntry = leagueEntry.merge({
-      data: state.entities.getIn(['leagueEntries', leagueEntry.get('leagueEntryId')]),
+      data: denormalize(leagueEntry.get('leagueEntryId'), 'leagueEntries', entities),
     });
   }
 
   if (championsMasteries.get('fetched')) {
     championsMasteries = championsMasteries.merge({
-      data: state.entities.getIn(['championsMasteries', championsMasteries.get('championsMasteriesId')]),
+      data: denormalize(championsMasteries.get('championsMasteriesId'), 'championsMasteries', entities),
     });
   }
 
   if (gamesRecent.get('fetched')) {
     gamesRecent = gamesRecent.merge({
-      data: state.entities.getIn(['gamesRecent', gamesRecent.get('gamesRecentId')]),
+      data: denormalize(gamesRecent.get('gamesRecentId'), 'gamesRecent', entities),
     });
   }
 
   if (masteries.get('fetched')) {
     masteries = masteries.merge({
-      data: state.entities.getIn(['masteries', masteries.get('masteriesId')]),
+      data: denormalize(masteries.get('masteriesId'), 'masteries', entities),
     });
   }
 
   if (runes.get('fetched')) {
     runes = runes.merge({
-      data: state.entities.getIn(['runes', runes.get('runesId')]),
+      data: denormalize(runes.get('runesId'), 'runes', entities),
     });
   }
 
   if (summary.get('fetched')) {
     summary = summary.merge({
-      data: state.entities.getIn(['statsSummaries', summary.get('statsSummariesId')]),
+      data: denormalize(summary.get('statsSummariesId'), 'statsSummaries', entities),
     });
   }
 

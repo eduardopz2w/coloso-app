@@ -44,7 +44,7 @@ class SummonerSumaryView extends Component {
     const summonerSummary = this.props.summary;
 
     if (summonerSummary.get('fetched')) {
-      const summaries = filterEmpty(summonerSummary.getIn(['data', 'attributes', 'playerStatSummaries']));
+      const summaries = filterEmpty(summonerSummary.getIn(['data', 'playerStatSummaries']));
 
       return (
         <View>

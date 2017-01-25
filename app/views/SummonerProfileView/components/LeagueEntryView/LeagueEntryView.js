@@ -48,7 +48,7 @@ class LeagueEntryView extends Component {
   }
 
   getEntriesList() {
-    const entriesList = this.props.leagueEntry.getIn(['data', 'attributes', 'entries']);
+    const entriesList = this.props.leagueEntry.getIn(['data', 'entries']);
 
     if (entriesList) {
       return entriesList;

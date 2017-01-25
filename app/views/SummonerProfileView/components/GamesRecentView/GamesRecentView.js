@@ -30,7 +30,7 @@ class GamesRecentView extends PureComponent {
   }
 
   getGamesList() {
-    const gamesList = this.props.gamesRecent.getIn(['data', 'attributes', 'games']);
+    const gamesList = this.props.gamesRecent.getIn(['data', 'games']);
 
     if (gamesList) {
       return gamesList;

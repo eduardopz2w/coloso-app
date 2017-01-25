@@ -43,16 +43,18 @@ class RunesView extends Component {
   render() {
     const { runes } = this.props;
 
+
     if (runes.get('fetched')) {
+      console.log(runes.toJS());
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={runes.getIn(['data', 'attributes', 'pages'])}
+            pages={runes.getIn(['data', 'pages'])}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
         <View style={styles.runesContainer}>
-          <RunePage page={runes.getIn(['data', 'attributes', 'pages', this.state.pageSelected])} />
+          <RunePage page={runes.getIn(['data', 'pages', this.state.pageSelected])} />
         </View>
       </View>);
     } else if (runes.get('isFetching')) {
