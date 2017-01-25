@@ -48,25 +48,13 @@ colosoClient.interceptors.response.use((response) => {
 });
 
 
-function getBuilds(filters, page, pageSize) {
-  const params = {
-    page,
-    pageSize,
-  };
-
-  if (filters.championId > 0) {
-    params.championId = filters.championId;
-  }
-
-  if (filters.proPlayerId > 0) {
-    params.proPlayerId = filters.proPlayerId;
-  }
-
+function getProBuilds(queryParams, pageParams) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
 
     return colosoClient.get(url, {
-      params,
+      page: pageParams,
+      ...queryParams,
     })
       .then((response) => {
         resolve(response.data);
@@ -260,7 +248,7 @@ function getStatsSummary(sumUrid, season) {
 }
 
 export default {
-  getBuilds,
+  getProBuilds,
   getBuild,
   getProPlayers,
   getSummonerByName,

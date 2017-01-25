@@ -12,6 +12,7 @@ export const COLOSO_CALL_TYPES = {
   GAMES_RECENT: 'COLOSO_CALL/GAMES_RECENT',
   MASTERIES: 'COLOSO_CALL/MASTERIES',
   RUNES: 'COLOSO_CALL/RUNES',
+  PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
 };
 
 // TODO: Handle errors
@@ -135,6 +136,21 @@ const middleware = ({ dispatch }) => next => (action) => {
 
   if (callData.type === COLOSO_CALL_TYPES.STATS_SUMMARY) {
     ColosoApi.getStatsSummary(action.payload.summonerUrid, action.payload.season)
+      .then((response) => {
+        const normalized = normalize(response);
+
+        dispatch(mergeEntities(normalized));
+        dispatch({
+          type: `${action.type}_FULFILLED`,
+          payload: {
+            statsSummariesId: _.first(_.keys(normalized.statsSummaries)),
+          },
+        });
+      });
+  }
+
+  if (callData.type === COLOSO_CALL_TYPES.PRO_BUILDS) {
+    ColosoApi.getStatsSummary(action.payload.queryParams, action.payload.season)
       .then((response) => {
         const normalized = normalize(response);
 

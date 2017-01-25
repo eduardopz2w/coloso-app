@@ -29,13 +29,15 @@ if (__DEV__) {
   middlewares = [...middlewares, logger];
 }
 
-const store = createStore(mainReducer, applyMiddleware(...middlewares));
+export default function configureStore() {
+  const store = createStore(mainReducer, applyMiddleware(...middlewares));
 
-if (module.hot) {
-  module.hot.accept(() => {
-    const nextRootReducer = require('./reducers').default; // eslint-disable-line global-require
-    store.replaceReducer(nextRootReducer);
-  });
+  if (module.hot) {
+    module.hot.accept(() => {
+      const nextRootReducer = require('./reducers').default; // eslint-disable-line global-require
+      store.replaceReducer(nextRootReducer);
+    });
+  }
+
+  return store;
 }
-
-export default store;
