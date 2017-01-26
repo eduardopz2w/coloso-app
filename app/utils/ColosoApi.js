@@ -1,10 +1,10 @@
 import axios from 'axios';
 import Qs from 'qs';
 import _ from 'lodash';
+import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
 const TIMEOUT = 10000;
-const VERSION_CODE = 20;
 let BASEURL = 'http://192.168.1.2:3000';
 
 if (__DEV__) {
@@ -16,8 +16,8 @@ const colosoClient = axios.create({
   timeout: TIMEOUT,
   responseType: 'json',
   headers: {
-    'x-version-code': VERSION_CODE,
-    'Content-Type': 'application/json',
+    'App-Version': DeviceInfo.getVersion(),
+    'Content-Type': 'application/vnd.api+json',
   },
   paramsSerializer: params => Qs.stringify(params, { arrayFormat: 'brackets' }),
 });
