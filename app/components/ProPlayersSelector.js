@@ -74,12 +74,12 @@ class ChampionSelector extends Component {
 
 ChampionSelector.propTypes = {
   onChangeSelected: PropTypes.func.isRequired,
-  initialValue: PropTypes.number,
+  initialValue: PropTypes.string,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
   titleStyle: Text.propTypes.style,
   proPlayers: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
 };

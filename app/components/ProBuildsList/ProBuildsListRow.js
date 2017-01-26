@@ -170,10 +170,10 @@ class ProBuild extends Component {
         <View>
           <View style={styles.playerData}>
             <ProPlayerImage
-              imageUrl={build.getIn(['proPlayer', 'imageUrl'])}
-              role={build.getIn(['proPlayer', 'role'])}
+              imageUrl={build.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
+              role={build.getIn(['proSummoner', 'proPlayer', 'role'])}
             />
-            <Text style={styles.playerName}>{build.getIn(['proPlayer', 'name'])}</Text>
+            <Text style={styles.playerName}>{build.getIn(['proSummoner', 'proPlayer', 'name'])}</Text>
             <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
           </View>
           <View style={styles.gameDataRow}>

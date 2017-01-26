@@ -13,6 +13,7 @@ export const COLOSO_CALL_TYPES = {
   MASTERIES: 'COLOSO_CALL/MASTERIES',
   RUNES: 'COLOSO_CALL/RUNES',
   PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
+  PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
 };
 
 // TODO: Handle errors
@@ -150,7 +151,7 @@ const middleware = ({ dispatch }) => next => (action) => {
   }
 
   if (callData.type === COLOSO_CALL_TYPES.PRO_BUILDS) {
-    ColosoApi.getStatsSummary(action.payload.queryParams, action.payload.season)
+    ColosoApi.getProBuilds(action.payload.queryParams, action.payload.pageParams)
       .then((response) => {
         const normalized = normalize(response);
 
@@ -158,7 +159,26 @@ const middleware = ({ dispatch }) => next => (action) => {
         dispatch({
           type: `${action.type}_FULFILLED`,
           payload: {
-            statsSummariesId: _.first(_.keys(normalized.statsSummaries)),
+            proBuildsIds: _.keys(normalized.proBuilds),
+            pagination: {
+              currentPage: response.meta.currentPage,
+              totalPages: response.meta.totalPages,
+            },
+          },
+        });
+      });
+  }
+
+  if (callData.type === COLOSO_CALL_TYPES.PRO_PLAYERS) {
+    ColosoApi.getProPlayers()
+      .then((response) => {
+        const normalized = normalize(response);
+
+        dispatch(mergeEntities(normalized));
+        dispatch({
+          type: `${action.type}_FULFILLED`,
+          payload: {
+            proPlayersIds: _.keys(normalized.proPlayers),
           },
         });
       });

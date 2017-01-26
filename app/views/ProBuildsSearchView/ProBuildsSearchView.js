@@ -5,10 +5,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
 import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsSearchActions';
-import { fetchPlayers } from '../../redux/actions/ProPlayersActions';
+import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
 import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
 import ErrorScreen from '../../components/ErrorScreen';
+import denormalize from '../../utils/denormalize';
 
 const styles = StyleSheet.create({
   root: {
@@ -19,8 +20,6 @@ const styles = StyleSheet.create({
     padding: 16,
   },
 });
-
-const PAGESIZE = 25;
 
 class ProBuildSearchView extends Component {
   constructor(props) {
@@ -35,7 +34,7 @@ class ProBuildSearchView extends Component {
     this.props.fetchBuilds({}, 1);
 
     if (!this.props.proPlayers.get('fetched')) {
-      this.props.fetchPlayers();
+      this.props.fetchProPlayers();
     }
   }
 
@@ -46,42 +45,42 @@ class ProBuildSearchView extends Component {
   handleOnChangeChampionSelected(championId) {
     this.props.fetchBuilds({
       championId,
-      proPlayerId: this.props.probuilds.get('proPlayerSelected'),
+      proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
     }, 1);
   }
 
   handleOnChangeProPlayerSelected(proPlayerId) {
     this.props.fetchBuilds({
-      championId: this.props.probuilds.get('championSelected'),
+      championId: this.props.proBuilds.get('championSelected'),
       proPlayerId,
     }, 1);
   }
 
   handleOnLoadMore() {
-    const pagData = this.props.probuilds.get('pagination').toJS();
-    const isFetching = this.props.probuilds.get('isFetching');
+    const pagData = this.props.proBuilds.get('pagination').toJS();
+    const isFetching = this.props.proBuilds.get('isFetching');
 
-    if (!isFetching && pagData.pageCount > pagData.page) {
-      const championSelected = this.props.probuilds.get('championSelected');
-      const proPlayerSelected = this.props.probuilds.get('proPlayerSelected');
+    if (!isFetching && pagData.totalPages > pagData.currentPage) {
+      const championSelected = this.props.proBuilds.get('championSelected');
+      const proPlayerSelected = this.props.proBuilds.get('proPlayerSelected');
 
       this.props.fetchBuilds(
         {
           championId: championSelected,
           proPlayerId: proPlayerSelected,
         },
-        pagData.page + 1,
+        pagData.currentPage + 1,
       );
     }
   }
 
   render() {
-    const probuilds = this.props.probuilds;
+    const probuilds = this.props.proBuilds;
     const isFetching = probuilds.get('isFetching');
     const isRefreshing = probuilds.get('isRefreshing');
     const championSelected = probuilds.get('championSelected');
     const proPlayerSelected = probuilds.get('proPlayerSelected');
-    const builds = probuilds.get('builds');
+    const proBuildsList = probuilds.getIn(['data', 'proBuilds']);
 
     let content;
 
@@ -98,9 +97,9 @@ class ProBuildSearchView extends Component {
           retryButton
         />
       </View>);
-    } else if (builds.size > 0 || isFetching) {
+    } else if (proBuildsList.size > 0 || isFetching) {
       content = (<ProBuildsList
-        builds={builds}
+        builds={proBuildsList}
         onPressBuild={buildId => Actions.probuild_view({ buildId })}
         onLoadMore={this.handleOnLoadMore}
         isFetching={isFetching}
@@ -125,8 +124,8 @@ class ProBuildSearchView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
-        championSelected={this.props.probuilds.get('championSelected')}
-        proPlayerSelected={this.props.probuilds.get('proPlayerSelected')}
+        championSelected={this.props.proBuilds.get('championSelected')}
+        proPlayerSelected={this.props.proBuilds.get('proPlayerSelected')}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
         onChangeProPlayerSelected={this.handleOnChangeProPlayerSelected}
         disabledFilters={isFetching || isRefreshing}
@@ -138,21 +137,23 @@ class ProBuildSearchView extends Component {
 
 ProBuildSearchView.propTypes = {
   fetchBuilds: PropTypes.func,
-  fetchPlayers: PropTypes.func,
+  fetchProPlayers: PropTypes.func,
   refreshBuilds: PropTypes.func,
-  probuilds: ImmutablePropTypes.mapContains({
+  proBuilds: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     isRefreshing: PropTypes.bool,
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
-    builds: ImmutablePropTypes.list,
+    proBuildsIds: PropTypes.list,
+    data: ImmutablePropTypes.mapContains({
+      proBuilds: ImmutablePropTypes.list,
+    }),
     pagination: ImmutablePropTypes.mapContains({
-      page: PropTypes.number,
-      pageSize: PropTypes.number,
-      pageCount: PropTypes.number,
+      currentPage: PropTypes.number,
+      totalPages: PropTypes.number,
     }),
     championSelected: PropTypes.number,
-    proPlayerSelected: PropTypes.number,
+    proPlayerSelected: PropTypes.string,
   }),
   proPlayers: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool,
@@ -160,25 +161,32 @@ ProBuildSearchView.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const probuilds = state.proBuildsSearchView;
-  const proPlayers = state.proPlayers;
+  let proBuilds = state.proBuildsSearchView;
+  let proPlayers = state.proPlayers;
 
+  const proBuildsIds = proBuilds.get('proBuildsIds');
+  const proPlayersIds = proPlayers.get('proPlayersIds');
+
+  proBuilds = proBuilds.setIn(['data', 'proBuilds'], proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
+  proPlayers = proPlayers.setIn(['data', 'proPlayers'], proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
+
+  console.debug(proPlayers.toJS());
   return {
-    probuilds,
+    proBuilds,
     proPlayers,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (filters, page) => {
-      dispatch(fetchBuilds(filters, page, PAGESIZE));
+    fetchBuilds: (queryParams, pageNumber) => {
+      dispatch(fetchBuilds(queryParams, pageNumber));
     },
-    refreshBuilds: (filters) => {
-      dispatch(refreshBuilds(filters, PAGESIZE));
+    refreshBuilds: (queryParams) => {
+      dispatch(refreshBuilds(queryParams));
     },
-    fetchPlayers: () => {
-      dispatch(fetchPlayers());
+    fetchProPlayers: () => {
+      dispatch(fetchProPlayers());
     },
   };
 }

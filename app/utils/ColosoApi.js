@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Qs from 'qs';
 import _ from 'lodash';
 
 const TIMEOUT = 10000;
@@ -17,6 +18,7 @@ const colosoClient = axios.create({
     'x-version-code': VERSION_CODE,
     'Content-Type': 'application/json',
   },
+  paramsSerializer: params => Qs.stringify(params, { arrayFormat: 'brackets' }),
 });
 
 colosoClient.interceptors.response.use((response) => {
@@ -51,15 +53,26 @@ colosoClient.interceptors.response.use((response) => {
 function getProBuilds(queryParams, pageParams) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
+    const params = {
+      page: pageParams,
+    };
+
+    if (_.isFinite(queryParams.championId) && queryParams.championId > 0) {
+      params.championId = queryParams.championId;
+    }
+
+    if (!_.isEmpty(queryParams.proPlayerId)) {
+      params.proPlayerId = queryParams.proPlayerId;
+    }
 
     return colosoClient.get(url, {
-      page: pageParams,
-      ...queryParams,
+      params,
     })
       .then((response) => {
         resolve(response.data);
       })
       .catch((err) => {
+        console.error(err);
         const { message: errorMessage } = err.response.data;
 
         reject({ errorMessage });

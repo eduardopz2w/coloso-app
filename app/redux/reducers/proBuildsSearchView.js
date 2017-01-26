@@ -7,36 +7,45 @@ const initialState = Immutable.fromJS({
   errorMessage: '',
   isFetching: false,
   isRefreshing: false,
-  builds: [],
+  proBuildsIds: [],
   pagination: {
-    page: 1,
-    pageCount: 1,
+    currentPage: 1,
+    totalPages: 1,
+  },
+  data: {
+    proBuilds: [],
   },
   championSelected: 0,
-  proPlayerSelected: 0,
+  proPlayerSelected: null,
 });
 
 export default typeToReducer({
   [fetchBuilds]: {
-    PENDING: (state, action) => state.withMutations((mutator) => {
-      if (action.payload.page === 1) {
-        mutator.set('builds', Immutable.List([]));
+    PENDING: (state, { payload }) => state.withMutations((mutator) => {
+      const { queryParams, pageParams } = payload;
+
+      if (pageParams.number === 1) {
+        mutator.set('proBuildsIds', Immutable.List([]));
         mutator.set('pagination', Immutable.fromJS({
-          page: 1,
-          pageCount: 1,
+          currentPage: 1,
+          totalPages: 1,
         }));
-        mutator.set('championSelected', action.payload.championId);
-        mutator.set('proPlayerSelected', action.payload.proPlayerId);
+
+        const championId = queryParams.championId || 0;
+        const proPlayerId = queryParams.proPlayerId || null;
+
+        mutator.set('championSelected', championId);
+        mutator.set('proPlayerSelected', proPlayerId);
       }
 
       mutator.set('fetchError', false);
       mutator.set('isFetching', true);
       mutator.set('refreshing', false);
     }),
-    FULFILLED: (state, action) => state.withMutations((mutator) => {
+    FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
       mutator.set('isFetching', false);
-      mutator.update('builds', builds => builds.concat(Immutable.fromJS(action.payload.probuilds)));
-      mutator.set('pagination', Immutable.fromJS(action.payload.pagination));
+      mutator.update('proBuildsIds', proBuilds => proBuilds.concat(payload.proBuildsIds));
+      mutator.set('pagination', Immutable.fromJS(payload.pagination));
     }),
     REJECTED: (state, action) => state.merge({
       isFetching: false,
@@ -56,11 +65,11 @@ export default typeToReducer({
       fetchError: true,
       errorMessage: action.payload.errorMessage,
     }),
-    FULFILLED: (state, action) => state.merge({
+    FULFILLED: (state, { payload }) => state.merge({
       isFetching: false,
       isRefreshing: false,
-      builds: Immutable.fromJS(action.payload.probuilds),
-      pagination: Immutable.fromJS(action.payload.pagination),
+      proBuildsIds: Immutable.List(payload.proBuildsIds),
+      pagination: Immutable.fromJS(payload.pagination),
     }),
   },
 

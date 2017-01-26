@@ -26,6 +26,7 @@ function Routes() {
           component={ProBuildsSearchView}
           hideNavBar
           type={ActionConst.RESET}
+          initial
         />
         <Scene key="probuild_view" component={ProBuildView} hideNavBar />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />

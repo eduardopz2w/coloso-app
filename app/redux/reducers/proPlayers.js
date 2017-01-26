@@ -1,22 +1,25 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchPlayers } from '../actions/ProPlayersActions';
+import { fetchProPlayers } from '../actions/ProPlayersActions';
 
 const initState = Immutable.fromJS({
   fetched: false,
   isFetching: false,
-  proPlayers: [],
+  proPlayersIds: [],
+  data: {
+    proPlayers: [],
+  },
   fetchError: false,
   errorMessage: '',
 });
 
 export default typeToReducer({
-  [fetchPlayers]: {
+  [fetchProPlayers]: {
     PENDING: state => state.merge({ fetchError: false, isFetching: true }),
-    FULFILLED: (state, action) => state.merge({
+    FULFILLED: (state, { payload }) => state.merge({
       fetched: true,
       isFetching: false,
-      proPlayers: Immutable.fromJS(action.payload.proPlayers),
+      proPlayersIds: Immutable.List(payload.proPlayersIds),
     }),
     REJECTED: (state, action) => state.merge({
       isFetching: false,
