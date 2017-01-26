@@ -1,6 +1,6 @@
 export default {
-  debug(data) {
-    console.debug(data);
+  debug(...args) {
+    console.debug(...args);
   },
 
   groupCollapsed(groupName) {

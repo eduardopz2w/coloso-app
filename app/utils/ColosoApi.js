@@ -54,12 +54,8 @@ colosoClient.interceptors.response.use((response) => {
 colosoClient.interceptors.request.use((config) => {
   if (__DEV__) {
     logger.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
-    logger.groupCollapsed('params');
-    logger.debug(config.params);
-    logger.groupEnd('params');
-    logger.groupCollapsed('headers');
-    logger.debug(config.headers);
-    logger.groupEnd('headers');
+    logger.debug('params: ', config.params);
+    logger.debug('headers: ', config.headers);
     logger.groupEnd('Request');
   }
 
