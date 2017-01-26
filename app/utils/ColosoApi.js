@@ -96,9 +96,9 @@ function getProPlayers() {
   });
 }
 
-function getBuild(buildId) {
+function getProBuild(proBuildId) {
   return new Promise((resolve, reject) => {
-    const url = `pro-builds/${buildId}`;
+    const url = `pro-builds/${proBuildId}`;
 
     return colosoClient.get(url)
       .then((response) => {
@@ -262,7 +262,7 @@ function getStatsSummary(sumUrid, season) {
 
 export default {
   getProBuilds,
-  getBuild,
+  getProBuild,
   getProPlayers,
   getSummonerByName,
   getSummonerByUrid,

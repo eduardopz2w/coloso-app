@@ -184,6 +184,21 @@ const middleware = ({ dispatch }) => next => (action) => {
       });
   }
 
+  if (callData.type === COLOSO_CALL_TYPES.PRO_BUILD) {
+    ColosoApi.getProBuild(action.payload.proBuildId)
+      .then((response) => {
+        const normalized = normalize(response);
+
+        dispatch(mergeEntities(normalized));
+        dispatch({
+          type: `${action.type}_FULFILLED`,
+          payload: {
+            proBuildId: action.payload.proBuildId,
+          },
+        });
+      });
+  }
+
   return null;
 };
 
