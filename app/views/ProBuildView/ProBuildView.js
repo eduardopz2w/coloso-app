@@ -521,7 +521,7 @@ class ProBuildView extends Component {
         <BasicToolbar
           onPressBackButton={() => { Actions.pop(); }}
         />
-        <View style={styles.basicContainer}>
+        <View style={[styles.basicContainer, { alignItems: 'center' }]}>
           <LoadingIndicator />
         </View>
       </View>);
