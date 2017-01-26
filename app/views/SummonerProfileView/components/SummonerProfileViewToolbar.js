@@ -142,7 +142,7 @@ const styles = MediaQueryStyleSheet.create(
 );
 
 function getImageUri(profileIconId) {
-  return `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${profileIconId}.png`;
+  return `http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${profileIconId}.png`;
 }
 
 class SummonerProfileViewToolbar extends Component {

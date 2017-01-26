@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
-import { MKTextField, MKButton, MKSpinner } from 'react-native-material-kit';
+import { MKTextField, MKButton } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: 40,
+    marginTop: 16,
   },
   addAccountText: {
     color: '#FFF',
@@ -70,15 +71,15 @@ class ManageAccountView extends Component {
     if (state.summonerName !== '') {
       this.setState({ isFetching: true });
 
-      ColosoApi.summoner.findByName(state.summonerName, state.region)
+      ColosoApi.getSummonerByName(state.summonerName, state.region)
         .then((summonerData) => {
           this.props.saveAccount({
-            summonerName: summonerData.name,
-            summonerId: summonerData.summonerId,
-            profileIconId: summonerData.profileIconId,
-            region: summonerData.region,
+            summonerName: summonerData.data.attributes.name,
+            summonerUrid: summonerData.data.attributes.urid,
+            profileIconId: summonerData.data.attributes.profileIconId,
+            region: summonerData.data.attributes.region,
           });
-          Alert.alert(null, 'Tu cuenta ha sido agregada');
+          Alert.alert(null, 'Tu cuenta ha sido agregada exitosamente');
           Actions.pop();
         })
         .catch(({ errorMessage }) => {

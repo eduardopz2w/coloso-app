@@ -3,10 +3,10 @@ import Immutable from 'immutable';
 import { loadAccount, saveAccount } from '../actions/OwnerAccountActions';
 
 const initialState = Immutable.fromJS({
-  summonerId: 0,
-  summonerName: '',
-  profileIconId: 0,
-  region: '',
+  summonerUrid: null,
+  summonerName: null,
+  profileIconId: null,
+  region: null,
 });
 
 export default typeToReducer({
