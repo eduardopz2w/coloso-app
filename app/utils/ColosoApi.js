@@ -36,7 +36,7 @@ colosoClient.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   console.debug(`${error}`);
-  if (error.response && error.response.message) {
+  if (_.has(error, ['response', 'data', 'message'])) {
     return Promise.reject(error);
   }
 
