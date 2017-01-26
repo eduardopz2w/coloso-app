@@ -1,10 +1,11 @@
 import axios from 'axios';
 import Qs from 'qs';
 import _ from 'lodash';
+import logger from './logger';
 
 const TIMEOUT = 10000;
 const VERSION_CODE = 20;
-let BASEURL = 'http://lolcena.ddns.net:1338/';
+let BASEURL = 'http://192.168.1.2:3000';
 
 if (__DEV__) {
   BASEURL = 'http://192.168.1.2:3000';
@@ -51,14 +52,16 @@ colosoClient.interceptors.response.use((response) => {
 });
 
 colosoClient.interceptors.request.use((config) => {
-  console.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
-  console.groupCollapsed('params');
-  console.debug(config.params);
-  console.groupEnd();
-  console.groupCollapsed('headers');
-  console.debug(config.headers);
-  console.groupEnd();
-  console.groupEnd();
+  if (__DEV__) {
+    logger.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
+    logger.groupCollapsed('params');
+    logger.debug(config.params);
+    logger.groupEnd('params');
+    logger.groupCollapsed('headers');
+    logger.debug(config.headers);
+    logger.groupEnd('headers');
+    logger.groupEnd('Request');
+  }
 
   return config;
 });
