@@ -24,6 +24,7 @@ if (__DEV__) {
 
       return newState;
     },
+    collapsed: true,
   });
 
   middlewares = [...middlewares, logger];

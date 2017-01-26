@@ -17,7 +17,7 @@ function resetStorage(newVersion) {
 
 StorageInstance.load({ key: 'storageMeta' })
   .then((meta) => {
-    console.log(`Storage cargado exitosamente version: ${meta.version}`);
+    console.info(`Storage loaded version: ${meta.version}`);
   })
   .catch((e) => {
     if (e.name === 'NotFoundError') {

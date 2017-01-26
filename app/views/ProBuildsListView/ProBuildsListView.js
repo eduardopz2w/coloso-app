@@ -170,7 +170,6 @@ function mapStateToProps(state) {
   proBuilds = proBuilds.setIn(['data', 'proBuilds'], proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
   proPlayers = proPlayers.setIn(['data', 'proPlayers'], proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
 
-  console.debug(proPlayers.toJS());
   return {
     proBuilds,
     proPlayers,

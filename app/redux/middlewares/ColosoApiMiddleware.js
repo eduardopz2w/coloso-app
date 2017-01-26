@@ -12,16 +12,24 @@ export const COLOSO_CALL_TYPES = {
   GAMES_RECENT: 'COLOSO_CALL/GAMES_RECENT',
   MASTERIES: 'COLOSO_CALL/MASTERIES',
   RUNES: 'COLOSO_CALL/RUNES',
+  STATS_SUMMARY: 'COLOSO_CALL/STATS_SUMMARY',
   PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
   PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
   GAME_CURRENT: 'COLOSO_CALL/GAME_CURRENT',
 };
 
-// TODO: Handle errors
-
 const middleware = ({ dispatch }) => next => (action) => {
   if (!_.has(action, ['payload', COLOSO_CALL])) {
     return next(action);
+  }
+
+  function handleError(error) {
+    dispatch({
+      type: `${action.type}_REJECTED`,
+      payload: {
+        errorMessage: error.errorMessage,
+      },
+    });
   }
 
   dispatch({
@@ -43,7 +51,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             summonerUrid: _.first(_.keys(normalized.summoners)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.SUMMONER) {
@@ -58,7 +67,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             summonerUrid: action.payload.summonerUrid,
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.LEAGUE_ENTRY) {
@@ -73,7 +83,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             leagueEntryId: _.first(_.keys(normalized.leagueEntries)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.CHAMPIONS_MASTERIES) {
@@ -88,7 +99,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             championsMasteriesId: _.first(_.keys(normalized.championsMasteries)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.GAMES_RECENT) {
@@ -103,7 +115,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             gamesRecentId: _.first(_.keys(normalized.gamesRecent)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.MASTERIES) {
@@ -118,7 +131,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             masteriesId: _.first(_.keys(normalized.masteries)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.RUNES) {
@@ -133,7 +147,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             runesId: _.first(_.keys(normalized.runes)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.STATS_SUMMARY) {
@@ -148,7 +163,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             statsSummariesId: _.first(_.keys(normalized.statsSummaries)),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.PRO_BUILDS) {
@@ -167,7 +183,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             },
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.PRO_PLAYERS) {
@@ -182,7 +199,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             proPlayersIds: _.keys(normalized.proPlayers),
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.PRO_BUILD) {
@@ -197,7 +215,8 @@ const middleware = ({ dispatch }) => next => (action) => {
             proBuildId: action.payload.proBuildId,
           },
         });
-      });
+      })
+      .catch(handleError);
   }
 
   if (callData.type === COLOSO_CALL_TYPES.GAME_CURRENT) {
@@ -217,14 +236,7 @@ const middleware = ({ dispatch }) => next => (action) => {
           },
         });
       })
-      .catch((e) => {
-        dispatch({
-          type: `${action.type}_REJECTED`,
-          payload: {
-            errorMessage: e.errorMessage,
-          },
-        });
-      });
+      .catch(handleError);
   }
 
   return null;

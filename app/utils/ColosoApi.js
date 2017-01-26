@@ -34,7 +34,8 @@ colosoClient.interceptors.response.use((response) => {
 
   return response;
 }, (error) => {
-  if (error.response) {
+  console.debug(`${error}`);
+  if (error.response && error.response.message) {
     return Promise.reject(error);
   }
 
@@ -48,6 +49,25 @@ colosoClient.interceptors.response.use((response) => {
 
   return Promise.reject(error);
 });
+
+colosoClient.interceptors.request.use((config) => {
+  console.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
+  console.groupCollapsed('params');
+  console.debug(config.params);
+  console.groupEnd();
+  console.groupCollapsed('headers');
+  console.debug(config.headers);
+  console.groupEnd();
+  console.groupEnd();
+
+  return config;
+});
+
+function handleError(error, reject) {
+  const { message: errorMessage } = error.response.data;
+
+  reject({ errorMessage });
+}
 
 
 function getProBuilds(queryParams, pageParams) {
@@ -71,12 +91,7 @@ function getProBuilds(queryParams, pageParams) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        console.error(err);
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -88,11 +103,7 @@ function getProPlayers() {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -104,11 +115,7 @@ function getProBuild(proBuildId) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -120,11 +127,7 @@ function getSummonerByName(summonerName, region) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -136,11 +139,7 @@ function getSummonerByUrid(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -152,11 +151,7 @@ function getLeagueEntry(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -168,11 +163,7 @@ function getChampionsMasteries(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -184,11 +175,7 @@ function getGamesRecent(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -200,11 +187,7 @@ function getMasteries(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -216,11 +199,7 @@ function getRunes(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -232,11 +211,7 @@ function getGameCurrent(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 
@@ -252,11 +227,7 @@ function getStatsSummary(sumUrid, season) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch((err) => {
-        const { message: errorMessage } = err.response.data;
-
-        reject({ errorMessage });
-      });
+      .catch(err => handleError(err, reject));
   });
 }
 

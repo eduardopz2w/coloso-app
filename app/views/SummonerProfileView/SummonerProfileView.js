@@ -84,7 +84,7 @@ class SummonerProfileView extends Component {
       // Summary
 
       if (!this.props.summary.get('isFetching') && !this.props.summary.get('fetched')) {
-        this.props.fetchSummary('SEASON2016');
+        this.props.fetchSummary('SEASON2017');
       }
     }
   }
