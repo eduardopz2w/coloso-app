@@ -22,8 +22,6 @@ import {
 } from '../../redux/actions/SearchViewActions';
 import styles from './styles';
 
-// TODO: Agregar busquedas recientes
-
 const PROFILE_SEARCH = 'PROFILE_SEARCH';
 const GAME_SEARCH = 'GAME_SEARCH';
 

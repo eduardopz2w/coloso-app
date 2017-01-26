@@ -146,7 +146,6 @@ function getImageUri(profileIconId) {
 }
 
 class SummonerProfileViewToolbar extends Component {
-  // TODO: Imagenes desde el servidor
   constructor(props) {
     super(props);
 

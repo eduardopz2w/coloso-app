@@ -105,7 +105,6 @@ class LeagueEntry extends Component {
 
 
   getTierTextStyle() {
-    // TODO add color
     const tier = this.props.leagueEntry.get('tier');
 
     return {

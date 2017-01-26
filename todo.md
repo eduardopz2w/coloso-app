@@ -1,3 +1,0 @@
-- Chequeo de noticias
-- Modal en maestria campeones
-- Sistema de refers en admob
