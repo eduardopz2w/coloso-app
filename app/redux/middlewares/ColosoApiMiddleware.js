@@ -14,6 +14,7 @@ export const COLOSO_CALL_TYPES = {
   RUNES: 'COLOSO_CALL/RUNES',
   PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
   PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
+  GAME_CURRENT: 'COLOSO_CALL/GAME_CURRENT',
 };
 
 // TODO: Handle errors
@@ -194,6 +195,33 @@ const middleware = ({ dispatch }) => next => (action) => {
           type: `${action.type}_FULFILLED`,
           payload: {
             proBuildId: action.payload.proBuildId,
+          },
+        });
+      });
+  }
+
+  if (callData.type === COLOSO_CALL_TYPES.GAME_CURRENT) {
+    ColosoApi.getSummonerByName(action.payload.summonerName, action.payload.region)
+      .then(({ data }) => ColosoApi
+        .getGameCurrent(data.id))
+      .then((gameData) => {
+        const normalized = normalize(gameData);
+
+        console.debug(normalized);
+
+        dispatch(mergeEntities(normalized));
+        dispatch({
+          type: `${action.type}_FULFILLED`,
+          payload: {
+            gameId: _.first(_.keys(normalized.gamesCurrent)),
+          },
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: `${action.type}_REJECTED`,
+          payload: {
+            errorMessage: e.errorMessage,
           },
         });
       });

@@ -11,8 +11,8 @@ import {
 } from '../actions/SearchViewActions';
 
 const initialState = Immutable.fromJS({
-  summonerName: 'armaghyon',
-  region: 'lan',
+  summonerName: '',
+  region: 'na',
   searchType: 'PROFILE_SEARCH',
   isSearching: false,
   searchError: false,

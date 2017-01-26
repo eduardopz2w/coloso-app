@@ -224,9 +224,9 @@ function getRunes(sumUrid) {
   });
 }
 
-function getGameCurrent(summonerId, region) {
+function getGameCurrent(sumUrid) {
   return new Promise((resolve, reject) => {
-    const url = `${region}/summoner/${summonerId}/games/current`;
+    const url = `riot-api/summoner/${sumUrid}/games/current`;
 
     return colosoClient.get(url)
       .then((response) => {

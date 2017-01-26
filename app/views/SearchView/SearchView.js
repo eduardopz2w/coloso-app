@@ -71,7 +71,11 @@ class SearchView extends Component {
       this.props.clearFoundData();
     }
 
-    // TODO: on game found
+    if (this.props.gameFound) {
+      this.props.addSearchEntry(this.props.summonerName, this.props.region);
+      this.props.clearFoundData();
+      Actions.game_current();
+    }
 
     return null;
   }
@@ -248,6 +252,7 @@ SearchView.propTypes = {
   errorMessage: PropTypes.string,
   summonerFoundUrid: PropTypes.string,
   searchError: PropTypes.bool.isRequired,
+  gameFound: PropTypes.bool,
   // Dispatchers
   clearSearchError: PropTypes.func,
   clearFoundData: PropTypes.func,
@@ -272,6 +277,7 @@ function mapStateToProps(state) {
     searchError: searchViewState.get('searchError'),
     errorMessage: searchViewState.get('errorMessage'),
     summonerFoundUrid: searchViewState.get('summonerFoundUrid'),
+    gameFound: searchViewState.get('gameFound'),
     searchHistoryEntries: state.searchHistory.get('entries'),
   };
 }

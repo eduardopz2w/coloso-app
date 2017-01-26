@@ -18,15 +18,15 @@ function Routes() {
         <Scene
           key="search_view"
           component={SearchView}
-          hideNavBar initial
+          hideNavBar
           type={ActionConst.RESET}
+          initial
         />
         <Scene
           key="probuilds_search_view"
           component={ProBuildsListView}
           hideNavBar
           type={ActionConst.RESET}
-          initial
         />
         <Scene key="probuild_view" component={ProBuildView} hideNavBar />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
