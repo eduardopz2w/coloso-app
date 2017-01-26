@@ -283,29 +283,48 @@ class ProBuildView extends Component {
 
   renderSkillsPriority() {
     const skillsNodes = [];
-    const skills = [
-      { label: 'Q', value: 0 },
-      { label: 'W', value: 0 },
-      { label: 'E', value: 0 },
-      { label: 'R', value: 99 },
+    const skills = [];
+    const skillsCount = [
+      { label: 'Q', count: 0, pushed: false },
+      { label: 'W', count: 0, pushed: false },
+      { label: 'E', count: 0, pushed: false },
     ];
 
-    this.props.proBuildData.get('skillsOrder').forEach((skill, level) => {
+    this.props.proBuildData.get('skillsOrder').forEach((skill) => {
       if (skill.get('levelUpType') === 'NORMAL') {
         const skillSlot = skill.get('skillSlot');
 
         if (skillSlot === 1) {
-          skills[0].value += level;
+          skillsCount[0].count += 1;
+
+          if (skillsCount[0].count === 5) {
+            skills.push('Q');
+            skillsCount[0].pushed = true;
+          }
         } else if (skillSlot === 2) {
-          skills[1].value += level;
+          skillsCount[1].count += 1;
+
+          if (skillsCount[1].count === 5) {
+            skills.push('W');
+            skillsCount[1].pushed = true;
+          }
         } else if (skillSlot === 3) {
-          skills[2].value += level;
+          skillsCount[2].count += 1;
+
+          if (skillsCount[2].count === 5) {
+            skills.push('E');
+            skillsCount[2].pushed = true;
+          }
         }
       }
     });
 
-    _.map(_.orderBy(skills, ['value']), (skill, index) => {
-      skillsNodes.push(<Text key={`sk_${index}`} style={styles.skillLabel}>{skill.label}</Text>);
+    _.each(_.orderBy(_.filter(skillsCount, { pushed: false }), 'count'), skill => skills.push(skill.label));
+
+    skills.push('R');
+
+    _.each(skills, (skill, index) => {
+      skillsNodes.push(<Text key={`sk_${index}`} style={styles.skillLabel}>{skill}</Text>);
       if (index !== 3) {
         skillsNodes.push(<Icon
           key={`ar_${index}`}

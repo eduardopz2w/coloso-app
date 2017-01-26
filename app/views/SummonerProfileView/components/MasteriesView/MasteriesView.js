@@ -35,7 +35,6 @@ class MasteriesView extends Component {
 
   render() {
     const { masteries } = this.props;
-    console.log(masteries.toJS());
     if (masteries.get('fetched')) {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>

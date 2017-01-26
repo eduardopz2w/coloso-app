@@ -155,7 +155,6 @@ class GameCurrentView extends Component {
   handleOnLoadMoreBuilds() {
     const pagData = this.props.builds.get('pagination');
     if (!this.props.builds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
-      console.log('Se cunple');
       this.props.fetchBuilds({
         championId: this.getFocusChampionId(),
         proPlayerId: this.props.builds.get('proPlayerSelected'),

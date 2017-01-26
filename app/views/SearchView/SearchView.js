@@ -69,8 +69,6 @@ class SearchView extends Component {
       this.props.addSearchEntry(this.props.summonerName, this.props.region);
       Actions.summoner_profile_view({ summonerUrid: this.props.summonerFoundUrid });
       this.props.clearFoundData();
-
-      console.log(`Go to ${this.props.summonerFoundUrid}`);
     }
 
     // TODO: on game found

@@ -45,7 +45,6 @@ class RunesView extends Component {
 
 
     if (runes.get('fetched')) {
-      console.log(runes.toJS());
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
