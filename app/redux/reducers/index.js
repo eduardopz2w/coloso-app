@@ -3,7 +3,7 @@ import searchView from './searchView';
 import summonerProfileView from './summonerProfileView';
 import gameCurrentView from './gameCurrentView';
 import searchHistory from './searchHistory';
-import proBuildsSearchView from './proBuildsSearchView';
+import proBuildsList from './proBuildsList';
 import proBuildView from './proBuildView';
 import ownerAccount from './ownerAccount';
 import proPlayers from './proPlayers';
@@ -14,7 +14,7 @@ export default combineReducers({
   summonerProfileView,
   gameCurrentView,
   searchHistory,
-  proBuildsSearchView,
+  proBuildsList,
   proBuildView,
   ownerAccount,
   proPlayers,

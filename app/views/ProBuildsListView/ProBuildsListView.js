@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Toolbar from './components/Toolbar';
-import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsSearchActions';
+import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsListActions';
 import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
 import { tracker } from '../../utils/analytics';
 import ProBuildsList from '../../components/ProBuildsList';
@@ -39,7 +39,7 @@ class ProBuildSearchView extends Component {
   }
 
   componentDidMount() {
-    tracker.trackScreenView('ProbuildsSearchView');
+    tracker.trackScreenView('ProBuildsListView');
   }
 
   handleOnChangeChampionSelected(championId) {
@@ -161,7 +161,7 @@ ProBuildSearchView.propTypes = {
 };
 
 function mapStateToProps(state) {
-  let proBuilds = state.proBuildsSearchView;
+  let proBuilds = state.proBuildsList;
   let proPlayers = state.proPlayers;
 
   const proBuildsIds = proBuilds.get('proBuildsIds');

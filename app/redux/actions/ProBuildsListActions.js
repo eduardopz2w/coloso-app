@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../middlewares/ColosoApiMiddleware';
 
-export const fetchBuilds = createAction('PROBUILDS_SEARCH_VIEW/FETCH_BUILDS', (queryParams, pageNumber = 1, pageSize = 25) => ({
+export const fetchBuilds = createAction('PROBUILDS_LIST/FETCH_BUILDS', (queryParams, pageNumber = 1, pageSize = 25) => ({
   queryParams,
   pageParams: {
     number: pageNumber,
@@ -12,7 +12,7 @@ export const fetchBuilds = createAction('PROBUILDS_SEARCH_VIEW/FETCH_BUILDS', (q
   },
 }));
 
-export const refreshBuilds = createAction('PROBUILDS_SEARCH_VIEW/REFRESH_BUILDS', (queryParams, pageSize = 25) => ({
+export const refreshBuilds = createAction('PROBUILDS_LIST/REFRESH_BUILDS', (queryParams, pageSize = 25) => ({
   queryParams,
   pageParams: {
     number: 1,
