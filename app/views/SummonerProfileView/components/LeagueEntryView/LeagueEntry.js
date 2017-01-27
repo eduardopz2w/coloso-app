@@ -192,11 +192,11 @@ class LeagueEntry extends Component {
 
 LeagueEntry.propTypes = {
   leagueEntry: ImmutablePropTypes.mapContains({
-    tier: PropTypes.string,
+    tier: PropTypes.string.isRequired,
     name: PropTypes.string,
-    queue: PropTypes.string,
+    queue: PropTypes.string.isRequired,
     leagueName: PropTypes.string,
-    entries: ImmutablePropTypes.list,
+    entries: ImmutablePropTypes.list.isRequired,
   }),
   reverse: PropTypes.bool,
 };
