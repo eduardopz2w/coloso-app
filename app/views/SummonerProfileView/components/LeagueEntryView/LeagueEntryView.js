@@ -50,11 +50,25 @@ class LeagueEntryView extends Component {
   getEntriesList() {
     const entriesList = this.props.leagueEntry.getIn(['data', 'entries']);
 
-    if (entriesList) {
+    if (entriesList && entriesList.size > 0) {
       return entriesList;
     }
 
-    return Immutable.List();
+    if (this.props.leagueEntry.get('isFetching')) {
+      return Immutable.List([]);
+    }
+
+    return Immutable.fromJS([
+      {
+        queue: 'RANKED_SOLO_5x5',
+        tier: 'UNRANKED',
+        entries: [{
+          division: 'N/A',
+          wins: 0,
+          losses: 0,
+        }],
+      },
+    ]);
   }
 
   render() {
