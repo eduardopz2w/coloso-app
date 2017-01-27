@@ -40,9 +40,21 @@ class LeagueEntryView extends Component {
     this.dataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
+    this.getEntriesList = this.getEntriesList.bind(this);
   }
+
   componentDidMount() {
     tracker.trackScreenView('LeagueEntryView');
+  }
+
+  getEntriesList() {
+    const entriesList = this.props.leagueEntry.getIn(['data', 'entries']);
+
+    if (entriesList) {
+      return entriesList;
+    }
+
+    return Immutable.List();
   }
 
   render() {
@@ -60,7 +72,7 @@ class LeagueEntryView extends Component {
 
     return (<ListView
       style={styles.rootScrollView}
-      dataSource={this.dataSource.cloneWithRows(leagueEntry.get('entries').toArray())}
+      dataSource={this.dataSource.cloneWithRows(this.getEntriesList().toArray())}
       refreshControl={
         <RefreshControl
           refreshing={leagueEntry.get('isFetching')}
@@ -87,7 +99,6 @@ LeagueEntryView.propTypes = {
     isFetching: PropTypes.bool,
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
-    entries: ImmutablePropTypes.list,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

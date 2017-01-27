@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Image, Text, Dimensions } from 'react-native';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKButton } from 'react-native-material-kit';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
@@ -189,8 +190,42 @@ class Participant extends Component {
     this.getRankedSoloEntry = this.getRankedSoloEntry.bind(this);
   }
 
+  shouldComponentUpdate(props) {
+    if (Immutable.is(this.props.participant, props.participant)) {
+      return false;
+    }
+
+    return true;
+  }
+
   getRankedSoloEntry() {
-    return this.props.participant.get('leagueEntries').find(entry => entry.get('queue') === 'RANKED_SOLO_5x5');
+    const entryFound = this.props.participant.getIn(['leagueEntry', 'entries']).find((entry) => {
+      const queue = entry.get('queue');
+
+      if (queue === 'RANKED_SOLO_5x5') {
+        return true;
+      }
+
+      return false;
+    });
+
+    if (entryFound) {
+      return entryFound;
+    }
+
+    return Immutable.fromJS({
+      name: 'Unranked',
+      tier: 'UNRANKED',
+      queue: 'RANKED_SOLO_5x5',
+      entries: [
+        {
+          wins: 0,
+          losses: 0,
+          division: 'I',
+          leaguePoints: 0,
+        },
+      ],
+    });
   }
 
   renderTierImage() {
@@ -244,7 +279,7 @@ class Participant extends Component {
           <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
           <MKButton
             style={[styles.profileButton]}
-            onPress={() => this.props.onPressProfileButton(participant.get('summonerId'))}
+            onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
           >
             <Text style={styles.profileButtonText}>PERFIL</Text>
           </MKButton>
@@ -284,7 +319,7 @@ class Participant extends Component {
           <MKButton
             style={styles.roundedButton}
             rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressRunesButton(participant.get('summonerId'))}
+            onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
           >
             <Text style={styles.roundedButtonText}>RUNAS</Text>
           </MKButton>
@@ -292,7 +327,7 @@ class Participant extends Component {
           <MKButton
             style={styles.roundedButton}
             rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressMasteriesButton(participant.get('summonerId'))}
+            onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
           >
             <Text style={styles.roundedButtonText}>MAESTRIAS</Text>
           </MKButton>
@@ -303,26 +338,10 @@ class Participant extends Component {
 }
 
 Participant.propTypes = {
-  participant: ImmutablePropTypes.mapContains({
-    summonerId: PropTypes.number.isRequired,
-    championId: PropTypes.number.isRequired,
-    spell1Id: PropTypes.number.isRequired,
-    spell2Id: PropTypes.number.isRequired,
-    summonerName: PropTypes.string.isRequired,
-    leagueEntries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-      queue: PropTypes.string.isRequired,
-      division: PropTypes.string,
-      wins: PropTypes.number,
-      losses: PropTypes.string,
-      miniSeries: ImmutablePropTypes.mapContains({
-        progress: PropTypes.string,
-      }),
-    })),
-    teamId: PropTypes.number,
-  }).isRequired,
-  onPressRunesButton: PropTypes.func.isRequired,
-  onPressMasteriesButton: PropTypes.func.isRequired,
-  onPressProfileButton: PropTypes.func.isRequired,
+  participant: ImmutablePropTypes.map,
+  onPressRunesButton: PropTypes.func,
+  onPressMasteriesButton: PropTypes.func,
+  onPressProfileButton: PropTypes.func,
 };
 
 export default Participant;

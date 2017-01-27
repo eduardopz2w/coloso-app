@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
+import { MKButton } from 'react-native-material-kit';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import colors from '../utils/colors';
 
@@ -17,22 +18,27 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: 'bold',
   },
-  retryTextContainer: {
-    marginTop: 8,
+  retryButton: {
+    minWidth: 64,
+    height: 36,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
   },
 });
 
 class ErrorScreen extends PureComponent {
   render() {
     return (<View style={styles.root}>
-      <Icon style={styles.icon} name="error-outline" size={100} />
+      <Icon style={styles.icon} name="error-outline" size={80} />
       <Text style={styles.message}>{this.props.message}</Text>
       {this.props.retryButton &&
-        <TouchableWithoutFeedback onPress={this.props.onPressRetryButton}>
-          <View style={styles.retryTextContainer}>
-            <Text style={styles.retryText}>REINTENTAR</Text>
-          </View>
-        </TouchableWithoutFeedback>
+        <MKButton
+          style={styles.retryButton}
+          onPress={this.props.onPressRetryButton}
+          rippleColor="rgba(0,0,0,0.4)"
+        >
+          <Text style={styles.retryText}>REINTENTAR</Text>
+        </MKButton>
       }
     </View>);
   }

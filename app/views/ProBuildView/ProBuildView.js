@@ -9,13 +9,14 @@ import { connect } from 'react-redux';
 import numeral from 'numeral';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { fetchBuild } from '../../redux/actions/ProBuildViewActions';
-import LoadingScreen from '../../components/LoadingScreen';
+import { fetchProBuild } from '../../redux/actions/ProBuildViewActions';
+import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorScreen from '../../components/ErrorScreen';
 import PlayerToolbar from './components/PlayerToolbar';
 import BasicToolbar from './components/BasicToolbar';
 import Item from './components/Item';
 import colors from '../../utils/colors';
+import denormalize from '../../utils/denormalize';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 
@@ -195,7 +196,7 @@ class ProBuildView extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchBuild();
+    this.props.fetchProBuild();
   }
 
   getItemStyle() {
@@ -218,7 +219,7 @@ class ProBuildView extends Component {
 
   getParsedItems() {
     const countedItems = [];
-    const items = this.props.build.get('itemsOrder').toJS();
+    const items = this.props.proBuildData.get('itemsOrder').toJS();
     let j;
 
     for (let i = 0; i < items.length + 1; i += 1) {
@@ -244,7 +245,7 @@ class ProBuildView extends Component {
     }
 
     for (let i = 6; i >= 0; i -= 1) {
-      const finalItemId = this.props.build.getIn(['stats', `item${i}`]);
+      const finalItemId = this.props.proBuildData.getIn(['stats', `item${i}`]);
 
       if (finalItemId > 0) {
         _.eachRight(countedItems, (countedItem) => {
@@ -275,37 +276,55 @@ class ProBuildView extends Component {
   }
 
   handleOnPressProfileButton() {
-    const build = this.props.build;
-
     Actions.summoner_profile_view({
-      summonerId: build.getIn(['proSummonerData', 'summonerId']),
-      region: build.getIn(['proSummonerData', 'region']),
+      summonerUrid: this.props.proBuildData.getIn(['proSummoner', 'summonerUrid']),
     });
   }
 
   renderSkillsPriority() {
     const skillsNodes = [];
-    const skills = [
-      { label: 'Q', value: 0 },
-      { label: 'W', value: -1 },
-      { label: 'E', value: -2 },
-      { label: 'R', value: -3 },
+    const skills = [];
+    const skillsCount = [
+      { label: 'Q', count: 0, pushed: false },
+      { label: 'W', count: 0, pushed: false },
+      { label: 'E', count: 0, pushed: false },
     ];
 
-    this.props.build.get('skillsOrder').forEach((skillNumber) => {
-      if (skillNumber === 1) {
-        skills[0].value += 1;
-      } else if (skillNumber === 2) {
-        skills[1].value += 1;
-      } else if (skillNumber === 3) {
-        skills[2].value += 1;
-      } else {
-        skills[3].value += 1;
+    this.props.proBuildData.get('skillsOrder').forEach((skill) => {
+      if (skill.get('levelUpType') === 'NORMAL') {
+        const skillSlot = skill.get('skillSlot');
+
+        if (skillSlot === 1) {
+          skillsCount[0].count += 1;
+
+          if (skillsCount[0].count === 5) {
+            skills.push('Q');
+            skillsCount[0].pushed = true;
+          }
+        } else if (skillSlot === 2) {
+          skillsCount[1].count += 1;
+
+          if (skillsCount[1].count === 5) {
+            skills.push('W');
+            skillsCount[1].pushed = true;
+          }
+        } else if (skillSlot === 3) {
+          skillsCount[2].count += 1;
+
+          if (skillsCount[2].count === 5) {
+            skills.push('E');
+            skillsCount[2].pushed = true;
+          }
+        }
       }
     });
 
-    _.map(_.orderBy(skills, ['value'], ['desc']), (skill, index) => {
-      skillsNodes.push(<Text key={`sk_${index}`} style={styles.skillLabel}>{skill.label}</Text>);
+    _.each(_.orderBy(_.filter(skillsCount, { pushed: false }), 'count'), skill => skills.push(skill.label));
+
+    skills.push('R');
+
+    _.each(skills, (skill, index) => {
+      skillsNodes.push(<Text key={`sk_${index}`} style={styles.skillLabel}>{skill}</Text>);
       if (index !== 3) {
         skillsNodes.push(<Icon
           key={`ar_${index}`}
@@ -323,30 +342,40 @@ class ProBuildView extends Component {
   }
 
   renderSkillsOrder() {
-    const skills = [];
+    const skillsOrderList = this.props.proBuildData.get('skillsOrder');
     const skillNodes = [];
 
-    this.props.build.get('skillsOrder').forEach((skillNumber) => {
-      if (skillNumber === 1) {
-        skills.push('Q');
-      } else if (skillNumber === 2) {
-        skills.push('W');
-      } else if (skillNumber === 3) {
-        skills.push('E');
+    skillsOrderList.forEach((skill, skIndex) => {
+      const levelUpType = skill.get('levelUpType');
+      const skillSlot = skill.get('skillSlot');
+      let skillLetter;
+
+      if (skillSlot === 1) {
+        skillLetter = 'Q';
+      } else if (skillSlot === 2) {
+        skillLetter = 'W';
+      } else if (skillSlot === 3) {
+        skillLetter = 'E';
       } else {
-        skills.push('R');
+        skillLetter = 'R';
       }
-    });
 
-    _.each(skills, (skill, index) => {
-      skillNodes.push(<View key={`sk_${index}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
-        <Text style={styles.skillLabel}>{skill}</Text>
-        <Text style={{ textAlign: 'center' }}>Nivel {index + 1}</Text>
-      </View>);
+      if (levelUpType === 'NORMAL') {
+        skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
+          <Text style={styles.skillLabel}>{skillLetter}</Text>
+          <Text style={{ textAlign: 'center' }}>Nivel {skIndex + 1}</Text>
+        </View>);
+      } else {
+        skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
+          <Text style={[styles.skillLabel, { backgroundColor: '#F44336' }]}>{skillLetter}</Text>
+          <Text style={{ textAlign: 'center' }}>Especial</Text>
+        </View>);
+      }
 
-      if (index !== skills.length - 1) {
+
+      if (skIndex !== skillsOrderList.size - 1) {
         skillNodes.push(<Icon
-          key={`ar_${index}`}
+          key={`ar_${skIndex}`}
           style={styles.itemsArrow}
           name="keyboard-arrow-right"
           color="rgba(0,0,0,0.5)"
@@ -365,7 +394,7 @@ class ProBuildView extends Component {
   }
 
   render() {
-    const { build } = this.props;
+    const proBuildData = this.props.proBuildData;
     const itemsAndSeparators = [];
     let itemData;
 
@@ -394,10 +423,10 @@ class ProBuildView extends Component {
 
       return (<View style={styles.root}>
         <PlayerToolbar
-          name={build.getIn(['proPlayerData', 'name'])}
-          imageUrl={build.getIn(['proPlayerData', 'imageUrl'])}
-          role={build.getIn(['proPlayerData', 'role'])}
-          realName={build.getIn(['proPlayerData', 'realName'])}
+          name={proBuildData.getIn(['proSummoner', 'proPlayer', 'name'])}
+          imageUrl={proBuildData.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
+          role={proBuildData.getIn(['proSummoner', 'proPlayer', 'role'])}
+          realName={proBuildData.getIn(['proSummoner', 'proPlayer', 'realName'])}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
         />
@@ -414,33 +443,33 @@ class ProBuildView extends Component {
           <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
             <Text style={styles.title}>Informacion</Text>
             <View style={styles.championDataRow}>
-              <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
+              <Image source={{ uri: `champion_square_${proBuildData.get('championId')}` }} style={styles.championImage} />
               <View>
-                <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
-                <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
+                <Image source={{ uri: `summoner_spell_${proBuildData.get('spell1Id')}` }} style={styles.summonerSpell} />
+                <Image source={{ uri: `summoner_spell_${proBuildData.get('spell2Id')}` }} style={styles.summonerSpell} />
               </View>
               <View>
-                <Text style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
-                <Text style={styles.championTitle}>{build.getIn(['championData', 'title'])}</Text>
+                <Text style={styles.championName}>{proBuildData.getIn(['championData', 'name'])}</Text>
+                <Text style={styles.championTitle}>{proBuildData.getIn(['championData', 'title'])}</Text>
               </View>
             </View>
 
             <View style={styles.summaryRow}>
-              <Text style={build.getIn(['stats', 'winner']) ? styles.winText : styles.lossText}>
-                {build.getIn(['stats', 'winner']) ? 'Victoria' : 'Derrota'}
+              <Text style={proBuildData.getIn(['stats', 'winner']) ? styles.winText : styles.lossText}>
+                {proBuildData.getIn(['stats', 'winner']) ? 'Victoria' : 'Derrota'}
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
                 <Text style={styles.scoreText}>
-                  <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
-                  <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
-                  <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
+                  <Text style={styles.killsText}>{proBuildData.getIn(['stats', 'kills'])}</Text>/
+                  <Text style={styles.deathsText}>{proBuildData.getIn(['stats', 'deaths'])}</Text>/
+                  <Text style={styles.assistsText}>{proBuildData.getIn(['stats', 'assists'])}</Text>
                 </Text>
               </View>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
                 <Text style={styles.goldText}>
-                  {numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}
+                  {numeral(proBuildData.getIn(['stats', 'goldEarned'])).format('0,0')}
                 </Text>
               </View>
             </View>
@@ -459,8 +488,8 @@ class ProBuildView extends Component {
               {itemsAndSeparators}
             </View>
           </ScrollView>
-          <RuneTab tabLabel="Runas" runes={build.get('runes')} />
-          <MasteryTab tabLabel="Maestrias" masteries={build.get('masteries')} />
+          <RuneTab tabLabel="Runas" runes={proBuildData.get('runes')} />
+          <MasteryTab tabLabel="Maestrias" masteries={proBuildData.get('masteries')} />
         </ScrollableTabView>
 
         <Modal
@@ -492,8 +521,8 @@ class ProBuildView extends Component {
         <BasicToolbar
           onPressBackButton={() => { Actions.pop(); }}
         />
-        <View style={styles.basicContainer}>
-          <LoadingScreen />
+        <View style={[styles.basicContainer, { alignItems: 'center' }]}>
+          <LoadingIndicator />
         </View>
       </View>);
     }
@@ -505,7 +534,7 @@ class ProBuildView extends Component {
       <View style={styles.basicContainer}>
         <ErrorScreen
           message={this.props.errorMessage}
-          onPressRetryButton={this.props.fetchBuild}
+          onPressRetryButton={this.props.fetchProBuild}
           retryButton
         />
       </View>
@@ -514,84 +543,33 @@ class ProBuildView extends Component {
 }
 
 ProBuildView.propTypes = {
-  build: ImmutablePropTypes.mapContains({
-    spell1Id: PropTypes.number,
-    spell2Id: PropTypes.number,
-    championId: PropTypes.number,
-    championData: ImmutablePropTypes.mapContains({
-      name: PropTypes.string,
-      title: PropTypes.string,
-    }),
-    matchCreation: PropTypes.number,
-    highestAchievedSeasonTier: PropTypes.string,
-    masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-      masteryId: PropTypes.number,
-      rank: PropTypes.number,
-    })),
-    runes: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-      runeId: PropTypes.number,
-      rank: PropTypes.number,
-      name: PropTypes.string,
-      description: PropTypes.string,
-      image: ImmutablePropTypes.mapContains({
-        full: PropTypes.string,
-      }),
-    })),
-    stats: ImmutablePropTypes.mapContains({
-      winner: PropTypes.bool,
-      champLevel: PropTypes.number,
-      item0: PropTypes.number,
-      item1: PropTypes.number,
-      item2: PropTypes.number,
-      item3: PropTypes.number,
-      item4: PropTypes.number,
-      item5: PropTypes.number,
-      item6: PropTypes.number,
-      kills: PropTypes.number,
-      deaths: PropTypes.number,
-      assists: PropTypes.number,
-      goldEarned: PropTypes.number,
-      largestMultiKill: PropTypes.number,
-    }),
-    itemsOrder: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-      itemId: PropTypes.number,
-      name: PropTypes.string,
-      plaintext: PropTypes.string,
-      gold: ImmutablePropTypes.mapContains({
-        total: PropTypes.number,
-      }),
-    })),
-    skillsOrder: ImmutablePropTypes.listOf(PropTypes.number),
-    proPlayerData: ImmutablePropTypes.mapContains({
-      name: PropTypes.string,
-      imageUrl: PropTypes.string,
-    }),
-    proSummonerData: ImmutablePropTypes.mapContains({
-      summonerId: PropTypes.number,
-      region: PropTypes.string,
-      role: PropTypes.string,
-      realName: PropTypes.string,
-    }),
-  }),
+  proBuildData: ImmutablePropTypes.map,
   isFetching: PropTypes.bool,
   fetched: PropTypes.bool,
   errorMessage: PropTypes.string,
-  fetchBuild: PropTypes.func,
+  fetchProBuild: PropTypes.func,
 };
 
 function mapStateToProps(state) {
+  const fetched = state.proBuildView.get('fetched');
+  let proBuildData;
+
+  if (fetched) {
+    proBuildData = denormalize(state.proBuildView.get('proBuildId'), 'proBuilds', state.entities);
+  }
+
   return {
-    build: state.proBuildView.get('build'),
+    proBuildData,
+    fetched,
     isFetching: state.proBuildView.get('isFetching'),
-    fetched: state.proBuildView.get('fetched'),
     errorMessage: state.proBuildView.get('errorMessage'),
   };
 }
 
 function mapDispatchToProps(dispatch, props) {
   return {
-    fetchBuild: () => {
-      dispatch(fetchBuild(props.buildId));
+    fetchProBuild: () => {
+      dispatch(fetchProBuild(props.buildId));
     },
   };
 }

@@ -1,4 +1,11 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../middlewares/ColosoApiMiddleware';
 
-export const fetchBuild = createAction('PROBUILD_VIEW/FETCH_BUILD', CenaApi.getBuild);
+export const fetchProBuild = createAction('PRO_BUILD_VIEW/FETCH', proBuildId => ({
+  proBuildId,
+  [COLOSO_CALL]: {
+    type: COLOSO_CALL_TYPES.PRO_BUILD,
+  },
+}));
+
+export default fetchProBuild;

@@ -35,16 +35,15 @@ class MasteriesView extends Component {
 
   render() {
     const { masteries } = this.props;
-
     if (masteries.get('fetched')) {
       return (<View style={styles.root}>
         <View style={styles.headerSelector}>
           <PageSelector
-            pages={masteries.get('pages')}
+            pages={masteries.getIn(['data', 'pages'])}
             onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
           />
         </View>
-        <MasteryPage page={masteries.getIn(['pages', this.state.pageSelected])} />
+        <MasteryPage page={masteries.getIn(['data', 'pages', this.state.pageSelected])} />
       </View>);
     } else if (masteries.get('isFetching')) {
       return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
@@ -67,7 +66,7 @@ MasteriesView.propTypes = {
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
-    pages: ImmutablePropTypes.list,
+    data: ImmutablePropTypes.map,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

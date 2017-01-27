@@ -1,8 +1,16 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../middlewares/ColosoApiMiddleware';
 
 
-export const fetchBuilds = createAction('GAME_CURRENT_VIEW/FETCH_BUILDS', (filters, page, pageSize) => ({
-  promise: CenaApi.getBuilds(filters, page, pageSize),
-  data: { proPlayerId: filters.proPlayerId, page, pageSize },
+export const fetchProBuilds = createAction('GAME_CURRENT/FETCH_BUILDS', (queryParams, pageNumber = 1, pageSize = 25) => ({
+  queryParams,
+  pageParams: {
+    number: pageNumber,
+    size: pageSize,
+  },
+  [COLOSO_CALL]: {
+    type: COLOSO_CALL_TYPES.PRO_BUILDS,
+  },
 }));
+
+export default fetchProBuilds;

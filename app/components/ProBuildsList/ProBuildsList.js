@@ -99,7 +99,7 @@ class ProBuildsList extends Component {
 }
 
 ProBuildsList.propTypes = {
-  builds: ImmutablePropTypes.list,
+  builds: ImmutablePropTypes.list.isRequired,
   isFetching: PropTypes.bool,
   isRefreshing: PropTypes.bool,
   onPressBuild: PropTypes.func,

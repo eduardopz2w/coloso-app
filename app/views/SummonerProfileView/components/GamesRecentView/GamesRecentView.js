@@ -22,10 +22,21 @@ class GamesRecentView extends PureComponent {
     this.gamesRecentDataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
+    this.getGamesList = this.getGamesList.bind(this);
   }
 
   componentDidMount() {
     tracker.trackScreenView('GamesRecentView');
+  }
+
+  getGamesList() {
+    const gamesList = this.props.gamesRecent.getIn(['data', 'games']);
+
+    if (gamesList) {
+      return gamesList;
+    }
+
+    return Immutable.List();
   }
 
   render() {
@@ -42,7 +53,7 @@ class GamesRecentView extends PureComponent {
     }
 
     return (<ListView
-      dataSource={this.gamesRecentDataSource.cloneWithRows(gamesRecent.get('games').toArray())}
+      dataSource={this.gamesRecentDataSource.cloneWithRows(this.getGamesList().toArray())}
       renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
       refreshControl={
         <RefreshControl
@@ -62,7 +73,7 @@ GamesRecentView.propTypes = {
     fetchError: PropTypes.bool,
     fetched: PropTypes.bool,
     errorMessage: PropTypes.string,
-    games: ImmutablePropTypes.list,
+    data: ImmutablePropTypes.map,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
 };

@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, Alert, TouchableWithoutFeedback } from 'react-native';
+import _ from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -81,14 +82,13 @@ class SideMenu extends PureComponent {
   handleOnPressProfile() {
     const { ownerAccount } = this.props;
 
-    if (ownerAccount.get('summonerId') === 0) {
+    if (_.isNull(ownerAccount.get('summonerUrid'))) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
       Actions.summoner_profile_view({
-        summonerId: ownerAccount.get('summonerId'),
-        region: ownerAccount.get('region'),
+        summonerUrid: ownerAccount.get('summonerUrid'),
       });
       this.context.drawer.close();
     }
@@ -97,7 +97,7 @@ class SideMenu extends PureComponent {
   handleOnPressSearchGame() {
     const { ownerAccount } = this.props;
 
-    if (ownerAccount.get('summonerId') === 0) {
+    if (_.isNull(ownerAccount.get('summonerUrid'))) {
       Alert.alert(null, 'Debes agregar tu cuenta de invocador');
       Actions.manage_account_view();
       this.context.drawer.close();
@@ -109,7 +109,7 @@ class SideMenu extends PureComponent {
   renderAccountData() {
     const ownerAccount = this.props.ownerAccount;
 
-    if (ownerAccount.get('summonerId') === 0) {
+    if (_.isNull(ownerAccount.get('summonerUrid'))) {
       return (<TouchableWithoutFeedback
         onPress={() => {
           Actions.manage_account_view();
@@ -127,7 +127,7 @@ class SideMenu extends PureComponent {
       </TouchableWithoutFeedback>);
     }
 
-    const url = `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${ownerAccount.get('profileIconId')}.png`;
+    const url = `http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${ownerAccount.get('profileIconId')}.png`;
 
     return (<TouchableWithoutFeedback
       onPress={() => {
@@ -185,7 +185,7 @@ class SideMenu extends PureComponent {
 
 SideMenu.propTypes = {
   ownerAccount: ImmutablePropTypes.mapContains({
-    summonerId: PropTypes.number,
+    summonerUrid: PropTypes.string,
     summonerName: PropTypes.string,
     profileIconId: PropTypes.number,
     region: PropTypes.string,

@@ -15,10 +15,12 @@ const regions = [
 ];
 
 function regionHumanize(shortName) {
-  const regionFound = _.find(regions, { shortName });
+  if (_.isString(shortName)) {
+    const regionFound = _.find(regions, { shortName: shortName.toLowerCase() });
 
-  if (regionFound) {
-    return regionFound.longName;
+    if (regionFound) {
+      return regionFound.longName;
+    }
   }
 
   return shortName;

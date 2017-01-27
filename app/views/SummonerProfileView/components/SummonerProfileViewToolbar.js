@@ -142,11 +142,10 @@ const styles = MediaQueryStyleSheet.create(
 );
 
 function getImageUri(profileIconId) {
-  return `http://ddragon.leagueoflegends.com/cdn/6.24.1/img/profileicon/${profileIconId}.png`;
+  return `http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${profileIconId}.png`;
 }
 
 class SummonerProfileViewToolbar extends Component {
-  // TODO: Imagenes desde el servidor
   constructor(props) {
     super(props);
 
@@ -177,33 +176,27 @@ class SummonerProfileViewToolbar extends Component {
             <View style={styles.summonerImageContainer}>
               <Image
                 style={styles.summonerImage}
-                source={{ uri: getImageUri(summonerData.get('profileIconId')) }}
+                source={{ uri: getImageUri(summonerData.getIn(['data', 'profileIconId'])) }}
               />
               <View style={styles.summonerLevelContainer}>
-                <Text style={styles.summonerLevelText}>{summonerData.get('summonerLevel')}</Text>
+                <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'summonerLevel'])}</Text>
               </View>
             </View>
 
             <View style={styles.summonerDataContainer}>
-              <Text style={styles.summonerNameText}>{summonerData.get('name')}</Text>
-              <Text style={styles.regionText}>{regionHumanize(summonerData.get('region'))}</Text>
+              <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'name'])}</Text>
+              <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'region']))}</Text>
             </View>
           </View>
         )}
       </View>
     </View>);
   }
-
 }
 
+
 SummonerProfileViewToolbar.propTypes = {
-  summonerData: ImmutablePropTypes.mapContains({
-    profileIconId: PropTypes.number,
-    name: PropTypes.string,
-    summonerLevel: PropTypes.number,
-    isFetching: PropTypes.bool,
-    region: PropTypes.string,
-  }),
+  summonerData: ImmutablePropTypes.map,
   onPressBackButton: PropTypes.func,
 };
 

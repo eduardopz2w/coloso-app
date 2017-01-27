@@ -26,13 +26,13 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-class ChampionSelector extends Component {
+class ProPlayersSelector extends Component {
   constructor(props) {
     super(props);
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: 0,
+      selectedValue: null,
     };
   }
 
@@ -72,21 +72,21 @@ class ChampionSelector extends Component {
   }
 }
 
-ChampionSelector.propTypes = {
+ProPlayersSelector.propTypes = {
   onChangeSelected: PropTypes.func.isRequired,
-  initialValue: PropTypes.number,
+  initialValue: PropTypes.string,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
   titleStyle: Text.propTypes.style,
   proPlayers: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
 };
 
-ChampionSelector.defaultProps = {
-  initialValue: 0,
+ProPlayersSelector.defaultProps = {
+  initialValue: null,
   disabled: false,
 };
 
-export default ChampionSelector;
+export default ProPlayersSelector;
