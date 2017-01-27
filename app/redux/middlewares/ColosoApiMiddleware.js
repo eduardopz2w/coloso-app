@@ -226,8 +226,6 @@ const middleware = ({ dispatch }) => next => (action) => {
       .then((gameData) => {
         const normalized = normalize(gameData);
 
-        console.debug(normalized);
-
         dispatch(mergeEntities(normalized));
         dispatch({
           type: `${action.type}_FULFILLED`,

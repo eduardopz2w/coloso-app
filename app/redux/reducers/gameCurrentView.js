@@ -21,8 +21,12 @@ const initialState = Immutable.fromJS({
 
 export default typeToReducer({
   [searchGame]: {
-    FULFILLED: (state, action) => state.merge({
-      gameId: action.payload.gameId,
+    FULFILLED: (state, action) => state.withMutations((mutator) => {
+      mutator.set('gameId', action.payload.gameId);
+      mutator.mergeIn(['proBuilds'], {
+        fetched: false,
+        proBuildsIds: Immutable.List(),
+      });
     }),
   },
 
