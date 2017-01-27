@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
 import { View } from 'react-native';
 import { AdMobBanner } from 'react-native-admob';
+import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import moment from 'moment';
 import 'moment/locale/es';
@@ -15,6 +16,10 @@ global.Storage = StorageInstance;
 const ADMOB_BANNER_ID = 'ca-app-pub-9850680385333731/3213566801';
 
 class AppContainer extends Component {
+  componentDidMount() {
+    Actions.refresh({ key: 'drawer', open: true });
+  }
+
   shouldComponentUpdate() {
     return false;
   }
