@@ -52,7 +52,6 @@ const styles = MediaQueryStyleSheet.create(
 );
 
 class SummonerProfileViewToolbar extends Component {
-  // TODO: Imagenes desde el servidor
   constructor(props) {
     super(props);
 

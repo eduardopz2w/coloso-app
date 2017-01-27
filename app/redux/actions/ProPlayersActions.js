@@ -1,4 +1,10 @@
 import { createAction } from 'redux-actions';
-import CenaApi from '../../utils/CenaApi';
+import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../middlewares/ColosoApiMiddleware';
 
-export const fetchPlayers = createAction('PRO_PLAYERS_FETCH', CenaApi.getProPlayers);
+export const fetchProPlayers = createAction('PRO_PLAYERS/FETCH', () => ({
+  [COLOSO_CALL]: {
+    type: COLOSO_CALL_TYPES.PRO_PLAYERS,
+  },
+}));
+
+export default fetchProPlayers;

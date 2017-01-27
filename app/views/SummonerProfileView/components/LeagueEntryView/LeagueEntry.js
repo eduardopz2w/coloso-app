@@ -105,7 +105,6 @@ class LeagueEntry extends Component {
 
 
   getTierTextStyle() {
-    // TODO add color
     const tier = this.props.leagueEntry.get('tier');
 
     return {
@@ -132,7 +131,7 @@ class LeagueEntry extends Component {
 
     return (<View style={styles.root}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}><Text style={styleUtils.boldText}>{rankedQueueParser(leagueEntry.get('queue'))}:</Text> {leagueEntry.get('leagueName') || 'Unranked'}</Text>
+        <Text style={styles.title}><Text style={styleUtils.boldText}>{rankedQueueParser(leagueEntry.get('queue'))}</Text></Text>
       </View>
 
       <View style={[styles.entryContainer, this.props.reverse && { flexDirection: 'row-reverse' }]}>

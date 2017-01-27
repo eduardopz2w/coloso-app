@@ -3,7 +3,7 @@ import Immutable from 'immutable';
 import {
   fetchSummonerData,
   fetchLeagueEntry,
-  fetchChampionsMastery,
+  fetchChampionsMasteries,
   fetchGamesRecent,
   fetchMasteries,
   fetchRunes,
@@ -13,6 +13,10 @@ import {
 const initialState = Immutable.fromJS({
   summonerData: {
     isFetching: true,
+    fetched: false,
+    fetchError: false,
+    errorMessage: '',
+    summonerUrid: null,
   },
 
   leagueEntry: {
@@ -20,15 +24,15 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    entries: [],
+    leagueEntryId: null,
   },
 
-  championsMastery: {
+  championsMasteries: {
     isFetching: false,
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    masteries: [],
+    championsMasteriesId: null,
   },
 
   gamesRecent: {
@@ -36,7 +40,7 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    games: [],
+    gamesRecentId: null,
   },
 
   masteries: {
@@ -44,7 +48,7 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    pages: [],
+    masteriesId: null,
   },
 
   runes: {
@@ -52,7 +56,7 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    pages: [],
+    runesId: null,
   },
 
   summary: {
@@ -60,17 +64,25 @@ const initialState = Immutable.fromJS({
     fetched: false,
     fetchError: false,
     errorMessage: '',
-    playerStatSummaries: [],
-    season: '',
+    statsSummariesId: null,
+    season: null,
   },
 });
 
 export default typeToReducer({
   [fetchSummonerData]: {
     PENDING: () => initialState,
+    REJECTED: (state, action) => state.mergeIn(['summonerData'], {
+      fetched: false,
+      isFetching: false,
+      fetchError: true,
+      errorMessage: action.payload.errorMessage,
+    }),
     FULFILLED: (state, action) => state.mergeIn(['summonerData'], {
       ...action.payload,
       isFetching: false,
+      fetched: true,
+      summonerUrid: action.payload.summonerUrid,
     }),
   },
   [fetchLeagueEntry]: {
@@ -82,7 +94,7 @@ export default typeToReducer({
       fetched: true,
       isFetching: false,
       fetchError: false,
-      entries: Immutable.fromJS(action.payload.entries),
+      leagueEntryId: action.payload.leagueEntryId,
     }),
     REJECTED: (state, action) => state.mergeIn(['leagueEntry'], {
       fetched: false,
@@ -91,18 +103,18 @@ export default typeToReducer({
       errorMessage: action.payload.errorMessage,
     }),
   },
-  [fetchChampionsMastery]: {
-    PENDING: state => state.mergeIn(['championsMastery'], {
+  [fetchChampionsMasteries]: {
+    PENDING: state => state.mergeIn(['championsMasteries'], {
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['championsMastery'], {
+    FULFILLED: (state, action) => state.mergeIn(['championsMasteries'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      masteries: Immutable.fromJS(action.payload.masteries),
+      championsMasteriesId: action.payload.championsMasteriesId,
     }),
-    REJECTED: (state, action) => state.mergeIn(['championsMastery'], {
+    REJECTED: (state, action) => state.mergeIn(['championsMasteries'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
@@ -118,7 +130,7 @@ export default typeToReducer({
       fetched: true,
       isFetching: false,
       fetchError: false,
-      games: Immutable.fromJS(action.payload.games),
+      gamesRecentId: action.payload.gamesRecentId,
     }),
     REJECTED: (state, action) => state.mergeIn(['gamesRecent'], {
       fetched: false,
@@ -136,7 +148,7 @@ export default typeToReducer({
       fetched: true,
       isFetching: false,
       fetchError: false,
-      pages: Immutable.fromJS(action.payload.pages),
+      masteriesId: action.payload.masteriesId,
     }),
     REJECTED: (state, action) => state.mergeIn(['masteries'], {
       fetched: false,
@@ -154,7 +166,7 @@ export default typeToReducer({
       fetched: true,
       isFetching: false,
       fetchError: false,
-      pages: Immutable.fromJS(action.payload.pages),
+      runesId: action.payload.runesId,
     }),
     REJECTED: (state, action) => state.mergeIn(['runes'], {
       fetched: false,
@@ -174,8 +186,7 @@ export default typeToReducer({
       fetched: true,
       isFetching: false,
       fetchError: false,
-      playerStatSummaries: Immutable.fromJS(action.payload.playerStatSummaries),
-      season: action.payload.season,
+      statsSummariesId: action.payload.statsSummariesId,
     }),
     REJECTED: (state, action) => state.mergeIn(['summary'], {
       fetched: false,

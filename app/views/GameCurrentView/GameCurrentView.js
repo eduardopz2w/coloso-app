@@ -7,13 +7,13 @@ import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import colors from '../../utils/colors';
+import denormalize from '../../utils/denormalize';
 import Team from './Team';
-import { fetchBuilds } from '../../redux/actions/GameCurrentViewActions';
-import { fetchPlayers as fetchProPlayers } from '../../redux/actions/ProPlayersActions';
+import { fetchProBuilds } from '../../redux/actions/GameCurrentViewActions';
+import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
 import RunePage from '../../components/RunePage';
 import MasteryPage from '../../components/MasteryPage';
 import ProBuildsList from '../../components/ProBuildsList';
-import ErrorScreen from '../../components/ErrorScreen';
 import ProPlayersSelector from '../../components/ProPlayersSelector';
 import { tracker } from '../../utils/analytics';
 import Toolbar from './Toolbar';
@@ -32,8 +32,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-const PAGESIZE = 25;
 
 function getModalStyle() {
   const { height: deviceHeight, width: deviceWidth } = Dimensions.get('window');
@@ -99,19 +97,19 @@ class GameCurrentView extends Component {
     };
   }
 
-  getSummonerRunes(summonerId) {
-    return this.props.gameData.get('participants').find(participant => participant.get('summonerId') === summonerId).get('runes');
+  getSummonerRunes(summonerUrid) {
+    return this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === summonerUrid).get('runes');
   }
 
-  getSummonerMasteries(summonerId) {
-    return this.props.gameData.get('participants').find(participant => participant.get('summonerId') === summonerId).get('masteries');
+  getSummonerMasteries(summonerUrid) {
+    return this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === summonerUrid).get('masteries');
   }
 
   getFocusChampionId() {
-    const focusSummonerId = this.props.gameData.get('focusSummonerId');
+    const focusSummonerUrid = this.props.gameData.get('focusSummonerUrid');
 
-    if (focusSummonerId > 0) {
-      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerId') === focusSummonerId);
+    if (focusSummonerUrid) {
+      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === focusSummonerUrid);
 
       if (participantFound) {
         const championId = participantFound.get('championId');
@@ -123,18 +121,18 @@ class GameCurrentView extends Component {
     return 0;
   }
 
-  handleOnPressRunesButton(summonerId) {
-    this.setState({ summonerSelectedId: summonerId, modalType: 'RUNES' });
+  handleOnPressRunesButton(summonerUrid) {
+    this.setState({ summonerSelectedId: summonerUrid, modalType: 'RUNES' });
     this.modal.open();
   }
 
-  handleOnPressMasteriesButton(summonerId) {
-    this.setState({ summonerSelectedId: summonerId, modalType: 'MASTERIES' });
+  handleOnPressMasteriesButton(summonerUrid) {
+    this.setState({ summonerSelectedId: summonerUrid, modalType: 'MASTERIES' });
     this.modal.open();
   }
 
-  handleOnPressProfileButton(summonerId) {
-    Actions.summoner_profile_view({ summonerId, region: this.props.gameData.get('region') });
+  handleOnPressProfileButton(summonerUrid) {
+    Actions.summoner_profile_view({ summonerUrid });
   }
 
   handleOnBackAndroid() {
@@ -147,58 +145,45 @@ class GameCurrentView extends Component {
   }
 
   handleOnChangeTab({ i: tabIndex }) {
-    if (tabIndex === 1 && !this.props.builds.get('fetched')) {
-      this.props.fetchBuilds({ championId: this.getFocusChampionId() }, 1);
+    if (tabIndex === 1 && !this.props.proBuilds.get('fetched')) {
+      this.props.fetchProBuilds({ championId: this.getFocusChampionId() }, 1);
     }
   }
 
   handleOnLoadMoreBuilds() {
-    const pagData = this.props.builds.get('pagination');
-    if (!this.props.builds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
-      console.log('Se cunple');
-      this.props.fetchBuilds({
+    const pagData = this.props.proBuilds.get('pagination');
+    if (!this.props.proBuilds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
+      this.props.fetchProBuilds({
         championId: this.getFocusChampionId(),
-        proPlayerId: this.props.builds.get('proPlayerSelected'),
+        proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
       }, pagData.get('page') + 1);
     }
   }
 
   handleOnChangeProPlayerSelected(proPlayerId) {
-    this.props.fetchBuilds({
+    this.props.fetchProBuilds({
       championId: this.getFocusChampionId(),
       proPlayerId,
     }, 1);
   }
 
   render() {
-    const { builds, gameData } = this.props;
+    const { proBuilds, gameData } = this.props;
+    const proBuildsList = proBuilds.get('proBuildsList');
     let modalContent;
     let proBuildsContent;
 
-    if (builds.fetchError) {
-      proBuildsContent = (<View style={styles.container}>
-        <ErrorScreen
-          message={builds.get('errorMessage')}
-          onPressRetryButton={() => {
-            this.props.fetchBuilds({
-              championId: this.getFocusChampionId(),
-              proPlayerId: this.props.builds.get('proPlayerSelected'),
-            }, 1);
-          }}
-          retryButton
-        />
-      </View>);
-    } else if (builds.get('builds').size > 0 || builds.get('isFetching')) {
+    if (proBuildsList.size > 0 || proBuilds.get('isFetching')) {
       proBuildsContent = (<ProBuildsList
-        builds={builds.get('builds')}
+        builds={proBuildsList}
         onPressBuild={buildId => Actions.probuild_view({ buildId })}
-        isFetching={builds.get('isFetching')}
+        isFetching={proBuilds.get('isFetching')}
         onLoadMore={this.handleOnLoadMoreBuilds}
       />);
     } else {
       proBuildsContent = (<View style={styles.container}>
         <Text>
-          {builds.get('proPlayerSelected') > 0 ?
+          {proBuilds.get('proPlayerSelected') ?
             'Actualmente no tenemos builds de este jugador con el campeón que estás jugando, pronto estarán disponbiles' :
             'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles'
           }
@@ -257,9 +242,9 @@ class GameCurrentView extends Component {
         </View>
         <View tabLabel="Builds Profesionales" style={{ flex: 1 }}>
           <ProPlayersSelector
-            proPlayers={this.props.proPlayers.get('proPlayers')}
+            proPlayers={this.props.proPlayers.get('proPlayersList')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
-            disabled={this.props.builds.get('isFetching')}
+            disabled={this.props.proBuilds.get('isFetching')}
             onChangeSelected={this.handleOnChangeProPlayerSelected}
           />
           {proBuildsContent}
@@ -287,39 +272,44 @@ GameCurrentView.propTypes = {
     gameLength: PropTypes.number,
     region: PropTypes.string,
     gameStartTime: PropTypes.number,
-    focusSummonerId: PropTypes.number,
+    focusSummonerUrid: PropTypes.string,
   }),
-  builds: ImmutablePropTypes.mapContains({
+  proBuilds: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
-    builds: ImmutablePropTypes.list,
+    proBuildsList: ImmutablePropTypes.list,
     pagination: ImmutablePropTypes.mapContains({
-      page: PropTypes.number,
-      pageSize: PropTypes.number,
+      currentPage: PropTypes.number,
+      totalPages: PropTypes.number,
     }),
   }),
   proPlayers: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
-    proPlayers: ImmutablePropTypes.list,
+    proPlayersList: ImmutablePropTypes.list,
   }),
-  fetchBuilds: PropTypes.func,
+  fetchProBuilds: PropTypes.func,
   fetchProPlayers: PropTypes.func,
 };
 
 function mapStateToProps(state) {
-  const gameData = state.gameCurrentView.get('gameData');
-  const builds = state.gameCurrentView.get('builds');
-  const proPlayers = state.proPlayers;
+  let proBuilds = state.gameCurrentView.get('proBuilds');
+  let proPlayers = state.proPlayers;
+  const proBuildsIds = state.gameCurrentView.getIn(['proBuilds', 'proBuildsIds']);
+  const proPlayersIds = proPlayers.get('proPlayersIds');
+  const gameData = denormalize(state.gameCurrentView.get('gameId'), 'gamesCurrent', state.entities);
 
-  return { gameData, builds, proPlayers };
+  proBuilds = proBuilds.set('proBuildsList', proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
+  proPlayers = proPlayers.set('proPlayersList', proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
+
+  return { gameData, proBuilds, proPlayers };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (filters, page) => {
-      dispatch(fetchBuilds(filters, page, PAGESIZE));
+    fetchProBuilds: (queryParams, page) => {
+      dispatch(fetchProBuilds(queryParams, page));
     },
     fetchProPlayers: () => {
       dispatch(fetchProPlayers());

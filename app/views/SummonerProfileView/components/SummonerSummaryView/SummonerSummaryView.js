@@ -44,7 +44,7 @@ class SummonerSumaryView extends Component {
     const summonerSummary = this.props.summary;
 
     if (summonerSummary.get('fetched')) {
-      const summaries = filterEmpty(summonerSummary.get('playerStatSummaries'));
+      const summaries = filterEmpty(summonerSummary.getIn(['data', 'playerStatSummaries']));
 
       return (
         <View>
@@ -84,7 +84,6 @@ SummonerSumaryView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetched: PropTypes.bool.isRequired,
     playerStatSummaries: ImmutablePropTypes.list,
-    season: PropTypes.string.isRequired,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

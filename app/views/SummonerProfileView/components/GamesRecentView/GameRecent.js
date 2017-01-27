@@ -11,8 +11,6 @@ import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 import gameModeParser from '../../../../utils/gameModeParser';
 
-// TODO: Add profile button
-
 const styles = MediaQueryStyleSheet.create(
   {
     root: {

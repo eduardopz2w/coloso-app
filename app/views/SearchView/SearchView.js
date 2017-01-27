@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import _ from 'lodash';
 import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
@@ -20,8 +21,6 @@ import {
   clearFoundData,
 } from '../../redux/actions/SearchViewActions';
 import styles from './styles';
-
-// TODO: Agregar busquedas recientes
 
 const PROFILE_SEARCH = 'PROFILE_SEARCH';
 const GAME_SEARCH = 'GAME_SEARCH';
@@ -64,14 +63,13 @@ class SearchView extends Component {
       return this.props.clearSearchError();
     }
 
-    if (this.props.summonerFoundId > 0) {
+    if (!_.isNull(this.props.summonerFoundUrid)) {
       this.props.addSearchEntry(this.props.summonerName, this.props.region);
-      Actions.summoner_profile_view({
-        summonerId: this.props.summonerFoundId,
-        region: this.props.summonerFoundRegion,
-      });
+      Actions.summoner_profile_view({ summonerUrid: this.props.summonerFoundUrid });
       this.props.clearFoundData();
-    } else if (this.props.gameFound) {
+    }
+
+    if (this.props.gameFound) {
       this.props.addSearchEntry(this.props.summonerName, this.props.region);
       this.props.clearFoundData();
       Actions.game_current();
@@ -249,13 +247,13 @@ SearchView.propTypes = {
   searchType: PropTypes.string,
   isSearching: PropTypes.bool,
   searchSummoner: PropTypes.func,
+  errorMessage: PropTypes.string,
+  summonerFoundUrid: PropTypes.string,
+  searchError: PropTypes.bool.isRequired,
+  gameFound: PropTypes.bool,
+  // Dispatchers
   clearSearchError: PropTypes.func,
   clearFoundData: PropTypes.func,
-  summonerFoundId: PropTypes.number,
-  summonerFoundRegion: PropTypes.string,
-  gameFound: PropTypes.bool.isRequired,
-  searchError: PropTypes.bool.isRequired,
-  errorMessage: PropTypes.string,
   searchGame: PropTypes.func,
   searchHistoryEntries: ImmutablePropTypes.list,
   setSummonerName: PropTypes.func,
@@ -276,8 +274,7 @@ function mapStateToProps(state) {
     isSearching: searchViewState.get('isSearching'),
     searchError: searchViewState.get('searchError'),
     errorMessage: searchViewState.get('errorMessage'),
-    summonerFoundId: searchViewState.get('summonerFoundId'),
-    summonerFoundRegion: searchViewState.get('summonerFoundRegion'),
+    summonerFoundUrid: searchViewState.get('summonerFoundUrid'),
     gameFound: searchViewState.get('gameFound'),
     searchHistoryEntries: state.searchHistory.get('entries'),
   };
