@@ -4,18 +4,21 @@ import _ from 'lodash';
 export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, region) => new Promise((resolve, reject) => {
   Storage.load({ key: 'searchHistoryEntries' })
     .then((entries) => {
-      let entriesFiltered = _.filter(entries, (entry) => {
-        if (entry.summonerName === summonerName && entry.region === region) {
-          return false;
+      const duplicateIndex = _.findIndex(entries, (entry) => {
+        if (entry.summonerName.toLowerCase() === summonerName.toLowerCase() &&
+            entry.region.toLowerCase() === region.toLowerCase()
+        ) {
+          return true;
         }
-        return true;
+        return false;
       });
 
-      entriesFiltered.unshift({ summonerName, region });
-      entriesFiltered = entriesFiltered.slice(0, 15);
+      if (duplicateIndex === -1) {
+        entries.unshift({ summonerName, region });
+      }
 
-      Storage.save({ key: 'searchHistoryEntries', rawData: entriesFiltered })
-        .then(resolve({ entries: entriesFiltered }))
+      Storage.save({ key: 'searchHistoryEntries', rawData: entries.slice(0, 20) })
+        .then(resolve({ entries }))
         .catch(reject);
     })
     .catch(() => {
