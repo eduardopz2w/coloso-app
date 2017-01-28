@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
+import I18n from 'i18n-js';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -48,7 +48,7 @@ class ChampionSelector extends Component {
 
   render() {
     const champions = [
-      { label: 'Seleccionar Campeón', value: 0 },
+      { label: I18n.t('select_champion'), value: 0 },
       { label: 'Aatrox', value: 266 },
       { label: 'Ahri', value: 103 },
       { label: 'Akali', value: 84 },
@@ -185,7 +185,7 @@ class ChampionSelector extends Component {
     ];
 
     return (<View style={[styles.root, this.props.style]}>
-      <Text style={[styles.titleText, this.props.titleStyle]}>Campeón: </Text>
+      <Text style={[styles.titleText, this.props.titleStyle]}>{I18n.t('champion')}: </Text>
       <Picker
         style={styles.picker}
         selectedValue={this.state.selectedValue}

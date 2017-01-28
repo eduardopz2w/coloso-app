@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import I18n from 'i18n-js';
 import colors from '../../../utils/colors';
 import IconButton from '../../../components/IconButton';
 import ChampionSelector from '../../../components/ChampionSelector';
@@ -47,7 +48,7 @@ class Toolbar extends PureComponent {
     return (<View>
       <View style={[styles.appBar, this.props.style]}>
         <IconButton iconName="menu" onPress={this.props.onPressMenuButton} />
-        <Text numberOfLines={1} style={styles.title}>Builds Profesionales</Text>
+        <Text numberOfLines={1} style={styles.title}>{I18n.t('pro_builds')}</Text>
         <IconButton iconName="filter-list" onPress={this.toggleFilters} />
       </View>
       { this.state.filters &&
