@@ -6,6 +6,7 @@ import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
+import I18n from 'i18n-js';
 import colors from '../../utils/colors';
 import denormalize from '../../utils/denormalize';
 import Team from './Team';
@@ -183,24 +184,21 @@ class GameCurrentView extends Component {
     } else {
       proBuildsContent = (<View style={styles.container}>
         <Text>
-          {proBuilds.get('proPlayerSelected') ?
-            'Actualmente no tenemos builds de este jugador con el campeón que estás jugando, pronto estarán disponbiles' :
-            'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles'
-          }
+          {I18n.t('pro_builds_not_available')}
         </Text>
       </View>);
     }
 
     if (this.state.modalType === 'RUNES') {
       modalContent = (<View>
-        <Text style={styles.modalTitle}>Runas</Text>
+        <Text style={styles.modalTitle}>{I18n.t('runes')}</Text>
         <RunePage
           page={Immutable.Map({ runes: this.getSummonerRunes(this.state.summonerSelectedId) })}
         />
       </View>);
     } else if (this.state.modalType === 'MASTERIES') {
       modalContent = (<View>
-        <Text style={styles.modalTitle}>Maestrias</Text>
+        <Text style={styles.modalTitle}>{I18n.t('masteries')}</Text>
         <MasteryPage
           page={Immutable.Map({
             masteries: this.getSummonerMasteries(this.state.summonerSelectedId),
@@ -213,7 +211,6 @@ class GameCurrentView extends Component {
       <Toolbar
         mapId={gameData.get('mapId')}
         gameQueueConfigId={gameData.get('gameQueueConfigId')}
-        gameLength={gameData.get('gameLength')}
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
@@ -224,7 +221,7 @@ class GameCurrentView extends Component {
         renderTabBar={() => <DefaultTabBar />}
         onChangeTab={this.handleOnChangeTab}
       >
-        <View style={{ flex: 1 }} tabLabel="Jugadores">
+        <View style={{ flex: 1 }} tabLabel={I18n.t('players')}>
           <ScrollView>
             <Team
               {...this.getTeamData(100)}
@@ -240,7 +237,7 @@ class GameCurrentView extends Component {
             />
           </ScrollView>
         </View>
-        <View tabLabel="Builds Profesionales" style={{ flex: 1 }}>
+        <View tabLabel={I18n.t('pro_builds')} style={{ flex: 1 }}>
           <ProPlayersSelector
             proPlayers={this.props.proPlayers.get('proPlayersList')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}

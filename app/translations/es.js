@@ -18,6 +18,7 @@ export default {
   pro_builds: 'Builds Profesionales',
   select_champion: 'Seleccionar Campeón',
   champion: 'Campeón',
+  champions: 'Campeones',
   player: 'Jugador',
   select_player: 'Seleccionar Jugador',
   runes: 'Runas',
@@ -48,4 +49,8 @@ export default {
   yes: 'Si',
   page: 'Página',
   season: 'Temporada',
+  players: 'Jugadores',
+  profile: 'Perfil',
+  bans: 'Baneos',
+  pro_builds_not_available: 'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles',
 };

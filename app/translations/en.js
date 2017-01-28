@@ -49,4 +49,8 @@ export default {
   yes: 'Yes',
   page: 'Page',
   season: 'Season',
+  players: 'Players',
+  profile: 'Profile',
+  bans: 'Bans',
+  pro_builds_not_available: 'Currently we do not have builds with the champion that you are playing, this builds will soon be available',
 };
