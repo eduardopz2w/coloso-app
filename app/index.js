@@ -12,6 +12,7 @@ import StorageInstance from './utils/Storage';
 import Routes from './routes';
 import translations from './translations';
 import logger from './utils/logger';
+import ColosoClient from './utils/ColosoClient';
 
 I18n.translations = translations;
 
@@ -22,14 +23,18 @@ const ADMOB_BANNER_ID = 'ca-app-pub-9850680385333731/3213566801';
 
 function configureLocale() {
   const deviceLocale = DeviceInfo.getDeviceLocale().slice(0, 2).toLowerCase();
+  let locale;
 
   if (deviceLocale === 'en' || deviceLocale === 'es') {
+    locale = deviceLocale;
     logger.debug(`Locale loaded from device: ${deviceLocale}`);
-    I18n.locale = deviceLocale;
   } else {
+    locale = 'en';
     logger.debug('Locale default: en');
-    I18n.locale = 'en';
   }
+
+  I18n.locale = locale;
+  ColosoClient.setLocale(locale);
 }
 
 class AppContainer extends Component {

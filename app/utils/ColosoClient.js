@@ -17,8 +17,10 @@ const axiosClient = axios.create({
   timeout: TIMEOUT,
   responseType: 'json',
   headers: {
-    'App-Version': DeviceInfo.getVersion(),
-    'Content-Type': 'application/vnd.api+json',
+    common: {
+      'Accept-Language': 'en',
+      'App-Version': DeviceInfo.getVersion(),
+    },
   },
   paramsSerializer: params => Qs.stringify(params, { arrayFormat: 'brackets' }),
 });
@@ -80,6 +82,10 @@ const colosoClient = {
         });
       }, TIMEOUT);
     });
+  },
+
+  setLocale(newLocale) {
+    axiosClient.defaults.headers.common['Accept-Language'] = newLocale;
   },
 };
 
