@@ -53,4 +53,17 @@ export default {
   profile: 'Profile',
   bans: 'Bans',
   pro_builds_not_available: 'Currently we do not have builds with the champion that you are playing, this builds will soon be available',
+  regions: {
+    na: 'North America',
+    lan: 'Latin America North',
+    las: 'Latin America South',
+    oce: 'Oceania',
+    eune: 'EU Nordic & East',
+    euw: 'EU West',
+    jp: 'Japan',
+    kr: 'Korea',
+    tr: 'Turkey',
+    ru: 'Russia',
+    br: 'Brazil',
+  },
 };

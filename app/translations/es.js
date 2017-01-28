@@ -53,4 +53,17 @@ export default {
   profile: 'Perfil',
   bans: 'Baneos',
   pro_builds_not_available: 'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles',
+  regions: {
+    na: 'Norte América',
+    lan: 'Latinoamérica Norte',
+    las: 'Latinoamérica Sur',
+    oce: 'Oceanía',
+    eune: 'Euroca Nórdica y Este',
+    euw: 'Europa Oeste',
+    jp: 'Japón',
+    kr: 'Corea',
+    tr: 'Turquía',
+    ru: 'Rusia',
+    br: 'Brasil',
+  },
 };
