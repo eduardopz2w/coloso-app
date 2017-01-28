@@ -4,6 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { MKButton } from 'react-native-material-kit';
+import I18n from 'i18n-js';
 import colors from '../../../utils/colors';
 
 const styles = StyleSheet.create({
@@ -97,7 +98,7 @@ class History extends Component {
     const { historyEntries } = this.props;
 
     if (historyEntries.size <= 0) {
-      return <Text>El historial está vacío</Text>;
+      return <Text>{I18n.t('empty_history')}</Text>;
     }
 
 

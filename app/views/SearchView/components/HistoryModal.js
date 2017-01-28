@@ -3,6 +3,7 @@ import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { StyleSheet, Text, Dimensions } from 'react-native';
 import Modal from 'react-native-modalbox';
+import I18n from 'i18n-js';
 import History from './History';
 
 const styles = StyleSheet.create({
@@ -70,7 +71,7 @@ class HistoryModal extends Component {
       position={deviceDimensions.width < 600 ? 'bottom' : 'center'}
       backdropOpacity={0.7}
     >
-      <Text style={styles.title}>Busqueda Rápida</Text>
+      <Text style={styles.title}>{I18n.t('fast_search')}</Text>
       <History
         historyEntries={this.props.historyEntries}
         onPressHistoryEntry={this.props.onPressHistoryEntry}

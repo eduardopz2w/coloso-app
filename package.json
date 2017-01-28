@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "i18n-js": "^1.0.0",
     "immutable": "^3.8.1",
     "json-api-normalizer": "^0.1.0",
     "lodash": "^4.17.2",

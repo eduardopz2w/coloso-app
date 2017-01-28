@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Qs from 'qs';
 import _ from 'lodash';
+import I18n from 'i18n-js';
 import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
@@ -27,7 +28,7 @@ axiosClient.interceptors.response.use((response) => {
     return Promise.reject({
       response: {
         data: {
-          message: 'Algo ha salido mal, asegurate de tener buena conexión a internet y la ultima version de la aplicación',
+          message: I18n.t('errors.slow_connection'),
         },
       },
     });
@@ -43,7 +44,7 @@ axiosClient.interceptors.response.use((response) => {
   _.assign(error, {
     response: {
       data: {
-        message: 'Error al conectar con el servidor, asegurate de tener acceso a internet y de tener la ultima version de la aplicación',
+        message: I18n.t('errors.request_failed'),
       },
     },
   });
@@ -73,7 +74,7 @@ const colosoClient = {
         reject({
           response: {
             data: {
-              message: 'No se ha podido establecer conexion con el servidor',
+              message: I18n.t('errors.timeout'),
             },
           },
         });

@@ -3,6 +3,7 @@ import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import _ from 'lodash';
+import I18n from 'i18n-js';
 import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import SearchViewToolbar from './components/SearchViewToolbar';
@@ -172,7 +173,7 @@ class SearchView extends Component {
         style={styles.searchButton}
         onPress={this.handlePressSearchButton}
       >
-        <Text style={styles.searchButtonText}>BUSCAR INVOCADOR</Text>
+        <Text style={styles.searchButtonText}>{I18n.t('summoner_search').toUpperCase()}</Text>
       </MKButton>);
     }
 
@@ -190,12 +191,12 @@ class SearchView extends Component {
           <View style={styles.container}>
             <View style={styles.paperBox}>
               <View style={styles.formGroup}>
-                <Text style={[styles.label]}>Nombre de Invocador: </Text>
+                <Text style={[styles.label]}>{I18n.t('summoner_name')}:</Text>
                 <MKTextField
                   style={styles.inputName}
                   value={this.props.summonerName}
                   onTextChange={this.handleTextChangeSummonerName}
-                  placeholder="Nombre de invocador"
+                  placeholder={I18n.t('summoner_name')}
                 />
               </View>
               <View style={styles.formGroup}>
@@ -212,14 +213,14 @@ class SearchView extends Component {
                     onCheckedChange={this.handleOnChekedChangeProfileButton}
                     checked={this.props.searchType === PROFILE_SEARCH}
                   />
-                  <Text>Perfil de invocador</Text>
+                  <Text>{I18n.t('summoner_profile')}</Text>
                 </View>
                 <View style={styles.radioGroup}>
                   <MKRadioButton
                     group={this.radioGroup}
                     checked={this.props.searchType === GAME_SEARCH}
                   />
-                  <Text>Juego actual</Text>
+                  <Text>{I18n.t('game_current')}</Text>
                 </View>
               </View>
             </View>
