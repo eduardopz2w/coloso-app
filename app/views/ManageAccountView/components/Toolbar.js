@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import I18n from 'i18n-js';
 import IconButton from '../../../components/IconButton';
 import colors from '../../../utils/colors';
 
@@ -40,7 +41,7 @@ class BasicToolbar extends Component {
   render() {
     return (<View style={styles.root}>
       <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
-      <Text style={styles.title}>Agregar Cuenta</Text>
+      <Text style={styles.title}>{I18n.t('add_account')}</Text>
     </View>);
   }
 

@@ -3,6 +3,7 @@ import { View, StyleSheet, Text, Alert } from 'react-native';
 import { MKTextField, MKButton } from 'react-native-material-kit';
 import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
+import I18n from 'i18n-js';
 import Toolbar from './components/Toolbar';
 import ColosoApi from '../../utils/ColosoApi';
 import { saveAccount } from '../../redux/actions/OwnerAccountActions';
@@ -79,7 +80,7 @@ class ManageAccountView extends Component {
             profileIconId: summonerData.data.attributes.profileIconId,
             region: summonerData.data.attributes.region,
           });
-          Alert.alert(null, 'Tu cuenta ha sido agregada exitosamente');
+          Alert.alert(null, I18n.t('account_added'));
           Actions.pop();
         })
         .catch(({ errorMessage }) => {
@@ -97,12 +98,12 @@ class ManageAccountView extends Component {
       />
       <View style={styles.container}>
         <View style={styles.formGroup}>
-          <Text style={[styles.label]}>Nombre de Invocador: </Text>
+          <Text style={[styles.label]}>{I18n.t('summoner_name')}: </Text>
           <MKTextField
             style={styles.inputName}
             value={this.state.summonerName}
             onTextChange={this.handleTextChangeSummonerName}
-            placeholder="Nombre de invocador"
+            placeholder={I18n.t('summoner_name')}
           />
         </View>
         <View style={styles.formGroup}>
@@ -119,7 +120,7 @@ class ManageAccountView extends Component {
             style={styles.addAccountButton}
             onPress={this.handlePressAddAccount}
           >
-            <Text style={styles.addAccountText}>AGREGAR CUENTA</Text>
+            <Text style={styles.addAccountText}>{I18n.t('add_account').toUpperCase()}</Text>
           </MKButton>
         }
 
