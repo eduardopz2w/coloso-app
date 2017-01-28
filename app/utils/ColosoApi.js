@@ -11,7 +11,7 @@ if (__DEV__) {
   BASEURL = 'http://192.168.1.2:3000';
 }
 
-const colosoClient = axios.create({
+const axiosClient = axios.create({
   baseURL: BASEURL,
   timeout: TIMEOUT,
   responseType: 'json',
@@ -22,7 +22,7 @@ const colosoClient = axios.create({
   paramsSerializer: params => Qs.stringify(params, { arrayFormat: 'brackets' }),
 });
 
-colosoClient.interceptors.response.use((response) => {
+axiosClient.interceptors.response.use((response) => {
   if (!_.isObject(response.data) && !_.isArray(response.data)) {
     return Promise.reject({
       response: {
@@ -35,7 +35,7 @@ colosoClient.interceptors.response.use((response) => {
 
   return response;
 }, (error) => {
-  console.debug(`${error}`);
+  logger.debug(`${error}`);
   if (_.has(error, ['response', 'data', 'message'])) {
     return Promise.reject(error);
   }
@@ -51,7 +51,7 @@ colosoClient.interceptors.response.use((response) => {
   return Promise.reject(error);
 });
 
-colosoClient.interceptors.request.use((config) => {
+axiosClient.interceptors.request.use((config) => {
   if (__DEV__) {
     logger.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
     logger.debug('params: ', config.params);
@@ -67,6 +67,26 @@ function handleError(error, reject) {
 
   reject({ errorMessage });
 }
+
+const colosoClient = {
+  get(...args) {
+    return new Promise((resolve, reject) => {
+      axiosClient.get(...args)
+        .then(resolve)
+        .catch(reject);
+
+      setTimeout(() => {
+        reject({
+          response: {
+            data: {
+              message: 'No se ha podido establecer conexion con el servidor',
+            },
+          },
+        });
+      }, TIMEOUT);
+    });
+  },
+};
 
 
 function getProBuilds(queryParams, pageParams) {
