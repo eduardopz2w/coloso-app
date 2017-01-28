@@ -4,6 +4,7 @@ import _ from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import I18n from 'i18n-js';
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
 import MenuItem from './MenuItem';
@@ -83,7 +84,7 @@ class SideMenu extends PureComponent {
     const { ownerAccount } = this.props;
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      Alert.alert(null, 'Debes agregar tu cuenta de invocador');
+      Alert.alert(null, I18n.t('have_to_add_account'));
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
@@ -98,7 +99,7 @@ class SideMenu extends PureComponent {
     const { ownerAccount } = this.props;
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      Alert.alert(null, 'Debes agregar tu cuenta de invocador');
+      Alert.alert(null, I18n.t('have_to_add_account'));
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
@@ -121,7 +122,7 @@ class SideMenu extends PureComponent {
             <Icon name="add" size={20} color="#FFF" />
           </View>
           <View style={styles.accountDataRow}>
-            <Text style={styles.accountDataText}>Agregar Cuenta</Text>
+            <Text style={styles.accountDataText}>{I18n.t('add_account')}</Text>
           </View>
         </View>
       </TouchableWithoutFeedback>);
@@ -152,19 +153,19 @@ class SideMenu extends PureComponent {
       </View>
       <MenuItem
         iconName="account-circle"
-        title="Mi Perfil"
+        title={I18n.t('my_account')}
         onPress={this.handleOnPressProfile}
       />
 
       <MenuItem
         iconName="games"
-        title="Mi Juego"
+        title={I18n.t('my_game')}
         onPress={this.handleOnPressSearchGame}
       />
 
       <MenuItem
-        title="Busquedas"
         iconName="search"
+        title={I18n.t('searches')}
         onPress={() => {
           Actions.search_view();
           this.context.drawer.close();
@@ -172,7 +173,7 @@ class SideMenu extends PureComponent {
       />
 
       <MenuItem
-        title="Builds Profesionales"
+        title={I18n.t('pro_builds')}
         iconName="gavel"
         onPress={() => {
           Actions.probuilds_search_view();

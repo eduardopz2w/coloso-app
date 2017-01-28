@@ -10,4 +10,10 @@ export default {
   summoner_search: 'Buscar invocador',
   fast_search: 'Búsqueda Rápida',
   empty_history: 'El historial está vacío',
+  have_to_add_account: 'Tienes que agregar tu cuenta de invocador',
+  add_account: 'Agregar Cuenta',
+  my_account: 'Mi Cuenta',
+  my_game: 'Mi Juego',
+  searches: 'Búsquedas',
+  pro_builds: 'Builds Profesionales',
 };

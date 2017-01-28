@@ -10,4 +10,10 @@ export default {
   summoner_search: 'Summoner Search',
   fast_search: 'Fast Search',
   empty_history: 'Search history is empty',
+  have_to_add_account: 'You have to add your account',
+  add_account: 'Add Account',
+  my_account: 'My Account',
+  my_game: 'My Game',
+  searches: 'Search',
+  pro_builds: 'Pro Builds',
 };
