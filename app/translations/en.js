@@ -127,4 +127,6 @@ export default {
     420: 'Ranked Solo',
     440: 'Ranked Flex',
   },
+  team_builder: 'Team Builder',
+  nightmare_bots: 'Nightmare Bots',
 };

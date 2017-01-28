@@ -1,22 +1,24 @@
+import I18n from 'i18n-js';
+
 export default function (queueName) {
   if (queueName === 'RANKED_SOLO_5x5') {
-    return 'Ranked Solo 5 vs 5';
+    return I18n.t('queues_ids.4');
   }
 
   if (queueName === 'RANKED_TEAM_5x5') {
-    return 'Ranked Team 5 vs 5';
+    return I18n.t('queues_ids.42');
   }
 
   if (queueName === 'RANKED_FLEX_SR') {
-    return 'Ranked Flexible';
+    return I18n.t('queues_ids.9');
   }
 
   if (queueName === 'RANKED_FLEX_TT') {
-    return 'Ranked Flexible';
+    return I18n.t('queues_ids.9');
   }
 
   if (queueName === 'RANKED_TEAM_3x3') {
-    return 'Ranked Team 3 vs 3';
+    return I18n.t('queues_ids.41');
   }
 
   return queueName;
