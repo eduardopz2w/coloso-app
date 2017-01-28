@@ -56,6 +56,6 @@ export const loadEntries = createAction('SEARCH_HISTORY/LOAD_ENTRIES', () => new
   Storage.load({ key: 'searchHistoryEntries' })
     .then(resolve)
     .catch(() => {
-      logger.debug('Can not load searchHistoryEntries');
+      logger.debug('Can not load searchHistoryEntries from storage');
     });
 }));

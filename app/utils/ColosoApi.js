@@ -4,7 +4,7 @@ import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
-const TIMEOUT = 10000;
+const TIMEOUT = 1000;
 let BASEURL = 'http://coloso.ddns.net:3000';
 
 if (__DEV__) {
