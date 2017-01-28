@@ -7,6 +7,7 @@ import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
+import I18n from 'i18n-js';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { fetchProBuild } from '../../redux/actions/ProBuildViewActions';
@@ -363,12 +364,12 @@ class ProBuildView extends Component {
       if (levelUpType === 'NORMAL') {
         skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
           <Text style={styles.skillLabel}>{skillLetter}</Text>
-          <Text style={{ textAlign: 'center' }}>Nivel {skIndex + 1}</Text>
+          <Text style={{ textAlign: 'center' }}>{I18n.t('level')} {skIndex + 1}</Text>
         </View>);
       } else {
         skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
           <Text style={[styles.skillLabel, { backgroundColor: '#F44336' }]}>{skillLetter}</Text>
-          <Text style={{ textAlign: 'center' }}>Especial</Text>
+          <Text style={{ textAlign: 'center' }}>{I18n.t('special')}</Text>
         </View>);
       }
 
@@ -441,7 +442,7 @@ class ProBuildView extends Component {
           locked
         >
           <ScrollView tabLabel="Build" contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Informacion</Text>
+            <Text style={styles.title}>{I18n.t('information')}</Text>
             <View style={styles.championDataRow}>
               <Image source={{ uri: `champion_square_${proBuildData.get('championId')}` }} style={styles.championImage} />
               <View>
@@ -456,7 +457,7 @@ class ProBuildView extends Component {
 
             <View style={styles.summaryRow}>
               <Text style={proBuildData.getIn(['stats', 'winner']) ? styles.winText : styles.lossText}>
-                {proBuildData.getIn(['stats', 'winner']) ? 'Victoria' : 'Derrota'}
+                {proBuildData.getIn(['stats', 'winner']) ? I18n.t('victory') : I18n.t('defeat')}
               </Text>
               <View style={{ flexDirection: 'row' }}>
                 <Image style={styles.summaryIcon} source={{ uri: 'ui_score' }} />
@@ -474,22 +475,22 @@ class ProBuildView extends Component {
               </View>
             </View>
 
-            <Text style={styles.title}>Prioridad de Habilidades</Text>
+            <Text style={styles.title}>{I18n.t('skills_priority')}</Text>
 
             {this.renderSkillsPriority()}
 
-            <Text style={styles.title}>Orden de Habilidades</Text>
+            <Text style={styles.title}>{I18n.t('skills_order')}</Text>
 
             {this.renderSkillsOrder()}
 
-            <Text style={styles.title}>Orden de Compra</Text>
+            <Text style={styles.title}>{I18n.t('buy_order')}</Text>
 
             <View style={styles.itemsContainer}>
               {itemsAndSeparators}
             </View>
           </ScrollView>
-          <RuneTab tabLabel="Runas" runes={proBuildData.get('runes')} />
-          <MasteryTab tabLabel="Maestrias" masteries={proBuildData.get('masteries')} />
+          <RuneTab tabLabel={I18n.t('runes')} runes={proBuildData.get('runes')} />
+          <MasteryTab tabLabel={I18n.t('masteries')} masteries={proBuildData.get('masteries')} />
         </ScrollableTabView>
 
         <Modal

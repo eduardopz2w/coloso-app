@@ -5,6 +5,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import { MKProgress } from 'react-native-material-kit';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import moment from 'moment';
+import I18n from 'i18n-js';
 import styleUtils from '../../../../utils/styleUtils';
 
 const styles = MediaQueryStyleSheet.create(
@@ -98,7 +99,7 @@ class MasteryInfo extends Component {
     }
 
     return (<View style={{ marginBottom: 16 }}>
-      <Text style={[styleUtils.boldText, styles.text]}>Progreso:</Text>
+      <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('progress')}:</Text>
       <View style={{ flexDirection: 'row' }}>
         <Col><Text style={styles.text}>{championPoints}</Text></Col>
         <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{nextLevelPoints}</Text></Col>
@@ -133,15 +134,15 @@ class MasteryInfo extends Component {
           <Text numberOfLines={1} style={styles.championTitle}>{mastery.getIn(['championData', 'title'])}</Text>
           {this.renderProgress()}
           <View style={{ flexDirection: 'row' }}>
-            <Text style={[styleUtils.boldText, styles.text]}>Cofre Disponible: </Text>
-            <Text style={styles.text}>{mastery.get('chestGranted') ? 'No' : 'Si'}</Text>
+            <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('chest_available')}: </Text>
+            <Text style={styles.text}>{mastery.get('chestGranted') ? I18n.t('no') : I18n.t('yes')}</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={[styleUtils.boldText, styles.text]}>Piezas de Maestria: </Text>
+            <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('mastery_pieces')}: </Text>
             <Text style={styles.text}>{mastery.get('tokensEarned')}</Text>
           </View>
           <View style={{ flexDirection: 'row' }}>
-            <Text style={[styleUtils.boldText, styles.text]}>Jugado: </Text>
+            <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('played')}: </Text>
             <Text style={styles.text}>{moment(mastery.get('lastPlayTime')).fromNow()}</Text>
           </View>
         </View>

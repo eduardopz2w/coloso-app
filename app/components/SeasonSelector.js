@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
+import I18n from 'i18n-js';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -61,7 +61,7 @@ class SeasonSelector extends Component {
     ];
 
     return (<View style={styles.root}>
-      <Text style={styles.titleText}>Temporada: </Text>
+      <Text style={styles.titleText}>{I18n.t('season')}: </Text>
       <Picker
         style={styles.picker}
         selectedValue={this.state.selectedValue}

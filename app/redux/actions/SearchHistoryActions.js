@@ -1,5 +1,6 @@
 import { createAction } from 'redux-actions';
 import _ from 'lodash';
+import logger from '../../utils/logger';
 
 export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, region) => new Promise((resolve, reject) => {
   Storage.load({ key: 'searchHistoryEntries' })
@@ -51,4 +52,10 @@ export const deleteEntry = createAction('SEARCH_HISTORY/DELETE_ENTRY', (summoner
     });
 }));
 
-export const loadEntries = createAction('SEARCH_HISTORY/LOAD_ENTRIES', () => Storage.load({ key: 'searchHistoryEntries' }));
+export const loadEntries = createAction('SEARCH_HISTORY/LOAD_ENTRIES', () => new Promise((resolve) => {
+  Storage.load({ key: 'searchHistoryEntries' })
+    .then(resolve)
+    .catch(() => {
+      logger.debug('Can not load searchHistoryEntries from storage');
+    });
+}));

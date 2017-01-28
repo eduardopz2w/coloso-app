@@ -35,7 +35,7 @@ class ErrorScreen extends PureComponent {
         <MKButton
           style={styles.retryButton}
           onPress={this.props.onPressRetryButton}
-          rippleColor="rgba(0,0,0,0.4)"
+          rippleColor="rgba(0,0,0,0.1)"
         >
           <Text style={styles.retryText}>REINTENTAR</Text>
         </MKButton>

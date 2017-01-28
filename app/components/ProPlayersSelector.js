@@ -3,6 +3,7 @@ import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
+import I18n from 'i18n-js';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -49,13 +50,13 @@ class ProPlayersSelector extends Component {
 
   render() {
     let pickerOptions = [
-      Immutable.Map({ name: 'Seleccionar Jugador', value: 0 }),
+      Immutable.Map({ name: I18n.t('select_player'), value: 0 }),
     ];
 
     pickerOptions = pickerOptions.concat(this.props.proPlayers.toArray());
 
     return (<View style={[styles.root, this.props.style]}>
-      <Text style={[styles.titleText, this.props.titleStyle]}>Jugador: </Text>
+      <Text style={[styles.titleText, this.props.titleStyle]}>{I18n.t('player')}: </Text>
       <Picker
         style={[styles.picker]}
         selectedValue={this.state.selectedValue}

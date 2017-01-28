@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-
+import I18n from 'i18n-js';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -48,7 +48,7 @@ class ChampionSelector extends Component {
 
   render() {
     const champions = [
-      { label: 'Seleccionar Campeón', value: 0 },
+      { label: I18n.t('select_champion'), value: 0 },
       { label: 'Aatrox', value: 266 },
       { label: 'Ahri', value: 103 },
       { label: 'Akali', value: 84 },
@@ -57,7 +57,7 @@ class ChampionSelector extends Component {
       { label: 'Anivia', value: 34 },
       { label: 'Annie', value: 1 },
       { label: 'Ashe', value: 22 },
-      { label: 'AurelionSol', value: 136 },
+      { label: 'Aurelion Sol', value: 136 },
       { label: 'Azir', value: 268 },
       { label: 'Bard', value: 432 },
       { label: 'Blitzcrank', value: 53 },
@@ -65,12 +65,13 @@ class ChampionSelector extends Component {
       { label: 'Braum', value: 201 },
       { label: 'Caitlyn', value: 51 },
       { label: 'Cassiopeia', value: 69 },
-      { label: 'Chogath', value: 31 },
+      { label: 'Camille', value: 164 },
+      { label: 'Cho\'Gath', value: 31 },
       { label: 'Corki', value: 42 },
       { label: 'Darius', value: 122 },
       { label: 'Diana', value: 131 },
       { label: 'Draven', value: 119 },
-      { label: 'DrMundo', value: 36 },
+      { label: 'Dr. Mundo', value: 36 },
       { label: 'Ekko', value: 245 },
       { label: 'Elise', value: 60 },
       { label: 'Evelynn', value: 28 },
@@ -90,7 +91,7 @@ class ChampionSelector extends Component {
       { label: 'Irelia', value: 39 },
       { label: 'Ivern', value: 427 },
       { label: 'Janna', value: 40 },
-      { label: 'JarvanIV', value: 59 },
+      { label: 'Jarvan IV', value: 59 },
       { label: 'Jax', value: 24 },
       { label: 'Jayce', value: 126 },
       { label: 'Jhin', value: 202 },
@@ -102,7 +103,7 @@ class ChampionSelector extends Component {
       { label: 'Katarina', value: 55 },
       { label: 'Kayle', value: 10 },
       { label: 'Kennen', value: 85 },
-      { label: 'Khazix', value: 121 },
+      { label: 'Kha\'zix', value: 121 },
       { label: 'Kindred', value: 203 },
       { label: 'Kled', value: 240 },
       { label: 'KogMaw', value: 96 },
@@ -117,7 +118,7 @@ class ChampionSelector extends Component {
       { label: 'Malzahar', value: 90 },
       { label: 'Maokai', value: 57 },
       { label: 'MasterYi', value: 11 },
-      { label: 'MissFortune', value: 21 },
+      { label: 'Miss Fortune', value: 21 },
       { label: 'Wukong', value: 62 },
       { label: 'Mordekaiser', value: 82 },
       { label: 'Morgana', value: 25 },
@@ -133,7 +134,7 @@ class ChampionSelector extends Component {
       { label: 'Poppy', value: 78 },
       { label: 'Quinn', value: 133 },
       { label: 'Rammus', value: 33 },
-      { label: 'RekSai', value: 421 },
+      { label: 'Rek\'Sai', value: 421 },
       { label: 'Renekton', value: 58 },
       { label: 'Rengar', value: 107 },
       { label: 'Riven', value: 92 },
@@ -185,7 +186,7 @@ class ChampionSelector extends Component {
     ];
 
     return (<View style={[styles.root, this.props.style]}>
-      <Text style={[styles.titleText, this.props.titleStyle]}>Campeón: </Text>
+      <Text style={[styles.titleText, this.props.titleStyle]}>{I18n.t('champion')}: </Text>
       <Picker
         style={styles.picker}
         selectedValue={this.state.selectedValue}

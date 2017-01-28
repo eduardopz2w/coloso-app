@@ -1,6 +1,6 @@
 {
   "name": "coloso-app",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "i18n-js": "^1.0.0",
     "immutable": "^3.8.1",
     "json-api-normalizer": "^0.1.0",
     "lodash": "^4.17.2",

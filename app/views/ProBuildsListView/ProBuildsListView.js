@@ -3,6 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
+import I18n from 'i18n-js';
 import Toolbar from './components/Toolbar';
 import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsListActions';
 import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
@@ -115,7 +116,7 @@ class ProBuildSearchView extends Component {
     } else {
       content = (<View style={styles.container}>
         <Text>
-          Actualmente no hay builds disponibles para este campeón o jugador, muy pronto estarán disponibles.
+          {I18n.t('pro_builds_not_available')}
         </Text>
       </View>);
     }

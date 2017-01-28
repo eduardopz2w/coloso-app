@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
+import I18n from 'i18n-js';
 import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar';
 import {
   fetchSummonerData,
@@ -105,33 +106,33 @@ class SummonerProfileView extends Component {
         onChangeTab={this.handleOnChangeTab}
       >
         <LeagueEntryView
-          tabLabel="Clasificatoria"
+          tabLabel={I18n.t('ranked')}
           leagueEntry={this.props.leagueEntry}
           onPressRetryButton={() => this.props.fetchLeagueEntry()}
         />
         <ChampionsMasteryView
-          tabLabel="Campeones"
+          tabLabel={I18n.t('champions')}
           championsMasteries={this.props.championsMasteries}
           onPressRetryButton={() => this.props.fetchChampionsMasteries()}
         />
         <GamesRecentView
-          tabLabel="Historial"
+          tabLabel={I18n.t('history')}
           gamesRecent={this.props.gamesRecent}
           onPressRetryButton={() => this.props.fetchGamesRecent()}
         />
         <RunesView
-          tabLabel="Runas"
+          tabLabel={I18n.t('runes')}
           runes={this.props.runes}
           onPressRetryButton={() => this.props.fetchRunes()}
         />
         <MasteriesView
-          tabLabel="Maestrias"
+          tabLabel={I18n.t('masteries')}
           masteries={this.props.masteries}
           onPressRetryButton={() => this.props.fetchMasteries()}
         />
         <SummonerSummaryView
           summary={this.props.summary}
-          tabLabel="Estadisticas"
+          tabLabel={I18n.t('stats')}
           onPressRetryButton={() => this.props.fetchSummary(this.props.summary.get('season'))}
           onChangeSeason={season => this.props.fetchSummary(season)}
         />

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, Text, Picker } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import I18n from 'i18n-js';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -47,7 +48,7 @@ class PageSelector extends Component {
     const { pages } = this.props;
 
     return (<View style={styles.root}>
-      <Text style={styles.titleText}>Pagina: </Text>
+      <Text style={styles.titleText}>{I18n.t('page')}: </Text>
       <Picker
         style={styles.picker}
         selectedValue={this.state.selectedValue}

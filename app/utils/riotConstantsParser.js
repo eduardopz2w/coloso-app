@@ -1,75 +1,77 @@
+import I18n from 'i18n-js';
+
 function playerStatSummaryType(constant) {
   if (constant === 'Unranked') {
-    return 'Grieta del Invocador (Normal)';
+    return I18n.t('queues_ids.2');
   }
   if (constant === 'Unranked3x3') {
-    return 'Bosque Retorcido';
+    return I18n.t('queues_ids.8');
   }
   if (constant === 'OdinUnranked') {
-    return 'Dominion';
+    return I18n.t('queues_ids.16');
   }
   if (constant === 'AramUnranked5x5') {
-    return 'Aram';
+    return I18n.t('queues_ids.65');
   }
   if (constant === 'CoopVsAI') {
-    return 'Cooperativo vs Bots 5 vs 5';
+    return 'Cop vs AI 5 vs 5';
   }
   if (constant === 'CoopVsAI3x3') {
-    return 'Cooperativo vs Bots 3 vs 3';
+    return 'Cop vs AI 3 vs 3';
   }
   if (constant === 'RankedSolo5x5') {
-    return 'Ranked Solo 5 vs 5';
+    return I18n.t('queues_ids.4');
   }
   if (constant === 'RankedTeam3x3') {
-    return 'Ranked de Equpos 3 vs 3';
+    return I18n.t('queues_ids.41');
   }
   if (constant === 'RankedTeam5x5') {
-    return 'Ranked de Equpos 5 vs 5';
+    return I18n.t('queues_ids.42');
   }
   if (constant === 'OneForAll5x5') {
-    return 'Uno Para Todos';
+    return I18n.t('queues_ids.70');
   }
   if (constant === 'FirstBlood1x1') {
-    return 'Primera Sangre 1 vs 1';
+    return I18n.t('queues_ids.72');
   }
   if (constant === 'FirstBlood2x2') {
-    return 'Primera Sangre 2 vs 2';
+    return I18n.t('queues_ids.73');
   }
   if (constant === 'SummonersRift6x6') {
-    return 'Hexakill';
+    return I18n.t('queues_ids.98');
   }
   if (constant === 'CAP5x5') {
-    return 'Creador de Equipos';
+    return I18n.t('team_builder');
   }
   if (constant === 'URF') {
-    return 'Rápido y Feróz';
+    return I18n.t('queues_ids.76');
   }
   if (constant === 'URFBots') {
-    return 'Rápido y Feróz (Bots)';
+    return I18n.t('queues_ids.83');
   }
   if (constant === 'NightmareBot') {
-    return 'Bots de Pesadilla';
+    return I18n.t('nightmare_bots');
   }
   if (constant === 'Ascension') {
-    return 'Ascensión';
+    return I18n.t('queues_ids.96');
   }
   if (constant === 'Hexakill') {
-    return 'Hexakill (Bosque Retorcido)';
+    return `${I18n.t('queues_ids.98')} (${I18n.t('maps.twisted_treeline')})`;
   }
   if (constant === 'KingPoro') {
-    return 'La Leyenda del Rey Poro';
+    return I18n.t('queues_ids.300');
   }
   if (constant === 'CounterPick') {
-    return 'Nemesis';
+    return I18n.t('queues_ids.310');
   }
   if (constant === 'Siege') {
-    return 'Asedio del Nexo';
+    return I18n.t('queues_ids.315');
   }
   if (constant === 'RankedFlexTT') {
-    return 'Ranked Flexible 3 vs 3';
+    return `${I18n.t('queues_ids.9')} 3 vs 3`;
   }
   if (constant === 'RankedFlexSR') {
-    return 'Ranked Flexible 5 vs 5';
+    return `${I18n.t('queues_ids.9')} 5 vs 5`;
   }
 
   return constant;

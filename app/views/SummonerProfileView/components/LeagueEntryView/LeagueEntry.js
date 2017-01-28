@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import I18n from 'i18n-js';
 import RankedMiniseries from '../../../../components/RankedMiniseries';
 import rankedQueueParser from '../../../../utils/rankedQueueParser';
 import colors from '../../../../utils/colors';
@@ -142,19 +143,19 @@ class LeagueEntry extends Component {
         <View style={styleUtils.flexOne}>
           {entries.get('playerOrTeamName') &&
             <Text style={[styleUtils.centerText, styles.nameText]}>
-              <Text style={styleUtils.boldText}>Nombre: </Text>
+              <Text style={styleUtils.boldText}>{I18n.t('name')}: </Text>
               {entries.get('playerOrTeamName')}
             </Text>
           }
 
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={styles.dataText}>Tier: </Text>
+              <Text style={styles.dataText}>{I18n.t('tier')}: </Text>
               <Text style={[this.getTierTextStyle(), styles.dataText]}>{leagueEntry.get('tier')}</Text>
             </Text>
             {entries.get('division') &&
               <Text style={[styleUtils.flexOne, styleUtils.centerText, styles.dataText]}>
-                <Text style={styleUtils.boldText}>Division: </Text>
+                <Text style={styleUtils.boldText}>{I18n.t('division')}: </Text>
                 {entries.get('division')}
               </Text>
             }
@@ -162,11 +163,11 @@ class LeagueEntry extends Component {
 
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.victoriesTitleText, styles.dataText]}>Victorias: </Text>
+              <Text style={[styles.victoriesTitleText, styles.dataText]}>{I18n.t('victories')}: </Text>
               <Text style={styles.victoriesNumberText}>{entries.get('wins')}</Text>
             </Text>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.defeatsTitleText, styles.dataText]}>Derrotas: </Text>
+              <Text style={[styles.defeatsTitleText, styles.dataText]}>{I18n.t('defeats')}: </Text>
               <Text style={styles.defeatsNumberText}>{entries.get('losses')}</Text>
             </Text>
           </View>
@@ -174,12 +175,12 @@ class LeagueEntry extends Component {
           <View>
             {entries.miniSeries ? (
               <View style={[styleUtils.flexRow, styles.miniSeriesContainer]}>
-                <Text style={[styleUtils.boldText, styles.dataText]}>Progreso: </Text>
+                <Text style={[styleUtils.boldText, styles.dataText]}>{I18n.t('progress')}: </Text>
                 <RankedMiniseries progress={entries.getIn(['miniSeries', 'progress'])} style={{ flex: 1 }} />
               </View>
             ) : (
               <Text style={styles.leaguePointsTitleText}>
-                <Text style={styles.dataText}>Puntos de Liga: </Text>
+                <Text style={styles.dataText}>{I18n.t('league_points')}: </Text>
                 <Text style={styles.leaguePointsText}> {entries.get('leaguePoints') || 0}</Text>
               </Text>
             )}

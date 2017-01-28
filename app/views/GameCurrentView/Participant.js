@@ -3,6 +3,7 @@ import { View, Image, Text, Dimensions } from 'react-native';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKButton } from 'react-native-material-kit';
+import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import RankedMiniseries from '../../components/RankedMiniseries';
 import colors from '../../utils/colors';
@@ -52,7 +53,7 @@ const styles = MediaQueryStyleSheet.create(
       marginLeft: 16,
     },
     summonerName: {
-      fontSize: 16,
+      fontSize: 15,
       fontWeight: 'bold',
       color: 'black',
     },
@@ -82,12 +83,10 @@ const styles = MediaQueryStyleSheet.create(
     blackText: {
       color: 'black',
     },
-
     buttonsRow: {
       justifyContent: 'space-around',
       flexDirection: 'row',
     },
-
     roundedButton: {
       marginTop: 12,
       flex: 1,
@@ -281,29 +280,29 @@ class Participant extends Component {
             style={[styles.profileButton]}
             onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
           >
-            <Text style={styles.profileButtonText}>PERFIL</Text>
+            <Text style={styles.profileButtonText}>{I18n.t('profile')}</Text>
           </MKButton>
         </View>
         <View style={styles.flexRow}>
-          <Text style={styles.flexText}>Tier: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
+          <Text style={styles.flexText}>{I18n.t('tier')}: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
           {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
             <Text style={styles.flexText}>
-              Division: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
+              {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
             </Text>
           }
         </View>
         <View style={styles.flexRow}>
           <Text style={styles.flexText}>
-            Victorias: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
+            {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
           </Text>
           <Text style={styles.flexText}>
-            Derrotas: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
+            {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
           </Text>
         </View>
         <View style={styles.flexRow}>
           {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
             <View style={styles.flexRow}>
-              <Text style={styles.dataText}>Progreso: </Text>
+              <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
               <RankedMiniseries
                 progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
                 iconsSize={getMiniseriesIconsSize()}
@@ -311,7 +310,7 @@ class Participant extends Component {
             </View>
           ) : (
             <Text style={styles.flexText}>
-              Puntos de Liga: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
+              {I18n.t('league_points')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
             </Text>
           )}
         </View>
@@ -321,7 +320,7 @@ class Participant extends Component {
             rippleColor="rgba(0,0,0,0.1)"
             onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
           >
-            <Text style={styles.roundedButtonText}>RUNAS</Text>
+            <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
           </MKButton>
 
           <MKButton
@@ -329,7 +328,7 @@ class Participant extends Component {
             rippleColor="rgba(0,0,0,0.1)"
             onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
           >
-            <Text style={styles.roundedButtonText}>MAESTRIAS</Text>
+            <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
           </MKButton>
         </View>
       </View>
