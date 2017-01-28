@@ -66,4 +66,15 @@ export default {
     ru: 'Rusia',
     br: 'Brasil',
   },
+  game_modes: {
+    classic: 'Grieta del Invocador',
+    aram: 'Abismo de los Lamentos',
+    tutorial: 'Tutorial',
+    oneforall: 'Uno para Todos',
+    ascension: 'Ascensión',
+    kingporo: 'La leyenda del Rey Poro',
+    odin: 'Dominion',
+    firstblood: 'Primera Sangre',
+    siege: 'Asedio del Nexo',
+  },
 };

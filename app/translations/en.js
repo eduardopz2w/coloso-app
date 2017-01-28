@@ -66,4 +66,15 @@ export default {
     ru: 'Russia',
     br: 'Brazil',
   },
+  game_modes: {
+    classic: 'Summoner\'s Rift',
+    aram: 'Howling Abyss',
+    tutorial: 'Tutorial',
+    oneforall: 'One For All',
+    ascension: 'Ascension',
+    kingporo: 'Legend of Poro King',
+    odin: 'Dominion',
+    firstblood: 'First Blood',
+    siege: 'Nexus Siege',
+  },
 };

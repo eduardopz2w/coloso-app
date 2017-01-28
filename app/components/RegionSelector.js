@@ -2,23 +2,23 @@ import React, { Component, PropTypes } from 'react';
 import { Picker, View } from 'react-native';
 import regionHumanize from '../utils/regionHumanize';
 
-const regions = [
-  { label: regionHumanize('na'), value: 'na' },
-  { label: regionHumanize('lan'), value: 'lan' },
-  { label: regionHumanize('las'), value: 'las' },
-  { label: regionHumanize('br'), value: 'br' },
-  { label: regionHumanize('euw'), value: 'euw' },
-  { label: regionHumanize('eune'), value: 'eune' },
-  { label: regionHumanize('oce'), value: 'oce' },
-  { label: regionHumanize('jp'), value: 'jp' },
-  { label: regionHumanize('kr'), value: 'kr' },
-  { label: regionHumanize('ru'), value: 'ru' },
-  { label: regionHumanize('tr'), value: 'tr' },
-];
 
 class RegionSelector extends Component {
   constructor(props) {
     super(props);
+    this.regions = [
+      { label: regionHumanize('na'), value: 'na' },
+      { label: regionHumanize('lan'), value: 'lan' },
+      { label: regionHumanize('las'), value: 'las' },
+      { label: regionHumanize('br'), value: 'br' },
+      { label: regionHumanize('euw'), value: 'euw' },
+      { label: regionHumanize('eune'), value: 'eune' },
+      { label: regionHumanize('oce'), value: 'oce' },
+      { label: regionHumanize('jp'), value: 'jp' },
+      { label: regionHumanize('kr'), value: 'kr' },
+      { label: regionHumanize('ru'), value: 'ru' },
+      { label: regionHumanize('tr'), value: 'tr' },
+    ];
 
     this.state = {
       selectedValue: 'na',
@@ -48,7 +48,7 @@ class RegionSelector extends Component {
       onValueChange={this.handleOnValueChange}
       selectedValue={this.state.selectedValue}
     >
-      {regions.map((region, index) => <Picker.Item
+      {this.regions.map((region, index) => <Picker.Item
         key={index}
         label={region.label}
         value={region.value}
