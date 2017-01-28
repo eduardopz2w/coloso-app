@@ -4,6 +4,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Modal from 'react-native-modalbox';
+import I18n from 'i18n-js';
 import ChampionMastery from './ChampionMastery';
 import MasteryInfo from './MasteryInfo';
 import colors from '../../../../utils/colors';
@@ -125,7 +126,7 @@ class ChampionsMasteryView extends Component {
         <Summary masteries={masteriesList} />
         <View style={styles.container}>
           <Text style={styles.messageText}>
-            Este invocador no tiene puntos de maestria con ningún campeón.
+            {I18n.t('summoner_does_not_have_champions_masteries')}
           </Text>
         </View>
       </View>);
