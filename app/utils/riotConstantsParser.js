@@ -2,7 +2,7 @@ import I18n from 'i18n-js';
 
 function playerStatSummaryType(constant) {
   if (constant === 'Unranked') {
-    return I18n.t('queues_ids.5');
+    return I18n.t('queues_ids.2');
   }
   if (constant === 'Unranked3x3') {
     return I18n.t('queues_ids.8');
