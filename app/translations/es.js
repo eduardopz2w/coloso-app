@@ -78,4 +78,10 @@ export default {
     firstblood: 'Primera Sangre',
     siege: 'Asedio del Nexo',
   },
+  maps: {
+    summoner_rift: 'Grieta del Invocador',
+    twisted_treeline: 'Bosque Retorcido',
+    howling_abyss: 'Abismo de los Lamentos',
+    crystal_scar: 'Cicatríz de Cristal',
+  },
 };

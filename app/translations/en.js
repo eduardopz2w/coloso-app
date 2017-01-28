@@ -78,4 +78,10 @@ export default {
     firstblood: 'First Blood',
     siege: 'Nexus Siege',
   },
+  maps: {
+    summoner_rift: 'Summoner\'s Rift',
+    twisted_treeline: 'Twisted Treeline',
+    howling_abyss: 'Howling Abyss',
+    crystal_scar: 'Crystal Scar',
+  },
 };
