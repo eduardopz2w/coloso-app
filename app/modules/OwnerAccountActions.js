@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 
 export const loadAccount = createAction('OWNER_ACCOUNT/LOAD_ACCOUNT', () => new Promise((resolve) => {
   Storage.load({ key: 'ownerAccount' })

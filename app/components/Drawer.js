@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import { connect } from 'react-redux';
-import { loadAccount } from '../redux/actions/OwnerAccountActions';
+import { loadAccount } from '../modules/OwnerAccountActions';
 import {
   setSummonerName,
   setRegion,

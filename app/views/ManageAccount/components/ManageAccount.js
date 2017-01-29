@@ -1,15 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Alert } from 'react-native';
 import { MKTextField, MKButton } from 'react-native-material-kit';
-import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import I18n from 'i18n-js';
-import Toolbar from './components/Toolbar';
-import ColosoApi from '../../utils/ColosoApi';
-import { saveAccount } from '../../redux/actions/OwnerAccountActions';
-import colors from '../../utils/colors';
-import RegionSelector from '../../components/RegionSelector';
-import LoadingIndicator from '../../components/LoadingIndicator';
+import Toolbar from './Toolbar';
+import ColosoApi from '../../../utils/ColosoApi';
+import colors from '../../../utils/colors';
+import RegionSelector from '../../../components/RegionSelector';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 
 const styles = StyleSheet.create({
   root: {
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class ManageAccountView extends Component {
+class ManageAccount extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -134,23 +132,8 @@ class ManageAccountView extends Component {
   }
 }
 
-ManageAccountView.propTypes = {
+ManageAccount.propTypes = {
   saveAccount: PropTypes.func,
 };
 
-function mapStateToProps() {
-  return {};
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    saveAccount: (ownerAccount) => {
-      dispatch(saveAccount(ownerAccount));
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ManageAccountView);
+export default ManageAccount;

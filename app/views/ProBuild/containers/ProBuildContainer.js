@@ -4,6 +4,8 @@ import denormalize from '../../../utils/denormalize';
 
 import ProBuild from '../components/ProBuild';
 
+// TODO: Add reselect
+
 function mapStateToProps(state) {
   const fetched = state.proBuild.get('fetched');
   let proBuildData;
