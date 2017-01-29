@@ -1,10 +1,10 @@
 import React from 'react';
 import { Scene, Router, ActionConst } from 'react-native-router-flux';
 
-import Drawer from './components/Drawer';
+import Drawer from './containers/DrawerContainer';
 
 // -------- Views --------------
-import SearchView from './views/SearchView';
+import SummonerSearch from './views/SummonerSearch';
 import SummonerProfileView from './views/SummonerProfileView';
 import ProBuildsList from './views/ProBuildsList';
 import ManageAccount from './views/ManageAccount';
@@ -17,7 +17,7 @@ function Routes() {
       <Scene key="root">
         <Scene
           key="search_view"
-          component={SearchView}
+          component={SummonerSearch}
           hideNavBar
           type={ActionConst.RESET}
           initial

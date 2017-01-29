@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import _ from 'lodash';
-import logger from '../../utils/logger';
+import logger from '../utils/logger';
 
 export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, region) => new Promise((resolve, reject) => {
   Storage.load({ key: 'searchHistoryEntries' })

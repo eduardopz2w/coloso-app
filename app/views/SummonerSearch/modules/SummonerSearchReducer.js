@@ -8,7 +8,7 @@ import {
   searchGame,
   clearSearchError,
   clearFoundData,
-} from '../actions/SearchViewActions';
+} from './SummonerSearchActions';
 
 const initialState = Immutable.fromJS({
   summonerName: '',

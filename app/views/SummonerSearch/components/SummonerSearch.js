@@ -1,32 +1,22 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
-import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
-import SearchViewToolbar from './components/SearchViewToolbar';
-import HistoryModal from './components//HistoryModal';
-import { tracker } from '../../utils/analytics';
-import LoadingIndicator from '../../components/LoadingIndicator';
-import { loadEntries, addEntry, deleteEntry } from '../../redux/actions/SearchHistoryActions';
-import RegionSelector from '../../components/RegionSelector';
-import {
-  setSummonerName,
-  setRegion,
-  setSearchType,
-  searchSummoner,
-  searchGame,
-  clearSearchError,
-  clearFoundData,
-} from '../../redux/actions/SearchViewActions';
+import SearchViewToolbar from './SearchViewToolbar';
+import HistoryModal from './HistoryModal';
+import { tracker } from '../../../utils/analytics';
+import LoadingIndicator from '../../../components/LoadingIndicator';
+import RegionSelector from '../../../components/RegionSelector';
+
 import styles from './styles';
 
 const PROFILE_SEARCH = 'PROFILE_SEARCH';
 const GAME_SEARCH = 'GAME_SEARCH';
 
-class SearchView extends Component {
+class SummonerSearch extends Component {
   constructor(props) {
     super(props);
 
@@ -55,7 +45,7 @@ class SearchView extends Component {
   }
 
   componentDidMount() {
-    tracker.trackScreenView('SearchView');
+    tracker.trackScreenView('SummonerSearch');
   }
 
   componentDidUpdate() {
@@ -242,7 +232,7 @@ class SearchView extends Component {
   }
 }
 
-SearchView.propTypes = {
+SummonerSearch.propTypes = {
   summonerName: PropTypes.string,
   region: PropTypes.string,
   searchType: PropTypes.string,
@@ -265,66 +255,4 @@ SearchView.propTypes = {
   deleteSearchEntry: PropTypes.func,
 };
 
-function mapStateToProps(state) {
-  const searchViewState = state.searchView;
-
-  return {
-    summonerName: searchViewState.get('summonerName'),
-    region: searchViewState.get('region'),
-    searchType: searchViewState.get('searchType'),
-    isSearching: searchViewState.get('isSearching'),
-    searchError: searchViewState.get('searchError'),
-    errorMessage: searchViewState.get('errorMessage'),
-    summonerFoundUrid: searchViewState.get('summonerFoundUrid'),
-    gameFound: searchViewState.get('gameFound'),
-    searchHistoryEntries: state.searchHistory.get('entries'),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    searchSummoner: (summonerName, region) => {
-      tracker.trackEvent('search profile', `name: ${summonerName} region: ${region}`);
-      dispatch(searchSummoner(summonerName, region));
-    },
-
-    searchGame: (summonerName, region) => {
-      tracker.trackEvent('search game', `name: ${summonerName} region: ${region}`);
-      dispatch(searchGame(summonerName, region));
-    },
-
-    clearSearchError: () => {
-      dispatch(clearSearchError());
-    },
-
-    clearFoundData: () => {
-      dispatch(clearFoundData());
-    },
-
-    loadSearchHistory: () => {
-      dispatch(loadEntries());
-    },
-
-    addSearchEntry: (summonerName, region) => {
-      dispatch(addEntry(summonerName, region));
-    },
-
-    deleteSearchEntry: (summonerName, region) => {
-      dispatch(deleteEntry(summonerName, region));
-    },
-
-    setSummonerName: (summonerName) => {
-      dispatch(setSummonerName(summonerName));
-    },
-
-    setRegion: (region) => {
-      dispatch(setRegion(region));
-    },
-
-    setSearchType: (searchType) => {
-      dispatch(setSearchType(searchType));
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchView);
+export default SummonerSearch;

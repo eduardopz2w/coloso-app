@@ -1,7 +1,7 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
 import { fetchProBuilds } from '../actions/GameCurrentViewActions';
-import { searchGame } from '../actions/SearchViewActions';
+import { searchGame } from '../../views/SummonerSearch/modules/SummonerSearchActions';
 
 const initialState = Immutable.fromJS({
   gameId: null,

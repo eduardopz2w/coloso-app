@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import searchView from './reducers/searchView';
 import summonerProfileView from './reducers/summonerProfileView';
 import gameCurrentView from './reducers/gameCurrentView';
 import searchHistory from './reducers/searchHistory';
@@ -9,7 +8,6 @@ import entities from './reducers/entities';
 
 export default function createReducer(asyncReducers) {
   return combineReducers({
-    searchView,
     summonerProfileView,
     gameCurrentView,
     searchHistory,
