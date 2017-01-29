@@ -1,16 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import I18n from 'i18n-js';
-import Toolbar from './components/Toolbar';
-import { fetchBuilds, refreshBuilds } from '../../redux/actions/ProBuildsListActions';
-import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
-import { tracker } from '../../utils/analytics';
-import ProBuildsList from '../../components/ProBuildsList';
-import ErrorScreen from '../../components/ErrorScreen';
-import denormalize from '../../utils/denormalize';
+
+
+import Toolbar from './Toolbar';
+import { tracker } from '../../../utils/analytics';
+import ProBuildsList from '../../../components/ProBuildsList';
+import ErrorScreen from '../../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {
@@ -22,7 +20,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class ProBuildSearchView extends Component {
+class ProBuildsListView extends Component {
   constructor(props) {
     super(props);
 
@@ -81,7 +79,7 @@ class ProBuildSearchView extends Component {
     const isRefreshing = probuilds.get('isRefreshing');
     const championSelected = probuilds.get('championSelected');
     const proPlayerSelected = probuilds.get('proPlayerSelected');
-    const proBuildsList = probuilds.getIn(['data', 'proBuilds']);
+    const proBuildsList = probuilds.get('proBuildsList');
 
     let content;
 
@@ -136,7 +134,7 @@ class ProBuildSearchView extends Component {
   }
 }
 
-ProBuildSearchView.propTypes = {
+ProBuildsListView.propTypes = {
   fetchBuilds: PropTypes.func,
   fetchProPlayers: PropTypes.func,
   refreshBuilds: PropTypes.func,
@@ -146,9 +144,7 @@ ProBuildSearchView.propTypes = {
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
     proBuildsIds: PropTypes.list,
-    data: ImmutablePropTypes.mapContains({
-      proBuilds: ImmutablePropTypes.list,
-    }),
+    proBuildsList: ImmutablePropTypes.list,
     pagination: ImmutablePropTypes.mapContains({
       currentPage: PropTypes.number,
       totalPages: PropTypes.number,
@@ -158,40 +154,8 @@ ProBuildSearchView.propTypes = {
   }),
   proPlayers: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool,
+    proPlayersList: ImmutablePropTypes.list,
   }),
 };
 
-function mapStateToProps(state) {
-  let proBuilds = state.proBuildsList;
-  let proPlayers = state.proPlayers;
-
-  const proBuildsIds = proBuilds.get('proBuildsIds');
-  const proPlayersIds = proPlayers.get('proPlayersIds');
-
-  proBuilds = proBuilds.setIn(['data', 'proBuilds'], proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
-  proPlayers = proPlayers.setIn(['data', 'proPlayers'], proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
-
-  return {
-    proBuilds,
-    proPlayers,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchBuilds: (queryParams, pageNumber) => {
-      dispatch(fetchBuilds(queryParams, pageNumber));
-    },
-    refreshBuilds: (queryParams) => {
-      dispatch(refreshBuilds(queryParams));
-    },
-    fetchProPlayers: () => {
-      dispatch(fetchProPlayers());
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProBuildSearchView);
+export default ProBuildsListView;

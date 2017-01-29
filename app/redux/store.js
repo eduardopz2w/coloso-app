@@ -5,7 +5,7 @@ import thunk from 'redux-thunk';
 import _ from 'lodash';
 import promiseMiddleware from 'redux-promise-middleware';
 import ColosoApiMiddleware from './middlewares/ColosoApiMiddleware';
-import mainReducer from './reducers';
+import createReducer from './createReducer';
 
 let middlewares = [thunk, promiseMiddleware(), ColosoApiMiddleware];
 
@@ -30,15 +30,13 @@ if (__DEV__) {
   middlewares = [...middlewares, logger];
 }
 
-export default function configureStore() {
-  const store = createStore(mainReducer, applyMiddleware(...middlewares));
+const injectedReducers = {};
+const store = createStore(createReducer(injectedReducers), applyMiddleware(...middlewares));
 
-  if (module.hot) {
-    module.hot.accept(() => {
-      const nextRootReducer = require('./reducers').default; // eslint-disable-line global-require
-      store.replaceReducer(nextRootReducer);
-    });
-  }
+export function injectReducer(name, reducer) {
+  injectedReducers[name] = reducer;
 
-  return store;
+  store.replaceReducer(createReducer(injectedReducers));
 }
+
+export default store;

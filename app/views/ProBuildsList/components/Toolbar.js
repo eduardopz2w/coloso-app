@@ -63,7 +63,7 @@ class Toolbar extends PureComponent {
           <ProPlayersSelector
             titleStyle={{ width: 70 }}
             initialValue={this.props.proPlayerSelected}
-            proPlayers={this.props.proPlayers.getIn(['data', 'proPlayers'])}
+            proPlayers={this.props.proPlayers.get('proPlayersList')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeProPlayerSelected}
@@ -77,9 +77,7 @@ class Toolbar extends PureComponent {
 Toolbar.propTypes = {
   style: View.propTypes.style,
   proPlayers: ImmutablePropTypes.mapContains({
-    data: ImmutablePropTypes.mapContains({
-      proPlayers: ImmutablePropTypes.List,
-    }),
+    proPlayersList: ImmutablePropTypes.list,
   }),
   onPressMenuButton: PropTypes.func,
   disabledFilters: PropTypes.bool,

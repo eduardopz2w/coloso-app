@@ -6,7 +6,7 @@ import Drawer from './components/Drawer';
 // -------- Views --------------
 import SearchView from './views/SearchView';
 import SummonerProfileView from './views/SummonerProfileView';
-import ProBuildsListView from './views/ProBuildsListView';
+import ProBuildsList from './views/ProBuildsList';
 import ManageAccountView from './views/ManageAccountView';
 import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
@@ -24,7 +24,7 @@ function Routes() {
         />
         <Scene
           key="probuilds_search_view"
-          component={ProBuildsListView}
+          component={ProBuildsList}
           hideNavBar
           type={ActionConst.RESET}
         />

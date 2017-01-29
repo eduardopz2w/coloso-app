@@ -1,9 +1,7 @@
 import React from 'react';
 import { AppRegistry } from 'react-native';
 import AppContainer from './app';
-import configureStore from './app/redux/configureStore';
-
-const store = configureStore();
+import store from './app/redux/store';
 
 function Coloso() {
   return <AppContainer store={store} />;
