@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchProBuild } from '../actions/ProBuildViewActions';
+import { fetchProBuild } from './ProBuildActions';
 
 const initialState = Immutable.fromJS({
   fetched: false,

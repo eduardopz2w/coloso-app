@@ -5,19 +5,16 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Modal from 'react-native-modalbox';
 import { Actions } from 'react-native-router-flux';
-import { connect } from 'react-redux';
 import numeral from 'numeral';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { fetchProBuild } from '../../redux/actions/ProBuildViewActions';
-import LoadingIndicator from '../../components/LoadingIndicator';
-import ErrorScreen from '../../components/ErrorScreen';
-import PlayerToolbar from './components/PlayerToolbar';
-import BasicToolbar from './components/BasicToolbar';
-import Item from './components/Item';
-import colors from '../../utils/colors';
-import denormalize from '../../utils/denormalize';
+import LoadingIndicator from '../../../components/LoadingIndicator';
+import ErrorScreen from '../../../components/ErrorScreen';
+import PlayerToolbar from './PlayerToolbar';
+import BasicToolbar from './BasicToolbar';
+import Item from './Item';
+import colors from '../../../utils/colors';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 
@@ -174,7 +171,7 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-class ProBuildView extends Component {
+class ProBuild extends Component {
   constructor(props) {
     super(props);
 
@@ -543,7 +540,7 @@ class ProBuildView extends Component {
   }
 }
 
-ProBuildView.propTypes = {
+ProBuild.propTypes = {
   proBuildData: ImmutablePropTypes.map,
   isFetching: PropTypes.bool,
   fetched: PropTypes.bool,
@@ -551,31 +548,4 @@ ProBuildView.propTypes = {
   fetchProBuild: PropTypes.func,
 };
 
-function mapStateToProps(state) {
-  const fetched = state.proBuildView.get('fetched');
-  let proBuildData;
-
-  if (fetched) {
-    proBuildData = denormalize(state.proBuildView.get('proBuildId'), 'proBuilds', state.entities);
-  }
-
-  return {
-    proBuildData,
-    fetched,
-    isFetching: state.proBuildView.get('isFetching'),
-    errorMessage: state.proBuildView.get('errorMessage'),
-  };
-}
-
-function mapDispatchToProps(dispatch, props) {
-  return {
-    fetchProBuild: () => {
-      dispatch(fetchProBuild(props.buildId));
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProBuildView);
+export default ProBuild;

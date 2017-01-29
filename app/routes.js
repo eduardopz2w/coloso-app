@@ -8,7 +8,7 @@ import SearchView from './views/SearchView';
 import SummonerProfileView from './views/SummonerProfileView';
 import ProBuildsList from './views/ProBuildsList';
 import ManageAccountView from './views/ManageAccountView';
-import ProBuildView from './views/ProBuildView';
+import ProBuild from './views/ProBuild';
 import GameCurrentView from './views/GameCurrentView';
 
 function Routes() {
@@ -28,7 +28,7 @@ function Routes() {
           hideNavBar
           type={ActionConst.RESET}
         />
-        <Scene key="probuild_view" component={ProBuildView} hideNavBar />
+        <Scene key="probuild_view" component={ProBuild} hideNavBar />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
         <Scene key="game_current" component={GameCurrentView} hideNavBar />
         <Scene key="manage_account_view" component={ManageAccountView} hideNavBar />

@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import { View, StyleSheet } from 'react-native';
-import MasteryPage from '../../components/MasteryPage';
+import MasteryPage from '../../../components/MasteryPage';
 
 const styles = StyleSheet.create({
   root: {},
