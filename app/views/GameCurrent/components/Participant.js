@@ -5,8 +5,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKButton } from 'react-native-material-kit';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import RankedMiniseries from '../../components/RankedMiniseries';
-import colors from '../../utils/colors';
+import RankedMiniseries from '../../../components/RankedMiniseries';
+import colors from '../../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {

@@ -1,22 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Dimensions, BackAndroid, Text, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
-import { connect } from 'react-redux';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import I18n from 'i18n-js';
-import colors from '../../utils/colors';
-import denormalize from '../../utils/denormalize';
+import colors from '../../../utils/colors';
 import Team from './Team';
-import { fetchProBuilds } from '../../redux/actions/GameCurrentViewActions';
-import { fetchProPlayers } from '../../redux/actions/ProPlayersActions';
-import RunePage from '../../components/RunePage';
-import MasteryPage from '../../components/MasteryPage';
-import ProBuildsList from '../../components/ProBuildsList';
-import ProPlayersSelector from '../../components/ProPlayersSelector';
-import { tracker } from '../../utils/analytics';
+import RunePage from '../../../components/RunePage';
+import MasteryPage from '../../../components/MasteryPage';
+import ProBuildsList from '../../../components/ProBuildsList';
+import ProPlayersSelector from '../../../components/ProPlayersSelector';
+import { tracker } from '../../../utils/analytics';
 import Toolbar from './Toolbar';
 
 const styles = StyleSheet.create({
@@ -52,7 +48,7 @@ function getModalStyle() {
   return modalStyle;
 }
 
-class GameCurrentView extends Component {
+class GameCurrent extends Component {
   constructor(props) {
     super(props);
 
@@ -61,7 +57,6 @@ class GameCurrentView extends Component {
     this.getSummonerMasteries = this.getSummonerMasteries.bind(this);
     this.handleOnPressRunesButton = this.handleOnPressRunesButton.bind(this);
     this.handleOnPressMasteriesButton = this.handleOnPressMasteriesButton.bind(this);
-    this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
     this.handleOnLoadMoreBuilds = this.handleOnLoadMoreBuilds.bind(this);
     this.handleOnChangeProPlayerSelected = this.handleOnChangeProPlayerSelected.bind(this);
@@ -81,7 +76,7 @@ class GameCurrentView extends Component {
   }
 
   componentDidMount() {
-    tracker.trackScreenView('GameCurrentView');
+    tracker.trackScreenView('GameCurrent');
   }
 
   componentWillUnmount() {
@@ -130,10 +125,6 @@ class GameCurrentView extends Component {
   handleOnPressMasteriesButton(summonerUrid) {
     this.setState({ summonerSelectedId: summonerUrid, modalType: 'MASTERIES' });
     this.modal.open();
-  }
-
-  handleOnPressProfileButton(summonerUrid) {
-    Actions.summoner_profile_view({ summonerUrid });
   }
 
   handleOnBackAndroid() {
@@ -227,13 +218,17 @@ class GameCurrentView extends Component {
               {...this.getTeamData(100)}
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
-              onPressProfileButton={this.handleOnPressProfileButton}
+              onPressProfileButton={(summonerUrid) => {
+                Actions.summoner_profile_view({ summonerUrid });
+              }}
             />
             <Team
               {...this.getTeamData(200)}
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
-              onPressProfileButton={this.handleOnPressProfileButton}
+              onPressProfileButton={(summonerUrid) => {
+                Actions.summoner_profile_view({ summonerUrid });
+              }}
             />
           </ScrollView>
         </View>
@@ -261,7 +256,7 @@ class GameCurrentView extends Component {
   }
 }
 
-GameCurrentView.propTypes = {
+GameCurrent.propTypes = {
   gameData: ImmutablePropTypes.mapContains({
     participants: ImmutablePropTypes.list,
     mapId: PropTypes.number,
@@ -290,28 +285,4 @@ GameCurrentView.propTypes = {
   fetchProPlayers: PropTypes.func,
 };
 
-function mapStateToProps(state) {
-  let proBuilds = state.gameCurrentView.get('proBuilds');
-  let proPlayers = state.proPlayers;
-  const proBuildsIds = state.gameCurrentView.getIn(['proBuilds', 'proBuildsIds']);
-  const proPlayersIds = proPlayers.get('proPlayersIds');
-  const gameData = denormalize(state.gameCurrentView.get('gameId'), 'gamesCurrent', state.entities);
-
-  proBuilds = proBuilds.set('proBuildsList', proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
-  proPlayers = proPlayers.set('proPlayersList', proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
-
-  return { gameData, proBuilds, proPlayers };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchProBuilds: (queryParams, page) => {
-      dispatch(fetchProBuilds(queryParams, page));
-    },
-    fetchProPlayers: () => {
-      dispatch(fetchProPlayers());
-    },
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameCurrentView);
+export default GameCurrent;

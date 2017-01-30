@@ -9,7 +9,7 @@ import SummonerProfileView from './views/SummonerProfileView';
 import ProBuildsList from './views/ProBuildsList';
 import ManageAccount from './views/ManageAccount';
 import ProBuild from './views/ProBuild';
-import GameCurrentView from './views/GameCurrentView';
+import GameCurrent from './views/GameCurrent';
 
 function Routes() {
   return (<Router>
@@ -30,7 +30,7 @@ function Routes() {
         />
         <Scene key="probuild_view" component={ProBuild} hideNavBar />
         <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
-        <Scene key="game_current" component={GameCurrentView} hideNavBar />
+        <Scene key="game_current" component={GameCurrent} hideNavBar />
         <Scene key="manage_account_view" component={ManageAccount} hideNavBar />
       </Scene>
     </Scene>

@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchProPlayers } from '../actions/ProPlayersActions';
+import { fetchProPlayers } from '../../modules/ProPlayersActions';
 
 const initState = Immutable.fromJS({
   fetched: false,

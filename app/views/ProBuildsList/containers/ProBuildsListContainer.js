@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import ProBuildsList from '../components/ProBuildsList';
 import denormalize from '../../../utils/denormalize';
 import { fetchBuilds, refreshBuilds } from '../modules/ProBuildsListActions';
-import { fetchProPlayers } from '../../../redux/actions/ProPlayersActions';
+import { fetchProPlayers } from '../../../modules/ProPlayersActions';
 
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
 
