@@ -1,29 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
-import SummonerProfileViewToolbar from './components/SummonerProfileViewToolbar';
-import {
-  fetchSummonerData,
-  fetchLeagueEntry,
-  fetchChampionsMasteries,
-  fetchGamesRecent,
-  fetchMasteries,
-  fetchRunes,
-  fetchSummary,
-} from '../../redux/actions/SummonerProfileViewActions';
-import LeagueEntryView from './components/LeagueEntryView';
-import ChampionsMasteryView from './components/ChampionsMasteryView';
-import GamesRecentView from './components/GamesRecentView';
-import MasteriesView from './components/MasteriesView';
-import SummonerSummaryView from './components/SummonerSummaryView';
-import RunesView from './components/RunesView';
-import colors from '../../utils/colors';
-import denormalize from '../../utils/denormalize';
-import { tracker } from '../../utils/analytics';
+import Toolbar from './Toolbar';
+
+import LeagueEntryView from './LeagueEntryView';
+import ChampionsMasteryView from './ChampionsMasteryView';
+import GamesRecentView from './GamesRecentView';
+import MasteriesView from './MasteriesView';
+import SummonerSummaryView from './SummonerSummaryView';
+import RunesView from './RunesView';
+import colors from '../../../utils/colors';
+import { tracker } from '../../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {
@@ -31,7 +21,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class SummonerProfileView extends Component {
+class SummonerProfile extends Component {
   constructor(props) {
     super(props);
 
@@ -44,7 +34,7 @@ class SummonerProfileView extends Component {
   }
 
   componentDidMount() {
-    tracker.trackScreenView('SummonerProfileView');
+    tracker.trackScreenView('SummonerProfile');
   }
 
   handleOnChangeTab({ i: tabIndex }) {
@@ -92,7 +82,7 @@ class SummonerProfileView extends Component {
 
   render() {
     return (<View style={styles.root}>
-      <SummonerProfileViewToolbar
+      <Toolbar
         summonerData={this.props.summonerData}
         onPressBackButton={() => { Actions.pop(); }}
       />
@@ -143,7 +133,7 @@ class SummonerProfileView extends Component {
 }
 
 
-SummonerProfileView.propTypes = {
+SummonerProfile.propTypes = {
   fetchSummonerData: PropTypes.func,
   fetchLeagueEntry: PropTypes.func,
   fetchChampionsMasteries: PropTypes.func,
@@ -189,104 +179,4 @@ SummonerProfileView.propTypes = {
   }),
 };
 
-function mapStateToProps(state) {
-  let summonerData = state.summonerProfileView.get('summonerData');
-  let leagueEntry = state.summonerProfileView.get('leagueEntry');
-  let championsMasteries = state.summonerProfileView.get('championsMasteries');
-  let gamesRecent = state.summonerProfileView.get('gamesRecent');
-  let masteries = state.summonerProfileView.get('masteries');
-  let runes = state.summonerProfileView.get('runes');
-  let summary = state.summonerProfileView.get('summary');
-  const entities = state.entities;
-
-  if (summonerData.get('fetched')) {
-    summonerData = summonerData.merge({
-      data: denormalize(summonerData.get('summonerUrid'), 'summoners', entities),
-    });
-  }
-
-  if (leagueEntry.get('fetched')) {
-    leagueEntry = leagueEntry.merge({
-      data: denormalize(leagueEntry.get('leagueEntryId'), 'leagueEntries', entities),
-    });
-  }
-
-  if (championsMasteries.get('fetched')) {
-    championsMasteries = championsMasteries.merge({
-      data: denormalize(championsMasteries.get('championsMasteriesId'), 'championsMasteries', entities),
-    });
-  }
-
-  if (gamesRecent.get('fetched')) {
-    gamesRecent = gamesRecent.merge({
-      data: denormalize(gamesRecent.get('gamesRecentId'), 'gamesRecent', entities),
-    });
-  }
-
-  if (masteries.get('fetched')) {
-    masteries = masteries.merge({
-      data: denormalize(masteries.get('masteriesId'), 'masteries', entities),
-    });
-  }
-
-  if (runes.get('fetched')) {
-    runes = runes.merge({
-      data: denormalize(runes.get('runesId'), 'runes', entities),
-    });
-  }
-
-  if (summary.get('fetched')) {
-    summary = summary.merge({
-      data: denormalize(summary.get('statsSummariesId'), 'statsSummaries', entities),
-    });
-  }
-
-  return {
-    summonerData,
-    leagueEntry,
-    championsMasteries,
-    gamesRecent,
-    masteries,
-    runes,
-    summary,
-  };
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  const { summonerUrid } = ownProps;
-
-  return {
-    fetchSummonerData: () => {
-      dispatch(fetchSummonerData(summonerUrid));
-    },
-
-    fetchLeagueEntry: () => {
-      dispatch(fetchLeagueEntry(summonerUrid));
-    },
-
-    fetchChampionsMasteries: () => {
-      dispatch(fetchChampionsMasteries(summonerUrid));
-    },
-
-    fetchGamesRecent: () => {
-      dispatch(fetchGamesRecent(summonerUrid));
-    },
-
-    fetchMasteries: () => {
-      dispatch(fetchMasteries(summonerUrid));
-    },
-
-    fetchRunes: () => {
-      dispatch(fetchRunes(summonerUrid));
-    },
-
-    fetchSummary: (season) => {
-      dispatch(fetchSummary(summonerUrid, season));
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SummonerProfileView);
+export default SummonerProfile;

@@ -5,7 +5,7 @@ import Drawer from './containers/DrawerContainer';
 
 // -------- Views --------------
 import SummonerSearch from './views/SummonerSearch';
-import SummonerProfileView from './views/SummonerProfileView';
+import SummonerProfile from './views/SummonerProfile';
 import ProBuildsList from './views/ProBuildsList';
 import ManageAccount from './views/ManageAccount';
 import ProBuild from './views/ProBuild';
@@ -29,7 +29,7 @@ function Routes() {
           type={ActionConst.RESET}
         />
         <Scene key="probuild_view" component={ProBuild} hideNavBar />
-        <Scene key="summoner_profile_view" component={SummonerProfileView} hideNavBar />
+        <Scene key="summoner_profile_view" component={SummonerProfile} hideNavBar />
         <Scene key="game_current" component={GameCurrent} hideNavBar />
         <Scene key="manage_account_view" component={ManageAccount} hideNavBar />
       </Scene>

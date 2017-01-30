@@ -8,7 +8,7 @@ import {
   fetchMasteries,
   fetchRunes,
   fetchSummary,
-} from '../actions/SummonerProfileViewActions';
+} from './SummonerProfileActions';
 
 const initialState = Immutable.fromJS({
   summonerData: {
