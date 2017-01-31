@@ -1,10 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, Alert, TouchableWithoutFeedback } from 'react-native';
 import _ from 'lodash';
+import DeviceInfo from 'react-native-device-info';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
+
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
 import MenuItem from './MenuItem';
@@ -14,6 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     width: 240,
+    position: 'relative',
   },
   header: {
     width: 240,
@@ -68,6 +71,11 @@ const styles = StyleSheet.create({
       width: 1.5,
       height: 1.5,
     },
+  },
+  versionText: {
+    position: 'absolute',
+    bottom: 0,
+    right: 8,
   },
 });
 
@@ -180,6 +188,8 @@ class SideMenu extends PureComponent {
           this.context.drawer.close();
         }}
       />
+
+      <Text style={styles.versionText}>v{DeviceInfo.getVersion()}</Text>
     </View>);
   }
 }
