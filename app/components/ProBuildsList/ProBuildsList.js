@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, ListView, RefreshControl } from 'react-native';
+import { View, StyleSheet, ListView, RefreshControl, Text } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
+import { MKButton } from 'react-native-material-kit';
+
 import ProBuildListRow from './ProBuildsListRow';
 import colors from '../../utils/colors';
 import LoadingIndicator from '../../components/LoadingIndicator';
@@ -14,6 +16,17 @@ const styles = StyleSheet.create({
   separator: {
     height: 1,
     backgroundColor: 'rgba(0,0,0,0.2)',
+  },
+  retryButton: {
+    minWidth: 64,
+    height: 36,
+    paddingHorizontal: 8,
+    justifyContent: 'center',
+  },
+  retryText: {
+    fontSize: 16,
+    color: colors.primary,
+    fontWeight: 'bold',
   },
 });
 
@@ -45,7 +58,7 @@ class ProBuildsList extends Component {
   }
 
   handleOnLoadMore() {
-    if (this.props.onLoadMore) {
+    if (this.props.onLoadMore && !this.props.fetchError) {
       this.props.onLoadMore();
     }
   }
@@ -57,6 +70,18 @@ class ProBuildsList extends Component {
   }
 
   renderFooter() {
+    if (this.props.fetchError) {
+      return (<View style={{ alignItems: 'center', paddingVertical: 8, paddingHorizontal: 16 }}>
+        <Text>{this.props.errorMessage}</Text>
+        <MKButton
+          style={styles.retryButton}
+          onPress={this.props.onPressRetry}
+          rippleColor="rgba(0,0,0,0.1)"
+        >
+          <Text style={styles.retryText}>REINTENTAR</Text>
+        </MKButton>
+      </View>);
+    }
     if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.size > 0) {
       return (<View style={{ alignItems: 'center', paddingVertical: 8 }}>
         <LoadingIndicator />
@@ -106,10 +131,14 @@ ProBuildsList.propTypes = {
   onLoadMore: PropTypes.func,
   onRefresh: PropTypes.func,
   refreshControl: PropTypes.bool,
+  fetchError: PropTypes.bool,
+  errorMessage: PropTypes.string,
+  onPressRetry: PropTypes.func.isRequired,
 };
 
 ProBuildsList.defaultProps = {
   builds: Immutable.List([]),
+  fetchError: false,
 };
 
 ProBuildsList.defaultProps = {

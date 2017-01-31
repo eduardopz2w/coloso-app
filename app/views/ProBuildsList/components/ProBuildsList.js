@@ -27,6 +27,7 @@ class ProBuildsListView extends Component {
     this.handleOnChangeChampionSelected = this.handleOnChangeChampionSelected.bind(this);
     this.handleOnChangeProPlayerSelected = this.handleOnChangeProPlayerSelected.bind(this);
     this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
+    this.handleOnRetry = this.handleOnRetry.bind(this);
   }
 
   componentWillMount() {
@@ -73,6 +74,16 @@ class ProBuildsListView extends Component {
     }
   }
 
+  handleOnRetry() {
+    this.props.fetchBuilds(
+      {
+        championId: this.props.proBuilds.get('championSelected'),
+        proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
+      },
+      this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1,
+    );
+  }
+
   render() {
     const probuilds = this.props.proBuilds;
     const isFetching = probuilds.get('isFetching');
@@ -83,7 +94,7 @@ class ProBuildsListView extends Component {
 
     let content;
 
-    if (probuilds.get('fetchError')) {
+    if (probuilds.get('fetchError') && proBuildsList.size === 0) {
       content = (<View style={styles.container}>
         <ErrorScreen
           message={probuilds.get('errorMessage')}
@@ -109,6 +120,9 @@ class ProBuildsListView extends Component {
             proPlayerId: proPlayerSelected,
           }, 1);
         }}
+        fetchError={probuilds.get('fetchError')}
+        errorMessage={probuilds.get('errorMessage')}
+        onPressRetry={this.handleOnRetry}
         refreshControl
       />);
     } else {
