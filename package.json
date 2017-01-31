@@ -23,6 +23,7 @@
     "react-native-bar-collapsible": "^1.5.0",
     "react-native-circular-progress": "0.0.7",
     "react-native-device-info": "^0.9.7",
+    "react-native-dialogs": "0.0.19",
     "react-native-drawer": "^2.3.0",
     "react-native-easy-grid": "^0.1.7",
     "react-native-fit-image": "^1.4.7",
@@ -43,6 +44,7 @@
     "redux-promise-middleware": "^4.2.0",
     "redux-thunk": "^2.1.0",
     "reselect": "^2.5.4",
+    "semver": "^5.3.0",
     "type-to-reducer": "^1.0.2"
   },
   "jest": {

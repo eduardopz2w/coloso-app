@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Provider } from 'react-redux';
-import { View } from 'react-native';
+import { View, Linking } from 'react-native';
+import Dialog from 'react-native-dialogs';
 import { AdMobBanner } from 'react-native-admob';
 import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
@@ -9,10 +10,12 @@ import moment from 'moment';
 import 'moment/locale/es';
 
 import StorageInstance from './utils/Storage';
+import versionChecker from './utils/versionChecker';
 import Routes from './routes';
 import translations from './translations';
 import logger from './utils/logger';
 import ColosoClient from './utils/ColosoClient';
+
 
 I18n.translations = translations;
 
@@ -37,9 +40,45 @@ function configureLocale() {
   moment.locale(locale);
 }
 
+function goToPlayStore() {
+  const playstoreUrl = 'market://details?id=com.pedronalbert.lolcena';
+  Linking.openURL(playstoreUrl);
+}
+
 class AppContainer extends Component {
   componentWillMount() {
     configureLocale();
+
+    versionChecker()
+      .then(({ state }) => {
+        if (state === 'UPDATED') {
+          return;
+        }
+
+        const dialog = new Dialog();
+        const dialogOptions = {
+          cancelable: false,
+        };
+
+        if (state === 'UPDATE_AVAILABLE') {
+          dialogOptions.title = I18n.t('update_available');
+          dialogOptions.content = I18n.t('update_available_message');
+          dialogOptions.positiveText = I18n.t('continue');
+          dialogOptions.negativeText = I18n.t('update');
+          dialogOptions.onNegative = goToPlayStore;
+        } else if (state === 'UPDATE_REQUIRED') {
+          dialogOptions.title = I18n.t('update_required');
+          dialogOptions.content = I18n.t('update_required_message');
+          dialogOptions.negativeText = I18n.t('update');
+          dialogOptions.onNegative = () => {
+            goToPlayStore();
+            dialog.show();
+          };
+        }
+
+        dialog.set(dialogOptions);
+        dialog.show();
+      });
   }
 
   componentDidMount() {

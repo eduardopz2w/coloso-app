@@ -91,6 +91,12 @@ export default {
   victories: 'Victorias',
   victory: 'Victorias',
   yes: 'Si',
+  update_available: 'Actualización Disponible',
+  update_available_message: 'Hay una nueva versión de la aplicación disponible en la PlayStore!',
+  update_required: 'Actualización Obligatoria',
+  update_required_message: 'Necesitas actualizar tu aplicación a la nueva version para poder continuar usandola',
+  continue: 'Continuar',
+  update: 'Actualizar',
   regions: {
     na: 'Norte América',
     lan: 'Latinoamérica Norte',
