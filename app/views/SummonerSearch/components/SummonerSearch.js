@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
+import { View, Text, Keyboard, Dimensions, BackAndroid, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
+
 import SearchViewToolbar from './SearchViewToolbar';
 import HistoryModal from './HistoryModal';
 import { tracker } from '../../../utils/analytics';
@@ -50,7 +52,15 @@ class SummonerSearch extends Component {
 
   componentDidUpdate() {
     if (this.props.searchError) {
-      Alert.alert(null, this.props.errorMessage);
+      const dialog = new Dialog();
+
+      dialog.set({
+        content: this.props.errorMessage,
+        positiveText: 'OK',
+      });
+
+      dialog.show();
+
       return this.props.clearSearchError();
     }
 

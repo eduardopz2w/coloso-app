@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, Alert, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -79,6 +80,15 @@ const styles = StyleSheet.create({
   },
 });
 
+function showAddAccountDialog() {
+  const dialog = new Dialog();
+  dialog.set({
+    content: I18n.t('have_to_add_account'),
+    positiveText: 'OK',
+  });
+  dialog.show();
+}
+
 class SideMenu extends PureComponent {
   constructor(props) {
     super(props);
@@ -92,7 +102,7 @@ class SideMenu extends PureComponent {
     const { ownerAccount } = this.props;
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      Alert.alert(null, I18n.t('have_to_add_account'));
+      showAddAccountDialog();
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
@@ -107,7 +117,7 @@ class SideMenu extends PureComponent {
     const { ownerAccount } = this.props;
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      Alert.alert(null, I18n.t('have_to_add_account'));
+      showAddAccountDialog();
       Actions.manage_account_view();
       this.context.drawer.close();
     } else {
