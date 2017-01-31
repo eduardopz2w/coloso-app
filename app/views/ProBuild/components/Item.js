@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Image, TouchableWithoutFeedback, Text } from 'react-native';
+import { View, StyleSheet, Image, Text } from 'react-native';
+import { MKButton } from 'react-native-material-kit';
 
 const styles = StyleSheet.create({
   root: {
@@ -30,17 +31,17 @@ class Item extends PureComponent {
   render() {
     const { itemData } = this.props;
 
-    return (<TouchableWithoutFeedback
+    return (<MKButton
+      style={styles.root}
       onPress={() => this.props.onPress(itemData)}
+      rippleColor="rgba(0,0,0,0.2)"
     >
-      <View style={styles.root}>
-        <Image
-          style={[styles.item, itemData.final && styles.final, this.props.style]}
-          source={{ uri: `item_${itemData.itemId}` }}
-        />
-        {itemData.count > 1 && <Text style={styles.count}>x{itemData.count}</Text>}
-      </View>
-    </TouchableWithoutFeedback>);
+      <Image
+        style={[styles.item, itemData.final && styles.final, this.props.style]}
+        source={{ uri: `item_${itemData.itemId}` }}
+      />
+      {itemData.count > 1 && <Text style={styles.count}>x{itemData.count}</Text>}
+    </MKButton>);
   }
 }
 
