@@ -85,19 +85,21 @@ class ProBuildsListView extends Component {
   }
 
   render() {
-    const probuilds = this.props.proBuilds;
-    const isFetching = probuilds.get('isFetching');
-    const isRefreshing = probuilds.get('isRefreshing');
-    const championSelected = probuilds.get('championSelected');
-    const proPlayerSelected = probuilds.get('proPlayerSelected');
-    const proBuildsList = probuilds.get('proBuildsList');
+    const proBuilds = this.props.proBuilds;
+    const fetchError = proBuilds.get('fetchError');
+    const errorMessage = proBuilds.get('errorMessage');
+    const isFetching = proBuilds.get('isFetching');
+    const isRefreshing = proBuilds.get('isRefreshing');
+    const championSelected = proBuilds.get('championSelected');
+    const proPlayerSelected = proBuilds.get('proPlayerSelected');
+    const proBuildsList = proBuilds.get('proBuildsList');
 
     let content;
 
-    if (probuilds.get('fetchError') && proBuildsList.size === 0) {
+    if (fetchError && proBuildsList.size === 0) {
       content = (<View style={styles.container}>
         <ErrorScreen
-          message={probuilds.get('errorMessage')}
+          message={errorMessage}
           onPressRetryButton={() => {
             this.props.fetchBuilds({
               championId: championSelected,
@@ -120,8 +122,8 @@ class ProBuildsListView extends Component {
             proPlayerId: proPlayerSelected,
           }, 1);
         }}
-        fetchError={probuilds.get('fetchError')}
-        errorMessage={probuilds.get('errorMessage')}
+        fetchError={fetchError}
+        errorMessage={errorMessage}
         onPressRetry={this.handleOnRetry}
         refreshControl
       />);
@@ -137,8 +139,8 @@ class ProBuildsListView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
-        championSelected={this.props.proBuilds.get('championSelected')}
-        proPlayerSelected={this.props.proBuilds.get('proPlayerSelected')}
+        championSelected={championSelected}
+        proPlayerSelected={proPlayerSelected}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
         onChangeProPlayerSelected={this.handleOnChangeProPlayerSelected}
         disabledFilters={isFetching || isRefreshing}
@@ -149,27 +151,25 @@ class ProBuildsListView extends Component {
 }
 
 ProBuildsListView.propTypes = {
-  fetchBuilds: PropTypes.func,
-  fetchProPlayers: PropTypes.func,
-  refreshBuilds: PropTypes.func,
   proBuilds: ImmutablePropTypes.mapContains({
-    isFetching: PropTypes.bool,
-    isRefreshing: PropTypes.bool,
-    fetchError: PropTypes.bool,
+    isFetching: PropTypes.bool.isRequired,
+    isRefreshing: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    proBuildsIds: PropTypes.list,
-    proBuildsList: ImmutablePropTypes.list,
+    proBuildsIds: ImmutablePropTypes.list.isRequired,
+    proBuildsList: ImmutablePropTypes.list.isRequired,
     pagination: ImmutablePropTypes.mapContains({
-      currentPage: PropTypes.number,
-      totalPages: PropTypes.number,
-    }),
-    championSelected: PropTypes.number,
+      currentPage: PropTypes.number.isRequired,
+      totalPages: PropTypes.number.isRequired,
+    }).isRequired,
+    championSelected: PropTypes.number.isRequired,
     proPlayerSelected: PropTypes.string,
-  }),
-  proPlayers: ImmutablePropTypes.mapContains({
-    fetched: PropTypes.bool,
-    proPlayersList: ImmutablePropTypes.list,
-  }),
+  }).isRequired,
+  proPlayers: ImmutablePropTypes.map.isRequired,
+  // Dispatchers
+  fetchBuilds: PropTypes.func.isRequired,
+  fetchProPlayers: PropTypes.func.isRequired,
+  refreshBuilds: PropTypes.func.isRequired,
 };
 
 export default ProBuildsListView;
