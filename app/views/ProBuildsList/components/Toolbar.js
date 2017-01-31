@@ -77,12 +77,12 @@ class Toolbar extends PureComponent {
 Toolbar.propTypes = {
   style: View.propTypes.style,
   proPlayers: ImmutablePropTypes.mapContains({
-    proPlayersList: ImmutablePropTypes.list,
-  }),
-  onPressMenuButton: PropTypes.func,
-  disabledFilters: PropTypes.bool,
-  championSelected: PropTypes.number,
+    proPlayersList: ImmutablePropTypes.list.isRequired,
+  }).isRequired,
   proPlayerSelected: PropTypes.string,
+  disabledFilters: PropTypes.bool.isRequired,
+  championSelected: PropTypes.number.isRequired,
+  onPressMenuButton: PropTypes.func.isRequired,
   onChangeChampionSelected: PropTypes.func.isRequired,
   onChangeProPlayerSelected: PropTypes.func.isRequired,
 };
