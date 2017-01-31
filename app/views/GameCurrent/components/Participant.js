@@ -221,7 +221,7 @@ class Participant extends Component {
         {
           wins: 0,
           losses: 0,
-          division: 'I',
+          division: 'N/A',
           leaguePoints: 0,
         },
       ],
