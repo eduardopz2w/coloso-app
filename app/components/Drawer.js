@@ -2,14 +2,6 @@ import React, { PureComponent, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
-import { connect } from 'react-redux';
-import { loadAccount } from '../redux/actions/OwnerAccountActions';
-import {
-  setSummonerName,
-  setRegion,
-  setSearchType,
-  searchGame,
-} from '../redux/actions/SearchViewActions';
 import SideMenu from './SideMenu';
 
 class MainDrawer extends PureComponent {
@@ -71,29 +63,4 @@ MainDrawer.propTypes = {
   searchGame: PropTypes.func,
 };
 
-function mapStateToProps(state) {
-  return {
-    ownerAccount: state.ownerAccount,
-    isSearchingGame: state.searchView.get('isSearching'),
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    loadAccount: () => {
-      dispatch(loadAccount());
-    },
-
-    searchGame: (summonerName, region) => {
-      dispatch(setSummonerName(summonerName));
-      dispatch(setRegion(region));
-      dispatch(setSearchType('GAME_SEARCH'));
-      dispatch(searchGame(summonerName, region));
-    },
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MainDrawer);
+export default MainDrawer;

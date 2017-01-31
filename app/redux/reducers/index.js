@@ -3,20 +3,26 @@ import searchView from './searchView';
 import summonerProfileView from './summonerProfileView';
 import gameCurrentView from './gameCurrentView';
 import searchHistory from './searchHistory';
-import proBuildsList from './proBuildsList';
 import proBuildView from './proBuildView';
 import ownerAccount from './ownerAccount';
 import proPlayers from './proPlayers';
 import entities from './entities';
 
-export default combineReducers({
+let reducer = combineReducers({
   searchView,
   summonerProfileView,
   gameCurrentView,
   searchHistory,
-  proBuildsList,
   proBuildView,
   ownerAccount,
   proPlayers,
   entities,
 });
+
+export function injectReducer(key, reduceToInject) {
+  // TODO
+}
+
+console.log(reducer);
+
+export default reducer;

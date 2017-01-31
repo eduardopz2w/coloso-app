@@ -168,6 +168,18 @@ function getStatsSummary(sumUrid, season) {
   });
 }
 
+function getAndroidStatus() {
+  return new Promise((resolve, reject) => {
+    const url = 'status/android-app';
+
+    return ColosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch(reject);
+  });
+}
+
 export default {
   getProBuilds,
   getProBuild,
@@ -181,4 +193,5 @@ export default {
   getMasteries,
   getRunes,
   getStatsSummary,
+  getAndroidStatus,
 };

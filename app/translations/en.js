@@ -91,6 +91,12 @@ export default {
   victories: 'Victories',
   victory: 'Victory',
   yes: 'Yes',
+  update_available: 'Update Available',
+  update_available_message: 'There is a new version of the app available on the PlayStore!',
+  update_required: 'Required Update',
+  update_required_message: 'You need to update the app',
+  continue: 'Continue',
+  update: 'Update',
   regions: {
     na: 'North America',
     lan: 'Latin America North',

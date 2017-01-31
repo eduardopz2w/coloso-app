@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { loadAccount, saveAccount } from '../actions/OwnerAccountActions';
+import { loadAccount, saveAccount } from '../../modules/OwnerAccountActions';
 
 const initialState = Immutable.fromJS({
   summonerUrid: null,

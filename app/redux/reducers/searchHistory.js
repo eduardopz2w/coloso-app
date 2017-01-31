@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { addEntry, loadEntries, deleteEntry } from '../actions/SearchHistoryActions';
+import { addEntry, loadEntries, deleteEntry } from '../../modules/SearchHistoryActions';
 
 const initialState = Immutable.fromJS({
   entries: [],
