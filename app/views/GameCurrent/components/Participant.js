@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Text, Dimensions } from 'react-native';
+import { View, Image, Text, Dimensions, TouchableNativeFeedback } from 'react-native';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { MKButton } from 'react-native-material-kit';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import { MKButton } from 'react-native-material-kit';
+
 import RankedMiniseries from '../../../components/RankedMiniseries';
 import colors from '../../../utils/colors';
 
@@ -261,80 +262,78 @@ class Participant extends Component {
     const { participant } = this.props;
     const rankedSoloEntry = this.getRankedSoloEntry();
 
-    return (<View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam]}>
-      <View>
-        <View style={styles.flexRow}>
-          <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
-          <View style={styles.spellsCol}>
-            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell1Id')}` }} />
-            <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell2Id')}` }} />
+    return (<TouchableNativeFeedback
+      onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
+    >
+      <View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam]}>
+        <View>
+          <View style={styles.flexRow}>
+            <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
+            <View style={styles.spellsCol}>
+              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell1Id')}` }} />
+              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell2Id')}` }} />
+            </View>
+          </View>
+
+          {this.renderTierImage()}
+        </View>
+        <View style={styles.dataCol}>
+          <View style={styles.flexRow}>
+            <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
+          </View>
+          <View style={styles.flexRow}>
+            <Text style={styles.flexText}>{I18n.t('tier')}: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
+            {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
+              <Text style={styles.flexText}>
+                {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
+              </Text>
+            }
+          </View>
+          <View style={styles.flexRow}>
+            <Text style={styles.flexText}>
+              {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
+            </Text>
+            <Text style={styles.flexText}>
+              {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
+            </Text>
+          </View>
+          <View style={styles.flexRow}>
+            {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
+              <View style={styles.flexRow}>
+                <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
+                <View style={{ flex: 1 }}>
+                  <RankedMiniseries
+                    progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
+                    iconsSize={getMiniseriesIconsSize()}
+                  />
+                </View>
+              </View>
+            ) : (
+              <Text style={styles.flexText}>
+                {I18n.t('league_points')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
+              </Text>
+            )}
+          </View>
+          <View style={styles.buttonsRow}>
+            <MKButton
+              style={styles.roundedButton}
+              rippleColor="rgba(0,0,0,0.1)"
+              onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
+            >
+              <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
+            </MKButton>
+
+            <MKButton
+              style={styles.roundedButton}
+              rippleColor="rgba(0,0,0,0.1)"
+              onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
+            >
+              <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
+            </MKButton>
           </View>
         </View>
-
-        {this.renderTierImage()}
       </View>
-      <View style={styles.dataCol}>
-        <View style={styles.flexRow}>
-          <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
-          <MKButton
-            style={[styles.profileButton]}
-            onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
-          >
-            <Text style={styles.profileButtonText}>{I18n.t('profile')}</Text>
-          </MKButton>
-        </View>
-        <View style={styles.flexRow}>
-          <Text style={styles.flexText}>{I18n.t('tier')}: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
-          {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
-            <Text style={styles.flexText}>
-              {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
-            </Text>
-          }
-        </View>
-        <View style={styles.flexRow}>
-          <Text style={styles.flexText}>
-            {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
-          </Text>
-          <Text style={styles.flexText}>
-            {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
-          </Text>
-        </View>
-        <View style={styles.flexRow}>
-          {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
-            <View style={styles.flexRow}>
-              <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
-              <View style={{ flex: 1 }}>
-                <RankedMiniseries
-                  progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
-                  iconsSize={getMiniseriesIconsSize()}
-                />
-              </View>
-            </View>
-          ) : (
-            <Text style={styles.flexText}>
-              {I18n.t('league_points')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
-            </Text>
-          )}
-        </View>
-        <View style={styles.buttonsRow}>
-          <MKButton
-            style={styles.roundedButton}
-            rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
-          >
-            <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
-          </MKButton>
-
-          <MKButton
-            style={styles.roundedButton}
-            rippleColor="rgba(0,0,0,0.1)"
-            onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
-          >
-            <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
-          </MKButton>
-        </View>
-      </View>
-    </View>);
+    </TouchableNativeFeedback>);
   }
 }
 
