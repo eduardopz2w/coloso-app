@@ -303,10 +303,12 @@ class Participant extends Component {
           {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
             <View style={styles.flexRow}>
               <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
-              <RankedMiniseries
-                progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
-                iconsSize={getMiniseriesIconsSize()}
-              />
+              <View style={{ flex: 1 }}>
+                <RankedMiniseries
+                  progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
+                  iconsSize={getMiniseriesIconsSize()}
+                />
+              </View>
             </View>
           ) : (
             <Text style={styles.flexText}>
