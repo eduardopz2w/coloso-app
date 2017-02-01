@@ -241,6 +241,7 @@ class GameCurrent extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summoner_profile_view({ summonerUrid });
               }}
+              focusSummonerUrid={gameData.get('focusSummonerUrid')}
             />
             <Team
               {...this.getTeamData(200)}
@@ -249,6 +250,7 @@ class GameCurrent extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summoner_profile_view({ summonerUrid });
               }}
+              focusSummonerUrid={gameData.get('focusSummonerUrid')}
             />
           </ScrollView>
         </View>

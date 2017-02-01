@@ -240,7 +240,7 @@ class Participant extends Component {
     return (<TouchableNativeFeedback
       onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
     >
-      <View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam]}>
+      <View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam, this.props.style]}>
         <View>
           <View style={styles.flexRow}>
             <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
@@ -315,6 +315,7 @@ class Participant extends Component {
 }
 
 Participant.propTypes = {
+  style: View.propTypes.style,
   participant: ImmutablePropTypes.map,
   onPressRunesButton: PropTypes.func,
   onPressMasteriesButton: PropTypes.func,
