@@ -178,4 +178,14 @@ export default {
   validation_errors: {
     summoner_name_required: 'Summoner name is required',
   },
+  tiers: {
+    unranked: 'Unranked',
+    bronze: 'Bronce',
+    silver: 'Plata',
+    gold: 'Oro',
+    platinum: 'Platino',
+    diamond: 'Diamante',
+    master: 'Maestro',
+    challenger: 'Retador',
+  },
 };

@@ -182,30 +182,6 @@ function getMiniseriesIconsSize() {
   return 20;
 }
 
-function renderTierText(tier) {
-  let color;
-
-  if (tier === 'UNRANKED') {
-    color = colors.tiers.unranked;
-  } else if (tier === 'SILVER') {
-    color = colors.tiers.silver;
-  } else if (tier === 'BRONZE') {
-    color = colors.tiers.bronze;
-  } else if (tier === 'GOLD') {
-    color = colors.tiers.gold;
-  } else if (tier === 'PLATINUM') {
-    color = colors.tiers.platinum;
-  } else if (tier === 'DIAMOND') {
-    color = colors.tiers.diamond;
-  } else if (tier === 'MASTER') {
-    color = colors.tiers.master;
-  } else if (tier === 'CHALLENGER') {
-    color = colors.tiers.challenger;
-  }
-
-  return <Text style={[styles.tierText, { color }]}>{tier}</Text>;
-}
-
 class Participant extends Component {
   constructor(props) {
     super(props);
@@ -281,7 +257,9 @@ class Participant extends Component {
             <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
           </View>
           <View style={styles.flexRow}>
-            <Text style={styles.flexText}>{I18n.t('tier')}: {renderTierText(rankedSoloEntry.get('tier'))}</Text>
+            <Text style={styles.flexText}>
+              {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>{rankedSoloEntry.get('tier').toUpperCase()}</Text>
+            </Text>
             {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>
                 {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>

@@ -178,4 +178,14 @@ export default {
   validation_errors: {
     summoner_name_required: 'Debes ingresar un nombre de invocador',
   },
+  tiers: {
+    unranked: 'Unranked',
+    bronze: 'Bronze',
+    silver: 'Silver',
+    gold: 'Gold',
+    platinum: 'Platinum',
+    diamond: 'Diamond',
+    master: 'Master',
+    challenger: 'Challenger',
+  },
 };
