@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Alert } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { MKButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
+import Dialog from 'react-native-dialogs';
 import I18n from 'i18n-js';
 import update from 'immutability-helper';
 import _ from 'lodash';
@@ -86,11 +87,26 @@ class ManageAccount extends Component {
             profileIconId: summonerData.data.attributes.profileIconId,
             region: summonerData.data.attributes.region,
           });
-          Alert.alert(null, I18n.t('account_added'));
+
+          const dialog = new Dialog();
+
+          dialog.set({
+            content: I18n.t('account_added'),
+            positiveText: 'OK',
+          });
+
+          dialog.show();
           Actions.pop();
         })
         .catch(({ errorMessage }) => {
-          Alert.alert(null, errorMessage);
+          const dialog = new Dialog();
+
+          dialog.set({
+            content: errorMessage,
+            positiveText: 'OK',
+          });
+
+          dialog.show();
           this.setState({ isFetching: false });
         });
     }
