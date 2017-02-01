@@ -57,7 +57,6 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
     },
     leaguePointsText: {
-      color: 'rgba(0,0,0,0.8)',
       fontWeight: 'bold',
     },
   }, {

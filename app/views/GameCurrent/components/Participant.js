@@ -262,7 +262,7 @@ class Participant extends Component {
             </Text>
             {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>
-                {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
+                {I18n.t('division')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
               </Text>
             }
           </View>
@@ -287,7 +287,7 @@ class Participant extends Component {
               </View>
             ) : (
               <Text style={styles.flexText}>
-                {I18n.t('league_points')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
+                {I18n.t('league_points')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
               </Text>
             )}
           </View>
