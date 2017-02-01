@@ -42,7 +42,6 @@ export default MediaQueryStyleSheet.create(
 
     inputName: {
       flex: 1,
-      height: 47,
       marginLeft: 10,
     },
 

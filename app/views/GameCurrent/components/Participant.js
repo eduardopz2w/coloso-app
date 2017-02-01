@@ -182,11 +182,34 @@ function getMiniseriesIconsSize() {
   return 20;
 }
 
+function renderTierText(tier) {
+  let color;
+
+  if (tier === 'UNRANKED') {
+    color = colors.tiers.unranked;
+  } else if (tier === 'SILVER') {
+    color = colors.tiers.silver;
+  } else if (tier === 'BRONZE') {
+    color = colors.tiers.bronze;
+  } else if (tier === 'GOLD') {
+    color = colors.tiers.gold;
+  } else if (tier === 'PLATINUM') {
+    color = colors.tiers.platinum;
+  } else if (tier === 'DIAMOND') {
+    color = colors.tiers.diamond;
+  } else if (tier === 'MASTER') {
+    color = colors.tiers.master;
+  } else if (tier === 'CHALLENGER') {
+    color = colors.tiers.challenger;
+  }
+
+  return <Text style={[styles.tierText, { color }]}>{tier}</Text>;
+}
+
 class Participant extends Component {
   constructor(props) {
     super(props);
 
-    this.renderTierImage = this.renderTierImage.bind(this);
     this.getRankedSoloEntry = this.getRankedSoloEntry.bind(this);
   }
 
@@ -234,30 +257,6 @@ class Participant extends Component {
     return <Image style={styles.tierImage} source={{ uri: leagueEntry.get('tier') }} />;
   }
 
-  renderTierText(tier) {
-    let color;
-
-    if (tier === 'UNRANKED') {
-      color = colors.tiers.unranked;
-    } else if (tier === 'SILVER') {
-      color = colors.tiers.silver;
-    } else if (tier === 'BRONZE') {
-      color = colors.tiers.bronze;
-    } else if (tier === 'GOLD') {
-      color = colors.tiers.gold;
-    } else if (tier === 'PLATINUM') {
-      color = colors.tiers.platinum;
-    } else if (tier === 'DIAMOND') {
-      color = colors.tiers.diamond;
-    } else if (tier === 'MASTER') {
-      color = colors.tiers.master;
-    } else if (tier === 'CHALLENGER') {
-      color = colors.tiers.challenger;
-    }
-
-    return <Text style={[styles.tierText, { color }]}>{tier}</Text>;
-  }
-
   render() {
     const { participant } = this.props;
     const rankedSoloEntry = this.getRankedSoloEntry();
@@ -282,7 +281,7 @@ class Participant extends Component {
             <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
           </View>
           <View style={styles.flexRow}>
-            <Text style={styles.flexText}>{I18n.t('tier')}: {this.renderTierText(rankedSoloEntry.get('tier'))}</Text>
+            <Text style={styles.flexText}>{I18n.t('tier')}: {renderTierText(rankedSoloEntry.get('tier'))}</Text>
             {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>
                 {I18n.t('division')}: <Text style={styles.blackText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>

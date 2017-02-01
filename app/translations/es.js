@@ -175,4 +175,7 @@ export default {
     slow_connection: 'Algo ha salido mal, asegúrate de tener una conexión estable a internet',
     request_failed: 'Error al establecer conexión con el servidor, asegurate de tener acceso a internet y de tener la última version de la aplicación',
   },
+  validation_errors: {
+    summoner_name_required: 'Summoner name is required',
+  },
 };
