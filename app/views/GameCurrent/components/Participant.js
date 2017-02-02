@@ -258,7 +258,9 @@ class Participant extends Component {
           </View>
           <View style={styles.flexRow}>
             <Text style={styles.flexText}>
-              {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>{rankedSoloEntry.get('tier').toUpperCase()}</Text>
+              {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>
+                {I18n.t(`tiers.${rankedSoloEntry.get('tier').toLowerCase()}`).toUpperCase()}
+              </Text>
             </Text>
             {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>

@@ -151,7 +151,7 @@ class LeagueEntry extends Component {
           <View style={styleUtils.flexRow}>
             <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
               <Text style={styles.dataText}>{I18n.t('tier')}: </Text>
-              <Text style={[this.getTierTextStyle(), styles.dataText]}>{leagueEntry.get('tier')}</Text>
+              <Text style={[this.getTierTextStyle(), styles.dataText]}>{I18n.t(`tiers.${leagueEntry.get('tier').toLowerCase()}`).toUpperCase()}</Text>
             </Text>
             {entries.get('division') &&
               <Text style={[styleUtils.flexOne, styleUtils.centerText, styles.dataText]}>
