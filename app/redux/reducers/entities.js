@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { mergeEntities } from '../actions/EntitiesActions';
+import { mergeEntities } from '../../modules/EntitiesActions';
 
 const initialState = Immutable.fromJS({
   summoners: {},
