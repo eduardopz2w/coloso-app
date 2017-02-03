@@ -10,7 +10,7 @@ export default function () {
       .then(({ data }) => {
         const apkVersions = data.apkVersions;
 
-        if (semver.satisfies(APP_VERSION, apkVersions.actual)) {
+        if (semver.satisfies(APP_VERSION, `>=${apkVersions.actual}`)) {
           resolve({ state: 'UPDATED' });
         } else if (semver.lt(APP_VERSION, apkVersions.min)) {
           resolve({ state: 'UPDATE_REQUIRED' });
@@ -23,4 +23,3 @@ export default function () {
       });
   });
 }
-
