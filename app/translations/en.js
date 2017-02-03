@@ -175,4 +175,17 @@ export default {
     slow_connection: 'Something has gone wrong, make sure you have a stable internet connection',
     request_failed: 'Could not connect to the server, make sure you have internet connection and have the latest version of the application',
   },
+  validation_errors: {
+    summoner_name_required: 'Debes ingresar un nombre de invocador',
+  },
+  tiers: {
+    unranked: 'Unranked',
+    bronze: 'Bronze',
+    silver: 'Silver',
+    gold: 'Gold',
+    platinum: 'Platinum',
+    diamond: 'Diamond',
+    master: 'Master',
+    challenger: 'Challenger',
+  },
 };

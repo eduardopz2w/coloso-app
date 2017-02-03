@@ -6,9 +6,11 @@ import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import I18n from 'i18n-js';
+
 import colors from '../../../utils/colors';
 import Team from './Team';
 import RunePage from '../../../components/RunePage';
+import ErrorScreen from '../../../components/ErrorScreen';
 import MasteryPage from '../../../components/MasteryPage';
 import ProBuildsList from '../../../components/ProBuildsList';
 import ProPlayersSelector from '../../../components/ProPlayersSelector';
@@ -144,11 +146,11 @@ class GameCurrent extends Component {
 
   handleOnLoadMoreBuilds() {
     const pagData = this.props.proBuilds.get('pagination');
-    if (!this.props.proBuilds.get('isFetching') && pagData.get('pageCount') > pagData.get('page')) {
+    if (!this.props.proBuilds.get('isFetching') && pagData.get('totalPages') > pagData.get('currentPage')) {
       this.props.fetchProBuilds({
         championId: this.getFocusChampionId(),
         proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
-      }, pagData.get('page') + 1);
+      }, pagData.get('currentPage') + 1);
     }
   }
 
@@ -165,12 +167,30 @@ class GameCurrent extends Component {
     let modalContent;
     let proBuildsContent;
 
-    if (proBuildsList.size > 0 || proBuilds.get('isFetching')) {
+    if (proBuilds.get('fetchError') && proBuildsList.size === 0) {
+      proBuildsContent = (<View style={styles.container}>
+        <ErrorScreen
+          message={proBuilds.get('errorMessage')}
+          onPressRetryButton={() => {
+            this.props.fetchProBuilds({ championId: this.getFocusChampionId() }, 1);
+          }}
+          retryButton
+        />
+      </View>);
+    } else if (proBuildsList.size > 0 || proBuilds.get('isFetching')) {
       proBuildsContent = (<ProBuildsList
         builds={proBuildsList}
         onPressBuild={buildId => Actions.probuild_view({ buildId })}
         isFetching={proBuilds.get('isFetching')}
         onLoadMore={this.handleOnLoadMoreBuilds}
+        fetchError={proBuilds.get('fetchError')}
+        errorMessage={proBuilds.get('errorMessage')}
+        onPressRetry={() => {
+          this.props.fetchProBuilds({
+            championId: this.getFocusChampionId(),
+            proPlayerId: proBuilds.get('proPlayerSelected'),
+          }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
+        }}
       />);
     } else {
       proBuildsContent = (<View style={styles.container}>
@@ -221,6 +241,7 @@ class GameCurrent extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summoner_profile_view({ summonerUrid });
               }}
+              focusSummonerUrid={gameData.get('focusSummonerUrid')}
             />
             <Team
               {...this.getTeamData(200)}
@@ -229,6 +250,7 @@ class GameCurrent extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summoner_profile_view({ summonerUrid });
               }}
+              focusSummonerUrid={gameData.get('focusSummonerUrid')}
             />
           </ScrollView>
         </View>

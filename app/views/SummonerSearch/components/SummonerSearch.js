@@ -1,15 +1,19 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Keyboard, Dimensions, BackAndroid, Alert, ScrollView } from 'react-native';
+import { View, Text, Keyboard, Dimensions, BackAndroid, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
-import { MKTextField, MKButton, MKRadioButton } from 'react-native-material-kit';
+import { MKButton, MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
+import update from 'immutability-helper';
+
 import SearchViewToolbar from './SearchViewToolbar';
 import HistoryModal from './HistoryModal';
 import { tracker } from '../../../utils/analytics';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import RegionSelector from '../../../components/RegionSelector';
+import TextField from '../../../components/TextField';
 
 import styles from './styles';
 
@@ -22,7 +26,10 @@ class SummonerSearch extends Component {
 
     this.state = {
       visibleHeight: Dimensions.get('window').height,
-      region: 'na',
+      validationErrors: {
+        summonerName: null,
+      },
+      valid: false,
     };
 
     this.handlePressSearchButton = this.handlePressSearchButton.bind(this);
@@ -50,7 +57,15 @@ class SummonerSearch extends Component {
 
   componentDidUpdate() {
     if (this.props.searchError) {
-      Alert.alert(null, this.props.errorMessage);
+      const dialog = new Dialog();
+
+      dialog.set({
+        content: this.props.errorMessage,
+        positiveText: 'OK',
+      });
+
+      dialog.show();
+
       return this.props.clearSearchError();
     }
 
@@ -93,7 +108,7 @@ class SummonerSearch extends Component {
   }
 
   handlePressSearchButton() {
-    if (this.props.summonerName !== '') {
+    if (this.validateForm()) {
       this.performSearch();
     }
   }
@@ -146,6 +161,34 @@ class SummonerSearch extends Component {
     }
   }
 
+  validateForm() {
+    if (_.isEmpty(this.props.summonerName)) {
+      const newState = update(this.state, {
+        validationErrors: {
+          summonerName: { $set: I18n.t('validation_errors.summoner_name_required') },
+        },
+        valid: { $set: false },
+      });
+
+      this.setState(newState);
+
+      return false;
+    } else if (!this.state.valid) {
+      const newState = update(this.state, {
+        validationErrors: {
+          summonerName: { $set: null },
+        },
+        valid: { $set: true },
+      });
+
+      this.setState(newState);
+
+      return true;
+    }
+
+    return true;
+  }
+
   renderSpinner() {
     if (this.props.isSearching) {
       return (<View style={styles.spinnerContainer}>
@@ -182,11 +225,12 @@ class SummonerSearch extends Component {
             <View style={styles.paperBox}>
               <View style={styles.formGroup}>
                 <Text style={[styles.label]}>{I18n.t('summoner_name')}:</Text>
-                <MKTextField
+                <TextField
                   style={styles.inputName}
                   value={this.props.summonerName}
                   onTextChange={this.handleTextChangeSummonerName}
                   placeholder={I18n.t('summoner_name')}
+                  errorText={this.state.validationErrors.summonerName}
                 />
               </View>
               <View style={styles.formGroup}>

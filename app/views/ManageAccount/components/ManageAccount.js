@@ -1,13 +1,18 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Alert } from 'react-native';
-import { MKTextField, MKButton } from 'react-native-material-kit';
+import { View, StyleSheet, Text } from 'react-native';
+import { MKButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
+import Dialog from 'react-native-dialogs';
 import I18n from 'i18n-js';
+import update from 'immutability-helper';
+import _ from 'lodash';
+
 import Toolbar from './Toolbar';
 import ColosoApi from '../../../utils/ColosoApi';
 import colors from '../../../utils/colors';
 import RegionSelector from '../../../components/RegionSelector';
 import LoadingIndicator from '../../../components/LoadingIndicator';
+import TextField from '../../../components/TextField';
 
 const styles = StyleSheet.create({
   root: {
@@ -45,6 +50,10 @@ class ManageAccount extends Component {
       summonerName: '',
       region: 'na',
       isFetching: false,
+      validationErrors: {
+        summonerName: null,
+      },
+      valid: false,
     };
 
     this.handleTextChangeSummonerName = this.handleTextChangeSummonerName.bind(this);
@@ -67,7 +76,7 @@ class ManageAccount extends Component {
   handlePressAddAccount() {
     const state = this.state;
 
-    if (state.summonerName !== '') {
+    if (this.validateForm()) {
       this.setState({ isFetching: true });
 
       ColosoApi.getSummonerByName(state.summonerName, state.region)
@@ -78,15 +87,59 @@ class ManageAccount extends Component {
             profileIconId: summonerData.data.attributes.profileIconId,
             region: summonerData.data.attributes.region,
           });
-          Alert.alert(null, I18n.t('account_added'));
+
+          const dialog = new Dialog();
+
+          dialog.set({
+            content: I18n.t('account_added'),
+            positiveText: 'OK',
+          });
+
+          dialog.show();
           Actions.pop();
         })
         .catch(({ errorMessage }) => {
-          Alert.alert(null, errorMessage);
+          const dialog = new Dialog();
+
+          dialog.set({
+            content: errorMessage,
+            positiveText: 'OK',
+          });
+
+          dialog.show();
           this.setState({ isFetching: false });
         });
     }
   }
+
+  validateForm() {
+    if (_.isEmpty(this.state.summonerName)) {
+      const newState = update(this.state, {
+        validationErrors: {
+          summonerName: { $set: I18n.t('validation_errors.summoner_name_required') },
+        },
+        valid: { $set: false },
+      });
+
+      this.setState(newState);
+
+      return false;
+    } else if (!this.state.valid) {
+      const newState = update(this.state, {
+        validationErrors: {
+          summonerName: { $set: null },
+        },
+        valid: { $set: true },
+      });
+
+      this.setState(newState);
+
+      return true;
+    }
+
+    return true;
+  }
+
   render() {
     return (<View style={styles.root}>
       <Toolbar
@@ -97,11 +150,12 @@ class ManageAccount extends Component {
       <View style={styles.container}>
         <View style={styles.formGroup}>
           <Text style={[styles.label]}>{I18n.t('summoner_name')}: </Text>
-          <MKTextField
+          <TextField
             style={styles.inputName}
             value={this.state.summonerName}
             onTextChange={this.handleTextChangeSummonerName}
             placeholder={I18n.t('summoner_name')}
+            errorText={this.state.validationErrors.summonerName}
           />
         </View>
         <View style={styles.formGroup}>

@@ -8,8 +8,14 @@ import SeasonSelector from '../../../../components/SeasonSelector';
 import Summary from './Summary';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+  },
+  listView: {
+    flex: 1,
+  },
   summaryContainer: {
+    flex: 1,
     marginTop: 8,
   },
   headerSelector: {
@@ -47,7 +53,7 @@ class SummonerSumaryView extends Component {
       const summaries = filterEmpty(summonerSummary.getIn(['data', 'playerStatSummaries']));
 
       return (
-        <View>
+        <View style={styles.root}>
           <View style={styles.headerSelector}>
             <SeasonSelector
               initialValue={summonerSummary.get('season')}
@@ -57,6 +63,7 @@ class SummonerSumaryView extends Component {
           </View>
           <View style={styles.summaryContainer}>
             <ListView
+              style={styles.listView}
               dataSource={this.dataSource.cloneWithRows(summaries.toArray())}
               renderRow={(summary, sectionId, rowId) => <Summary key={rowId} summary={summary} />}
             />

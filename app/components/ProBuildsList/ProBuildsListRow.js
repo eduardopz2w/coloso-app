@@ -1,9 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { View, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
+import { MKButton } from 'react-native-material-kit';
 import moment from 'moment';
 import numeral from 'numeral';
+
 import ProPlayerImage from '../ProPlayerImage';
 import colors from '../../utils/colors';
 
@@ -165,51 +167,53 @@ class ProBuild extends Component {
   render() {
     const { build } = this.props;
 
-    return (<View style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}>
-      <TouchableWithoutFeedback onPress={this.props.onPress}>
-        <View>
-          <View style={styles.playerData}>
-            <ProPlayerImage
-              imageUrl={build.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
-              role={build.getIn(['proSummoner', 'proPlayer', 'role'])}
-            />
-            <Text style={styles.playerName}>{build.getIn(['proSummoner', 'proPlayer', 'name'])}</Text>
-            <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
-          </View>
-          <View style={styles.gameDataRow}>
-            <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
-            <View>
-              <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
-              <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
-            </View>
-            <View style={styles.championNameAndScore} >
-              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
-              <Text style={styles.scoreText}>
-                <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
-                <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
-                <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
-              </Text>
-            </View>
-            <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
-            <MediaQuery maxDeviceWidth={599}>
-              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
-            </MediaQuery>
-            <MediaQuery minDeviceWidth={600}>
-              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
-            </MediaQuery>
-            <View style={styles.itemsContainer} >
-              {renderItem(build.getIn(['stats', 'item0']))}
-              {renderItem(build.getIn(['stats', 'item1']))}
-              {renderItem(build.getIn(['stats', 'item2']))}
-              {renderItem(build.getIn(['stats', 'item3']))}
-              {renderItem(build.getIn(['stats', 'item4']))}
-              {renderItem(build.getIn(['stats', 'item5']))}
-            </View>
-            {renderItem(build.getIn(['stats', 'item6']))}
-          </View>
+    return (<MKButton
+      style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}
+      rippleColor="rgba(0,0,0,0.1)"
+      onPress={this.props.onPress}
+    >
+      <View>
+        <View style={styles.playerData}>
+          <ProPlayerImage
+            imageUrl={build.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
+            role={build.getIn(['proSummoner', 'proPlayer', 'role'])}
+          />
+          <Text style={styles.playerName}>{build.getIn(['proSummoner', 'proPlayer', 'name'])}</Text>
+          <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
         </View>
-      </TouchableWithoutFeedback>
-    </View>);
+        <View style={styles.gameDataRow}>
+          <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
+          <View>
+            <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
+            <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
+          </View>
+          <View style={styles.championNameAndScore} >
+            <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
+            <Text style={styles.scoreText}>
+              <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+              <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+              <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
+            </Text>
+          </View>
+          <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
+          <MediaQuery maxDeviceWidth={599}>
+            <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
+          </MediaQuery>
+          <MediaQuery minDeviceWidth={600}>
+            <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
+          </MediaQuery>
+          <View style={styles.itemsContainer} >
+            {renderItem(build.getIn(['stats', 'item0']))}
+            {renderItem(build.getIn(['stats', 'item1']))}
+            {renderItem(build.getIn(['stats', 'item2']))}
+            {renderItem(build.getIn(['stats', 'item3']))}
+            {renderItem(build.getIn(['stats', 'item4']))}
+            {renderItem(build.getIn(['stats', 'item5']))}
+          </View>
+          {renderItem(build.getIn(['stats', 'item6']))}
+        </View>
+      </View>
+    </MKButton>);
   }
 }
 

@@ -14,9 +14,11 @@ export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, 
         return false;
       });
 
-      if (duplicateIndex === -1) {
-        entries.unshift({ summonerName, region });
+      if (duplicateIndex >= 0) {
+        entries.splice(duplicateIndex, 1);
       }
+
+      entries.unshift({ summonerName, region });
 
       Storage.save({ key: 'searchHistoryEntries', rawData: entries.slice(0, 20) })
         .then(resolve({ entries }))
