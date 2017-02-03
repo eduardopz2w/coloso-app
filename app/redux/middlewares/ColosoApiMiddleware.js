@@ -196,7 +196,7 @@ const middleware = ({ dispatch }) => next => (action) => {
         dispatch({
           type: `${action.type}_FULFILLED`,
           payload: {
-            proPlayersIds: _.keys(normalized.proPlayers),
+            proPlayersIds: _.map(response.data, data => data.id),
           },
         });
       })
