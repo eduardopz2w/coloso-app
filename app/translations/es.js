@@ -120,6 +120,7 @@ export default {
     odin: 'Dominion',
     firstblood: 'Primera Sangre',
     siege: 'Asedio del Nexo',
+    assassinate: 'Luna Sangrienta',
   },
   maps: {
     summoner_rift: 'Grieta del Invocador',
@@ -169,6 +170,7 @@ export default {
     410: 'Clasificatoria 5 vs 5',
     420: 'Clasificatoria Solo',
     440: 'Clasificatoria Flexible',
+    600: 'Luna Sangrienta',
   },
   errors: {
     timeout: 'No se ha podido establecer conexion con el servidor',

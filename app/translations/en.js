@@ -120,6 +120,7 @@ export default {
     odin: 'Dominion',
     firstblood: 'First Blood',
     siege: 'Nexus Siege',
+    assassinate: 'Blood Moon',
   },
   maps: {
     summoner_rift: 'Summoner\'s Rift',
@@ -169,6 +170,7 @@ export default {
     410: 'Ranked 5 vs 5',
     420: 'Ranked Solo',
     440: 'Ranked Flex',
+    600: 'Blood Moon',
   },
   errors: {
     timeout: 'Could not connect to server',
