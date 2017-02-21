@@ -5,8 +5,8 @@ import I18n from 'i18n-js';
 import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
-const TIMEOUT = 10000;
-let BASEURL = 'http://coloso.ddns.net:3000';
+const TIMEOUT = 25000;
+let BASEURL = 'http://api.coloso.net';
 
 if (__DEV__) {
   BASEURL = 'http://192.168.1.2:3000';
@@ -68,18 +68,28 @@ axiosClient.interceptors.request.use((config) => {
 const colosoClient = {
   get(...args) {
     return new Promise((resolve, reject) => {
+      let rejected = false;
+
       axiosClient.get(...args)
         .then(resolve)
-        .catch(reject);
+        .catch((err) => {
+          if (!rejected) {
+            rejected = true;
+            reject(err);
+          }
+        });
 
       setTimeout(() => {
-        reject({
-          response: {
-            data: {
-              message: I18n.t('errors.timeout'),
+        if (!rejected) {
+          rejected = true;
+          reject({
+            response: {
+              data: {
+                message: I18n.t('errors.timeout'),
+              },
             },
-          },
-        });
+          });
+        }
       }, TIMEOUT);
     });
   },

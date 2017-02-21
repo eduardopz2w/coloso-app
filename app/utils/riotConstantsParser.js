@@ -73,6 +73,9 @@ function playerStatSummaryType(constant) {
   if (constant === 'RankedFlexSR') {
     return `${I18n.t('queues_ids.9')} 5 vs 5`;
   }
+  if (constant === 'Assassinate') {
+    return I18n.t('queues_ids.600');
+  }
 
   return constant;
 }
