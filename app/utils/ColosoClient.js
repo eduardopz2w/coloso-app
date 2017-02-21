@@ -68,18 +68,28 @@ axiosClient.interceptors.request.use((config) => {
 const colosoClient = {
   get(...args) {
     return new Promise((resolve, reject) => {
+      let rejected = false;
+
       axiosClient.get(...args)
         .then(resolve)
-        .catch(reject);
+        .catch((err) => {
+          if (!rejected) {
+            rejected = true;
+            reject(err);
+          }
+        });
 
       setTimeout(() => {
-        reject({
-          response: {
-            data: {
-              message: I18n.t('errors.timeout'),
+        if (!rejected) {
+          rejected = true;
+          reject({
+            response: {
+              data: {
+                message: I18n.t('errors.timeout'),
+              },
             },
-          },
-        });
+          });
+        }
       }, TIMEOUT);
     });
   },
