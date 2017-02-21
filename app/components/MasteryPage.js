@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
-import _ from 'lodash';
 
 const styles = StyleSheet.create({
   rootScrollView: {
@@ -95,7 +94,7 @@ const CUNNING_ROWS = [
   [6331, 6332],
   [6341, 6342, 6343],
   [6351, 6352],
-  [6363, 6362, 6363],
+  [6361, 6362, 6363],
 ];
 
 
