@@ -173,17 +173,16 @@ class LeagueEntry extends Component {
           </View>
 
           <View>
-            {entries.miniSeries ? (
+            {entries.get('miniSeries') && (
               <View style={[styleUtils.flexRow, styles.miniSeriesContainer]}>
                 <Text style={[styleUtils.boldText, styles.dataText]}>{I18n.t('progress')}: </Text>
                 <RankedMiniseries progress={entries.getIn(['miniSeries', 'progress'])} style={{ flex: 1 }} />
               </View>
-            ) : (
-              <Text style={styles.leaguePointsTitleText}>
-                <Text style={styles.dataText}>{I18n.t('league_points')}: </Text>
-                <Text style={styles.leaguePointsText}> {entries.get('leaguePoints') || 0}</Text>
-              </Text>
             )}
+            <Text style={styles.leaguePointsTitleText}>
+              <Text style={styles.dataText}>{I18n.t('league_points')}: </Text>
+              <Text style={styles.leaguePointsText}> {entries.get('leaguePoints') || 0}</Text>
+            </Text>
           </View>
         </View>
       </View>
