@@ -5,7 +5,7 @@ import I18n from 'i18n-js';
 import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
-const TIMEOUT = 10000;
+const TIMEOUT = 25000;
 let BASEURL = 'http://api.coloso.net';
 
 if (__DEV__) {
