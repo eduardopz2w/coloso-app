@@ -45,6 +45,18 @@ function goToPlayStore() {
   Linking.openURL(playstoreUrl);
 }
 
+function renderAdmob() {
+  if (__DEV__) {
+    return null;
+  }
+
+  return (<AdMobBanner
+    bannerSize="smartBannerPortrait"
+    adUnitID={ADMOB_BANNER_ID}
+    testDeviceID={DeviceInfo.getUniqueID()}
+  />);
+}
+
 class AppContainer extends Component {
   componentWillMount() {
     configureLocale();
@@ -93,11 +105,7 @@ class AppContainer extends Component {
     return (<Provider store={this.props.store}>
       <View style={{ flex: 1 }}>
         <Routes />
-        <AdMobBanner
-          bannerSize="smartBannerPortrait"
-          adUnitID={ADMOB_BANNER_ID}
-          testDeviceID={DeviceInfo.getUniqueID()}
-        />
+        {renderAdmob()}
       </View>
     </Provider>);
   }
