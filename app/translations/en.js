@@ -121,6 +121,7 @@ export default {
     firstblood: 'First Blood',
     siege: 'Nexus Siege',
     assassinate: 'Blood Moon',
+    urf: 'Ultra Rapid Fire',
   },
   maps: {
     summoner_rift: 'Summoner\'s Rift',
