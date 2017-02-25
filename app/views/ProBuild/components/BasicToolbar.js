@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import I18n from 'i18n-js';
 import IconButton from '../../../components/IconButton';
 import colors from '../../../utils/colors';
 
@@ -9,6 +10,16 @@ const styles = MediaQueryStyleSheet.create(
     root: {
       backgroundColor: colors.primary,
       height: 56,
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+
+    title: {
+      flex: 1,
+      marginLeft: 18,
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#FFFFFF',
     },
   },
 );
@@ -31,6 +42,7 @@ class BasicToolbar extends Component {
   render() {
     return (<View style={styles.root}>
       <IconButton iconName="arrow-back" onPress={this.handleOnPressBackButton} />
+      <Text style={styles.title}>{I18n.t('loading')} Build...</Text>
     </View>);
   }
 

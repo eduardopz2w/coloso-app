@@ -97,6 +97,7 @@ export default {
   update_required_message: 'Necesitas actualizar tu aplicación a la nueva version para poder continuar usandola',
   continue: 'Continuar',
   update: 'Actualizar',
+  loading: 'Cargando',
   regions: {
     na: 'Norte América',
     lan: 'Latinoamérica Norte',
