@@ -314,7 +314,7 @@ class GameRecent extends PureComponent {
               </View>
               <View style={styles.iconDataCol}>
                 <Text style={styles.dataText}>IP: </Text>
-                <Text style={styles.dataText}>+{game.get('ipEar') || 0}</Text>
+                <Text style={styles.dataText}>+{game.get('ipEarned') || 0}</Text>
               </View>
             </View>
             <Row style={styles.itemsRow}>
