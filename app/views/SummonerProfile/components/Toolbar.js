@@ -2,8 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import I18n from 'i18n-js';
+
 import IconButton from '../../../components/IconButton';
-import LoadingScreen from '../../../components/LoadingScreen';
 import regionHumanize from '../../../utils/regionHumanize';
 import colors from '../../../utils/colors';
 
@@ -23,6 +24,12 @@ const styles = MediaQueryStyleSheet.create(
     profileToolbarContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
+    },
+
+    loadingText: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: 'white',
     },
 
     backgroundImage: {
@@ -93,7 +100,6 @@ const styles = MediaQueryStyleSheet.create(
         height: 1.5,
       },
     },
-
   },
   {
     '@media (min-device-width: 600)': {
@@ -170,7 +176,9 @@ class SummonerProfileViewToolbar extends Component {
 
       <View style={styles.profileToolbar}>
         {summonerData.get('isFetching') ? (
-          <LoadingScreen />
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text style={styles.loadingText}>{I18n.t('loading')}...</Text>
+          </View>
         ) : (
           <View style={styles.profileToolbarContainer}>
             <View style={styles.summonerImageContainer}>
