@@ -9,12 +9,14 @@ import numeral from 'numeral';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import ErrorScreen from '../../../components/ErrorScreen';
 import PlayerToolbar from './PlayerToolbar';
 import BasicToolbar from './BasicToolbar';
 import Item from './Item';
 import colors from '../../../utils/colors';
+import sentenceCase from '../../../utils/sentenceCase';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 
@@ -448,7 +450,7 @@ class ProBuild extends Component {
               </View>
               <View>
                 <Text style={styles.championName}>{proBuildData.getIn(['championData', 'name'])}</Text>
-                <Text style={styles.championTitle}>{proBuildData.getIn(['championData', 'title'])}</Text>
+                <Text style={styles.championTitle}>{sentenceCase(proBuildData.getIn(['championData', 'title']))}</Text>
               </View>
             </View>
 

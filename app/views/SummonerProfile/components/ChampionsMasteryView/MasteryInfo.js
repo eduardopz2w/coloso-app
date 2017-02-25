@@ -6,7 +6,9 @@ import { MKProgress } from 'react-native-material-kit';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import moment from 'moment';
 import I18n from 'i18n-js';
+
 import styleUtils from '../../../../utils/styleUtils';
+import sentenceCase from '../../../../utils/sentenceCase';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -131,7 +133,7 @@ class MasteryInfo extends Component {
         </View>
         <View style={{ flex: 1 }}>
           <Text style={styles.championName}>{mastery.getIn(['championData', 'name'])}</Text>
-          <Text numberOfLines={1} style={styles.championTitle}>{mastery.getIn(['championData', 'title'])}</Text>
+          <Text numberOfLines={1} style={styles.championTitle}>{sentenceCase(mastery.getIn(['championData', 'title']))}</Text>
           {this.renderProgress()}
           <View style={{ flexDirection: 'row' }}>
             <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('chest_available')}: </Text>
