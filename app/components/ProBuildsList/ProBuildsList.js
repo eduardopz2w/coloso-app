@@ -44,6 +44,8 @@ class ProBuildsList extends Component {
 
     this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
     this.handleOnRefresh = this.handleOnRefresh.bind(this);
+    this.handleOnAddFavorite = this.handleOnAddFavorite.bind(this);
+    this.handleOnRemoveFavorite = this.handleOnRemoveFavorite.bind(this);
     this.renderFooter = this.renderFooter.bind(this);
   }
 
@@ -66,6 +68,18 @@ class ProBuildsList extends Component {
   handleOnRefresh() {
     if (this.props.onRefresh) {
       this.props.onRefresh();
+    }
+  }
+
+  handleOnAddFavorite(buildId) {
+    if (this.props.onAddFavorite) {
+      this.props.onAddFavorite(buildId);
+    }
+  }
+
+  handleOnRemoveFavorite(buildId) {
+    if (this.props.onRemoveFavorite) {
+      this.props.onRemoveFavorite(buildId);
     }
   }
 
@@ -112,7 +126,10 @@ class ProBuildsList extends Component {
       renderRow={(build, sectionId, rowId) => <ProBuildListRow
         key={rowId}
         build={build}
+        favorites={this.props.favorites}
         onPress={() => { this.props.onPressBuild(build.get('id')); }}
+        onAddFavorite={this.handleOnAddFavorite}
+        onRemoveFavorite={this.handleOnRemoveFavorite}
       />}
       renderFooter={this.renderFooter}
       renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
@@ -127,23 +144,24 @@ ProBuildsList.propTypes = {
   builds: ImmutablePropTypes.list.isRequired,
   isFetching: PropTypes.bool,
   isRefreshing: PropTypes.bool,
-  onPressBuild: PropTypes.func,
-  onLoadMore: PropTypes.func,
-  onRefresh: PropTypes.func,
   refreshControl: PropTypes.bool,
   fetchError: PropTypes.bool,
   errorMessage: PropTypes.string,
+  favorites: PropTypes.bool,
   onPressRetry: PropTypes.func.isRequired,
+  onPressBuild: PropTypes.func,
+  onLoadMore: PropTypes.func,
+  onRefresh: PropTypes.func,
+  onAddFavorite: PropTypes.func,
+  onRemoveFavorite: PropTypes.func,
 };
 
 ProBuildsList.defaultProps = {
   builds: Immutable.List([]),
   fetchError: false,
-};
-
-ProBuildsList.defaultProps = {
   refreshControl: false,
   isRefreshing: false,
+  favorites: true,
 };
 
 export default ProBuildsList;

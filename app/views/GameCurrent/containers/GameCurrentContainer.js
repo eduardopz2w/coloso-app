@@ -9,11 +9,11 @@ import { fetchProPlayers } from '../../../modules/ProPlayersActions';
 function mapStateToProps(state) {
   let proBuilds = state.gameCurrent.get('proBuilds');
   let proPlayers = state.proPlayers;
-  const proBuildsIds = state.gameCurrent.getIn(['proBuilds', 'proBuildsIds']);
+  const ids = state.gameCurrent.getIn(['proBuilds', 'ids']);
   const proPlayersIds = proPlayers.get('proPlayersIds');
   const gameData = denormalize(state.gameCurrent.get('gameId'), 'gamesCurrent', state.entities);
 
-  proBuilds = proBuilds.set('proBuildsList', proBuildsIds.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
+  proBuilds = proBuilds.set('proBuildsList', ids.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
   proPlayers = proPlayers.set('proPlayersList', proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
 
   return { gameData, proBuilds, proPlayers };

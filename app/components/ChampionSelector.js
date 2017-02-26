@@ -31,12 +31,8 @@ class ChampionSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: 'SEASON3',
+      selectedValue: props.initialValue || 0,
     };
-  }
-
-  componentWillMount() {
-    this.setState({ selectedValue: this.props.initialValue });
   }
 
   handleOnValueChange(newValue) {
@@ -204,8 +200,8 @@ class ChampionSelector extends Component {
 }
 
 ChampionSelector.propTypes = {
-  onChangeSelected: PropTypes.func,
   initialValue: PropTypes.number,
+  onChangeSelected: PropTypes.func,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
   titleStyle: Text.propTypes.style,

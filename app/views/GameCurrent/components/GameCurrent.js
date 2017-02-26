@@ -191,6 +191,7 @@ class GameCurrent extends Component {
             proPlayerId: proBuilds.get('proPlayerSelected'),
           }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
         }}
+        favorites={false}
       />);
     } else {
       proBuildsContent = (<View style={styles.container}>

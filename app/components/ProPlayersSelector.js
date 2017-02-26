@@ -33,12 +33,8 @@ class ProPlayersSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: null,
+      selectedValue: props.initialValue || '0',
     };
-  }
-
-  componentWillMount() {
-    this.setState({ selectedValue: this.props.initialValue });
   }
 
   handleOnValueChange(newValue) {
@@ -50,7 +46,7 @@ class ProPlayersSelector extends Component {
 
   render() {
     let pickerOptions = [
-      Immutable.Map({ name: I18n.t('select_player'), value: 0 }),
+      Immutable.Map({ name: I18n.t('select_player'), value: '0' }),
     ];
 
     pickerOptions = pickerOptions.concat(this.props.proPlayers.toArray());
@@ -74,8 +70,8 @@ class ProPlayersSelector extends Component {
 }
 
 ProPlayersSelector.propTypes = {
-  onChangeSelected: PropTypes.func.isRequired,
   initialValue: PropTypes.string,
+  onChangeSelected: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
   titleStyle: Text.propTypes.style,

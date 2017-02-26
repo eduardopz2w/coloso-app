@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
-import { MKButton } from 'react-native-material-kit';
 import moment from 'moment';
 import numeral from 'numeral';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import ProPlayerImage from '../ProPlayerImage';
 import colors from '../../utils/colors';
@@ -118,6 +118,10 @@ const styles = MediaQueryStyleSheet.create(
     loss: {
       borderLeftColor: colors.defeat,
     },
+
+    timeAgoRow: {
+      marginTop: 4,
+    },
   }, {
     '@media (min-device-width: 600)': {
       itemsContainer: {
@@ -163,62 +167,98 @@ class ProBuild extends Component {
     this.state = {
       expanded: false,
     };
+
+    this.renderFavoriteButton = this.renderFavoriteButton.bind(this);
+    this.handleOnPressAddFavorite = this.handleOnPressAddFavorite.bind(this);
+    this.handleOnPressRemoveFavorite = this.handleOnPressRemoveFavorite.bind(this);
+  }
+
+  handleOnPressAddFavorite() {
+    if (this.props.onAddFavorite) {
+      this.props.onAddFavorite(this.props.build.get('id'));
+    }
+  }
+
+  handleOnPressRemoveFavorite() {
+    if (this.props.onRemoveFavorite) {
+      this.props.onRemoveFavorite(this.props.build.get('id'));
+    }
+  }
+
+  renderFavoriteButton() {
+    if (!this.props.favorites) {
+      return null;
+    }
+
+    const isFavorite = this.props.build.get('isFavorite');
+
+    if (isFavorite) {
+      return (<TouchableWithoutFeedback onPress={this.handleOnPressRemoveFavorite}>
+        <Icon name="favorite" size={28} color="#C62828" />
+      </TouchableWithoutFeedback>);
+    }
+
+    return (<TouchableWithoutFeedback onPress={this.handleOnPressAddFavorite}>
+      <Icon name="favorite" size={28} color="gray" />
+    </TouchableWithoutFeedback>);
   }
   render() {
     const { build } = this.props;
 
-    return (<MKButton
-      style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}
-      rippleColor="rgba(0,0,0,0.1)"
-      onPress={this.props.onPress}
-    >
-      <View>
-        <View style={styles.playerData}>
-          <ProPlayerImage
-            imageUrl={build.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
-            role={build.getIn(['proSummoner', 'proPlayer', 'role'])}
-          />
-          <Text style={styles.playerName}>{build.getIn(['proSummoner', 'proPlayer', 'name'])}</Text>
-          <Text>{getTimeAgo(build.get('matchCreation'))}</Text>
-        </View>
-        <View style={styles.gameDataRow}>
-          <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
-          <View>
-            <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
-            <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
+    return (<TouchableNativeFeedback onPress={this.props.onPress} >
+      <View style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}>
+        <View>
+          <View style={styles.playerData}>
+            <ProPlayerImage
+              imageUrl={build.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
+              role={build.getIn(['proSummoner', 'proPlayer', 'role'])}
+            />
+            <Text style={styles.playerName}>{build.getIn(['proSummoner', 'proPlayer', 'name'])}</Text>
+            {this.renderFavoriteButton()}
           </View>
-          <View style={styles.championNameAndScore} >
-            <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
-            <Text style={styles.scoreText}>
-              <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
-              <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
-              <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
-            </Text>
+          <View style={styles.gameDataRow}>
+            <Image source={{ uri: `champion_square_${build.get('championId')}` }} style={styles.championImage} />
+            <View>
+              <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
+              <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
+            </View>
+            <View style={styles.championNameAndScore} >
+              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
+              <Text style={styles.scoreText}>
+                <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+                <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+                <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
+              </Text>
+            </View>
+            <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
+            <MediaQuery maxDeviceWidth={599}>
+              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
+            </MediaQuery>
+            <MediaQuery minDeviceWidth={600}>
+              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
+            </MediaQuery>
+            <View style={styles.itemsContainer} >
+              {renderItem(build.getIn(['stats', 'item0']))}
+              {renderItem(build.getIn(['stats', 'item1']))}
+              {renderItem(build.getIn(['stats', 'item2']))}
+              {renderItem(build.getIn(['stats', 'item3']))}
+              {renderItem(build.getIn(['stats', 'item4']))}
+              {renderItem(build.getIn(['stats', 'item5']))}
+            </View>
+            {renderItem(build.getIn(['stats', 'item6']))}
           </View>
-          <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
-          <MediaQuery maxDeviceWidth={599}>
-            <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
-          </MediaQuery>
-          <MediaQuery minDeviceWidth={600}>
-            <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
-          </MediaQuery>
-          <View style={styles.itemsContainer} >
-            {renderItem(build.getIn(['stats', 'item0']))}
-            {renderItem(build.getIn(['stats', 'item1']))}
-            {renderItem(build.getIn(['stats', 'item2']))}
-            {renderItem(build.getIn(['stats', 'item3']))}
-            {renderItem(build.getIn(['stats', 'item4']))}
-            {renderItem(build.getIn(['stats', 'item5']))}
+          <View style={styles.timeAgoRow}>
+            <Text style={{ textAlign: 'right' }}>{getTimeAgo(build.get('matchCreation'))}</Text>
           </View>
-          {renderItem(build.getIn(['stats', 'item6']))}
         </View>
       </View>
-    </MKButton>);
+    </TouchableNativeFeedback>);
   }
 }
 
 ProBuild.propTypes = {
   build: ImmutablePropTypes.mapContains({
+    id: PropTypes.string.isRequired,
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
@@ -249,7 +289,10 @@ ProBuild.propTypes = {
       role: PropTypes.string,
     }),
   }).isRequired,
+  favorites: PropTypes.bool.isRequired,
   onPress: PropTypes.func,
+  onAddFavorite: PropTypes.func,
+  onRemoveFavorite: PropTypes.func,
 };
 
 export default ProBuild;

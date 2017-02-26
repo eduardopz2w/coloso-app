@@ -22,7 +22,9 @@ export default {
   division: 'Division',
   doublekills: 'Double Kills',
   empty_history: 'Search history is empty',
+  empty_favorite_builds: 'The favorite builds list is empty',
   fast_search: 'Fast Search',
+  favorites: 'Favorites',
   first_bloods: 'First Bloods',
   game_current: 'Current Game',
   games: 'Games',
@@ -178,6 +180,7 @@ export default {
     timeout: 'Could not connect to server',
     slow_connection: 'Something has gone wrong, make sure you have a stable internet connection',
     request_failed: 'Could not connect to the server, make sure you have internet connection and have the latest version of the application',
+    something_wrong: 'Something was wrong',
   },
   validation_errors: {
     summoner_name_required: 'Debes ingresar un nombre de invocador',

@@ -22,6 +22,10 @@ function getProBuilds(queryParams, pageParams) {
       params.proPlayerId = queryParams.proPlayerId;
     }
 
+    if (_.isArray(queryParams.ids)) {
+      params.ids = queryParams.ids.toString();
+    }
+
     return ColosoClient.get(url, {
       params,
     })
