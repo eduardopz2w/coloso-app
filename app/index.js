@@ -9,7 +9,6 @@ import I18n from 'i18n-js';
 import moment from 'moment';
 import 'moment/locale/es';
 
-import StorageInstance from './utils/Storage';
 import versionChecker from './utils/versionChecker';
 import Routes from './routes';
 import translations from './translations';
@@ -18,8 +17,6 @@ import ColosoClient from './utils/ColosoClient';
 
 
 I18n.translations = translations;
-
-global.Storage = StorageInstance;
 
 const ADMOB_BANNER_ID = 'ca-app-pub-9850680385333731/3213566801';
 

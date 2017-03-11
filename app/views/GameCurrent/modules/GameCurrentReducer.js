@@ -10,7 +10,7 @@ const initialState = Immutable.fromJS({
     fetchError: false,
     errorMessage: '',
     isFetching: true,
-    proBuildsIds: [],
+    ids: [],
     pagination: {
       currentPage: 1,
       totalPages: 1,
@@ -25,7 +25,7 @@ export default typeToReducer({
       mutator.set('gameId', action.payload.gameId);
       mutator.mergeIn(['proBuilds'], {
         fetched: false,
-        proBuildsIds: Immutable.List(),
+        ids: Immutable.List(),
       });
     }),
   },
@@ -35,7 +35,7 @@ export default typeToReducer({
       const { queryParams, pageParams } = payload;
       if (pageParams.number === 1) {
         mutator.setIn(['proBuilds', 'fetched'], false);
-        mutator.setIn(['proBuilds', 'proBuildsIds'], Immutable.List([]));
+        mutator.setIn(['proBuilds', 'ids'], Immutable.List([]));
         mutator.setIn(['proBuilds', 'pagination'], Immutable.Map({
           page: 1,
           pageCount: 1,
@@ -52,7 +52,7 @@ export default typeToReducer({
     FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
       mutator.setIn(['proBuilds', 'fetched'], true);
       mutator.setIn(['proBuilds', 'isFetching'], false);
-      mutator.updateIn(['proBuilds', 'proBuildsIds'], proBuilds => proBuilds.concat(payload.proBuildsIds));
+      mutator.updateIn(['proBuilds', 'ids'], proBuilds => proBuilds.concat(payload.ids));
       mutator.setIn(['proBuilds', 'pagination'], Immutable.fromJS(payload.pagination));
     }),
 

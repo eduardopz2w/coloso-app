@@ -22,7 +22,9 @@ export default {
   division: 'División',
   double_ills: 'Double Kills',
   empty_history: 'El historial está vacío',
+  empty_favorite_builds: 'La lista de builds favoritas está vacía',
   fast_search: 'Búsqueda Rápida',
+  favorites: 'Favoritos',
   first_bloods: 'Primeras Sangres',
   game_current: 'Juego actual',
   games: 'Juegos',
@@ -178,6 +180,7 @@ export default {
     timeout: 'No se ha podido establecer conexión con el servidor',
     slow_connection: 'Algo ha salido mal, asegúrate de tener una conexión estable a internet',
     request_failed: 'Error al establecer conexión con el servidor, asegurate de tener acceso a internet y de tener la última version de la aplicación',
+    something_wrong: 'Algo ha salido mal',
   },
   validation_errors: {
     summoner_name_required: 'Ingrese un nombre de invocador',

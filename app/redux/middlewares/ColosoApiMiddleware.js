@@ -176,7 +176,7 @@ const middleware = ({ dispatch }) => next => (action) => {
         dispatch({
           type: `${action.type}_FULFILLED`,
           payload: {
-            proBuildsIds: _.map(response.data, data => data.id),
+            ids: _.map(response.data, data => data.id),
             pagination: {
               currentPage: response.meta.currentPage,
               totalPages: response.meta.totalPages,

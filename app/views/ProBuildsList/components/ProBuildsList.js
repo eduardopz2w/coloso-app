@@ -1,14 +1,15 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
+import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
-
 
 import Toolbar from './Toolbar';
 import { tracker } from '../../../utils/analytics';
-import ProBuildsList from '../../../components/ProBuildsList';
-import ErrorScreen from '../../../components/ErrorScreen';
+import colors from '../../../utils/colors';
+import ProBuildsTab from './ProBuildsTab';
+import FavoriteProBuildsTab from './FavoriteProBuildsTab';
 
 const styles = StyleSheet.create({
   root: {
@@ -24,39 +25,48 @@ class ProBuildsListView extends Component {
   constructor(props) {
     super(props);
 
-    this.handleOnChangeChampionSelected = this.handleOnChangeChampionSelected.bind(this);
+    this.state = {
+      proPlayerSelected: null,
+      championSelected: null,
+    };
+
+    this.handleOnPressProBuildsTabRetryButton = this.handleOnPressProBuildsTabRetryButton.bind(this);
+    this.handleOnPressFavoriteProBuildsTabRetryButton = this.handleOnPressFavoriteProBuildsTabRetryButton.bind(this);
+    this.handleOnLoadMoreProBuildsTab = this.handleOnLoadMoreProBuildsTab.bind(this);
+    this.handleOnPressProBuildsTabRefreshButton = this.handleOnPressProBuildsTabRefreshButton.bind(this);
     this.handleOnChangeProPlayerSelected = this.handleOnChangeProPlayerSelected.bind(this);
-    this.handleOnLoadMore = this.handleOnLoadMore.bind(this);
-    this.handleOnRetry = this.handleOnRetry.bind(this);
+    this.handleOnChangeChampionSelected = this.handleOnChangeChampionSelected.bind(this);
   }
 
   componentWillMount() {
+    this.props.fetchProPlayers();
     this.props.fetchBuilds({}, 1);
-
-    if (!this.props.proPlayers.get('fetched')) {
-      this.props.fetchProPlayers();
-    }
+    this.props.fetchFavoriteBuilds();
   }
 
   componentDidMount() {
     tracker.trackScreenView('ProBuildsListView');
   }
 
-  handleOnChangeChampionSelected(championId) {
+  handleOnPressProBuildsTabRetryButton() {
     this.props.fetchBuilds({
-      championId,
+      championId: this.props.proBuilds.get('championSelected'),
+      proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
+    }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
+  }
+
+  handleOnPressFavoriteProBuildsTabRetryButton() {
+    this.props.fetchFavoriteBuilds();
+  }
+
+  handleOnPressProBuildsTabRefreshButton() {
+    this.props.refreshBuilds({
+      championId: this.props.proBuilds.get('championSelected'),
       proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
     }, 1);
   }
 
-  handleOnChangeProPlayerSelected(proPlayerId) {
-    this.props.fetchBuilds({
-      championId: this.props.proBuilds.get('championSelected'),
-      proPlayerId,
-    }, 1);
-  }
-
-  handleOnLoadMore() {
+  handleOnLoadMoreProBuildsTab() {
     const pagData = this.props.proBuilds.get('pagination').toJS();
     const isFetching = this.props.proBuilds.get('isFetching');
 
@@ -74,78 +84,71 @@ class ProBuildsListView extends Component {
     }
   }
 
-  handleOnRetry() {
-    this.props.fetchBuilds(
-      {
-        championId: this.props.proBuilds.get('championSelected'),
-        proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
-      },
-      this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1,
-    );
+  handleOnChangeProPlayerSelected(proPlayerSelected) {
+    this.setState({ proPlayerSelected });
+
+    this.props.fetchBuilds({
+      championId: this.state.championSelected,
+      proPlayerId: proPlayerSelected,
+    }, 1);
+    this.props.setFavoriteBuildsFilters({
+      championSelected: this.state.championSelected,
+      proPlayerSelected,
+    });
+  }
+
+  handleOnChangeChampionSelected(championSelected) {
+    this.setState({ championSelected });
+
+    this.props.fetchBuilds({
+      championId: championSelected,
+      proPlayerId: this.state.proPlayerSelected,
+    }, 1);
+    this.props.setFavoriteBuildsFilters({
+      championSelected,
+      proPlayerSelected: this.state.proPlayerSelected,
+    });
   }
 
   render() {
-    const proBuilds = this.props.proBuilds;
-    const fetchError = proBuilds.get('fetchError');
-    const errorMessage = proBuilds.get('errorMessage');
-    const isFetching = proBuilds.get('isFetching');
-    const isRefreshing = proBuilds.get('isRefreshing');
-    const championSelected = proBuilds.get('championSelected');
-    const proPlayerSelected = proBuilds.get('proPlayerSelected');
-    const proBuildsList = proBuilds.get('proBuildsList');
-
-    let content;
-
-    if (fetchError && proBuildsList.size === 0) {
-      content = (<View style={styles.container}>
-        <ErrorScreen
-          message={errorMessage}
-          onPressRetryButton={() => {
-            this.props.fetchBuilds({
-              championId: championSelected,
-              proPlayerId: proPlayerSelected,
-            }, 1);
-          }}
-          retryButton
-        />
-      </View>);
-    } else if (proBuildsList.size > 0 || isFetching) {
-      content = (<ProBuildsList
-        builds={proBuildsList}
-        onPressBuild={buildId => Actions.probuild_view({ buildId })}
-        onLoadMore={this.handleOnLoadMore}
-        isFetching={isFetching}
-        isRefreshing={isRefreshing}
-        onRefresh={() => {
-          this.props.refreshBuilds({
-            championId: championSelected,
-            proPlayerId: proPlayerSelected,
-          }, 1);
-        }}
-        fetchError={fetchError}
-        errorMessage={errorMessage}
-        onPressRetry={this.handleOnRetry}
-        refreshControl
-      />);
-    } else {
-      content = (<View style={styles.container}>
-        <Text>
-          {I18n.t('pro_builds_not_available')}
-        </Text>
-      </View>);
-    }
-
     return (<View style={styles.root}>
       <Toolbar
         proPlayers={this.props.proPlayers}
+        disabledFilters={this.props.proBuilds.get('isFetching')}
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
-        championSelected={championSelected}
-        proPlayerSelected={proPlayerSelected}
+        championSelected={this.state.championSelected}
+        proPlayerSelected={this.state.proPlayerSelected}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
         onChangeProPlayerSelected={this.handleOnChangeProPlayerSelected}
-        disabledFilters={isFetching || isRefreshing}
       />
-      {content}
+      <ScrollableTabView
+        initialPage={0}
+        style={{ flex: 1 }}
+        renderTabBar={() => <DefaultTabBar />}
+        tabBarBackgroundColor={colors.primary}
+        tabBarActiveTextColor={colors.accent}
+        tabBarInactiveTextColor="rgba(255,255,255,0.8)"
+        tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
+        onChangeTab={this.handleOnChangeTab}
+      >
+        <ProBuildsTab
+          tabLabel="Builds"
+          proBuilds={this.props.proBuilds}
+          onPressRetryButton={this.handleOnPressProBuildsTabRetryButton}
+          onPressRefreshButton={this.handleOnPressProBuildsTabRefreshButton}
+          onPressBuild={buildId => Actions.probuild_view({ buildId })}
+          onLoadMore={this.handleOnLoadMoreProBuildsTab}
+          onAddFavorite={this.props.addFavoriteBuild}
+          onRemoveFavorite={this.props.removeFavoriteBuild}
+        />
+        <FavoriteProBuildsTab
+          tabLabel={I18n.t('favorites')}
+          favoriteProBuilds={this.props.favoriteProBuilds}
+          onPressRetryButton={this.handleOnPressFavoriteProBuildsTabRetryButton}
+          onPressBuild={buildId => Actions.probuild_view({ buildId })}
+          onRemoveFavorite={this.props.removeFavoriteBuild}
+        />
+      </ScrollableTabView>
     </View>);
   }
 }
@@ -156,20 +159,31 @@ ProBuildsListView.propTypes = {
     isRefreshing: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    proBuildsIds: ImmutablePropTypes.list.isRequired,
     proBuildsList: ImmutablePropTypes.list.isRequired,
     pagination: ImmutablePropTypes.mapContains({
       currentPage: PropTypes.number.isRequired,
       totalPages: PropTypes.number.isRequired,
     }).isRequired,
-    championSelected: PropTypes.number.isRequired,
+    championSelected: PropTypes.number,
+    proPlayerSelected: PropTypes.string,
+  }).isRequired,
+  favoriteProBuilds: ImmutablePropTypes.mapContains({
+    isFetching: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
+    errorMessage: PropTypes.string,
+    builds: ImmutablePropTypes.list.isRequired,
+    championSelected: PropTypes.number,
     proPlayerSelected: PropTypes.string,
   }).isRequired,
   proPlayers: ImmutablePropTypes.map.isRequired,
   // Dispatchers
   fetchBuilds: PropTypes.func.isRequired,
+  fetchFavoriteBuilds: PropTypes.func.isRequired,
   fetchProPlayers: PropTypes.func.isRequired,
   refreshBuilds: PropTypes.func.isRequired,
+  addFavoriteBuild: PropTypes.func.isRequired,
+  removeFavoriteBuild: PropTypes.func.isRequired,
+  setFavoriteBuildsFilters: PropTypes.func.isRequired,
 };
 
 export default ProBuildsListView;

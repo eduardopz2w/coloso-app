@@ -3,20 +3,17 @@ import Immutable from 'immutable';
 import { fetchBuilds, refreshBuilds } from './ProBuildsListActions';
 
 const initialState = Immutable.fromJS({
+  ids: [],
+  championSelected: null,
+  proPlayerSelected: null,
   fetchError: false,
   errorMessage: '',
   isFetching: false,
   isRefreshing: false,
-  proBuildsIds: [],
   pagination: {
     currentPage: 1,
     totalPages: 1,
   },
-  data: {
-    proBuilds: [],
-  },
-  championSelected: 0,
-  proPlayerSelected: null,
 });
 
 export default typeToReducer({
@@ -25,7 +22,7 @@ export default typeToReducer({
       const { queryParams, pageParams } = payload;
 
       if (pageParams.number === 1) {
-        mutator.set('proBuildsIds', Immutable.List([]));
+        mutator.set('ids', Immutable.List([]));
         mutator.set('pagination', Immutable.fromJS({
           currentPage: 1,
           totalPages: 1,
@@ -44,7 +41,7 @@ export default typeToReducer({
     }),
     FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
       mutator.set('isFetching', false);
-      mutator.update('proBuildsIds', proBuilds => proBuilds.concat(payload.proBuildsIds));
+      mutator.update('ids', proBuilds => proBuilds.concat(payload.ids));
       mutator.set('pagination', Immutable.fromJS(payload.pagination));
     }),
     REJECTED: (state, action) => state.merge({
@@ -68,7 +65,7 @@ export default typeToReducer({
     FULFILLED: (state, { payload }) => state.merge({
       isFetching: false,
       isRefreshing: false,
-      proBuildsIds: Immutable.List(payload.proBuildsIds),
+      ids: Immutable.List(payload.ids),
       pagination: Immutable.fromJS(payload.pagination),
     }),
   },
