@@ -20,6 +20,10 @@ export default typeToReducer({
       mutator.set('isFetching', true);
       mutator.set('ids', Immutable.List([]));
       mutator.set('fetchError', false);
+      mutator.set('filters', Immutable.Map({
+        championId: null,
+        proPlayerId: null,
+      }));
     }),
     FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
       mutator.set('isFetching', false);
