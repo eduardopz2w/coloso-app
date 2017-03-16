@@ -43,7 +43,7 @@ class ProBuildsListView extends Component {
 
   componentWillMount() {
     this.props.fetchProPlayers();
-    this.props.fetchBuilds({}, 1);
+    this.props.fetchBuilds({ championId: null, proPlayerId: null }, 1);
     this.props.fetchFavoriteBuilds();
   }
 
