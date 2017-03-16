@@ -1,15 +1,15 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { MKButton } from 'react-native-material-kit';
+import { View, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const styles = StyleSheet.create({
   menuItem: {
     height: 56,
     paddingLeft: 16,
-    justifyContent: 'center',
     borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   menuItemText: {
     fontSize: 14,
@@ -22,16 +22,14 @@ const styles = StyleSheet.create({
 
 class MenuItem extends PureComponent {
   render() {
-    return (<MKButton
-      style={styles.menuItem}
-      rippleColor="rgba(0,0,0,0.1)"
+    return (<TouchableNativeFeedback
       onPress={this.props.onPress}
     >
-      <View style={{ flexDirection: 'row' }}>
+      <View style={styles.menuItem}>
         <Icon style={styles.icon} name={this.props.iconName} size={22} color="rgba(0,0,0,0.7)" />
         <Text style={styles.menuItemText} >{this.props.title}</Text>
       </View>
-    </MKButton>);
+    </TouchableNativeFeedback>);
   }
 }
 
