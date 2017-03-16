@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import ProBuildsList from '../components/ProBuildsList';
 import denormalize from '../../../utils/denormalize';
 import { fetchBuilds, refreshBuilds } from '../../../modules/ProBuildsActions';
-import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../modules/FavoriteProBuildsActions';
+import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../../../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';
 
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
@@ -13,8 +13,8 @@ const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.
 const getProBuildsIds = state => state.proBuilds.get('ids');
 const getFavoriteProBuildsIds = state => state.favoriteProBuilds.get('ids');
 const getFavoriteBuildsFilters = state => ({
-  championSelected: state.favoriteProBuilds.get('championSelected'),
-  proPlayerSelected: state.favoriteProBuilds.get('proPlayerSelected'),
+  championId: state.favoriteProBuilds.getIn(['filters', 'championId']),
+  proPlayerId: state.favoriteProBuilds.getIn(['filters', 'proPlayerId']),
 });
 const getProPlayersIds = state => state.proPlayers.get('proPlayersIds');
 const getProBuildsEntities = state => state.entities.filter((value, key) => {
@@ -44,7 +44,7 @@ const getProBuildsList = createImmutableSelector(
 
 const getFavoriteProBuildsList = createImmutableSelector(
   [getFavoriteProBuildsIds, getProBuildsEntities, getFavoriteBuildsFilters],
-  (ids, entities, { championSelected, proPlayerSelected }) => {
+  (ids, entities, { championId, proPlayerId }) => {
     const builds = ids.map((id) => {
       const build = denormalize(id, 'proBuilds', entities);
 
@@ -52,11 +52,11 @@ const getFavoriteProBuildsList = createImmutableSelector(
     });
 
     return builds.filter((proBuild) => {
-      if (championSelected && proBuild.get('championId') !== championSelected) {
+      if (championId && proBuild.get('championId') !== championId) {
         return false;
       }
 
-      if (proPlayerSelected && proBuild.getIn(['proSummoner', 'proPlayer', 'id']) !== proPlayerSelected) {
+      if (proPlayerId && proBuild.getIn(['proSummoner', 'proPlayer', 'id']) !== proPlayerId) {
         return false;
       }
 

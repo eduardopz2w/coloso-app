@@ -174,8 +174,10 @@ ProBuildsListView.propTypes = {
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
     builds: ImmutablePropTypes.list.isRequired,
-    championSelected: PropTypes.number,
-    proPlayerSelected: PropTypes.string,
+    filters: ImmutablePropTypes.mapContains({
+      championId: PropTypes.number,
+      proPlayerId: PropTypes.string,
+    }),
   }).isRequired,
   proPlayers: ImmutablePropTypes.map.isRequired,
   // Dispatchers
