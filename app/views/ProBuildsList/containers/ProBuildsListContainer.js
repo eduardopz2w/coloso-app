@@ -4,13 +4,13 @@ import Immutable from 'immutable';
 
 import ProBuildsList from '../components/ProBuildsList';
 import denormalize from '../../../utils/denormalize';
-import { fetchBuilds, refreshBuilds } from '../modules/ProBuildsListActions';
+import { fetchBuilds, refreshBuilds } from '../../../modules/ProBuildsActions';
 import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';
 
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
 
-const getProBuildsIds = state => state.proBuildsList.get('ids');
+const getProBuildsIds = state => state.proBuilds.get('ids');
 const getFavoriteProBuildsIds = state => state.favoriteProBuilds.get('ids');
 const getFavoriteBuildsFilters = state => ({
   championSelected: state.favoriteProBuilds.get('championSelected'),
@@ -71,11 +71,11 @@ const getProPlayersList = createImmutableSelector(
 );
 
 function mapStateToProps(state) {
-  let proBuilds = state.proBuildsList;
+  let proBuilds = state.proBuilds;
   let proPlayers = state.proPlayers;
   let favoriteProBuilds = state.favoriteProBuilds;
 
-  proBuilds = proBuilds.set('proBuildsList', getProBuildsList(state));
+  proBuilds = proBuilds.set('builds', getProBuildsList(state));
   proPlayers = proPlayers.set('proPlayersList', getProPlayersList(state));
   favoriteProBuilds = favoriteProBuilds.set('builds', getFavoriteProBuildsList(state));
 

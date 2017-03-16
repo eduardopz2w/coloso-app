@@ -23,9 +23,9 @@ class ProBuildsTab extends PureComponent {
     const errorMessage = proBuilds.get('errorMessage');
     const isFetching = proBuilds.get('isFetching');
     const isRefreshing = proBuilds.get('isRefreshing');
-    const proBuildsList = proBuilds.get('proBuildsList');
+    const buildsList = proBuilds.get('builds');
 
-    if (fetchError && proBuildsList.size === 0) {
+    if (fetchError && buildsList.size === 0) {
       return (<View style={styles.container}>
         <ErrorScreen
           message={errorMessage}
@@ -33,9 +33,9 @@ class ProBuildsTab extends PureComponent {
           retryButton
         />
       </View>);
-    } else if (proBuildsList.size > 0 || isFetching) {
+    } else if (buildsList.size > 0 || isFetching) {
       return (<ProBuildsList
-        builds={proBuildsList}
+        builds={buildsList}
         onPressBuild={this.props.onPressBuild}
         onLoadMore={this.props.onLoadMore}
         isFetching={isFetching}
@@ -60,17 +60,19 @@ class ProBuildsTab extends PureComponent {
 
 ProBuildsTab.propTypes = {
   proBuilds: ImmutablePropTypes.mapContains({
+    builds: ImmutablePropTypes.list.isRequired,
     isFetching: PropTypes.bool.isRequired,
     isRefreshing: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    proBuildsList: ImmutablePropTypes.list.isRequired,
     pagination: ImmutablePropTypes.mapContains({
       currentPage: PropTypes.number.isRequired,
       totalPages: PropTypes.number.isRequired,
     }).isRequired,
-    championSelected: PropTypes.number,
-    proPlayerSelected: PropTypes.string,
+    filters: ImmutablePropTypes.mapContains({
+      championId: PropTypes.number,
+      proPlayerId: PropTypes.string,
+    }),
   }).isRequired,
   onPressRetryButton: PropTypes.func.isRequired,
   onPressRefreshButton: PropTypes.func.isRequired,
