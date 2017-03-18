@@ -42,3 +42,5 @@ android/app/libs
 
 app/assets/profileicon/*.png
 *_fakedata.js
+
+gradle*.zip
