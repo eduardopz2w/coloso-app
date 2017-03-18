@@ -1,15 +1,17 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from './FavoriteProBuildsActions';
+import { addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../../modules/FavoriteProBuildsActions';
 
 const initialState = Immutable.fromJS({
   ids: [],
-  championSelected: null,
-  proPlayerSelected: null,
   fetchError: false,
   errorMessage: '',
   isFetching: false,
   isRefreshing: false,
+  filters: {
+    championId: null,
+    proPlayerId: null,
+  },
 });
 
 export default typeToReducer({
@@ -18,6 +20,10 @@ export default typeToReducer({
       mutator.set('isFetching', true);
       mutator.set('ids', Immutable.List([]));
       mutator.set('fetchError', false);
+      mutator.set('filters', Immutable.Map({
+        championId: null,
+        proPlayerId: null,
+      }));
     }),
     FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
       mutator.set('isFetching', false);
@@ -39,8 +45,8 @@ export default typeToReducer({
       ids: payload.ids,
     }),
   },
-  [setFavoriteBuildsFilters]: (state, { payload }) => state.merge({
-    championSelected: payload.championSelected,
-    proPlayerSelected: payload.proPlayerSelected,
+  [setFavoriteBuildsFilters]: (state, { payload }) => state.mergeIn(['filters'], {
+    championId: payload.championId,
+    proPlayerId: payload.proPlayerId,
   }),
 }, initialState);

@@ -140,7 +140,7 @@ class GameCurrent extends Component {
 
   handleOnChangeTab({ i: tabIndex }) {
     if (tabIndex === 1 && !this.props.proBuilds.get('fetched')) {
-      this.props.fetchProBuilds({ championId: this.getFocusChampionId() }, 1);
+      this.props.fetchProBuilds({ championId: this.getFocusChampionId(), proPlayerId: null }, 1);
     }
   }
 
@@ -149,7 +149,7 @@ class GameCurrent extends Component {
     if (!this.props.proBuilds.get('isFetching') && pagData.get('totalPages') > pagData.get('currentPage')) {
       this.props.fetchProBuilds({
         championId: this.getFocusChampionId(),
-        proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
+        proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerSelected']),
       }, pagData.get('currentPage') + 1);
     }
   }
@@ -163,11 +163,11 @@ class GameCurrent extends Component {
 
   render() {
     const { proBuilds, gameData } = this.props;
-    const proBuildsList = proBuilds.get('proBuildsList');
+    const buildsList = proBuilds.get('builds');
     let modalContent;
     let proBuildsContent;
 
-    if (proBuilds.get('fetchError') && proBuildsList.size === 0) {
+    if (proBuilds.get('fetchError') && buildsList.size === 0) {
       proBuildsContent = (<View style={styles.container}>
         <ErrorScreen
           message={proBuilds.get('errorMessage')}
@@ -177,9 +177,9 @@ class GameCurrent extends Component {
           retryButton
         />
       </View>);
-    } else if (proBuildsList.size > 0 || proBuilds.get('isFetching')) {
+    } else if (buildsList.size > 0 || proBuilds.get('isFetching')) {
       proBuildsContent = (<ProBuildsList
-        builds={proBuildsList}
+        builds={buildsList}
         onPressBuild={buildId => Actions.probuild_view({ buildId })}
         isFetching={proBuilds.get('isFetching')}
         onLoadMore={this.handleOnLoadMoreBuilds}
@@ -290,11 +290,11 @@ GameCurrent.propTypes = {
     focusSummonerUrid: PropTypes.string,
   }),
   proBuilds: ImmutablePropTypes.mapContains({
+    builds: ImmutablePropTypes.list,
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
     errorMessage: PropTypes.string,
-    proBuildsList: ImmutablePropTypes.list,
     pagination: ImmutablePropTypes.mapContains({
       currentPage: PropTypes.number,
       totalPages: PropTypes.number,

@@ -16,6 +16,7 @@ export const COLOSO_CALL_TYPES = {
   PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
   PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
   GAME_CURRENT: 'COLOSO_CALL/GAME_CURRENT',
+  MATCH: 'COLOSO_CALL/MATCH',
 };
 
 const middleware = ({ dispatch }) => next => (action) => {
@@ -231,6 +232,22 @@ const middleware = ({ dispatch }) => next => (action) => {
           type: `${action.type}_FULFILLED`,
           payload: {
             gameId: _.first(_.keys(normalized.gamesCurrent)),
+          },
+        });
+      })
+      .catch(handleError);
+  }
+
+  if (callData.type === COLOSO_CALL_TYPES.MATCH) {
+    ColosoApi.getMatch(action.payload.matchUrid)
+      .then((matchData) => {
+        const normalized = normalize(matchData);
+
+        dispatch(mergeEntities(normalized));
+        dispatch({
+          type: `${action.type}_FULFILLED`,
+          payload: {
+            matchUrid: action.payload.matchUrid,
           },
         });
       })

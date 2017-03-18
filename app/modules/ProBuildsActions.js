@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../../../redux/middlewares/ColosoApiMiddleware';
+import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../redux/middlewares/ColosoApiMiddleware';
 
 export const fetchBuilds = createAction('PROBUILDS_LIST/FETCH_BUILDS', (queryParams, pageNumber = 1, pageSize = 25) => ({
   queryParams,

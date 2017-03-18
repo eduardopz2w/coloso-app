@@ -1,11 +1,9 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchBuilds, refreshBuilds } from './ProBuildsListActions';
+import { fetchBuilds, refreshBuilds } from '../../modules/ProBuildsActions';
 
 const initialState = Immutable.fromJS({
   ids: [],
-  championSelected: null,
-  proPlayerSelected: null,
   fetchError: false,
   errorMessage: '',
   isFetching: false,
@@ -13,6 +11,10 @@ const initialState = Immutable.fromJS({
   pagination: {
     currentPage: 1,
     totalPages: 1,
+  },
+  filters: {
+    championId: null,
+    proPlayerId: null,
   },
 });
 
@@ -31,8 +33,8 @@ export default typeToReducer({
         const championId = queryParams.championId || 0;
         const proPlayerId = queryParams.proPlayerId || null;
 
-        mutator.set('championSelected', championId);
-        mutator.set('proPlayerSelected', proPlayerId);
+        mutator.setIn(['filters', 'championId'], championId);
+        mutator.setIn(['filters', 'proPlayerId'], proPlayerId);
       }
 
       mutator.set('fetchError', false);

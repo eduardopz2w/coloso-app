@@ -26,21 +26,24 @@ class ProBuildsListView extends Component {
     super(props);
 
     this.state = {
-      proPlayerSelected: null,
-      championSelected: null,
+      proPlayerId: null,
+      championId: null,
     };
 
-    this.handleOnPressProBuildsTabRetryButton = this.handleOnPressProBuildsTabRetryButton.bind(this);
-    this.handleOnPressFavoriteProBuildsTabRetryButton = this.handleOnPressFavoriteProBuildsTabRetryButton.bind(this);
+    this.handleOnPressProBuildsTabRetryButton = this
+      .handleOnPressProBuildsTabRetryButton.bind(this);
+    this.handleOnPressFavoriteProBuildsTabRetryButton = this
+      .handleOnPressFavoriteProBuildsTabRetryButton.bind(this);
     this.handleOnLoadMoreProBuildsTab = this.handleOnLoadMoreProBuildsTab.bind(this);
-    this.handleOnPressProBuildsTabRefreshButton = this.handleOnPressProBuildsTabRefreshButton.bind(this);
+    this.handleOnPressProBuildsTabRefreshButton = this
+      .handleOnPressProBuildsTabRefreshButton.bind(this);
     this.handleOnChangeProPlayerSelected = this.handleOnChangeProPlayerSelected.bind(this);
     this.handleOnChangeChampionSelected = this.handleOnChangeChampionSelected.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchProPlayers();
-    this.props.fetchBuilds({}, 1);
+    this.props.fetchBuilds({ championId: null, proPlayerId: null }, 1);
     this.props.fetchFavoriteBuilds();
   }
 
@@ -50,8 +53,8 @@ class ProBuildsListView extends Component {
 
   handleOnPressProBuildsTabRetryButton() {
     this.props.fetchBuilds({
-      championId: this.props.proBuilds.get('championSelected'),
-      proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
+      championId: this.props.proBuilds.getIn(['filters', 'championId']),
+      proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
     }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
   }
 
@@ -61,8 +64,8 @@ class ProBuildsListView extends Component {
 
   handleOnPressProBuildsTabRefreshButton() {
     this.props.refreshBuilds({
-      championId: this.props.proBuilds.get('championSelected'),
-      proPlayerId: this.props.proBuilds.get('proPlayerSelected'),
+      championId: this.props.proBuilds.getIn(['filters', 'championId']),
+      proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
     }, 1);
   }
 
@@ -71,42 +74,39 @@ class ProBuildsListView extends Component {
     const isFetching = this.props.proBuilds.get('isFetching');
 
     if (!isFetching && pagData.totalPages > pagData.currentPage) {
-      const championSelected = this.props.proBuilds.get('championSelected');
-      const proPlayerSelected = this.props.proBuilds.get('proPlayerSelected');
+      const championId = this.props.proBuilds.getIn(['filters', 'championId']);
+      const proPlayerId = this.props.proBuilds.getIn(['filters', 'proPlayerId']);
 
       this.props.fetchBuilds(
-        {
-          championId: championSelected,
-          proPlayerId: proPlayerSelected,
-        },
+        { championId, proPlayerId },
         pagData.currentPage + 1,
       );
     }
   }
 
-  handleOnChangeProPlayerSelected(proPlayerSelected) {
-    this.setState({ proPlayerSelected });
+  handleOnChangeProPlayerSelected(proPlayerId) {
+    this.setState({ proPlayerId });
 
     this.props.fetchBuilds({
-      championId: this.state.championSelected,
-      proPlayerId: proPlayerSelected,
+      championId: this.state.championId,
+      proPlayerId,
     }, 1);
     this.props.setFavoriteBuildsFilters({
-      championSelected: this.state.championSelected,
-      proPlayerSelected,
+      championId: this.state.championId,
+      proPlayerId,
     });
   }
 
-  handleOnChangeChampionSelected(championSelected) {
-    this.setState({ championSelected });
+  handleOnChangeChampionSelected(championId) {
+    this.setState({ championId });
 
     this.props.fetchBuilds({
-      championId: championSelected,
-      proPlayerId: this.state.proPlayerSelected,
+      championId,
+      proPlayerId: this.state.proPlayerId,
     }, 1);
     this.props.setFavoriteBuildsFilters({
-      championSelected,
-      proPlayerSelected: this.state.proPlayerSelected,
+      championId,
+      proPlayerId: this.state.proPlayerId,
     });
   }
 
@@ -116,8 +116,8 @@ class ProBuildsListView extends Component {
         proPlayers={this.props.proPlayers}
         disabledFilters={this.props.proBuilds.get('isFetching')}
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
-        championSelected={this.state.championSelected}
-        proPlayerSelected={this.state.proPlayerSelected}
+        championSelected={this.state.championId}
+        proPlayerSelected={this.state.proPlayerId}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
         onChangeProPlayerSelected={this.handleOnChangeProPlayerSelected}
       />
@@ -155,25 +155,29 @@ class ProBuildsListView extends Component {
 
 ProBuildsListView.propTypes = {
   proBuilds: ImmutablePropTypes.mapContains({
+    builds: ImmutablePropTypes.list.isRequired,
     isFetching: PropTypes.bool.isRequired,
     isRefreshing: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    proBuildsList: ImmutablePropTypes.list.isRequired,
     pagination: ImmutablePropTypes.mapContains({
       currentPage: PropTypes.number.isRequired,
       totalPages: PropTypes.number.isRequired,
     }).isRequired,
-    championSelected: PropTypes.number,
-    proPlayerSelected: PropTypes.string,
+    filters: ImmutablePropTypes.mapContains({
+      championId: PropTypes.number,
+      proPlayerId: PropTypes.string,
+    }),
   }).isRequired,
   favoriteProBuilds: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
     builds: ImmutablePropTypes.list.isRequired,
-    championSelected: PropTypes.number,
-    proPlayerSelected: PropTypes.string,
+    filters: ImmutablePropTypes.mapContains({
+      championId: PropTypes.number,
+      proPlayerId: PropTypes.string,
+    }),
   }).isRequired,
   proPlayers: ImmutablePropTypes.map.isRequired,
   // Dispatchers

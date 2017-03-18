@@ -1,17 +1,17 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchProBuild } from './ProBuildActions';
+import { fetchMatch } from './MatchActions';
 
 const initialState = Immutable.fromJS({
   fetched: false,
   fetchError: false,
   errorMessage: '',
   isFetching: true,
-  id: null,
+  urid: null,
 });
 
 export default typeToReducer({
-  [fetchProBuild]: {
+  [fetchMatch]: {
     PENDING: state => state.merge({
       fetched: false,
       isFetching: true,
@@ -21,7 +21,7 @@ export default typeToReducer({
     FULFILLED: (state, { payload }) => state.merge({
       fetched: true,
       isFetching: false,
-      id: payload.proBuildId,
+      urid: payload.matchUrid,
     }),
 
     REJECTED: (state, action) => state.merge({
