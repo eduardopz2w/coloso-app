@@ -178,7 +178,7 @@ class BuildTab extends Component {
   getItemStyle() {
     let numCols = 5;
 
-    if (this.deviceDimensions.width >= 400) {
+    if (this.deviceDimensions.width >= 400 && this.deviceDimensions.width <= 599) {
       numCols = 6;
     } else if (this.deviceDimensions.width >= 600) {
       numCols = 8;
