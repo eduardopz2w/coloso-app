@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { View, Text, Image, TouchableNativeFeedback, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, Image, TouchableNativeFeedback } from 'react-native';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 import moment from 'moment';
 import numeral from 'numeral';
@@ -122,6 +122,12 @@ const styles = MediaQueryStyleSheet.create(
     timeAgoRow: {
       marginTop: 4,
     },
+    favoriteButtonContainer: {
+      width: 36,
+      height: 36,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   }, {
     '@media (min-device-width: 600)': {
       itemsContainer: {
@@ -193,14 +199,18 @@ class ProBuild extends Component {
     const isFavorite = this.props.build.get('isFavorite');
 
     if (isFavorite) {
-      return (<TouchableWithoutFeedback onPress={this.handleOnPressRemoveFavorite}>
-        <Icon name="favorite" size={28} color="#C62828" />
-      </TouchableWithoutFeedback>);
+      return (<TouchableNativeFeedback onPress={this.handleOnPressRemoveFavorite}>
+        <View style={styles.favoriteButtonContainer}>
+          <Icon name="favorite" size={28} color="#C62828" />
+        </View>
+      </TouchableNativeFeedback>);
     }
 
-    return (<TouchableWithoutFeedback onPress={this.handleOnPressAddFavorite}>
-      <Icon name="favorite" size={28} color="gray" />
-    </TouchableWithoutFeedback>);
+    return (<TouchableNativeFeedback onPress={this.handleOnPressAddFavorite}>
+      <View style={styles.favoriteButtonContainer}>
+        <Icon name="favorite" size={28} color="gray" />
+      </View>
+    </TouchableNativeFeedback>);
   }
   render() {
     const { build } = this.props;
