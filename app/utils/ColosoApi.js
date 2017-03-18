@@ -184,6 +184,18 @@ function getAndroidStatus() {
   });
 }
 
+function getMatch(matchUrid) {
+  return new Promise((resolve, reject) => {
+    const url = `riot-api/matches/${matchUrid}`;
+
+    return ColosoClient.get(url)
+      .then((response) => {
+        resolve(response.data);
+      })
+      .catch(reject);
+  });
+}
+
 export default {
   getProBuilds,
   getProBuild,
@@ -198,4 +210,5 @@ export default {
   getRunes,
   getStatsSummary,
   getAndroidStatus,
+  getMatch,
 };

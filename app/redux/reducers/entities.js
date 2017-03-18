@@ -9,6 +9,7 @@ const initialState = Immutable.fromJS({
   proBuilds: {},
   proPlayers: {},
   proSummoners: {},
+  matches: {},
 });
 
 export default typeToReducer({

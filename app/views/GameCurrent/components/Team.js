@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKColor } from 'react-native-material-kit';
 
-import BannedChampions from './BannedChampions';
+import BannedChampions from '../../../components/BannedChampions';
 import Participant from './Participant';
 
 const styles = StyleSheet.create({

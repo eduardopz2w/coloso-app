@@ -231,10 +231,10 @@ class ProBuild extends Component {
               </Text>
             </View>
             <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
-            <MediaQuery maxDeviceWidth={599}>
+            <MediaQuery maxDeviceWidth={400}>
               <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
             </MediaQuery>
-            <MediaQuery minDeviceWidth={600}>
+            <MediaQuery minDeviceWidth={401}>
               <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
             </MediaQuery>
             <View style={styles.itemsContainer} >

@@ -1,0 +1,174 @@
+import React, { PureComponent, PropTypes } from 'react';
+import { View, StyleSheet, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
+import numeral from 'numeral';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+
+import ParticipantSquare from '../../../components/ParticipantSquare';
+import FinalItems from '../../../components/FinalItems';
+import colors from '../../../utils/colors';
+
+const styles = StyleSheet.create({
+  root: {
+    padding: 16,
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderColor: 'rgba(0,0,0,0.3)',
+  },
+  summonerName: {
+    color: 'rgba(0,0,0,0.8)',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  dataCol: {
+    flex: 1,
+  },
+  uiImage: {
+    width: 18,
+    height: 18,
+    marginRight: 2,
+  },
+  totalScore: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  kills: {
+    color: colors.victory,
+  },
+  deaths: {
+    color: colors.defeat,
+  },
+  minionsKilled: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  goldText: {
+    color: colors.tiers.gold,
+    fontWeight: 'bold',
+    textShadowColor: '#000',
+    textShadowOffset: {
+      width: 0.2,
+      height: 0.2,
+    },
+    fontSize: 16,
+  },
+});
+
+class Participant extends PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.deviceWidth = Dimensions.get('window').width;
+    this.getGoldText = this.getGoldText.bind(this);
+  }
+
+  getGoldText() {
+    const gold = this.props.participant.getIn(['stats', 'goldEarned']) || 0;
+
+    if (this.deviceWidth <= 400) {
+      return numeral(gold).format('0a');
+    }
+
+    return numeral(gold).format('0,0');
+  }
+
+  render() {
+    const participantData = this.props.participant;
+
+    return (<TouchableNativeFeedback
+      onPress={() => {
+        this.props.onPressParticipant(this.props.participant.getIn(['summonerData', 'summonerUrid']));
+      }}
+    >
+      <View style={styles.root}>
+        <ParticipantSquare
+          style={{ marginRight: 16 }}
+          championId={participantData.get('championId')}
+          spell1Id={participantData.get('spell1Id')}
+          spell2Id={participantData.get('spell2Id')}
+          level={participantData.getIn(['stats', 'champLevel'])}
+          size={this.deviceWidth <= 400 ? 50 : 60}
+        />
+        <View style={styles.dataCol}>
+          <View style={styles.row}>
+            <Text style={styles.summonerName}>{participantData.getIn(['summonerData', 'summonerName'])}</Text>
+          </View>
+          <View style={[styles.row, { justifyContent: 'space-around' }]}>
+            <View style={styles.row}>
+              <Image style={styles.uiImage} source={{ uri: 'ui_score' }} />
+              <Text style={styles.totalScore}>
+                <Text style={styles.kills}>{participantData.getIn(['stats', 'kills']) || 0}</Text>/
+                <Text style={styles.deaths}>{participantData.getIn(['stats', 'deaths']) || 0}</Text>/
+                <Text>{participantData.getIn(['stats', 'assists']) || 0}</Text>
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Image style={styles.uiImage} source={{ uri: 'ui_minion' }} />
+              <Text style={styles.minionsKilled}>
+                {participantData.getIn(['stats', 'minionsKilled']) || 0}
+              </Text>
+            </View>
+
+            <View style={styles.row}>
+              <Image style={styles.uiImage} source={{ uri: 'ui_gold' }} />
+              <Text style={styles.goldText}>
+                {this.getGoldText()}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.row}>
+            <FinalItems
+              style={{ flex: 1, marginTop: 8 }}
+              item0={participantData.getIn(['stats', 'item0'])}
+              item1={participantData.getIn(['stats', 'item1'])}
+              item2={participantData.getIn(['stats', 'item2'])}
+              item3={participantData.getIn(['stats', 'item3'])}
+              item4={participantData.getIn(['stats', 'item4'])}
+              item5={participantData.getIn(['stats', 'item5'])}
+              item6={participantData.getIn(['stats', 'item6'])}
+              itemsSie={this.deviceWidth <= 400 ? 24 : 32}
+            />
+          </View>
+        </View>
+      </View>
+    </TouchableNativeFeedback>);
+  }
+}
+
+Participant.propTypes = {
+  participant: ImmutablePropTypes.mapContains({
+    spell1Id: PropTypes.number.isRequired,
+    spell2Id: PropTypes.number.isRequired,
+    championId: PropTypes.number.isRequired,
+    summonerData: ImmutablePropTypes.mapContains({
+      summonerName: PropTypes.string.isRequired,
+    }).isRequired,
+    championData: ImmutablePropTypes.mapContains({
+      name: PropTypes.string.isRequired,
+    }).isRequired,
+    stats: ImmutablePropTypes.mapContains({
+      item0: PropTypes.number,
+      item1: PropTypes.number,
+      item2: PropTypes.number,
+      item3: PropTypes.number,
+      item4: PropTypes.number,
+      item5: PropTypes.number,
+      item6: PropTypes.number,
+      kills: PropTypes.number,
+      deaths: PropTypes.number,
+      assists: PropTypes.number,
+      goldEarned: PropTypes.number.isRequired,
+      minionsKilled: PropTypes.number.isRequired,
+      champLevel: PropTypes.number.isRequired,
+    }).isRequired,
+  }).isRequired,
+  onPressParticipant: PropTypes.func.isRequired,
+};
+
+export default Participant;
