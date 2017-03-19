@@ -5,16 +5,17 @@ import I18n from 'i18n-js';
 import DeviceInfo from 'react-native-device-info';
 import logger from './logger';
 
-const TIMEOUT = 25000;
 let BASEURL = 'http://api.coloso.net';
+let TIMEOUT = 25000;
 
 if (__DEV__) {
   BASEURL = 'http://192.168.1.2:3000';
+  TIMEOUT = 5000;
 }
 
 const axiosClient = axios.create({
   baseURL: BASEURL,
-  timeout: TIMEOUT,
+  timeout: TIMEOUT * 2,
   responseType: 'json',
   headers: {
     common: {
@@ -27,31 +28,34 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.response.use((response) => {
   if (!_.isObject(response.data) && !_.isArray(response.data)) {
+    logger.debug(`Request Fail ${response.config.method.toUpperCase()} @ ${response.config.url}, reason: Slow Connection`);
+
     return Promise.reject({
-      response: {
-        data: {
-          message: I18n.t('errors.slow_connection'),
-        },
-      },
+      message: I18n.t('errors.slow_connection'),
     });
   }
 
+  logger.groupCollapsed(`Request Success ${response.config.method.toUpperCase()} @ ${response.config.url}`);
+  logger.debug(`Status: ${response.status}`);
+  logger.debug('Data: ', response.data);
+  logger.groupEnd('Request');
+
   return response;
 }, (error) => {
-  logger.debug(`${error}`);
+  logger.groupCollapsed(`Request Fail ${error.response.config.method.toUpperCase()} @ ${error.response.config.url}`);
+  logger.debug(`Status: ${error.response.status}`);
+  logger.debug('Data: ', error.response.data);
+  logger.groupEnd('Request');
+
+  let message;
+
   if (_.has(error, ['response', 'data', 'message'])) {
-    return Promise.reject(error);
+    message = error.response.data.message;
+  } else {
+    message = I18n.t('errors.request_failed');
   }
 
-  _.assign(error, {
-    response: {
-      data: {
-        message: I18n.t('errors.request_failed'),
-      },
-    },
-  });
-
-  return Promise.reject(error);
+  return Promise.reject({ message });
 });
 
 axiosClient.interceptors.request.use((config) => {
@@ -68,28 +72,23 @@ axiosClient.interceptors.request.use((config) => {
 const colosoClient = {
   get(...args) {
     return new Promise((resolve, reject) => {
-      let rejected = false;
+      let canceled = false;
 
       axiosClient.get(...args)
-        .then(resolve)
-        .catch((err) => {
-          if (!rejected) {
-            rejected = true;
-            reject(err);
+        .then((response) => {
+          if (!canceled) {
+            resolve(response);
+          }
+        })
+        .catch((error) => {
+          if (!canceled) {
+            reject(error);
           }
         });
 
       setTimeout(() => {
-        if (!rejected) {
-          rejected = true;
-          reject({
-            response: {
-              data: {
-                message: I18n.t('errors.timeout'),
-              },
-            },
-          });
-        }
+        reject({ message: I18n.t('errors.timeout') });
+        canceled = true;
       }, TIMEOUT);
     });
   },

@@ -387,9 +387,9 @@ class BuildTab extends Component {
           <Image source={{ uri: `summoner_spell_${proBuildData.get('spell1Id')}` }} style={styles.summonerSpell} />
           <Image source={{ uri: `summoner_spell_${proBuildData.get('spell2Id')}` }} style={styles.summonerSpell} />
         </View>
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.championName}>{proBuildData.getIn(['championData', 'name'])}</Text>
-          <Text style={styles.championTitle}>{sentenceCase(proBuildData.getIn(['championData', 'title']))}</Text>
+          <Text style={styles.championTitle} numberOfLines={1} >{sentenceCase(proBuildData.getIn(['championData', 'title']))}</Text>
         </View>
       </View>
 

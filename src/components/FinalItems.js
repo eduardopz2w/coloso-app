@@ -19,8 +19,8 @@ class FinalItems extends PureComponent {
     const itemStyle = {
       width: this.props.itemsSie,
       height: this.props.itemsSie,
-      borderWidth: 1,
-      borderColor: 'black',
+      borderWidth: 2,
+      borderColor: 'gold',
       backgroundColor: 'black',
     };
 

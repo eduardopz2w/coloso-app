@@ -9,7 +9,9 @@ import LoadingIndicator from '../../../../components/LoadingIndicator';
 import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+  },
   headerSelector: {
     paddingLeft: 16,
     backgroundColor: colors.titlesBackground,

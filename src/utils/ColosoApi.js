@@ -1,12 +1,6 @@
 import _ from 'lodash';
 import ColosoClient from './ColosoClient';
 
-function handleError(error, reject) {
-  const { message: errorMessage } = error.response.data;
-
-  reject({ errorMessage });
-}
-
 function getProBuilds(queryParams, pageParams) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
@@ -32,7 +26,7 @@ function getProBuilds(queryParams, pageParams) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -44,7 +38,7 @@ function getProPlayers() {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -56,7 +50,7 @@ function getProBuild(proBuildId) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -68,7 +62,7 @@ function getSummonerByName(summonerName, region) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -80,7 +74,7 @@ function getSummonerByUrid(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -92,7 +86,7 @@ function getLeagueEntry(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -104,7 +98,7 @@ function getChampionsMasteries(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -116,7 +110,7 @@ function getGamesRecent(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -128,7 +122,7 @@ function getMasteries(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -140,7 +134,7 @@ function getRunes(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -152,7 +146,7 @@ function getGameCurrent(sumUrid) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 
@@ -168,7 +162,7 @@ function getStatsSummary(sumUrid, season) {
       .then((response) => {
         resolve(response.data);
       })
-      .catch(err => handleError(err, reject));
+      .catch(reject);
   });
 }
 

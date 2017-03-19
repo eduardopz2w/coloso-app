@@ -14,13 +14,12 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
   },
   teamNameAndStatus: {
-    fontSize: 16,
+    color: 'rgba(0,0,0,0.8)',
     fontWeight: 'bold',
     marginRight: 8,
     flex: 1,
   },
   winStatus: {
-    fontSize: 16,
     fontWeight: 'bold',
   },
   scoreImage: {

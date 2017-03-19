@@ -124,6 +124,18 @@ const styles = MediaQueryStyleSheet.create(
     },
   },
   {
+    '@media (min-device-width: 400)': {
+      noItem: {
+        width: 32,
+        height: 32,
+      },
+      itemImage: {
+        width: 32,
+        height: 32,
+      },
+    },
+  },
+  {
     '@media (min-device-width: 600)': {
       championImage: {
         width: 80,
@@ -291,14 +303,14 @@ class GameRecent extends PureComponent {
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_minion' }} />
-                <Text style={styles.dataText}>{game.getIn(['stats', 'minionsKilled'])}</Text>
+                <Text style={styles.dataText}>{game.getIn(['stats', 'minionsKilled']) || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_gold' }} />
-                <MediaQuery maxDeviceWidth={599}>
+                <MediaQuery maxDeviceWidth={400}>
                   <Text style={[styles.dataText, styles.gold]}>{numeral(game.getIn(['stats', 'goldEarned'])).format('0.0 a')}</Text>
                 </MediaQuery>
-                <MediaQuery minDeviceWidth={600}>
+                <MediaQuery minDeviceWidth={401}>
                   <Text style={[styles.dataText, styles.gold]}>{numeral(game.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
                 </MediaQuery>
               </View>
