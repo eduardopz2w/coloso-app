@@ -106,7 +106,7 @@ class MasteryInfo extends Component {
         <Col><Text style={styles.text}>{championPoints}</Text></Col>
         <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{nextLevelPoints}</Text></Col>
       </View>
-      <View>
+      <View style={{ flexDirection: 'row' }}>
         <MKProgress progress={progressNumber} style={styles.progress} progressColor={tintColor} />
       </View>
     </View>);
