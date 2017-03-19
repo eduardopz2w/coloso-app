@@ -89,6 +89,7 @@ export default {
   summoner_name: 'Nombre de Invocador',
   summoner_profile: 'Perfil de Invocador',
   summoner_search: 'Buscar invocador',
+  suggestion: 'Sugerencia',
   team_builder: 'Creador de Equipos',
   tier: 'Liga',
   triplekills: 'Triplekills',
