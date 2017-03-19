@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
@@ -189,41 +189,43 @@ class SideMenu extends PureComponent {
       <View style={styles.header}>
         {this.renderAccountData()}
       </View>
-      <MenuItem
-        iconName="account-circle"
-        title={I18n.t('my_account')}
-        onPress={this.handleOnPressProfile}
-      />
+      <ScrollView>
+        <MenuItem
+          iconName="account-circle"
+          title={I18n.t('my_account')}
+          onPress={this.handleOnPressProfile}
+        />
 
-      <MenuItem
-        iconName="games"
-        title={I18n.t('my_game')}
-        onPress={this.handleOnPressSearchGame}
-      />
+        <MenuItem
+          iconName="games"
+          title={I18n.t('my_game')}
+          onPress={this.handleOnPressSearchGame}
+        />
 
-      <MenuItem
-        iconName="search"
-        title={I18n.t('searches')}
-        onPress={() => {
-          Actions.search_view();
-          this.context.drawer.close();
-        }}
-      />
+        <MenuItem
+          iconName="search"
+          title={I18n.t('searches')}
+          onPress={() => {
+            Actions.search_view();
+            this.context.drawer.close();
+          }}
+        />
 
-      <MenuItem
-        title={I18n.t('pro_builds')}
-        iconName="gavel"
-        onPress={() => {
-          Actions.probuilds_search_view();
-          this.context.drawer.close();
-        }}
-      />
+        <MenuItem
+          title={I18n.t('pro_builds')}
+          iconName="gavel"
+          onPress={() => {
+            Actions.probuilds_search_view();
+            this.context.drawer.close();
+          }}
+        />
 
-      <MenuItem
-        title={I18n.t('suggestion')}
-        iconName="mail"
-        onPress={handleOnPressSuggestion}
-      />
+        <MenuItem
+          title={I18n.t('suggestion')}
+          iconName="mail"
+          onPress={handleOnPressSuggestion}
+        />
+      </ScrollView>
 
       <Text style={styles.versionText}>v{DeviceInfo.getVersion()}</Text>
     </View>);
