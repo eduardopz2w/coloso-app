@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
 
 class TeamHeader extends PureComponent {
   getRootStyles() {
-    const winner = this.props.team.get('winner');
+    const teamId = this.props.team.get('teamId');
 
-    if (winner) {
+    if (teamId === 100) {
       return { backgroundColor: '#C5CAE9', borderColor: colors.primary };
     }
 
