@@ -1,21 +1,19 @@
 package com.pedronalbert.lolcena;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.facebook.react.ReactApplication;
-import com.ocetnik.timer.BackgroundTimerPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
-import com.sbugert.rnadmob.RNAdMobPackage;
-import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
-import com.facebook.react.ReactInstanceManager;
+import com.github.xinthink.rnmk.ReactMaterialKitPackage;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
+import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
+import com.learnium.RNDeviceInfo.RNDeviceInfo;
+import com.ocetnik.timer.BackgroundTimerPackage;
+import com.sbugert.rnadmob.RNAdMobPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +22,7 @@ public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
     @Override
-    protected boolean getUseDeveloperSupport() {
+    public boolean getUseDeveloperSupport() {
       return BuildConfig.DEBUG;
     }
 
@@ -32,13 +30,13 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new BackgroundTimerPackage(),
-            new RNDeviceInfo(),
-            new GoogleAnalyticsBridgePackage(),
-            new RNAdMobPackage(),
-            new ReactMaterialKitPackage(),
             new VectorIconsPackage(),
-            new ReactNativeDialogsPackage()
+            new ReactMaterialKitPackage(),
+            new GoogleAnalyticsBridgePackage(),
+            new ReactNativeDialogsPackage(),
+            new RNDeviceInfo(),
+            new BackgroundTimerPackage(),
+            new RNAdMobPackage()
       );
     }
   };
