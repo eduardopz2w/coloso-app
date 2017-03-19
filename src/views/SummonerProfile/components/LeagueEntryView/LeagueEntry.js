@@ -59,6 +59,14 @@ const styles = MediaQueryStyleSheet.create(
     leaguePointsText: {
       fontWeight: 'bold',
     },
+  },
+  {
+    '@media (min-device-width: 400)': {
+      tierImage: {
+        width: 90,
+        height: 90,
+      },
+    },
   }, {
     '@media (min-device-width: 600)': {
       tierImage: {
