@@ -7,6 +7,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
+import { RNMail as Mailer } from 'NativeModules';
 
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
@@ -80,6 +81,17 @@ const styles = StyleSheet.create({
   },
 });
 
+const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
+
+const suggestionTemplate = `====== Required Info ======
+App Version: ${DeviceInfo.getVersion()}
+Device: ${DeviceInfo.getBrand()} (${DeviceInfo.getModel()})
+System Version: ${DeviceInfo.getSystemVersion()} (${DeviceInfo.getSystemName()})
+Locale: ${DeviceInfo.getDeviceLocale()}
+Timezone: ${DeviceInfo.getTimezone()}
+========================
+Suggestion: `;
+
 function showAddAccountDialog() {
   const dialog = new Dialog();
   dialog.set({
@@ -87,6 +99,14 @@ function showAddAccountDialog() {
     positiveText: 'OK',
   });
   dialog.show();
+}
+
+function handleOnPressSuggestion() {
+  Mailer.mail({
+    subject: 'Coloso - Suggestion',
+    recipients: [SUGGESTION_EMAIL],
+    body: suggestionTemplate,
+  }, () => {});
 }
 
 class SideMenu extends PureComponent {
@@ -197,6 +217,12 @@ class SideMenu extends PureComponent {
           Actions.probuilds_search_view();
           this.context.drawer.close();
         }}
+      />
+
+      <MenuItem
+        title={I18n.t('suggestion')}
+        iconName="mail"
+        onPress={handleOnPressSuggestion}
       />
 
       <Text style={styles.versionText}>v{DeviceInfo.getVersion()}</Text>

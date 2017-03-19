@@ -89,6 +89,7 @@ export default {
   summoner_name: 'Summoner Name',
   summoner_profile: 'Summoner Profile',
   summoner_search: 'Summoner Search',
+  suggestion: 'Suggestion',
   team_builder: 'Team Builder',
   tier: 'Tier',
   triplekills: 'Triplekills',
