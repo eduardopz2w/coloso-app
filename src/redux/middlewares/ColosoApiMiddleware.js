@@ -28,7 +28,7 @@ const middleware = ({ dispatch }) => next => (action) => {
     dispatch({
       type: `${action.type}_REJECTED`,
       payload: {
-        errorMessage: error.errorMessage,
+        errorMessage: error.message,
       },
     });
   }
