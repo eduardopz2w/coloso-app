@@ -343,7 +343,7 @@ class Participant extends Component {
 
             <View style={styles.flexRow}>
               <Text style={styles.flexText}>
-                {I18n.t('games')}: <Text style={styles.victoriesNumberText}>{rankedStats.gamesPlayed}</Text>
+                {I18n.t('games')}: <Text style={{ fontSize: 16 }}>{rankedStats.gamesPlayed}</Text>
               </Text>
               <Text style={styles.flexText}>
                 Rate: {renderRateText(rankedStats.winRate)}
