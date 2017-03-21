@@ -15,14 +15,13 @@ const styles = StyleSheet.create({
 
 class Team extends PureComponent {
   render() {
-    const { bannedChampions, participants, focusSummonerUrid } = this.props;
+    const { bannedChampions, participants } = this.props;
 
     return (<View style={styles.root}>
       {bannedChampions.size > 0 &&
         <BannedChampions champions={bannedChampions} />
       }
       {participants.map((participant, key) => <Participant
-        style={(participant.get('summonerUrid') === focusSummonerUrid) && styles.hightlight}
         key={key}
         participant={participant}
         onPressRunesButton={this.props.onPressRunesButton}
@@ -35,7 +34,6 @@ class Team extends PureComponent {
 
 Team.propTypes = {
   participants: ImmutablePropTypes.list,
-  focusSummonerUrid: PropTypes.string,
   bannedChampions: ImmutablePropTypes.list,
   onPressRunesButton: PropTypes.func.isRequired,
   onPressMasteriesButton: PropTypes.func.isRequired,
