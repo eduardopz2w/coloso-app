@@ -204,7 +204,7 @@ function renderRateText(rate) {
 }
 
 function renderKdaText(kda) {
-  let color;
+  let color = 'rgba(0,0,0,0.7)';
 
   if (kda > 3 && kda < 5) {
     color = colors.tiers.platinum;
