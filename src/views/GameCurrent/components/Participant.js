@@ -107,21 +107,6 @@ const styles = MediaQueryStyleSheet.create(
       color: colors.primary,
       fontWeight: 'bold',
     },
-    profileButton: {
-      height: 22,
-      paddingLeft: 8,
-      paddingRight: 8,
-      borderRadius: 5,
-      backgroundColor: colors.primary,
-      marginLeft: 8,
-      justifyContent: 'center',
-    },
-    profileButtonText: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textAlignVertical: 'center',
-    },
     dataText: {
       fontWeight: 'bold',
     },
@@ -148,32 +133,11 @@ const styles = MediaQueryStyleSheet.create(
         marginRight: 20,
       },
       summonerName: {
-        fontSize: 25,
+        fontSize: 21,
         marginBottom: 4,
-      },
-      flexText: {
-        fontSize: 20,
-      },
-      dataText: {
-        fontSize: 20,
-      },
-      victoriesNumberText: {
-        fontSize: 22,
-      },
-      defeatsNumberText: {
-        fontSize: 22,
       },
       roundedButton: {
         maxWidth: 150,
-      },
-      roundedButtonText: {
-        fontSize: 18,
-      },
-      profileButton: {
-        height: 30,
-      },
-      profileButtonText: {
-        fontSize: 16,
       },
     },
   },
