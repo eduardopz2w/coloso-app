@@ -12,10 +12,14 @@ import colors from '../../../utils/colors';
 const styles = MediaQueryStyleSheet.create(
   {
     root: {
-      padding: 8,
-      flexDirection: 'row',
       borderLeftWidth: 6,
       borderColor: colors.blueTeam,
+    },
+    container: {
+      padding: 8,
+      flexDirection: 'row',
+      borderBottomWidth: 1,
+      borderColor: 'rgba(0,0,0,0.2)',
     },
     redTeam: {
       borderColor: colors.redTeam,
@@ -54,7 +58,7 @@ const styles = MediaQueryStyleSheet.create(
       marginLeft: 16,
     },
     summonerName: {
-      fontSize: 15,
+      fontSize: 16.5,
       fontWeight: 'bold',
       color: 'black',
     },
@@ -89,33 +93,19 @@ const styles = MediaQueryStyleSheet.create(
       flexDirection: 'row',
     },
     roundedButton: {
-      marginTop: 12,
+      marginTop: 8,
       flex: 1,
-      padding: 4,
+      height: 32,
       maxWidth: 90,
       borderRadius: 4,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-
     roundedButtonText: {
       fontSize: 12,
       textAlign: 'center',
       color: colors.primary,
       fontWeight: 'bold',
-    },
-    profileButton: {
-      height: 22,
-      paddingLeft: 8,
-      paddingRight: 8,
-      borderRadius: 5,
-      backgroundColor: colors.primary,
-      marginLeft: 8,
-      justifyContent: 'center',
-    },
-    profileButtonText: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
-      textAlignVertical: 'center',
     },
     dataText: {
       fontWeight: 'bold',
@@ -143,32 +133,11 @@ const styles = MediaQueryStyleSheet.create(
         marginRight: 20,
       },
       summonerName: {
-        fontSize: 25,
+        fontSize: 21,
         marginBottom: 4,
-      },
-      flexText: {
-        fontSize: 20,
-      },
-      dataText: {
-        fontSize: 20,
-      },
-      victoriesNumberText: {
-        fontSize: 22,
-      },
-      defeatsNumberText: {
-        fontSize: 22,
       },
       roundedButton: {
         maxWidth: 150,
-      },
-      roundedButtonText: {
-        fontSize: 18,
-      },
-      profileButton: {
-        height: 30,
-      },
-      profileButtonText: {
-        fontSize: 16,
       },
     },
   },
@@ -182,11 +151,49 @@ function getMiniseriesIconsSize() {
   return 20;
 }
 
+function renderRateText(rate) {
+  if (rate === null) {
+    return <Text>N/A</Text>;
+  }
+
+  let color;
+
+  if (rate < 50) {
+    color = colors.defeat;
+  } else if (rate > 50) {
+    color = colors.victory;
+  }
+
+  return <Text style={{ color, fontSize: 16 }}>{rate}%</Text>;
+}
+
+function renderKdaText(kda) {
+  let color = 'rgba(0,0,0,0.7)';
+
+  if (kda > 3 && kda < 5) {
+    color = colors.tiers.platinum;
+  } else if (kda >= 5) {
+    color = colors.tiers.diamond;
+  }
+
+  return <Text style={{ color, fontSize: 16 }}>{kda}:1</Text>;
+}
+
+function renderAveragesText(kills, deaths, assists) {
+  return (<Text style={{ fontSize: 16 }}>
+    <Text style={{ color: colors.victory }}>{kills}</Text> /
+    <Text style={{ color: colors.defeat }}> {deaths}</Text> /
+    <Text> {assists}</Text>
+  </Text>);
+}
+
 class Participant extends Component {
   constructor(props) {
     super(props);
 
     this.getRankedSoloEntry = this.getRankedSoloEntry.bind(this);
+    this.getChampionRankedStats = this.getChampionRankedStats.bind(this);
+    this.getRankedStats = this.getRankedStats.bind(this);
   }
 
   shouldComponentUpdate(props) {
@@ -220,11 +227,73 @@ class Participant extends Component {
         {
           wins: 0,
           losses: 0,
-          division: 'N/A',
+          division: null,
           leaguePoints: 0,
         },
       ],
     });
+  }
+
+  getRankedStats() {
+    const rankedSoloEntry = this.getRankedSoloEntry();
+
+    const victories = rankedSoloEntry.getIn(['entries', 0, 'wins']) || 0;
+    const defeats = rankedSoloEntry.getIn(['entries', 0, 'losses']) || 0;
+    const gamesPlayed = victories + defeats;
+    let winRate;
+
+    if (gamesPlayed > 0) {
+      winRate = ((victories * 100) / gamesPlayed).toFixed(0);
+    } else {
+      winRate = null;
+    }
+
+    return {
+      victories,
+      defeats,
+      gamesPlayed,
+      winRate,
+    };
+  }
+
+  getChampionRankedStats() {
+    const rankedStats = this.props.participant.get('championRankedStats');
+
+    if (!rankedStats) {
+      return {
+        gamesPlayed: 0,
+        winRate: 0,
+        victories: 0,
+        defeats: 0,
+        kda: null,
+        averageKills: 0,
+        averageDeaths: 0,
+        averageAssists: 0,
+      };
+    }
+
+    const gamesPlayed = rankedStats.get('totalSessionsPlayed');
+    const victories = rankedStats.get('totalSessionsWon') || 0;
+    const defeats = rankedStats.get('totalSessionsLost') || 0;
+    const kills = rankedStats.get('totalChampionKills') || 0;
+    const deaths = rankedStats.get('totalDeathsPerSession') || 0;
+    const assists = rankedStats.get('totalAssists') || 0;
+    const kda = ((kills + assists) / (deaths > 0 ? deaths : 1)).toFixed(2);
+    const averageKills = (kills / gamesPlayed).toFixed(1);
+    const averageDeaths = (deaths / gamesPlayed).toFixed(1);
+    const averageAssists = (assists / gamesPlayed).toFixed(1);
+    const winRate = ((victories * 100) / gamesPlayed).toFixed(0);
+
+    return {
+      gamesPlayed,
+      winRate,
+      victories,
+      defeats,
+      kda,
+      averageKills,
+      averageDeaths,
+      averageAssists,
+    };
   }
 
   renderTierImage() {
@@ -236,79 +305,133 @@ class Participant extends Component {
   render() {
     const { participant } = this.props;
     const rankedSoloEntry = this.getRankedSoloEntry();
+    const championRankedStats = this.getChampionRankedStats();
+    const rankedStats = this.getRankedStats();
 
     return (<TouchableNativeFeedback
       onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
     >
       <View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam, this.props.style]}>
-        <View>
-          <View style={styles.flexRow}>
-            <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
-            <View style={styles.spellsCol}>
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell1Id')}` }} />
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell2Id')}` }} />
+        <View style={styles.container}>
+          <View>
+            <View style={styles.flexRow}>
+              <Image style={styles.championImage} source={{ uri: `champion_square_${participant.get('championId')}` }} />
+              <View style={styles.spellsCol}>
+                <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell1Id')}` }} />
+                <Image style={styles.spellImage} source={{ uri: `summoner_spell_${participant.get('spell2Id')}` }} />
+              </View>
             </View>
-          </View>
 
-          {this.renderTierImage()}
-        </View>
-        <View style={styles.dataCol}>
-          <View style={styles.flexRow}>
-            <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
+            {this.renderTierImage()}
           </View>
-          <View style={styles.flexRow}>
-            <Text style={styles.flexText}>
-              {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>
-                {I18n.t(`tiers.${rankedSoloEntry.get('tier').toLowerCase()}`).toUpperCase()}
+          <View style={styles.dataCol}>
+            <View style={styles.flexRow}>
+              <Text style={styles.summonerName}>{participant.get('summonerName')}</Text>
+            </View>
+            <View style={styles.flexRow}>
+              <Text style={styles.flexText}>
+                {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>
+                  {I18n.t(`tiers.${rankedSoloEntry.get('tier').toLowerCase()}`).toUpperCase()}
+                </Text>
               </Text>
-            </Text>
-            {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
+              {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>
                 {I18n.t('division')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
               </Text>
             }
-          </View>
-          <View style={styles.flexRow}>
-            <Text style={styles.flexText}>
-              {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'wins'])}</Text>
-            </Text>
-            <Text style={styles.flexText}>
-              {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedSoloEntry.getIn(['entries', 0, 'losses'])}</Text>
-            </Text>
-          </View>
-          <View style={styles.flexRow}>
-            {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
-              <View style={styles.flexRow}>
-                <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
-                <View style={{ flex: 1 }}>
-                  <RankedMiniseries
-                    progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
-                    iconsSize={getMiniseriesIconsSize()}
-                  />
+            </View>
+
+            <View style={styles.flexRow}>
+              <Text style={styles.flexText}>
+                {I18n.t('games')}: <Text style={{ fontSize: 16 }}>{rankedStats.gamesPlayed}</Text>
+              </Text>
+              <Text style={styles.flexText}>
+                Rate: {renderRateText(rankedStats.winRate)}
+              </Text>
+            </View>
+
+            <View style={styles.flexRow}>
+              <Text style={styles.flexText}>
+                {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedStats.victories}</Text>
+              </Text>
+              <Text style={styles.flexText}>
+                {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedStats.defeats}</Text>
+              </Text>
+            </View>
+            <View style={styles.flexRow}>
+              {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
+                <View style={styles.flexRow}>
+                  <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
+                  <View style={{ flex: 1 }}>
+                    <RankedMiniseries
+                      progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
+                      iconsSize={getMiniseriesIconsSize()}
+                    />
+                  </View>
+                </View>
+              ) : (
+                <Text style={styles.flexText}>
+                  {I18n.t('league_points')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
+                </Text>
+              )}
+            </View>
+
+            {(championRankedStats.gamesPlayed > 0) &&
+              <View>
+                <View style={styles.flexRow}>
+                  <Text style={{ fontWeight: 'bold', marginTop: 4, color: 'rgba(0,0,0,0.85)' }}>{I18n.t('champion_stats')}</Text>
+                </View>
+
+                <View style={styles.flexRow}>
+                  <Text style={styles.flexText}>
+                    {I18n.t('games')}: <Text style={{ fontSize: 16 }}>{championRankedStats.gamesPlayed}</Text>
+                  </Text>
+                  <Text style={styles.flexText}>
+                    Rate: {renderRateText(championRankedStats.winRate)}
+                  </Text>
+                </View>
+
+                <View style={styles.flexRow}>
+                  <Text style={styles.flexText}>
+                    {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{championRankedStats.victories}</Text>
+                  </Text>
+                  <Text style={styles.flexText}>
+                    {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{championRankedStats.defeats}</Text>
+                  </Text>
+                </View>
+
+                <View style={styles.flexRow}>
+                  <Text style={styles.flexText}>
+                    KDA: <Text>{renderKdaText(championRankedStats.kda)}</Text>
+                  </Text>
+                </View>
+
+                <View style={styles.flexRow}>
+                  <Text style={styles.flexText}>
+                    {I18n.t('average')}: {renderAveragesText(championRankedStats.averageKills, championRankedStats.averageDeaths, championRankedStats.averageAssists)}
+                  </Text>
                 </View>
               </View>
-            ) : (
-              <Text style={styles.flexText}>
-                {I18n.t('league_points')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
-              </Text>
-            )}
-          </View>
-          <View style={styles.buttonsRow}>
-            <MKButton
-              style={styles.roundedButton}
-              rippleColor="rgba(0,0,0,0.1)"
-              onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
-            >
-              <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
-            </MKButton>
+            }
 
-            <MKButton
-              style={styles.roundedButton}
-              rippleColor="rgba(0,0,0,0.1)"
-              onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
-            >
-              <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
-            </MKButton>
+
+            <View style={styles.buttonsRow}>
+              <MKButton
+                style={styles.roundedButton}
+                rippleColor="rgba(0,0,0,0.1)"
+                onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
+              >
+                <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
+              </MKButton>
+
+              <MKButton
+                style={styles.roundedButton}
+                rippleColor="rgba(0,0,0,0.1)"
+                onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
+              >
+                <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
+              </MKButton>
+            </View>
           </View>
         </View>
       </View>
