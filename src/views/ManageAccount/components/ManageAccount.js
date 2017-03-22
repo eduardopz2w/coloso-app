@@ -98,11 +98,11 @@ class ManageAccount extends Component {
           dialog.show();
           Actions.pop();
         })
-        .catch(({ errorMessage }) => {
+        .catch(({ message }) => {
           const dialog = new Dialog();
 
           dialog.set({
-            content: errorMessage,
+            content: message,
             positiveText: 'OK',
           });
 

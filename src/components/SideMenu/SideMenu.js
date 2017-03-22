@@ -12,6 +12,7 @@ import { RNMail as Mailer } from 'NativeModules';
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
 import MenuItem from './MenuItem';
+import ProfileImage from '../ProfileImage';
 
 const styles = StyleSheet.create({
   root: {
@@ -166,8 +167,6 @@ class SideMenu extends PureComponent {
       </TouchableWithoutFeedback>);
     }
 
-    const url = `http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${ownerAccount.get('profileIconId')}.png`;
-
     return (<TouchableWithoutFeedback
       onPress={() => {
         Actions.manage_account_view();
@@ -175,7 +174,7 @@ class SideMenu extends PureComponent {
       }}
     >
       <View style={styles.accountDataContainer}>
-        <Image source={{ uri: url }} style={styles.accountImage} />
+        <ProfileImage id={ownerAccount.get('profileIconId')} style={styles.accountImage} />
         <View style={styles.accountDataRow}>
           <Text style={styles.summonerName}>{ownerAccount.get('summonerName')}</Text>
           <Text style={styles.accountDataText}>{regionHumanize(ownerAccount.get('region'))}</Text>

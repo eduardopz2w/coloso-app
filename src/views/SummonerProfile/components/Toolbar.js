@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
@@ -7,6 +7,7 @@ import I18n from 'i18n-js';
 import IconButton from '../../../components/IconButton';
 import regionHumanize from '../../../utils/regionHumanize';
 import colors from '../../../utils/colors';
+import ProfileImage from '../../../components/ProfileImage';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -147,10 +148,6 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-function getImageUri(profileIconId) {
-  return `http://ddragon.leagueoflegends.com/cdn/7.2.1/img/profileicon/${profileIconId}.png`;
-}
-
 class SummonerProfileViewToolbar extends Component {
   constructor(props) {
     super(props);
@@ -182,9 +179,9 @@ class SummonerProfileViewToolbar extends Component {
         ) : (
           <View style={styles.profileToolbarContainer}>
             <View style={styles.summonerImageContainer}>
-              <Image
+              <ProfileImage
                 style={styles.summonerImage}
-                source={{ uri: getImageUri(summonerData.getIn(['data', 'profileIconId'])) }}
+                id={summonerData.getIn(['data', 'profileIconId'])}
               />
               <View style={styles.summonerLevelContainer}>
                 <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'summonerLevel'])}</Text>
