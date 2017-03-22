@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
   retryButton: {
     minWidth: 64,
     height: 36,
+    marginTop: 8,
     paddingHorizontal: 8,
     justifyContent: 'center',
   },
