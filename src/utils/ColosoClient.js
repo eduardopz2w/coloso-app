@@ -15,7 +15,7 @@ if (__DEV__) {
 
 const axiosClient = axios.create({
   baseURL: BASEURL,
-  timeout: TIMEOUT * 2,
+  timeout: TIMEOUT,
   responseType: 'json',
   headers: {
     common: {
@@ -42,14 +42,18 @@ axiosClient.interceptors.response.use((response) => {
 
   return response;
 }, (error) => {
-  logger.groupCollapsed(`Request Fail ${error.response.config.method.toUpperCase()} @ ${error.response.config.url}`);
-  logger.debug(`Status: ${error.response.status}`);
-  logger.debug('Data: ', error.response.data);
-  logger.groupEnd('Request');
+  if (__DEV__) {
+    logger.groupCollapsed(`Request Fail ${error.config.method.toUpperCase()} @ ${error.config.url}`);
+    logger.debug(`Status: ${error.response && error.response.status}`);
+    logger.debug('Data: ', error.response && error.response.data);
+    logger.groupEnd('Request');
+  }
 
   let message;
 
-  if (_.has(error, ['response', 'data', 'message'])) {
+  if (error.code === 'ECONNABORTED') {
+    message = I18n.t('errors.timeout');
+  } else if (_.has(error, ['response', 'data', 'message'])) {
     message = error.response.data.message;
   } else {
     message = I18n.t('errors.request_failed');
@@ -71,24 +75,24 @@ axiosClient.interceptors.request.use((config) => {
 
 const colosoClient = {
   get(...args) {
-    return new Promise((resolve, reject) => {
-      let canceled = false;
+    let canceled = false;
 
+    return new Promise((resolve, reject) => {
       axiosClient.get(...args)
         .then((response) => {
           if (!canceled) {
             resolve(response);
           }
         })
-        .catch((error) => {
+        .catch((err) => {
           if (!canceled) {
-            reject(error);
+            reject(err);
           }
         });
 
       setTimeout(() => {
-        reject({ message: I18n.t('errors.timeout') });
         canceled = true;
+        reject({ message: I18n.t('errors.timeout') });
       }, TIMEOUT);
     });
   },

@@ -130,6 +130,7 @@ class ProBuildsListView extends Component {
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}
+        locked
       >
         <ProBuildsTab
           tabLabel="Builds"
