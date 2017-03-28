@@ -61,7 +61,9 @@ class ProPlayersSelector extends Component {
       <View style={{ flex: 1 }}>
         <Selector
           items={proPlayers}
+          value={this.props.initialValue}
           placeholder={I18n.t('select_player')}
+          noResultsText={I18n.t('no_results_found')}
           onChangeSelected={this.handleOnValueChange}
           disabled={this.props.disabled}
         />

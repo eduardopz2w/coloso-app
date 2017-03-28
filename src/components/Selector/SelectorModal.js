@@ -55,6 +55,7 @@ class SelectorModal extends Component {
       <Modal
         onRequestClose={this.handleOnRequestClose}
         visible={this.state.open}
+        animationType="none"
       >
         <View style={styles.contentContainer}>
           <SelectorHeader
@@ -64,6 +65,7 @@ class SelectorModal extends Component {
           />
           <SelectorList
             items={this.getFilteredItems()}
+            noResultsText={this.props.noResultsText}
             onPressItem={this.handleOnPressItem}
           />
         </View>
@@ -81,6 +83,7 @@ SelectorModal.propTypes = {
     ]).isRequired,
   })).isRequired,
   placeholder: PropTypes.string.isRequired,
+  noResultsText: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
   onPressItem: PropTypes.func.isRequired,
 };

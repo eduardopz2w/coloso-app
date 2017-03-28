@@ -106,6 +106,7 @@ export default {
   continue: 'Continuar',
   update: 'Actualizar',
   loading: 'Cargando',
+  no_results_found: 'No se han encontrado resultados',
   regions: {
     na: 'Norte América',
     lan: 'Latinoamérica Norte',

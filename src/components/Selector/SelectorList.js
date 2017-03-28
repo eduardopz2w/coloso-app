@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, View, Text } from 'react-native';
 
 import SelectorItem from './SelectorItem';
 
@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
 
 class SelectorList extends PureComponent {
   render() {
+    if (this.props.items.length === 0) {
+      return <View style={styles.container}><Text>{this.props.noResultsText}</Text></View>;
+    }
+
     return (<ScrollView
       style={styles.root}
       contentContainerStyle={styles.container}
@@ -36,6 +40,7 @@ SelectorList.propTypes = {
     ]).isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  noResultsText: PropTypes.string.isRequired,
   onPressItem: PropTypes.func.isRequired,
 };
 

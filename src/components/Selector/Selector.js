@@ -49,8 +49,14 @@ class Selector extends Component {
 
     this.state = {
       open: false,
-      selectedValue: props.defaultSelected,
+      selectedValue: props.value,
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.value !== this.state.selectedValue) {
+      this.setState({ selectedValue: newProps.value });
+    }
   }
 
   getItemSelected() {
@@ -60,8 +66,6 @@ class Selector extends Component {
   }
 
   changeSelectedValue(value) {
-    this.setState({ selectedValue: value });
-
     if (this.props.onChangeSelected) {
       this.props.onChangeSelected(value);
     }
@@ -104,6 +108,7 @@ class Selector extends Component {
       return (<SelectorModal
         items={this.props.items}
         placeholder={this.props.placeholder}
+        noResultsText={this.props.noResultsText}
         onClose={() => { this.setState({ open: false }); }}
         onPressItem={this.changeSelectedValue}
       />);
@@ -128,18 +133,20 @@ Selector.propTypes = {
     name: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
   })).isRequired,
-  defaultSelected: PropTypes.oneOf([
+  value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,
   ]),
   placeholder: PropTypes.string.isRequired,
+  noResultsText: PropTypes.string,
   disabled: PropTypes.bool.isRequired,
   onChangeSelected: PropTypes.func,
 };
 
 Selector.defaultProps = {
-  defaultSelected: null,
+  value: null,
   disabled: false,
+  noResultsText: 'No results found',
 };
 
 export default Selector;
