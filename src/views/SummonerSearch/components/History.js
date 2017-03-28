@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView, TouchableWithoutFeedback } from 'react-native';
+import { View, StyleSheet, Text, ListView, TouchableNativeFeedback } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { MKButton } from 'react-native-material-kit';
 import I18n from 'i18n-js';
 import colors from '../../../utils/colors';
 
@@ -71,26 +70,26 @@ class History extends Component {
     const region = historyEntry.get('region');
 
     return (<View style={[styles.root, parseInt(rowId, 10) === 0 && { borderTopWidth: 1 }]}>
-      <MKButton
-        key={rowId}
-        rippleColor="rgba(0,0,0,0.1)"
+      <TouchableNativeFeedback
         style={styles.dataContainer}
         onPress={() => {
           this.handleOnPressHistoryEntry(summonerName, region);
         }}
       >
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+        <View style={styles.dataContainer}>
           <Text style={styles.region}>{region.toUpperCase()}</Text>
           <Text style={styles.summonerName}>{summonerName}</Text>
         </View>
-      </MKButton>
-      <TouchableWithoutFeedback
+      </TouchableNativeFeedback>
+      <TouchableNativeFeedback
         onPress={() => {
           this.handleOnPressDeleteIcon(summonerName, region);
         }}
       >
-        <Icon name="delete" size={24} style={styles.removeIcon} />
-      </TouchableWithoutFeedback>
+        <View>
+          <Icon name="delete" size={24} style={styles.removeIcon} />
+        </View>
+      </TouchableNativeFeedback>
     </View>);
   }
 

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { MKButton } from 'react-native-material-kit';
+import { View, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import Dialog from 'react-native-dialogs';
 import I18n from 'i18n-js';
@@ -167,13 +166,13 @@ class ManageAccount extends Component {
           />
         </View>
         {!this.state.isFetching &&
-          <MKButton
-            rippleColor="rgba(0,0,0,0.1)"
-            style={styles.addAccountButton}
+          <TouchableNativeFeedback
             onPress={this.handlePressAddAccount}
           >
-            <Text style={styles.addAccountText}>{I18n.t('add_account').toUpperCase()}</Text>
-          </MKButton>
+            <View style={styles.addAccountButton}>
+              <Text style={styles.addAccountText}>{I18n.t('add_account').toUpperCase()}</Text>
+            </View>
+          </TouchableNativeFeedback>
         }
 
         {this.state.isFetching &&

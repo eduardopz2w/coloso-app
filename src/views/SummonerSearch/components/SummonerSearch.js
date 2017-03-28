@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Keyboard, Dimensions, BackAndroid, ScrollView } from 'react-native';
+import { View, Text, Keyboard, Dimensions, BackAndroid, ScrollView, TouchableNativeFeedback } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
-import { MKButton, MKRadioButton } from 'react-native-material-kit';
+import { MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import update from 'immutability-helper';
 
@@ -201,13 +201,13 @@ class SummonerSearch extends Component {
 
   renderButton() {
     if (!this.props.isSearching && this.state.visibleHeight > 350) {
-      return (<MKButton
-        rippleColor="rgba(0,0,0,0.1)"
-        style={styles.searchButton}
+      return (<TouchableNativeFeedback
         onPress={this.handlePressSearchButton}
       >
-        <Text style={styles.searchButtonText}>{I18n.t('summoner_search').toUpperCase()}</Text>
-      </MKButton>);
+        <View style={styles.searchButton}>
+          <Text style={styles.searchButtonText}>{I18n.t('summoner_search').toUpperCase()}</Text>
+        </View>
+      </TouchableNativeFeedback>);
     }
 
     return null;
