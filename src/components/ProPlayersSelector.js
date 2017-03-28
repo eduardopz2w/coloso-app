@@ -32,7 +32,7 @@ class ProPlayersSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: props.initialValue || '0',
+      selectedValue: props.value || '0',
     };
   }
 
@@ -61,7 +61,7 @@ class ProPlayersSelector extends Component {
       <View style={{ flex: 1 }}>
         <Selector
           items={proPlayers}
-          value={this.props.initialValue}
+          value={this.props.value}
           placeholder={I18n.t('select_player')}
           noResultsText={I18n.t('no_results_found')}
           onChangeSelected={this.handleOnValueChange}
@@ -73,7 +73,7 @@ class ProPlayersSelector extends Component {
 }
 
 ProPlayersSelector.propTypes = {
-  initialValue: PropTypes.string,
+  value: PropTypes.string,
   onChangeSelected: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
@@ -86,7 +86,7 @@ ProPlayersSelector.propTypes = {
 };
 
 ProPlayersSelector.defaultProps = {
-  initialValue: null,
+  value: null,
   disabled: false,
 };
 

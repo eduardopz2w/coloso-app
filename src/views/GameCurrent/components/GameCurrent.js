@@ -149,7 +149,7 @@ class GameCurrent extends Component {
     if (!this.props.proBuilds.get('isFetching') && pagData.get('totalPages') > pagData.get('currentPage')) {
       this.props.fetchProBuilds({
         championId: this.getFocusChampionId(),
-        proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerSelected']),
+        proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
       }, pagData.get('currentPage') + 1);
     }
   }
@@ -188,7 +188,7 @@ class GameCurrent extends Component {
         onPressRetry={() => {
           this.props.fetchProBuilds({
             championId: this.getFocusChampionId(),
-            proPlayerId: proBuilds.get('proPlayerSelected'),
+            proPlayerId: proBuilds.getIn(['filters', 'proPlayerId']),
           }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
         }}
         favorites={false}
@@ -196,7 +196,7 @@ class GameCurrent extends Component {
     } else {
       proBuildsContent = (<View style={styles.container}>
         <Text>
-          {I18n.t('pro_builds_not_available')}
+          {I18n.t('no_results_found')}
         </Text>
       </View>);
     }
@@ -257,6 +257,7 @@ class GameCurrent extends Component {
         </View>
         <View tabLabel={I18n.t('pro_builds')} style={{ flex: 1 }}>
           <ProPlayersSelector
+            value={this.props.proBuilds.getIn(['filters', 'proPlayerId'])}
             proPlayers={this.props.proPlayers.get('proPlayersList')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.proBuilds.get('isFetching')}
