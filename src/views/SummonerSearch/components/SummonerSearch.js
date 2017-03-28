@@ -220,7 +220,7 @@ class SummonerSearch extends Component {
         onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
       />
       <View style={styles.wrapper}>
-        <ScrollView style={styles.scrollView}>
+        <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.paperBox}>
               <View style={styles.formGroup}>

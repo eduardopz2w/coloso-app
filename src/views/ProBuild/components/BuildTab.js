@@ -346,6 +346,7 @@ class BuildTab extends Component {
     return (<ScrollView
       contentContainerStyle={{ flexDirection: 'row', alignItems: 'center' }}
       showsHorizontalScrollIndicator={false}
+      keyboardShouldPersistTaps="handled"
       horizontal
     >
       {skillNodes}
@@ -379,7 +380,10 @@ class BuildTab extends Component {
       }
     }
 
-    return (<ScrollView contentContainerStyle={styles.container}>
+    return (<ScrollView
+      contentContainerStyle={styles.container}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text style={styles.title}>{I18n.t('information')}</Text>
       <View style={styles.championDataRow}>
         <Image source={{ uri: `champion_square_${proBuildData.get('championId')}` }} style={styles.championImage} />
