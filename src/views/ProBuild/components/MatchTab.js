@@ -32,7 +32,7 @@ class Matchtab extends PureComponent {
     const blueParticipants = this.getParticipants(100);
     const redParticipants = this.getParticipants(200);
 
-    return (<ScrollView>
+    return (<ScrollView keyboardShouldPersistTaps="handled">
       <TeamHeader team={blueTeam} participants={blueParticipants} />
       <BannedChampions champions={blueTeam.get('bans')} />
       {blueParticipants.map(participant => <Participant

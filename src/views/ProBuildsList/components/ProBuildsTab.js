@@ -52,7 +52,7 @@ class ProBuildsTab extends PureComponent {
 
     return (<View style={styles.container}>
       <Text>
-        {I18n.t('pro_builds_not_available')}
+        {I18n.t('no_results_found')}
       </Text>
     </View>);
   }

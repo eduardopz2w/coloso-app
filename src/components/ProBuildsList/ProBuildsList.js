@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, ListView, RefreshControl, Text } from 'react-native';
+import { View, StyleSheet, ListView, RefreshControl, Text, TouchableNativeFeedback } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
-import { MKButton } from 'react-native-material-kit';
 
 import ProBuildListRow from './ProBuildsListRow';
 import colors from '../../utils/colors';
@@ -87,13 +86,13 @@ class ProBuildsList extends Component {
     if (this.props.fetchError) {
       return (<View style={{ alignItems: 'center', paddingVertical: 8, paddingHorizontal: 16 }}>
         <Text>{this.props.errorMessage}</Text>
-        <MKButton
+        <TouchableNativeFeedback
           style={styles.retryButton}
-          onPress={this.props.onPressRetry}
-          rippleColor="rgba(0,0,0,0.1)"
         >
-          <Text style={styles.retryText}>REINTENTAR</Text>
-        </MKButton>
+          <View style={styles.retryButton}>
+            <Text style={styles.retryText}>REINTENTAR</Text>
+          </View>
+        </TouchableNativeFeedback>
       </View>);
     }
     if (this.props.isFetching && !this.props.isRefreshing && this.props.builds.size > 0) {

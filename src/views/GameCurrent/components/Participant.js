@@ -4,7 +4,6 @@ import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import { MKButton } from 'react-native-material-kit';
 
 import RankedMiniseries from '../../../components/RankedMiniseries';
 import colors from '../../../utils/colors';
@@ -416,21 +415,21 @@ class Participant extends Component {
 
 
             <View style={styles.buttonsRow}>
-              <MKButton
-                style={styles.roundedButton}
-                rippleColor="rgba(0,0,0,0.1)"
+              <TouchableNativeFeedback
                 onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
               >
-                <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
-              </MKButton>
+                <View style={styles.roundedButton}>
+                  <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
+                </View>
+              </TouchableNativeFeedback>
 
-              <MKButton
-                style={styles.roundedButton}
-                rippleColor="rgba(0,0,0,0.1)"
+              <TouchableNativeFeedback
                 onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
               >
-                <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
-              </MKButton>
+                <View style={styles.roundedButton}>
+                  <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>
+                </View>
+              </TouchableNativeFeedback>
             </View>
           </View>
         </View>

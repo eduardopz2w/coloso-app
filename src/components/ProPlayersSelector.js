@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Picker } from 'react-native';
+import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Immutable from 'immutable';
 import I18n from 'i18n-js';
+
+import Selector from './Selector';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -13,9 +14,7 @@ const styles = MediaQueryStyleSheet.create(
     titleText: {
       alignSelf: 'center',
       fontWeight: 'bold',
-    },
-    picker: {
-      flex: 1,
+      marginRight: 8,
     },
   },
   {
@@ -33,8 +32,18 @@ class ProPlayersSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: props.initialValue || '0',
+      selectedValue: props.value || '0',
     };
+  }
+
+  getProPlayersArray() {
+    return this.props.proPlayers
+      .toJS()
+      .map(proPlayer => ({
+        value: proPlayer.id,
+        name: proPlayer.name,
+        imageUrl: proPlayer.imageUrl,
+      }));
   }
 
   handleOnValueChange(newValue) {
@@ -45,32 +54,26 @@ class ProPlayersSelector extends Component {
   }
 
   render() {
-    let pickerOptions = [
-      Immutable.Map({ name: I18n.t('select_player'), value: '0' }),
-    ];
-
-    pickerOptions = pickerOptions.concat(this.props.proPlayers.toArray());
+    const proPlayers = this.getProPlayersArray();
 
     return (<View style={[styles.root, this.props.style]}>
       <Text style={[styles.titleText, this.props.titleStyle]}>{I18n.t('player')}: </Text>
-      <Picker
-        style={[styles.picker]}
-        selectedValue={this.state.selectedValue}
-        onValueChange={this.handleOnValueChange}
-        enabled={!this.props.disabled}
-      >
-        {pickerOptions.map((player, index) => <Picker.Item
-          key={index}
-          label={player.get('name')}
-          value={player.get('id')}
-        />)}
-      </Picker>
+      <View style={{ flex: 1 }}>
+        <Selector
+          items={proPlayers}
+          value={this.props.value}
+          placeholder={I18n.t('select_player')}
+          noResultsText={I18n.t('no_results_found')}
+          onChangeSelected={this.handleOnValueChange}
+          disabled={this.props.disabled}
+        />
+      </View>
     </View>);
   }
 }
 
 ProPlayersSelector.propTypes = {
-  initialValue: PropTypes.string,
+  value: PropTypes.string,
   onChangeSelected: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
@@ -78,11 +81,12 @@ ProPlayersSelector.propTypes = {
   proPlayers: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string.isRequired,
   })).isRequired,
 };
 
 ProPlayersSelector.defaultProps = {
-  initialValue: null,
+  value: null,
   disabled: false,
 };
 

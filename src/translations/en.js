@@ -72,7 +72,6 @@ export default {
   player: 'Player',
   players: 'Players',
   pro_builds: 'Pro Builds',
-  pro_builds_not_available: 'Currently we do not have builds with the champion that you are playing, this builds will soon be available',
   profile: 'Profile',
   progress: 'Progress',
   quadrakills: 'Quadrakills',
@@ -106,6 +105,7 @@ export default {
   continue: 'Continue',
   update: 'Update',
   loading: 'Loading',
+  no_results_found: 'No results found',
   regions: {
     na: 'North America',
     lan: 'Latin America North',

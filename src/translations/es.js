@@ -72,7 +72,6 @@ export default {
   player: 'Jugador',
   players: 'Jugadores',
   pro_builds: 'Builds Profesionales',
-  pro_builds_not_available: 'Actualmente no tenemos builds con el campeón que estás jugando, pronto estarán disponibles',
   profile: 'Perfil',
   progress: 'Progreso',
   quadrakills: 'Quadrakills',
@@ -106,6 +105,7 @@ export default {
   continue: 'Continuar',
   update: 'Actualizar',
   loading: 'Cargando',
+  no_results_found: 'No se han encontrado resultados',
   regions: {
     na: 'Norte América',
     lan: 'Latinoamérica Norte',

@@ -1,9 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import {
   StyleSheet,
+  View,
+  TouchableNativeFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { MKButton } from 'react-native-material-kit';
 
 const styles = StyleSheet.create({
   root: {
@@ -30,9 +31,13 @@ class IconButton extends PureComponent {
   render() {
     const { iconSize, iconName, iconColor } = this.props;
 
-    return (<MKButton style={styles.root} onPress={this.handleOnPress}>
-      <Icon name={iconName} size={iconSize} color={iconColor} />
-    </MKButton>);
+    return (<TouchableNativeFeedback
+      onPress={this.handleOnPress}
+    >
+      <View style={[styles.root, this.props.style]}>
+        <Icon name={iconName} size={iconSize} color={iconColor} />
+      </View>
+    </TouchableNativeFeedback>);
   }
 
 }
@@ -41,6 +46,7 @@ IconButton.propTypes = {
   iconName: PropTypes.string.isRequired,
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
+  style: View.propTypes.style,
   onPress: PropTypes.func,
 };
 
