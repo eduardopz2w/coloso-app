@@ -1,5 +1,5 @@
-import React, { PureComponent, PropTypes } from 'react';
-import { ScrollView, StyleSheet, View, Text } from 'react-native';
+import React, { Component, PropTypes } from 'react';
+import { ListView, StyleSheet, View, Text } from 'react-native';
 
 import SelectorItem from './SelectorItem';
 
@@ -12,23 +12,42 @@ const styles = StyleSheet.create({
   },
 });
 
-class SelectorList extends PureComponent {
+class SelectorList extends Component {
+  constructor(props) {
+    super(props);
+    const dataSource = new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2,
+    });
+
+    this.state = {
+      dataSource: dataSource.cloneWithRows(props.items),
+    };
+  }
+
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(newProps.items),
+    });
+  }
+
   render() {
     if (this.props.items.length === 0) {
       return <View style={styles.container}><Text>{this.props.noResultsText}</Text></View>;
     }
 
-    return (<ScrollView
+    return (<ListView
       style={styles.root}
       contentContainerStyle={styles.container}
-      keyboardShouldPersistTaps="handled"
-    >
-      {this.props.items.map((item, index) => <SelectorItem
-        key={index}
+      dataSource={this.state.dataSource}
+      initialListSize={15}
+      pageSize={12}
+      renderRow={item => <SelectorItem
+        key={item.value}
         item={item}
         onPress={this.props.onPressItem}
-      />)}
-    </ScrollView>);
+      />}
+      keyboardShouldPersistTaps="handled"
+    />);
   }
 }
 

@@ -55,14 +55,14 @@ class Toolbar extends PureComponent {
         <View>
           <ChampionSelector
             titleStyle={{ width: 70 }}
-            initialValue={this.props.championSelected}
+            value={this.props.championSelected}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeChampionSelected}
           />
           <ProPlayersSelector
             titleStyle={{ width: 70 }}
-            initialValue={this.props.proPlayerSelected}
+            value={this.props.proPlayerSelected}
             proPlayers={this.props.proPlayers.get('proPlayersList')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}

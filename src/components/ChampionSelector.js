@@ -31,7 +31,7 @@ class ChampionSelector extends Component {
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.state = {
-      selectedValue: props.initialValue || 0,
+      selectedValue: props.value || 0,
     };
   }
 
@@ -187,7 +187,7 @@ class ChampionSelector extends Component {
       <View style={{ flex: 1 }}>
         <Selector
           items={champions}
-          value={this.props.initialValue}
+          value={this.props.value}
           placeholder={I18n.t('select_champion')}
           noResultsText={I18n.t('no_results_found')}
           onChangeSelected={this.handleOnValueChange}
@@ -199,7 +199,7 @@ class ChampionSelector extends Component {
 }
 
 ChampionSelector.propTypes = {
-  initialValue: PropTypes.number,
+  value: PropTypes.number,
   onChangeSelected: PropTypes.func,
   disabled: PropTypes.bool,
   style: View.propTypes.style,
@@ -207,7 +207,7 @@ ChampionSelector.propTypes = {
 };
 
 ChampionSelector.defaultProps = {
-  initialValue: 0,
+  value: 0,
   disabled: false,
 };
 

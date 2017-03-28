@@ -72,7 +72,6 @@ export default {
   player: 'Player',
   players: 'Players',
   pro_builds: 'Pro Builds',
-  pro_builds_not_available: 'Currently we do not have builds with the champion that you are playing, this builds will soon be available',
   profile: 'Profile',
   progress: 'Progress',
   quadrakills: 'Quadrakills',
