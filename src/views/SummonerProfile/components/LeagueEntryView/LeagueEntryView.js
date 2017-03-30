@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { StyleSheet, View, ListView, RefreshControl } from 'react-native';
+import { View, StyleSheet, ListView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
 import LeagueEntry from './LeagueEntry';
-import LoaderLayout from '../../../../components/LoaderLayout';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
+import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
@@ -70,16 +71,22 @@ class LeagueEntryView extends Component {
   }
 
   render() {
-    const { leagueEntry } = this.props;
+    const leagueEntry = this.props.leagueEntry;
 
-    return (<LoaderLayout
-      fetched={leagueEntry.get('fetched')}
-      isFetching={leagueEntry.get('isFetching')}
-      fetchError={leagueEntry.get('fetchError')}
-      errorMessage={leagueEntry.get('errorMessage')}
-      onPressRetryButton={this.props.onPressRetryButton}
-      renderFunction={this.renderContent}
-    />);
+    if (leagueEntry.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
+        <LoadingIndicator />
+      </View>);
+    } else if (leagueEntry.get('fetchError')) {
+      return (<ErrorScreen
+        message={leagueEntry.get('errorMessage')}
+        onPressRetryButton={this.props.onPressRetryButton}
+      />);
+    } else if (leagueEntry.get('fetched')) {
+      return this.renderContent();
+    }
+
+    return null;
   }
 }
 

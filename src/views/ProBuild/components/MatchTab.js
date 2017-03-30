@@ -1,8 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ScrollView } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import LoaderLayout from '../../../components/LoaderLayout';
+import ErrorScreen from '../../../components/ErrorScreen';
+import LoadingIndicator from '../../../components/LoadingIndicator';
 import BannedChampions from '../../../components/BannedChampions';
 import TeamHeader from './TeamHeader';
 import Participant from './Participant';
@@ -51,13 +52,22 @@ class Matchtab extends PureComponent {
   }
 
   render() {
-    return (<LoaderLayout
-      renderFunction={this.renderContent}
-      fetched={this.props.match.get('fetched')}
-      isFetching={this.props.match.get('isFetching')}
-      errorMessage={this.props.match.get('errorMessage')}
-      onPressRetryButton={this.props.onPressRetryButton}
-    />);
+    const match = this.props.match;
+
+    if (match.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
+        <LoadingIndicator />
+      </View>);
+    } else if (match.get('fetchError')) {
+      return (<ErrorScreen
+        message={match.get('errorMessage')}
+        onPressRetryButton={this.props.onPressRetryButton}
+      />);
+    } else if (match.get('fetched')) {
+      return this.renderContent();
+    }
+
+    return null;
   }
 }
 

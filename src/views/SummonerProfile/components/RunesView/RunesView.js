@@ -31,6 +31,8 @@ class RunesView extends Component {
   constructor(props) {
     super(props);
 
+    this.renderContent = this.renderContent.bind(this);
+
     this.state = {
       pageSelected: 1,
     };
@@ -40,35 +42,39 @@ class RunesView extends Component {
     tracker.trackScreenView('RunesView');
   }
 
+  renderContent() {
+    const runes = this.props.runes;
+
+    return (<View style={styles.root}>
+      <View style={styles.headerSelector}>
+        <PageSelector
+          pages={runes.getIn(['data', 'pages'])}
+          onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
+        />
+      </View>
+      <View style={styles.runesContainer}>
+        <RunePage page={runes.getIn(['data', 'pages', this.state.pageSelected])} />
+      </View>
+    </View>);
+  }
+
   render() {
-    const { runes } = this.props;
+    const runes = this.props.runes;
 
-
-    if (runes.get('fetched')) {
-      return (<View style={styles.root}>
-        <View style={styles.headerSelector}>
-          <PageSelector
-            pages={runes.getIn(['data', 'pages'])}
-            onChangeSelected={newSelected => this.setState({ pageSelected: newSelected })}
-          />
-        </View>
-        <View style={styles.runesContainer}>
-          <RunePage page={runes.getIn(['data', 'pages', this.state.pageSelected])} />
-        </View>
-      </View>);
-    } else if (runes.get('isFetching')) {
-      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+    if (runes.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
         <LoadingIndicator />
       </View>);
-    }
-
-    return (<View style={styles.container}>
-      <ErrorScreen
+    } else if (runes.get('fetchError')) {
+      return (<ErrorScreen
         message={runes.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />
-    </View>);
+      />);
+    } else if (runes.get('fetched')) {
+      return this.renderContent();
+    }
+
+    return null;
   }
 }
 
@@ -77,7 +83,9 @@ RunesView.propTypes = {
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool,
     fetchError: PropTypes.bool,
-    pages: ImmutablePropTypes.list,
+    data: ImmutablePropTypes.mapContains({
+      pages: ImmutablePropTypes.list.isRequired,
+    }),
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,

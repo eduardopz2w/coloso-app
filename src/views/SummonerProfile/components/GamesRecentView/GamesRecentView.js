@@ -1,19 +1,12 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { ListView, View, StyleSheet, RefreshControl } from 'react-native';
+import { ListView, View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
-import colors from '../../../../utils/colors';
-import GameRecent from './GameRecent';
+
 import ErrorScreen from '../../../../components/ErrorScreen';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import { tracker } from '../../../../utils/analytics';
-
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-});
+import GameRecent from './GameRecent';
 
 class GamesRecentView extends PureComponent {
   constructor(props) {
@@ -23,6 +16,7 @@ class GamesRecentView extends PureComponent {
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
     this.getGamesList = this.getGamesList.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   componentDidMount() {
@@ -39,31 +33,31 @@ class GamesRecentView extends PureComponent {
     return Immutable.List();
   }
 
-  render() {
-    const { gamesRecent } = this.props;
-
-    if (gamesRecent.get('fetchError')) {
-      return (<View style={styles.container}>
-        <ErrorScreen
-          message={gamesRecent.get('errorMessage')}
-          onPressRetryButton={this.props.onPressRetryButton}
-          retryButton
-        />
-      </View>);
-    }
-
+  renderContent() {
     return (<ListView
       dataSource={this.gamesRecentDataSource.cloneWithRows(this.getGamesList().toArray())}
       renderRow={(game, sectionId, rowId) => <GameRecent key={rowId} game={game} />}
-      refreshControl={
-        <RefreshControl
-          refreshing={gamesRecent.get('isFetching')}
-          enabled={false}
-          colors={[colors.spinnerColor]}
-        />
-      }
       enableEmptySections
     />);
+  }
+
+  render() {
+    const gamesRecent = this.props.gamesRecent;
+
+    if (gamesRecent.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
+        <LoadingIndicator />
+      </View>);
+    } else if (gamesRecent.get('fetchError')) {
+      return (<ErrorScreen
+        message={gamesRecent.get('errorMessage')}
+        onPressRetryButton={this.props.onPressRetryButton}
+      />);
+    } else if (gamesRecent.get('fetched')) {
+      return this.renderContent();
+    }
+
+    return null;
   }
 }
 

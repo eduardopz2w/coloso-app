@@ -45,44 +45,48 @@ class SummonerSumaryView extends Component {
     this.dataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
+
+    this.renderContent = this.renderContent.bind(this);
+  }
+
+  renderContent() {
+    const summary = this.props.summary;
+    const summaries = filterEmpty(summary.getIn(['data', 'playerStatSummaries']));
+
+    return (<View style={styles.root}>
+      <View style={styles.headerSelector}>
+        <SeasonSelector
+          initialValue={summary.get('season')}
+          onChangeSelected={this.props.onChangeSeason}
+          disabled={summary.get('isFetching')}
+        />
+      </View>
+      <View style={styles.summaryContainer}>
+        <ListView
+          style={styles.listView}
+          dataSource={this.dataSource.cloneWithRows(summaries.toArray())}
+          renderRow={(summaryRow, sectionId, rowId) => <Summary key={rowId} summary={summaryRow} />}
+        />
+      </View>
+    </View>);
   }
   render() {
-    const summonerSummary = this.props.summary;
+    const summary = this.props.summary;
 
-    if (summonerSummary.get('fetched')) {
-      const summaries = filterEmpty(summonerSummary.getIn(['data', 'playerStatSummaries']));
-
-      return (
-        <View style={styles.root}>
-          <View style={styles.headerSelector}>
-            <SeasonSelector
-              initialValue={summonerSummary.get('season')}
-              onChangeSelected={this.props.onChangeSeason}
-              disabled={summonerSummary.get('isFetching')}
-            />
-          </View>
-          <View style={styles.summaryContainer}>
-            <ListView
-              style={styles.listView}
-              dataSource={this.dataSource.cloneWithRows(summaries.toArray())}
-              renderRow={(summary, sectionId, rowId) => <Summary key={rowId} summary={summary} />}
-            />
-          </View>
-        </View>
-      );
-    } else if (summonerSummary.get('isFetching')) {
-      return (<View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 16 }}>
+    if (summary.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
         <LoadingIndicator />
       </View>);
+    } else if (summary.get('fetchError')) {
+      return (<ErrorScreen
+        message={summary.get('errorMessage')}
+        onPressRetryButton={this.props.onPressRetryButton}
+      />);
+    } else if (summary.get('fetched')) {
+      return this.renderContent();
     }
 
-    return (<View style={styles.container}>
-      <ErrorScreen
-        message={summonerSummary.get('errorMessage')}
-        onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />
-    </View>);
+    return null;
   }
 }
 

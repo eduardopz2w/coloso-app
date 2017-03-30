@@ -5,11 +5,14 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Modal from 'react-native-modalbox';
 import I18n from 'i18n-js';
-import ChampionMastery from './ChampionMastery';
-import MasteryInfo from './MasteryInfo';
+
+
 import colors from '../../../../utils/colors';
+import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
+import ChampionMastery from './ChampionMastery';
+import MasteryInfo from './MasteryInfo';
 import Summary from './Summary';
 
 const styles = MediaQueryStyleSheet.create(
@@ -57,9 +60,11 @@ class ChampionsMasteryView extends Component {
       championSelected: 0,
     };
 
+    this.windowDimensions = Dimensions.get('window');
     this.handleOnPressChampion = this.handleOnPressChampion.bind(this);
     this.getModalContent = this.getModalContent.bind(this);
     this.getMasteriesList = this.getMasteriesList.bind(this);
+    this.renderContent = this.renderContent.bind(this);
     this.championsMasteryDataSource = new ListView.DataSource({
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
@@ -96,14 +101,14 @@ class ChampionsMasteryView extends Component {
     });
   }
 
-  render() {
+  renderContent() {
     const championsMasteries = this.props.championsMasteries;
     const masteriesList = this.getMasteriesList();
     let championImageSize;
     let progressWidth;
     let pageSize;
 
-    if (Dimensions.get('window').width <= 500) {
+    if (this.windowDimensions.width <= 500) {
       championImageSize = 70;
       progressWidth = 5;
       pageSize = 9;
@@ -113,15 +118,7 @@ class ChampionsMasteryView extends Component {
       pageSize = 16;
     }
 
-    if (championsMasteries.get('fetchError')) {
-      return (<View style={styles.container}>
-        <ErrorScreen
-          message={championsMasteries.get('errorMessage')}
-          onPressRetryButton={this.props.onPressRetryButton}
-          retryButton
-        />
-      </View>);
-    } else if (masteriesList.size === 0 && championsMasteries.get('fetched')) {
+    if (masteriesList.size === 0) {
       return (<View style={{ flex: 1 }}>
         <Summary masteries={masteriesList} />
         <View style={styles.container}>
@@ -162,9 +159,28 @@ class ChampionsMasteryView extends Component {
         onOpened={() => this.setState({ modalIsOpen: true })}
         onClosed={() => this.setState({ modalIsOpen: false })}
       >
-        {this.getModalContent()}
+        {this.state.modalIsOpen && this.getModalContent()}
       </Modal>
     </View>);
+  }
+
+  render() {
+    const championsMasteries = this.props.championsMasteries;
+
+    if (championsMasteries.get('isFetching')) {
+      return (<View style={{ padding: 16, alignItems: 'center' }}>
+        <LoadingIndicator />
+      </View>);
+    } else if (championsMasteries.get('fetchError')) {
+      return (<ErrorScreen
+        message={championsMasteries.get('errorMessage')}
+        onPressRetryButton={this.props.onPressRetryButton}
+      />);
+    } else if (championsMasteries.get('fetched')) {
+      return this.renderContent();
+    }
+
+    return null;
   }
 }
 
