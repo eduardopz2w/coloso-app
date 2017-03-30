@@ -156,7 +156,7 @@ class ProBuildsListView extends Component {
 
 ProBuildsListView.propTypes = {
   proBuilds: ImmutablePropTypes.mapContains({
-    builds: ImmutablePropTypes.list.isRequired,
+    data: ImmutablePropTypes.list.isRequired,
     isFetching: PropTypes.bool.isRequired,
     isRefreshing: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
@@ -174,7 +174,7 @@ ProBuildsListView.propTypes = {
     isFetching: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
-    builds: ImmutablePropTypes.list.isRequired,
+    data: ImmutablePropTypes.list.isRequired,
     filters: ImmutablePropTypes.mapContains({
       championId: PropTypes.number,
       proPlayerId: PropTypes.string,

@@ -6,27 +6,27 @@ import ErrorScreen from './ErrorScreen';
 
 class LoaderLayout extends PureComponent {
   render() {
-    if (this.props.fetched) {
+    if (this.props.renderContent) {
       return this.props.renderFunction();
     } else if (this.props.isFetching) {
       return (<View style={{ padding: 16, alignItems: 'center' }}>
         <LoadingIndicator />
       </View>);
-    }
-
-    return (<View style={{ flex: 1, padding: 16 }}>
-      <ErrorScreen
+    } else if (this.props.fetchError) {
+      return (<ErrorScreen
         message={this.props.errorMessage}
         onPressRetryButton={this.props.onPressRetryButton}
-        retryButton
-      />
-    </View>);
+      />);
+    }
+
+    return null;
   }
 }
 
 LoaderLayout.propTypes = {
-  fetched: PropTypes.bool.isRequired,
+  renderContent: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  fetchError: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,
   renderFunction: PropTypes.func.isRequired,
   onPressRetryButton: PropTypes.func.isRequired,

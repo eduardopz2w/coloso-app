@@ -4,10 +4,10 @@ import { addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from 
 
 const initialState = Immutable.fromJS({
   ids: [],
+  fetched: false,
   fetchError: false,
   errorMessage: '',
   isFetching: false,
-  isRefreshing: false,
   filters: {
     championId: null,
     proPlayerId: null,
@@ -18,6 +18,7 @@ export default typeToReducer({
   'FAVORITE_BUILDS/FETCH_BUILDS': {
     PENDING: state => state.withMutations((mutator) => {
       mutator.set('isFetching', true);
+      mutator.set('fetched', false);
       mutator.set('ids', Immutable.List([]));
       mutator.set('fetchError', false);
       mutator.set('filters', Immutable.Map({
@@ -26,6 +27,7 @@ export default typeToReducer({
       }));
     }),
     FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
+      mutator.set('fetched', true);
       mutator.set('isFetching', false);
       mutator.set('ids', Immutable.List(payload.ids));
     }),
