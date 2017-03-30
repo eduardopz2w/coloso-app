@@ -13,7 +13,7 @@ function mapStateToProps(state) {
   const proPlayersIds = proPlayers.get('proPlayersIds');
   const gameData = denormalize(state.gameCurrent.get('gameId'), 'gamesCurrent', state.entities);
 
-  proBuilds = proBuilds.set('builds', ids.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
+  proBuilds = proBuilds.set('data', ids.map(proBuildId => denormalize(proBuildId, 'proBuilds', state.entities)));
   proPlayers = proPlayers.set('proPlayersList', proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', state.entities)));
 
   return { gameData, proBuilds, proPlayers };

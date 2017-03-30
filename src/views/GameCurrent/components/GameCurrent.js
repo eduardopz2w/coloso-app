@@ -163,43 +163,7 @@ class GameCurrent extends Component {
 
   render() {
     const { proBuilds, gameData } = this.props;
-    const buildsList = proBuilds.get('builds');
     let modalContent;
-    let proBuildsContent;
-
-    if (proBuilds.get('fetchError') && buildsList.size === 0) {
-      proBuildsContent = (<View style={styles.container}>
-        <ErrorScreen
-          message={proBuilds.get('errorMessage')}
-          onPressRetryButton={() => {
-            this.props.fetchProBuilds({ championId: this.getFocusChampionId() }, 1);
-          }}
-          retryButton
-        />
-      </View>);
-    } else if (buildsList.size > 0 || proBuilds.get('isFetching')) {
-      proBuildsContent = (<ProBuildsList
-        builds={buildsList}
-        onPressBuild={buildId => Actions.probuild_view({ buildId })}
-        isFetching={proBuilds.get('isFetching')}
-        onLoadMore={this.handleOnLoadMoreBuilds}
-        fetchError={proBuilds.get('fetchError')}
-        errorMessage={proBuilds.get('errorMessage')}
-        onPressRetry={() => {
-          this.props.fetchProBuilds({
-            championId: this.getFocusChampionId(),
-            proPlayerId: proBuilds.getIn(['filters', 'proPlayerId']),
-          }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
-        }}
-        favorites={false}
-      />);
-    } else {
-      proBuildsContent = (<View style={styles.container}>
-        <Text>
-          {I18n.t('no_results_found')}
-        </Text>
-      </View>);
-    }
 
     if (this.state.modalType === 'RUNES') {
       modalContent = (<View>
@@ -263,7 +227,22 @@ class GameCurrent extends Component {
             disabled={this.props.proBuilds.get('isFetching')}
             onChangeSelected={this.handleOnChangeProPlayerSelected}
           />
-          {proBuildsContent}
+          <ProBuildsList
+            builds={proBuilds.get('data')}
+            isFetching={proBuilds.get('isFetching')}
+            fetchError={proBuilds.get('fetchError')}
+            errorMessage={proBuilds.get('errorMessage')}
+            favorites={false}
+            emptyListMessage={I18n.t('no_results_found')}
+            onPressBuild={buildId => Actions.probuild_view({ buildId })}
+            onLoadMore={this.handleOnLoadMoreBuilds}
+            onPressRetry={() => {
+              this.props.fetchProBuilds({
+                championId: this.getFocusChampionId(),
+                proPlayerId: proBuilds.getIn(['filters', 'proPlayerId']),
+              }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
+            }}
+          />
         </View>
       </ScrollableTabView>
       <Modal
