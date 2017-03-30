@@ -63,7 +63,7 @@ class Toolbar extends PureComponent {
           <ProPlayersSelector
             titleStyle={{ width: 70 }}
             value={this.props.proPlayerSelected}
-            proPlayers={this.props.proPlayers.get('proPlayersList')}
+            proPlayers={this.props.proPlayers.get('data')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeProPlayerSelected}
@@ -77,7 +77,7 @@ class Toolbar extends PureComponent {
 Toolbar.propTypes = {
   style: View.propTypes.style,
   proPlayers: ImmutablePropTypes.mapContains({
-    proPlayersList: ImmutablePropTypes.list.isRequired,
+    data: ImmutablePropTypes.list.isRequired,
   }).isRequired,
   proPlayerSelected: PropTypes.string,
   championSelected: PropTypes.number,

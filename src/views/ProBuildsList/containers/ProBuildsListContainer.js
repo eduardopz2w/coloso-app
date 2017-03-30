@@ -75,7 +75,7 @@ function mapStateToProps(state) {
   let proPlayers = state.proPlayers;
   let favoriteProBuilds = state.favoriteProBuilds;
 
-  proPlayers = proPlayers.set('proPlayersList', getProPlayersList(state));
+  proPlayers = proPlayers.set('data', getProPlayersList(state));
   proBuilds = proBuilds.set('data', getProBuildsList(state));
   favoriteProBuilds = favoriteProBuilds.set('data', getFavoriteProBuildsList(state));
 

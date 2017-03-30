@@ -10,7 +10,6 @@ import I18n from 'i18n-js';
 import colors from '../../../utils/colors';
 import Team from './Team';
 import RunePage from '../../../components/RunePage';
-import ErrorScreen from '../../../components/ErrorScreen';
 import MasteryPage from '../../../components/MasteryPage';
 import ProBuildsList from '../../../components/ProBuildsList';
 import ProPlayersSelector from '../../../components/ProPlayersSelector';
@@ -222,7 +221,7 @@ class GameCurrent extends Component {
         <View tabLabel={I18n.t('pro_builds')} style={{ flex: 1 }}>
           <ProPlayersSelector
             value={this.props.proBuilds.getIn(['filters', 'proPlayerId'])}
-            proPlayers={this.props.proPlayers.get('proPlayersList')}
+            proPlayers={this.props.proPlayers.get('data')}
             style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
             disabled={this.props.proBuilds.get('isFetching')}
             onChangeSelected={this.handleOnChangeProPlayerSelected}
@@ -282,7 +281,7 @@ GameCurrent.propTypes = {
   }),
   proPlayers: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
-    proPlayersList: ImmutablePropTypes.list,
+    data: ImmutablePropTypes.list,
   }),
   fetchProBuilds: PropTypes.func,
   fetchProPlayers: PropTypes.func,
