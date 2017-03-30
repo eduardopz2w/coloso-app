@@ -172,7 +172,7 @@ class SummonerProfileViewToolbar extends Component {
       </View>
 
       <View style={styles.profileToolbar}>
-        {summonerData.get('isFetching') ? (
+        {!summonerData.get('fetched') ? (
           <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
             <Text style={styles.loadingText}>{I18n.t('loading')}...</Text>
           </View>
@@ -201,7 +201,15 @@ class SummonerProfileViewToolbar extends Component {
 
 
 SummonerProfileViewToolbar.propTypes = {
-  summonerData: ImmutablePropTypes.map,
+  summonerData: ImmutablePropTypes.mapContains({
+    fetched: PropTypes.bool.isRequired,
+    data: ImmutablePropTypes.mapContains({
+      profileIconId: PropTypes.number.isRequired,
+      summonerLevel: PropTypes.number.isRequired,
+      name: PropTypes.string.isRequired,
+      region: PropTypes.string.isRequired,
+    }),
+  }).isRequired,
   onPressBackButton: PropTypes.func,
 };
 

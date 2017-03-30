@@ -87,6 +87,7 @@ export default typeToReducer({
   },
   [fetchLeagueEntry]: {
     PENDING: state => state.mergeIn(['leagueEntry'], {
+      fetched: false,
       isFetching: true,
       fetchError: false,
     }),
@@ -105,6 +106,7 @@ export default typeToReducer({
   },
   [fetchChampionsMasteries]: {
     PENDING: state => state.mergeIn(['championsMasteries'], {
+      fetched: false,
       isFetching: true,
       fetchError: false,
     }),
@@ -123,6 +125,7 @@ export default typeToReducer({
   },
   [fetchGamesRecent]: {
     PENDING: state => state.mergeIn(['gamesRecent'], {
+      fetched: false,
       isFetching: true,
       fetchError: false,
     }),
@@ -141,6 +144,7 @@ export default typeToReducer({
   },
   [fetchMasteries]: {
     PENDING: state => state.mergeIn(['masteries'], {
+      fetched: false,
       isFetching: true,
       fetchError: false,
     }),
@@ -159,6 +163,7 @@ export default typeToReducer({
   },
   [fetchRunes]: {
     PENDING: state => state.mergeIn(['runes'], {
+      fetched: false,
       isFetching: true,
       fetchError: false,
     }),

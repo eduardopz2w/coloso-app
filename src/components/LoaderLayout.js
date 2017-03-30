@@ -6,7 +6,7 @@ import ErrorScreen from './ErrorScreen';
 
 class LoaderLayout extends PureComponent {
   render() {
-    if (this.props.renderContent) {
+    if (this.props.fetched) {
       return this.props.renderFunction();
     } else if (this.props.isFetching) {
       return (<View style={{ padding: 16, alignItems: 'center' }}>
@@ -24,7 +24,7 @@ class LoaderLayout extends PureComponent {
 }
 
 LoaderLayout.propTypes = {
-  renderContent: PropTypes.bool.isRequired,
+  fetched: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   fetchError: PropTypes.bool.isRequired,
   errorMessage: PropTypes.string,

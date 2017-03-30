@@ -2,34 +2,14 @@ import React, { Component, PropTypes } from 'react';
 import { StyleSheet, View, ListView, RefreshControl } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
+
 import LeagueEntry from './LeagueEntry';
-import ErrorScreen from '../../../../components/ErrorScreen';
-import colors from '../../../../utils/colors';
+import LoaderLayout from '../../../../components/LoaderLayout';
 import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
-  spinnerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  spinner: {
-    width: 50,
-    height: 50,
-  },
-
   rootScrollView: {
     flex: 1,
-  },
-
-  rootScrollViewContainer: {
-    paddingBottom: 16,
-  },
-
-  container: {
-    flex: 1,
-    padding: 16,
   },
 });
 
@@ -41,6 +21,7 @@ class LeagueEntryView extends Component {
       rowHasChanged: (r1, r2) => !Immutable.is(r1, r2),
     });
     this.getEntriesList = this.getEntriesList.bind(this);
+    this.renderContent = this.renderContent.bind(this);
   }
 
   componentDidMount() {
@@ -71,29 +52,10 @@ class LeagueEntryView extends Component {
     ]);
   }
 
-  render() {
-    const { leagueEntry } = this.props;
-
-    if (leagueEntry.get('fetchError')) {
-      return (<View style={styles.container}>
-        <ErrorScreen
-          message={leagueEntry.get('errorMessage')}
-          onPressRetryButton={this.props.onPressRetryButton}
-          retryButton
-        />
-      </View>);
-    }
-
+  renderContent() {
     return (<ListView
       style={styles.rootScrollView}
       dataSource={this.dataSource.cloneWithRows(this.getEntriesList().toArray())}
-      refreshControl={
-        <RefreshControl
-          refreshing={leagueEntry.get('isFetching')}
-          enabled={false}
-          colors={[colors.spinnerColor]}
-        />
-      }
       renderRow={(entry, sectionId, rowId) => {
         let reverse = true;
 
@@ -106,13 +68,26 @@ class LeagueEntryView extends Component {
       enableEmptySections
     />);
   }
+
+  render() {
+    const { leagueEntry } = this.props;
+
+    return (<LoaderLayout
+      fetched={leagueEntry.get('fetched')}
+      isFetching={leagueEntry.get('isFetching')}
+      fetchError={leagueEntry.get('fetchError')}
+      errorMessage={leagueEntry.get('errorMessage')}
+      onPressRetryButton={this.props.onPressRetryButton}
+      renderFunction={this.renderContent}
+    />);
+  }
 }
 
 LeagueEntryView.propTypes = {
   leagueEntry: ImmutablePropTypes.mapContains({
-    isFetching: PropTypes.bool,
-    fetchError: PropTypes.bool,
-    fetched: PropTypes.bool,
+    fetched: PropTypes.bool.isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string,
   }),
   onPressRetryButton: PropTypes.func.isRequired,
