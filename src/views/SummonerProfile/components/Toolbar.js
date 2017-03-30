@@ -14,9 +14,10 @@ const styles = MediaQueryStyleSheet.create(
     root: {
       backgroundColor: colors.primary,
     },
-
+    toolbar: {
+      marginBottom: -56,
+    },
     profileToolbar: {
-      marginTop: -56,
       paddingTop: 18,
       paddingBottom: 8,
       minHeight: 100,
@@ -115,13 +116,13 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       summonerImageContainer: {
-        width: 100,
-        height: 100,
+        width: 90,
+        height: 90,
       },
 
       summonerImage: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
       },
 
       summonerLevelContainer: {
@@ -138,7 +139,7 @@ const styles = MediaQueryStyleSheet.create(
         justifyContent: 'center',
       },
       summonerNameText: {
-        fontSize: 26,
+        fontSize: 20,
         textAlign: 'left',
       },
       regionText: {
@@ -150,7 +151,7 @@ const styles = MediaQueryStyleSheet.create(
 );
 
 function renderLoading() {
-  return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+  return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
     <Text style={styles.loadingText}>{I18n.t('loading')}...</Text>
   </View>);
 }
@@ -196,7 +197,7 @@ class SummonerProfileViewToolbar extends Component {
   }
 
   renderRetryButton() {
-    return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    return (<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <IconButton
         style={{ backgroundColor: 'white', borderRadius: 50, width: 40, height: 40 }}
         onPress={this.props.onPressRetryButton}

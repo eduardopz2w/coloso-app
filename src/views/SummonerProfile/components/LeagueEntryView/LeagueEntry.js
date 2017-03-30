@@ -63,15 +63,15 @@ const styles = MediaQueryStyleSheet.create(
   {
     '@media (min-device-width: 400)': {
       tierImage: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
       },
     },
   }, {
     '@media (min-device-width: 600)': {
       tierImage: {
-        width: 100,
-        height: 100,
+        width: 120,
+        height: 120,
       },
       entryContainer: {
         paddingLeft: 40,
