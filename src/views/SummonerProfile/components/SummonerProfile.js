@@ -85,6 +85,7 @@ class SummonerProfile extends Component {
       <Toolbar
         summonerData={this.props.summonerData}
         onPressBackButton={() => { Actions.pop(); }}
+        onPressRetryButton={() => { this.props.fetchSummonerData(); }}
       />
       <ScrollableTabView
         initialPage={0}

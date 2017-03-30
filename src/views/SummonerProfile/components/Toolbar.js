@@ -25,6 +25,7 @@ const styles = MediaQueryStyleSheet.create(
     profileToolbarContainer: {
       flexDirection: 'row',
       justifyContent: 'center',
+      alignItems: 'center',
     },
 
     loadingText: {
@@ -148,11 +149,19 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
+function renderLoading() {
+  return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+    <Text style={styles.loadingText}>{I18n.t('loading')}...</Text>
+  </View>);
+}
+
 class SummonerProfileViewToolbar extends Component {
   constructor(props) {
     super(props);
 
     this.handleOnPressBackButton = this.handleOnPressBackButton.bind(this);
+    this.renderSummonerData = this.renderSummonerData.bind(this);
+    this.renderRetryButton = this.renderRetryButton.bind(this);
   }
 
   handleOnPressBackButton() {
@@ -163,8 +172,51 @@ class SummonerProfileViewToolbar extends Component {
     return null;
   }
 
+  renderSummonerData() {
+    const summonerData = this.props.summonerData;
+
+    return (
+      <View style={styles.profileToolbarContainer}>
+        <View style={styles.summonerImageContainer}>
+          <ProfileImage
+            style={styles.summonerImage}
+            id={summonerData.getIn(['data', 'profileIconId'])}
+          />
+          <View style={styles.summonerLevelContainer}>
+            <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'summonerLevel'])}</Text>
+          </View>
+        </View>
+
+        <View style={styles.summonerDataContainer}>
+          <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'name'])}</Text>
+          <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'region']))}</Text>
+        </View>
+      </View>
+    );
+  }
+
+  renderRetryButton() {
+    return (<View style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <IconButton
+        style={{ backgroundColor: 'white', borderRadius: 50, width: 40, height: 40 }}
+        onPress={this.props.onPressRetryButton}
+        iconName="refresh"
+        iconColor={colors.primary}
+      />
+    </View>);
+  }
+
   render() {
     const { summonerData } = this.props;
+    let content;
+
+    if (summonerData.get('fetched')) {
+      content = this.renderSummonerData();
+    } else if (summonerData.get('fetchError')) {
+      content = this.renderRetryButton();
+    } else {
+      content = renderLoading();
+    }
 
     return (<View style={styles.root}>
       <View style={styles.toolbar}>
@@ -172,28 +224,7 @@ class SummonerProfileViewToolbar extends Component {
       </View>
 
       <View style={styles.profileToolbar}>
-        {!summonerData.get('fetched') ? (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={styles.loadingText}>{I18n.t('loading')}...</Text>
-          </View>
-        ) : (
-          <View style={styles.profileToolbarContainer}>
-            <View style={styles.summonerImageContainer}>
-              <ProfileImage
-                style={styles.summonerImage}
-                id={summonerData.getIn(['data', 'profileIconId'])}
-              />
-              <View style={styles.summonerLevelContainer}>
-                <Text style={styles.summonerLevelText}>{summonerData.getIn(['data', 'summonerLevel'])}</Text>
-              </View>
-            </View>
-
-            <View style={styles.summonerDataContainer}>
-              <Text style={styles.summonerNameText}>{summonerData.getIn(['data', 'name'])}</Text>
-              <Text style={styles.regionText}>{regionHumanize(summonerData.getIn(['data', 'region']))}</Text>
-            </View>
-          </View>
-        )}
+        {content}
       </View>
     </View>);
   }
@@ -210,7 +241,8 @@ SummonerProfileViewToolbar.propTypes = {
       region: PropTypes.string.isRequired,
     }),
   }).isRequired,
-  onPressBackButton: PropTypes.func,
+  onPressBackButton: PropTypes.func.isRequired,
+  onPressRetryButton: PropTypes.func.isRequired,
 };
 
 export default SummonerProfileViewToolbar;

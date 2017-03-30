@@ -71,7 +71,11 @@ const initialState = Immutable.fromJS({
 
 export default typeToReducer({
   [fetchSummonerData]: {
-    PENDING: () => initialState,
+    PENDING: state => state.mergeIn(['summonerData'], {
+      fetched: false,
+      isFetching: true,
+      fetchError: false,
+    }),
     REJECTED: (state, action) => state.mergeIn(['summonerData'], {
       fetched: false,
       isFetching: false,
