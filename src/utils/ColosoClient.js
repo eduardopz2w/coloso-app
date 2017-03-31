@@ -10,7 +10,7 @@ let TIMEOUT = 25000;
 
 if (__DEV__) {
   BASEURL = 'http://192.168.1.2:3000';
-  TIMEOUT = 5000;
+  TIMEOUT = 10000;
 }
 
 const axiosClient = axios.create({

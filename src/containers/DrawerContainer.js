@@ -7,7 +7,7 @@ import {
   setRegion,
   setSearchType,
   searchGame,
-} from '../views/SummonerSearch/modules/SummonerSearchActions';
+} from '../views/SummonerSearchView/modules/SummonerSearchActions';
 
 function mapStateToProps(state) {
   return {

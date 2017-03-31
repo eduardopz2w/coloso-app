@@ -124,10 +124,10 @@ class SideMenu extends PureComponent {
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
       showAddAccountDialog();
-      Actions.manage_account_view();
+      Actions.manageAccountView();
       this.context.drawer.close();
     } else {
-      Actions.summoner_profile_view({
+      Actions.summonerProfileView({
         summonerUrid: ownerAccount.get('summonerUrid'),
       });
       this.context.drawer.close();
@@ -139,7 +139,7 @@ class SideMenu extends PureComponent {
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
       showAddAccountDialog();
-      Actions.manage_account_view();
+      Actions.manageAccountView();
       this.context.drawer.close();
     } else {
       this.props.onPressSearchGame();
@@ -152,7 +152,7 @@ class SideMenu extends PureComponent {
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
       return (<TouchableWithoutFeedback
         onPress={() => {
-          Actions.manage_account_view();
+          Actions.manageAccountView();
           this.context.drawer.close();
         }}
       >
@@ -169,7 +169,7 @@ class SideMenu extends PureComponent {
 
     return (<TouchableWithoutFeedback
       onPress={() => {
-        Actions.manage_account_view();
+        Actions.manageAccountView();
         this.context.drawer.close();
       }}
     >
@@ -205,7 +205,7 @@ class SideMenu extends PureComponent {
           iconName="search"
           title={I18n.t('searches')}
           onPress={() => {
-            Actions.search_view();
+            Actions.summonerSearchView();
             this.context.drawer.close();
           }}
         />
@@ -214,7 +214,7 @@ class SideMenu extends PureComponent {
           title={I18n.t('pro_builds')}
           iconName="gavel"
           onPress={() => {
-            Actions.probuilds_search_view();
+            Actions.proBuildsListView();
             this.context.drawer.close();
           }}
         />

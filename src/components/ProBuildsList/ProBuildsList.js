@@ -3,10 +3,12 @@ import { View, StyleSheet, ListView, RefreshControl, Text, TouchableNativeFeedba
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
+import I18n from 'i18n-js';
 
 import ProBuildListRow from './ProBuildsListRow';
 import colors from '../../utils/colors';
 import LoadingIndicator from '../../components/LoadingIndicator';
+import ErrorScreen from '../../components/ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {
@@ -49,7 +51,7 @@ class ProBuildsList extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.builds.size === 0) {
+    if (nextProps.builds.size === 0 && this.listView) {
       this.listView.scrollTo({ x: 0, y: 0, animated: false });
     }
 
@@ -87,6 +89,7 @@ class ProBuildsList extends Component {
       return (<View style={{ alignItems: 'center', paddingVertical: 8, paddingHorizontal: 16 }}>
         <Text>{this.props.errorMessage}</Text>
         <TouchableNativeFeedback
+          onPress={this.props.onPressRetry}
           style={styles.retryButton}
         >
           <View style={styles.retryButton}>
@@ -105,6 +108,17 @@ class ProBuildsList extends Component {
   }
 
   render() {
+    if (this.props.fetchError && this.props.builds.size === 0) {
+      return (<ErrorScreen
+        message={this.props.errorMessage}
+        onPressRetryButton={this.props.onPressRetry}
+      />);
+    } else if (!this.props.isFetching && this.props.builds.size === 0) {
+      return (<View style={{ padding: 16 }}>
+        <Text>{this.props.emptyListMessage}</Text>
+      </View>);
+    }
+
     return (<ListView
       style={styles.root}
       dataSource={this.state.dataSource}
@@ -141,12 +155,13 @@ class ProBuildsList extends Component {
 
 ProBuildsList.propTypes = {
   builds: ImmutablePropTypes.list.isRequired,
-  isFetching: PropTypes.bool,
-  isRefreshing: PropTypes.bool,
-  refreshControl: PropTypes.bool,
+  isFetching: PropTypes.bool.isRequired,
+  isRefreshing: PropTypes.bool.isRequired,
+  refreshControl: PropTypes.bool.isRequired,
   fetchError: PropTypes.bool,
   errorMessage: PropTypes.string,
   favorites: PropTypes.bool,
+  emptyListMessage: PropTypes.string.isRequired,
   onPressRetry: PropTypes.func.isRequired,
   onPressBuild: PropTypes.func,
   onLoadMore: PropTypes.func,
@@ -157,10 +172,10 @@ ProBuildsList.propTypes = {
 
 ProBuildsList.defaultProps = {
   builds: Immutable.List([]),
-  fetchError: false,
   refreshControl: false,
   isRefreshing: false,
   favorites: true,
+  emptyListMessage: I18n.t('no_results_found'),
 };
 
 export default ProBuildsList;

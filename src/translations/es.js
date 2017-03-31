@@ -74,6 +74,7 @@ export default {
   pro_builds: 'Builds Profesionales',
   profile: 'Perfil',
   progress: 'Progreso',
+  press_again_to_quit: 'Presione nuevamente para salir',
   quadrakills: 'Quadrakills',
   ranked: 'Clasificatoria',
   red_team: 'Equipo Rojo',
