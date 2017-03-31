@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     height: 35,
     borderRadius: 50,
     marginRight: 16,
-    backgroundColor: 'rgba(0,0,0,0.15)',
+    backgroundColor: 'rgba(0,0,0,0.25)',
   },
   selectedName: {
     flex: 1,
@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   placeholder: {
     flex: 1,
     flexBasis: 100,
+    color: 'rgba(0,0,0,0.80)',
   },
 });
 
@@ -114,7 +115,7 @@ class Selector extends Component {
       />);
     }
 
-    return (<View style={styles.root}>
+    return (<View style={[styles.root, this.props.disabled && { opacity: 0.3 }]}>
       <TouchableWithoutFeedback
         onPress={this.handleOnPressSelector}
       >

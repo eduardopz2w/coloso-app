@@ -6,6 +6,7 @@ import colors from '../utils/colors';
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -44,14 +45,14 @@ class ErrorScreen extends PureComponent {
   }
 }
 
-ErrorScreen.defaultProps = {
-  retryButton: false,
-};
-
 ErrorScreen.propTypes = {
   message: PropTypes.string.isRequired,
   retryButton: PropTypes.bool,
   onPressRetryButton: PropTypes.func,
+};
+
+ErrorScreen.defaultProps = {
+  retryButton: true,
 };
 
 export default ErrorScreen;

@@ -18,7 +18,7 @@ class MainDrawer extends PureComponent {
   handleOnPressSearchGame() {
     if (!this.props.isSearchingGame) {
       const { ownerAccount } = this.props;
-      Actions.search_view();
+      Actions.summonerSearchView();
       this.drawer.close();
       this.props.searchGame(ownerAccount.get('summonerName'), ownerAccount.get('region'));
     }
