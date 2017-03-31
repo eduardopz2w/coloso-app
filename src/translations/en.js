@@ -74,6 +74,7 @@ export default {
   pro_builds: 'Pro Builds',
   profile: 'Profile',
   progress: 'Progress',
+  press_again_to_quit: 'Press again to quit',
   quadrakills: 'Quadrakills',
   ranked: 'Ranked',
   red_team: 'Red Team',

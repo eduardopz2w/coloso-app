@@ -1,5 +1,7 @@
 import React from 'react';
+import { ToastAndroid } from 'react-native';
 import { Scene, Router, ActionConst } from 'react-native-router-flux';
+import I18n from 'i18n-js';
 
 import Drawer from './containers/DrawerContainer';
 
@@ -11,8 +13,26 @@ import ManageAccountView from './views/ManageAccountView';
 import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
 
+let waitingNextExit = false;
+
+function handleOnExitApp() {
+  if (waitingNextExit) {
+    return false;
+  }
+
+  waitingNextExit = true;
+
+  setTimeout(() => {
+    waitingNextExit = false;
+  }, 3000);
+
+  ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
+
+  return true;
+}
+
 function Routes() {
-  return (<Router>
+  return (<Router onExitApp={handleOnExitApp}>
     <Scene key="drawer" component={Drawer}>
       <Scene key="root">
         <Scene
