@@ -8,6 +8,7 @@ import numeral from 'numeral';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
+import { tracker } from '../../../utils/analytics';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import ErrorScreen from '../../../components/ErrorScreen';
 import PlayerToolbar from './PlayerToolbar';
@@ -94,6 +95,10 @@ class ProBuildView extends Component {
     if (!fetched || fetchedProBuildId !== this.props.buildId) {
       this.props.fetchProBuild();
     }
+  }
+
+  componentDidMount() {
+    tracker.trackScreenView('ProBuildView');
   }
 
   fetchMatch() {
