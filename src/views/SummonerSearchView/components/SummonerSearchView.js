@@ -240,7 +240,7 @@ class SummonerSearchView extends Component {
                   onChangeRegion={this.handleChangeRegion}
                 />
               </View>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
+              <View style={styles.radiosContainer}>
                 <View style={styles.radioGroup}>
                   <MKRadioButton
                     group={this.radioGroup}

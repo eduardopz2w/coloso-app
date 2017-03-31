@@ -48,8 +48,11 @@ export default MediaQueryStyleSheet.create(
     radioGroup: {
       flexDirection: 'row',
       alignItems: 'center',
-      minWidth: 120,
       height: 40,
+    },
+
+    radiosContainer: {
+      flexDirection: 'column',
     },
 
     inputRegion: {
@@ -95,6 +98,9 @@ export default MediaQueryStyleSheet.create(
       },
       inputRegion: {
         marginLeft: 8,
+      },
+      radiosContainer: {
+        flexDirection: 'row',
       },
       radioGroup: {
         flex: 1,
