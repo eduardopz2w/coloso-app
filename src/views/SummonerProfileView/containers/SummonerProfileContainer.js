@@ -9,6 +9,7 @@ import {
   fetchMasteries,
   fetchRunes,
   fetchSummary,
+  clearCache,
 } from '../modules/SummonerProfileActions';
 import denormalize from '../../../utils/denormalize';
 
@@ -105,6 +106,10 @@ function mapDispatchToProps(dispatch, ownProps) {
 
     fetchSummary: (season) => {
       dispatch(fetchSummary(summonerUrid, season));
+    },
+
+    clearCache: () => {
+      dispatch(clearCache());
     },
   };
 }

@@ -8,6 +8,7 @@ import {
   fetchMasteries,
   fetchRunes,
   fetchSummary,
+  clearCache,
 } from './SummonerProfileActions';
 
 const initialState = Immutable.fromJS({
@@ -204,4 +205,5 @@ export default typeToReducer({
       errorMessage: action.payload.errorMessage,
     }),
   },
+  [clearCache]: () => initialState,
 }, initialState);
