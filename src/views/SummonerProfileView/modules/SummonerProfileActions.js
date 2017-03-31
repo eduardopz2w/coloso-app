@@ -50,3 +50,5 @@ export const fetchSummary = createAction('SUMMONER_PROFILE_VIEW/FETCH_SUMMARY', 
     type: COLOSO_CALL_TYPES.STATS_SUMMARY,
   },
 }));
+
+export const clearCache = createAction('SUMMONER_PROFILE_VIEW/CLEAR_CACHE', () => ({}));

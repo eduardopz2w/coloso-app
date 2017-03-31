@@ -90,8 +90,8 @@ android {
         applicationId "com.pedronalbert.lolcena"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 35
-        versionName "1.4.0"
+        versionCode 36
+        versionName "1.5.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }

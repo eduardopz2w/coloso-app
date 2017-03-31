@@ -29,8 +29,11 @@ class SummonerProfileView extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchSummonerData();
-    this.props.fetchLeagueEntry();
+    if (this.props.summonerUrid !== this.props.summonerData.getIn(['data', 'summonerUrid'])) {
+      this.props.clearCache();
+      this.props.fetchSummonerData();
+      this.props.fetchLeagueEntry();
+    }
   }
 
   componentDidMount() {
@@ -135,13 +138,15 @@ class SummonerProfileView extends Component {
 
 
 SummonerProfileView.propTypes = {
-  fetchSummonerData: PropTypes.func,
-  fetchLeagueEntry: PropTypes.func,
-  fetchChampionsMasteries: PropTypes.func,
-  fetchGamesRecent: PropTypes.func,
-  fetchMasteries: PropTypes.func,
-  fetchSummary: PropTypes.func,
-  fetchRunes: PropTypes.func,
+  summonerUrid: PropTypes.string.isRequired,
+  fetchSummonerData: PropTypes.func.isRequired,
+  fetchLeagueEntry: PropTypes.func.isRequired,
+  fetchChampionsMasteries: PropTypes.func.isRequired,
+  fetchGamesRecent: PropTypes.func.isRequired,
+  fetchMasteries: PropTypes.func.isRequired,
+  fetchSummary: PropTypes.func.isRequired,
+  fetchRunes: PropTypes.func.isRequired,
+  clearCache: PropTypes.func.isRequired,
   leagueEntry: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool.isRequired,
