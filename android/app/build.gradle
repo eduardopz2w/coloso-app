@@ -146,6 +146,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-keep-awake')
     compile project(':react-native-config')
     compile project(':react-native-mail')
     compile project(':react-native-vector-icons')
