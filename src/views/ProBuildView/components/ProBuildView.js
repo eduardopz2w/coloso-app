@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import numeral from 'numeral';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
+import KeepAwake from 'react-native-keep-awake';
 
 import { tracker } from '../../../utils/analytics';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -99,6 +100,11 @@ class ProBuildView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('ProBuildView');
+    KeepAwake.activate();
+  }
+
+  componentWillUnmount() {
+    KeepAwake.deactivate();
   }
 
   fetchMatch() {

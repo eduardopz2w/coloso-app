@@ -3,13 +3,14 @@ package com.pedronalbert.lolcena;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.corbt.keepawake.KCKeepAwakePackage;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.chirag.RNMail.RNMail;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.xinthink.rnmk.ReactMaterialKitPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.aakashns.reactnativedialogs.ReactNativeDialogsPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
-import com.ocetnik.timer.BackgroundTimerPackage;
 import com.sbugert.rnadmob.RNAdMobPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
@@ -31,13 +32,14 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new KCKeepAwakePackage(),
+            new ReactNativeConfigPackage(),
             new RNMail(),
             new VectorIconsPackage(),
             new ReactMaterialKitPackage(),
             new GoogleAnalyticsBridgePackage(),
             new ReactNativeDialogsPackage(),
             new RNDeviceInfo(),
-            new BackgroundTimerPackage(),
             new RNAdMobPackage()
       );
     }
