@@ -1,13 +1,11 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, Dimensions, Text, View, RefreshControl } from 'react-native';
+import { ListView, Dimensions, Text, View } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Modal from 'react-native-modalbox';
 import I18n from 'i18n-js';
 
-
-import colors from '../../../../utils/colors';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import { tracker } from '../../../../utils/analytics';
@@ -57,7 +55,7 @@ class ChampionsMasteryView extends Component {
 
     this.state = {
       modalIsOpen: false,
-      championSelected: 0,
+      championSelectedIndex: 0,
     };
 
     this.windowDimensions = Dimensions.get('window');
@@ -75,12 +73,12 @@ class ChampionsMasteryView extends Component {
   }
 
   getModalContent() {
-    if (this.state.championSelected === 0) {
+    if (this.state.championSelectedIndex === 0) {
       return null;
     }
 
     const masteries = this.getMasteriesList();
-    const masteryFound = masteries.find(mastery => mastery.get('championId') === this.state.championSelected);
+    const masteryFound = masteries.get(this.state.championSelectedIndex);
 
     return <MasteryInfo mastery={masteryFound} />;
   }
@@ -95,14 +93,13 @@ class ChampionsMasteryView extends Component {
     return Immutable.List();
   }
 
-  handleOnPressChampion(championId) {
-    this.setState({ championSelected: championId }, () => {
+  handleOnPressChampion(championId, championIndex) {
+    this.setState({ championSelectedIndex: championIndex }, () => {
       this.modal.open();
     });
   }
 
   renderContent() {
-    const championsMasteries = this.props.championsMasteries;
     const masteriesList = this.getMasteriesList();
     let championImageSize;
     let progressWidth;
@@ -138,18 +135,11 @@ class ChampionsMasteryView extends Component {
         dataSource={this.championsMasteryDataSource.cloneWithRows(masteriesList.toArray())}
         renderRow={(mastery, sectionId, rowId) => <ChampionMastery
           key={rowId}
-          onPress={this.handleOnPressChampion}
+          onPress={(championId) => { this.handleOnPressChampion(championId, rowId); }}
           mastery={mastery}
           championImageSize={championImageSize}
           progressWidth={progressWidth}
         />}
-        refreshControl={
-          <RefreshControl
-            refreshing={championsMasteries.get('isFetching')}
-            enabled={false}
-            colors={[colors.spinnerColor]}
-          />
-        }
         enableEmptySections
       />
       <Modal
@@ -159,7 +149,7 @@ class ChampionsMasteryView extends Component {
         onOpened={() => this.setState({ modalIsOpen: true })}
         onClosed={() => this.setState({ modalIsOpen: false })}
       >
-        {this.state.modalIsOpen && this.getModalContent()}
+        {this.getModalContent()}
       </Modal>
     </View>);
   }
