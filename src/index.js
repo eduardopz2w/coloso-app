@@ -7,6 +7,7 @@ import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import I18n from 'i18n-js';
 import moment from 'moment';
+import Config from 'react-native-config';
 import 'moment/locale/es';
 
 import versionChecker from './utils/versionChecker';
@@ -15,10 +16,9 @@ import translations from './translations';
 import logger from './utils/logger';
 import ColosoClient from './utils/ColosoClient';
 
+const ADMOB_BANNER_ID = Config.ADMOB_BANNER_ID;
 
 I18n.translations = translations;
-
-const ADMOB_BANNER_ID = 'ca-app-pub-9850680385333731/3213566801';
 
 function configureLocale() {
   const deviceLocale = DeviceInfo.getDeviceLocale().slice(0, 2).toLowerCase();

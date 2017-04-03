@@ -3,18 +3,15 @@ import Qs from 'qs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import DeviceInfo from 'react-native-device-info';
+import Config from 'react-native-config';
+
 import logger from './logger';
 
-let BASEURL = 'http://api.coloso.net';
-let TIMEOUT = 25000;
-
-if (__DEV__) {
-  BASEURL = 'http://192.168.1.2:3000';
-  TIMEOUT = 10000;
-}
+const BASE_URL = Config.API_URL;
+const TIMEOUT = parseInt(Config.REQUEST_TIMEOUT, 10);
 
 const axiosClient = axios.create({
-  baseURL: BASEURL,
+  baseURL: BASE_URL,
   timeout: TIMEOUT,
   responseType: 'json',
   headers: {

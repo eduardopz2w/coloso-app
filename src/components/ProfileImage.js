@@ -1,9 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Image } from 'react-native';
+import Config from 'react-native-config';
 
 class ProfileImage extends PureComponent {
   render() {
-    const url = `http://ddragon.leagueoflegends.com/cdn/7.5.2/img/profileicon/${this.props.id}.png`;
+    const url = `${Config.DDRAGON_URL}/img/profileicon/${this.props.id}.png`;
 
     return <Image source={{ uri: url }} style={this.props.style} />;
   }
