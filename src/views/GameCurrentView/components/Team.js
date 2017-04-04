@@ -2,6 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKColor } from 'react-native-material-kit';
+import Immutable from 'immutable';
 
 import BannedChampions from '../../../components/BannedChampions';
 import Participant from './Participant';
@@ -14,6 +15,10 @@ const styles = StyleSheet.create({
 });
 
 class Team extends PureComponent {
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.participants, this.props.participants);
+  }
+
   render() {
     const { bannedChampions, participants } = this.props;
 

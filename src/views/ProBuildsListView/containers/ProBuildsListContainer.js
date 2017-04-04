@@ -3,7 +3,8 @@ import { createSelectorCreator, defaultMemoize } from 'reselect';
 import Immutable from 'immutable';
 
 import ProBuildsListView from '../components/ProBuildsListView';
-import denormalize from '../../../utils/denormalize';
+import keyIn from '../../../utils/keyIn';
+import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
 import { fetchBuilds, refreshBuilds } from '../../../modules/ProBuildsActions';
 import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../../../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';
@@ -11,78 +12,56 @@ import { fetchProPlayers } from '../../../modules/ProPlayersActions';
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
 
 const getProBuildsIds = state => state.proBuilds.get('ids');
+const getProBuildsEntities = state => state.entities.filter(keyIn('proBuilds', 'proPlayers', 'proSummoners'));
+const getProPlayersIds = state => state.proPlayers.get('ids');
+const getProPlayersEntities = state => state.entities.filter(keyIn('proPlayers', 'proSummoners'));
 const getFavoriteProBuildsIds = state => state.favoriteProBuilds.get('ids');
 const getFavoriteBuildsFilters = state => ({
   championId: state.favoriteProBuilds.getIn(['filters', 'championId']),
   proPlayerId: state.favoriteProBuilds.getIn(['filters', 'proPlayerId']),
 });
-const getProPlayersIds = state => state.proPlayers.get('proPlayersIds');
-const getProBuildsEntities = state => state.entities.filter((value, key) => {
-  const filterKeys = ['proBuilds', 'proPlayers', 'proSummoners'];
 
-  return filterKeys.indexOf(key) >= 0;
-});
+const proBuildsSelector = createDenormalizeSelector('proBuilds', getProBuildsIds, getProBuildsEntities);
+const favoriteProBuildsSelector = createDenormalizeSelector('proBuilds', getFavoriteProBuildsIds, getProBuildsEntities);
 
-const getProPlayersEntities = state => state.entities.filter((value, key) => {
-  const filterKeys = ['proPlayers'];
-
-  return filterKeys.indexOf(key) >= 0;
-});
-
-const getProBuildsList = createImmutableSelector(
-  [getProBuildsIds, getProBuildsEntities, getFavoriteProBuildsIds],
-  (ids, entities, favoriteIdsList) => ids.map((id) => {
-    const build = denormalize(id, 'proBuilds', entities);
+const getProBuilds = createImmutableSelector(
+  proBuildsSelector,
+  getFavoriteProBuildsIds,
+  (proBuildsList, favoriteIdsList) => proBuildsList.map((proBuildMap) => {
+    const id = proBuildMap.get('id');
 
     if (favoriteIdsList.includes(id)) {
-      return build.set('isFavorite', true);
+      return proBuildMap.set('isFavorite', true);
     }
 
-    return build.set('isFavorite', false);
+    return proBuildMap.set('isFavorite', false);
   }),
 );
 
-const getFavoriteProBuildsList = createImmutableSelector(
-  [getFavoriteProBuildsIds, getProBuildsEntities, getFavoriteBuildsFilters],
-  (ids, entities, { championId, proPlayerId }) => {
-    const builds = ids.map((id) => {
-      const build = denormalize(id, 'proBuilds', entities);
+const getProPlayers = createDenormalizeSelector('proPlayers', getProPlayersIds, getProPlayersEntities);
 
-      return build.set('isFavorite', true);
-    });
+const getFavoriteProBuilds = createImmutableSelector(
+  favoriteProBuildsSelector,
+  getFavoriteBuildsFilters,
+  (builds, { championId, proPlayerId }) => builds.filter((build) => {
+    if (championId && build.get('championId') !== championId) {
+      return false;
+    }
 
-    return builds.filter((proBuild) => {
-      if (championId && proBuild.get('championId') !== championId) {
-        return false;
-      }
+    if (proPlayerId && build.getIn(['proSummoner', 'proPlayer', 'id']) !== proPlayerId) {
+      return false;
+    }
 
-      if (proPlayerId && proBuild.getIn(['proSummoner', 'proPlayer', 'id']) !== proPlayerId) {
-        return false;
-      }
-
-      return true;
-    });
-  },
+    return true;
+  }).map(build => build.set('isFavorite', true)),
 );
 
-const getProPlayersList = createImmutableSelector(
-  [getProPlayersIds, getProPlayersEntities],
-  (proPlayersIds, entities) => proPlayersIds.map(proPlayerId => denormalize(proPlayerId, 'proPlayers', entities)),
-);
 
 function mapStateToProps(state) {
-  let proBuilds = state.proBuilds;
-  let proPlayers = state.proPlayers;
-  let favoriteProBuilds = state.favoriteProBuilds;
-
-  proPlayers = proPlayers.set('data', getProPlayersList(state));
-  proBuilds = proBuilds.set('data', getProBuildsList(state));
-  favoriteProBuilds = favoriteProBuilds.set('data', getFavoriteProBuildsList(state));
-
   return {
-    proBuilds,
-    proPlayers,
-    favoriteProBuilds,
+    proBuilds: state.proBuilds.set('data', getProBuilds(state)),
+    proPlayers: state.proPlayers.set('data', getProPlayers(state)),
+    favoriteProBuilds: state.favoriteProBuilds.set('data', getFavoriteProBuilds(state)),
   };
 }
 

@@ -5,10 +5,8 @@ import { fetchProPlayers } from '../../modules/ProPlayersActions';
 const initState = Immutable.fromJS({
   fetched: false,
   isFetching: false,
-  proPlayersIds: [],
-  data: {
-    proPlayers: [],
-  },
+  ids: [],
+  data: {},
   fetchError: false,
   errorMessage: '',
 });
@@ -19,7 +17,7 @@ export default typeToReducer({
     FULFILLED: (state, { payload }) => state.merge({
       fetched: true,
       isFetching: false,
-      proPlayersIds: Immutable.List(payload.proPlayersIds),
+      ids: Immutable.List(payload.proPlayersIds),
     }),
     REJECTED: (state, action) => state.merge({
       isFetching: false,
