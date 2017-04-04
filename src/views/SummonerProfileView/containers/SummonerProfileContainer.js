@@ -1,6 +1,4 @@
 import { connect } from 'react-redux';
-import { createSelectorCreator, defaultMemoize } from 'reselect';
-import Immutable from 'immutable';
 
 import SummonerProfileView from '../components/SummonerProfileView';
 import {
@@ -13,14 +11,8 @@ import {
   fetchSummary,
   clearCache,
 } from '../modules/SummonerProfileActions';
-import denormalize from '../../../utils/denormalize';
-
-function keyIn(...keys) {
-  const keySet = Immutable.Set(keys);
-  return (v, k) => keySet.has(k);
-}
-
-const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
+import createSelector from '../../../utils/createSelector';
+import keyIn from '../../../utils/keyIn';
 
 const getChampionsMasteriesState = state => state.summonerProfile.get('championsMasteries');
 const getChampionsMasteriesEntities = state => state.entities.filter(keyIn('championsMasteries'));
@@ -37,37 +29,13 @@ const getSummaryEntities = state => state.entities.filter(keyIn('statsSummaries'
 const getSummonerState = state => state.summonerProfile.get('summonerData');
 const getSummonerEntities = state => state.entities.filter(keyIn('summoners'));
 
-
-const createSelector = (attrName, getState, getEntities) => createImmutableSelector(
-  [getState, getEntities],
-  (state, entities) => {
-    let newState = state;
-
-    if (newState.get('fetched')) {
-      newState = newState.merge({
-        data: denormalize(newState.get('id'), attrName, entities),
-      });
-    }
-
-    return newState;
-  },
-);
-
-const summonerSelector = createSelector('summoners', getSummonerState, getSummonerEntities);
-const masteriesSelector = createSelector('masteries', getMasteriesState, getMasteriesEntities);
-const gamesRecentSelector = createSelector('gamesRecent', getGamesRecentState, getGamesRecentEntities);
-const leagueEntriesSelector = createSelector('leagueEntries', getLeagueEntriesState, getLeagueEntriesEntities);
-const championsMasteriesSelector = createSelector('championsMasteries', getChampionsMasteriesState, getChampionsMasteriesEntities);
-const runesSelector = createSelector('runes', getRunesState, getRunesEntities);
-const summarySelector = createSelector('statsSummaries', getSummaryState, getSummaryEntities);
-
-const getSummoner = summonerSelector;
-const getMasteries = masteriesSelector;
-const getGamesRecent = gamesRecentSelector;
-const getLeagueEntries = leagueEntriesSelector;
-const getChampionsMasteries = championsMasteriesSelector;
-const getRunes = runesSelector;
-const getSummary = summarySelector;
+const getSummoner = createSelector('summoners', getSummonerState, getSummonerEntities);
+const getMasteries = createSelector('masteries', getMasteriesState, getMasteriesEntities);
+const getGamesRecent = createSelector('gamesRecent', getGamesRecentState, getGamesRecentEntities);
+const getLeagueEntries = createSelector('leagueEntries', getLeagueEntriesState, getLeagueEntriesEntities);
+const getChampionsMasteries = createSelector('championsMasteries', getChampionsMasteriesState, getChampionsMasteriesEntities);
+const getRunes = createSelector('runes', getRunesState, getRunesEntities);
+const getSummary = createSelector('statsSummaries', getSummaryState, getSummaryEntities);
 
 function mapStateToProps(state) {
   return {

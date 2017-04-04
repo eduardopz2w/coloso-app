@@ -8,6 +8,8 @@ import numeral from 'numeral';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import KeepAwake from 'react-native-keep-awake';
+import Immutable from 'immutable';
+import _ from 'lodash';
 
 import { tracker } from '../../../utils/analytics';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -103,6 +105,12 @@ class ProBuildView extends Component {
     KeepAwake.activate();
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(nextProps.proBuild, this.props.proBuild) ||
+      !Immutable.is(nextProps.match, this.props.match) ||
+      !_.isEqual(nextState, this.state);
+  }
+
   componentWillUnmount() {
     KeepAwake.deactivate();
   }
@@ -135,7 +143,7 @@ class ProBuildView extends Component {
   handleOnChangeTab({ i }) {
     if (i === 3) {
       const matchFetched = this.props.match.get('fetched');
-      const matchFetchedUrid = this.props.match.get('urid');
+      const matchFetchedUrid = this.props.match.get('id');
       const actualMatchUrid = this.props.proBuild.getIn(['data', 'matchUrid']);
 
       if (!matchFetched || matchFetchedUrid !== actualMatchUrid) {

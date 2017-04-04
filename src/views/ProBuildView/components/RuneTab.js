@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import { View, StyleSheet } from 'react-native';
+
 import RunePage from '../../../components/RunePage';
 
 const styles = StyleSheet.create({
@@ -11,6 +12,10 @@ const styles = StyleSheet.create({
 });
 
 class RuneTab extends PureComponent {
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.runes, this.props.runes);
+  }
+
   render() {
     const page = Immutable.fromJS({
       runes: this.props.runes,

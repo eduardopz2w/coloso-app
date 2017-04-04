@@ -7,7 +7,7 @@ const initialState = Immutable.fromJS({
   fetchError: false,
   errorMessage: '',
   isFetching: true,
-  urid: null,
+  id: null,
 });
 
 export default typeToReducer({
@@ -21,7 +21,7 @@ export default typeToReducer({
     FULFILLED: (state, { payload }) => state.merge({
       fetched: true,
       isFetching: false,
-      urid: payload.matchUrid,
+      id: payload.matchUrid,
     }),
 
     REJECTED: (state, action) => state.merge({

@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
 
 import ErrorScreen from '../../../components/ErrorScreen';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -13,6 +14,10 @@ class Matchtab extends PureComponent {
     super(props);
 
     this.renderContent = this.renderContent.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.match, this.props.match);
   }
 
   getTeam(teamId) {

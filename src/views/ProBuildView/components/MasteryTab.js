@@ -1,20 +1,21 @@
 import React, { PureComponent } from 'react';
+import { View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
-import { View, StyleSheet } from 'react-native';
+
 import MasteryPage from '../../../components/MasteryPage';
 
-const styles = StyleSheet.create({
-  root: {},
-});
-
 class MasteryTab extends PureComponent {
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.masteries, this.props.masteries);
+  }
+
   render() {
     const page = Immutable.fromJS({
       masteries: this.props.masteries,
     });
 
-    return (<View style={styles.root}>
+    return (<View>
       <MasteryPage page={page} />
     </View>);
   }

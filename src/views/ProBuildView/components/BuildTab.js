@@ -6,6 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import numeral from 'numeral';
 import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Immutable from 'immutable';
 
 import sentenceCase from '../../../utils/sentenceCase';
 import Item from './Item';
@@ -173,6 +174,10 @@ class BuildTab extends Component {
     this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillsPriority = this.renderSkillsPriority.bind(this);
     this.renderSkillsOrder = this.renderSkillsOrder.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.proBuild, this.props.proBuild);
   }
 
   getItemStyle() {
