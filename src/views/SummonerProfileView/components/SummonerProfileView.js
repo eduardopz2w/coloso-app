@@ -101,7 +101,7 @@ class SummonerProfileView extends Component {
       >
         <LeagueEntryView
           tabLabel={I18n.t('ranked')}
-          leagueEntry={this.props.leagueEntry}
+          leagueEntries={this.props.leagueEntries}
           onPressRetryButton={() => this.props.fetchLeagueEntry()}
         />
         <ChampionsMasteryView
@@ -147,7 +147,7 @@ SummonerProfileView.propTypes = {
   fetchSummary: PropTypes.func.isRequired,
   fetchRunes: PropTypes.func.isRequired,
   clearCache: PropTypes.func.isRequired,
-  leagueEntry: ImmutablePropTypes.mapContains({
+  leagueEntries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,

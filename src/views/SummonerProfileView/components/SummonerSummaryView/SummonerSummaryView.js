@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { StyleSheet, ListView, View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
+
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import SeasonSelector from '../../../../components/SeasonSelector';
@@ -38,7 +39,7 @@ function filterEmpty(summaries) {
   });
 }
 
-class SummonerSumaryView extends Component {
+class SummonerSumaryView extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -47,6 +48,10 @@ class SummonerSumaryView extends Component {
     });
 
     this.renderContent = this.renderContent.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.summary, this.props.summary);
   }
 
   renderContent() {
