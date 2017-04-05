@@ -252,7 +252,7 @@ class GameRecent extends PureComponent {
     const duration = moment.duration({ seconds });
     const minutes = (duration.hours() * 60) + duration.minutes();
 
-    return `${numeral(minutes).format('00')}:${numeral(duration.minutes()).format('00')}`;
+    return `${numeral(minutes).format('00')}:${numeral(duration.seconds()).format('00')}`;
   }
 
   renderMultiKillBadge() {
