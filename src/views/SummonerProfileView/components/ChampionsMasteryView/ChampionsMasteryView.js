@@ -123,11 +123,10 @@ class ChampionsMasteryView extends Component {
     if (masteriesList.size === 0) {
       return (<View style={{ flex: 1 }}>
         <Summary masteries={masteriesList} />
-        <View style={styles.container}>
-          <Text style={styles.messageText}>
-            {I18n.t('summoner_does_not_have_champions_masteries')}
-          </Text>
-        </View>
+        <ErrorScreen
+          message={I18n.t('summoner_does_not_have_champions_masteries')}
+          retryButton={false}
+        />
       </View>);
     }
 

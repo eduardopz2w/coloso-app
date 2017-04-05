@@ -1,7 +1,8 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, StyleSheet, View, Text } from 'react-native';
+import { ListView, StyleSheet } from 'react-native';
 
 import SelectorItem from './SelectorItem';
+import ErrorScreen from '../ErrorScreen';
 
 const styles = StyleSheet.create({
   root: {
@@ -32,7 +33,7 @@ class SelectorList extends Component {
 
   render() {
     if (this.props.items.length === 0) {
-      return <View style={styles.container}><Text>{this.props.noResultsText}</Text></View>;
+      return <ErrorScreen message={this.props.noResultsText} retryButton={false} />;
     }
 
     return (<ListView
