@@ -1,13 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import Dialog from 'react-native-dialogs';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
-import { RNMail as Mailer } from 'NativeModules';
 
 import regionHumanize from '../../utils/regionHumanize';
 import colors from '../../utils/colors';
@@ -82,68 +79,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
-
-const suggestionTemplate = `====== Required Info ======
-App Version: ${DeviceInfo.getVersion()}
-Device: ${DeviceInfo.getBrand()} (${DeviceInfo.getModel()})
-System Version: ${DeviceInfo.getSystemVersion()} (${DeviceInfo.getSystemName()})
-Locale: ${DeviceInfo.getDeviceLocale()}
-Timezone: ${DeviceInfo.getTimezone()}
-========================
-Suggestion: `;
-
-function showAddAccountDialog() {
-  const dialog = new Dialog();
-  dialog.set({
-    content: I18n.t('have_to_add_account'),
-    positiveText: 'OK',
-  });
-  dialog.show();
-}
-
-function handleOnPressSuggestion() {
-  Mailer.mail({
-    subject: 'Coloso - Suggestion',
-    recipients: [SUGGESTION_EMAIL],
-    body: suggestionTemplate,
-  }, () => {});
-}
-
 class SideMenu extends PureComponent {
   constructor(props) {
     super(props);
 
     this.renderAccountData = this.renderAccountData.bind(this);
-    this.handleOnPressProfile = this.handleOnPressProfile.bind(this);
-    this.handleOnPressSearchGame = this.handleOnPressSearchGame.bind(this);
-  }
-
-  handleOnPressProfile() {
-    const { ownerAccount } = this.props;
-
-    if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      showAddAccountDialog();
-      Actions.manageAccountView();
-      this.context.drawer.close();
-    } else {
-      Actions.summonerProfileView({
-        summonerUrid: ownerAccount.get('summonerUrid'),
-      });
-      this.context.drawer.close();
-    }
-  }
-
-  handleOnPressSearchGame() {
-    const { ownerAccount } = this.props;
-
-    if (_.isNull(ownerAccount.get('summonerUrid'))) {
-      showAddAccountDialog();
-      Actions.manageAccountView();
-      this.context.drawer.close();
-    } else {
-      this.props.onPressSearchGame();
-    }
   }
 
   renderAccountData() {
@@ -151,10 +91,7 @@ class SideMenu extends PureComponent {
 
     if (_.isNull(ownerAccount.get('summonerUrid'))) {
       return (<TouchableWithoutFeedback
-        onPress={() => {
-          Actions.manageAccountView();
-          this.context.drawer.close();
-        }}
+        onPress={this.props.onPressManageAccount}
       >
         <View style={styles.accountDataContainer}>
           <View style={[styles.accountImage, styles.noAccountCircle]}>
@@ -168,10 +105,7 @@ class SideMenu extends PureComponent {
     }
 
     return (<TouchableWithoutFeedback
-      onPress={() => {
-        Actions.manageAccountView();
-        this.context.drawer.close();
-      }}
+      onPress={this.props.onPressManageAccount}
     >
       <View style={styles.accountDataContainer}>
         <ProfileImage id={ownerAccount.get('profileIconId')} style={styles.accountImage} />
@@ -192,37 +126,31 @@ class SideMenu extends PureComponent {
         <MenuItem
           iconName="account-circle"
           title={I18n.t('my_account')}
-          onPress={this.handleOnPressProfile}
+          onPress={this.props.onPressProfile}
         />
 
         <MenuItem
           iconName="games"
           title={I18n.t('my_game')}
-          onPress={this.handleOnPressSearchGame}
+          onPress={this.props.onPressMyGame}
         />
 
         <MenuItem
           iconName="search"
           title={I18n.t('searches')}
-          onPress={() => {
-            Actions.summonerSearchView();
-            this.context.drawer.close();
-          }}
+          onPress={this.props.onPressSummonerSearch}
         />
 
         <MenuItem
           title={I18n.t('pro_builds')}
           iconName="gavel"
-          onPress={() => {
-            Actions.proBuildsListView();
-            this.context.drawer.close();
-          }}
+          onPress={this.props.onPressProBuilds}
         />
 
         <MenuItem
           title={I18n.t('suggestion')}
           iconName="mail"
-          onPress={handleOnPressSuggestion}
+          onPress={this.props.onPressSuggestion}
         />
       </ScrollView>
 
@@ -238,11 +166,12 @@ SideMenu.propTypes = {
     profileIconId: PropTypes.number,
     region: PropTypes.string,
   }),
-  onPressSearchGame: PropTypes.func,
-};
-
-SideMenu.contextTypes = {
-  drawer: React.PropTypes.object,
+  onPressSuggestion: PropTypes.func,
+  onPressProfile: PropTypes.func,
+  onPressProBuilds: PropTypes.func,
+  onPressSummonerSearch: PropTypes.func,
+  onPressMyGame: PropTypes.func,
+  onPressManageAccount: PropTypes.func,
 };
 
 export default SideMenu;
