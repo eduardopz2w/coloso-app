@@ -67,7 +67,7 @@ export const addFavoriteBuild = createAction('FAVORITE_BUILDS/ADD_BUILD', id => 
     })
     .catch((e) => {
       if (e.name === 'NotFoundError') {
-        saveIdsToStorage([])
+        saveIdsToStorage([id])
           .then(() => resolve({ ids: [id] }))
           .catch(() => reject({ errorMessage: I18n.t('errors.something_wrong') }));
       } else {
