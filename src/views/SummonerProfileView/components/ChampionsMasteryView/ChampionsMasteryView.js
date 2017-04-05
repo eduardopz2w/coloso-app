@@ -115,7 +115,7 @@ class ChampionsMasteryView extends Component {
       progressWidth = 5;
       pageSize = 9;
     } else {
-      championImageSize = 100;
+      championImageSize = 80;
       progressWidth = 7;
       pageSize = 16;
     }
