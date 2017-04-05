@@ -114,9 +114,10 @@ class ProBuildsList extends Component {
         onPressRetryButton={this.props.onPressRetry}
       />);
     } else if (!this.props.isFetching && this.props.builds.size === 0) {
-      return (<View style={{ padding: 16 }}>
-        <Text>{this.props.emptyListMessage}</Text>
-      </View>);
+      return (<ErrorScreen
+        message={this.props.emptyListMessage}
+        retryButton={false}
+      />);
     }
 
     return (<ListView

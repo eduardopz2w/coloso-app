@@ -78,6 +78,7 @@ export default {
   quadrakills: 'Quadrakills',
   ranked: 'Ranked',
   red_team: 'Red Team',
+  retry: 'Retry',
   runes: 'Runes',
   searches: 'Search',
   season: 'Season',

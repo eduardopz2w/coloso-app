@@ -78,6 +78,7 @@ export default {
   quadrakills: 'Quadrakills',
   ranked: 'Clasificatoria',
   red_team: 'Equipo Rojo',
+  retry: 'Reintentar',
   runes: 'Runas',
   searches: 'Búsquedas',
   season: 'Temporada',

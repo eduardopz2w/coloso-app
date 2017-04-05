@@ -200,14 +200,6 @@ function renderItemImage(itemId) {
   return <View style={styles.noItem} />;
 }
 
-function getIconSize() {
-  if (Dimensions.get('window').width >= 600) {
-    return 25;
-  }
-
-  return 15;
-}
-
 class GameRecent extends PureComponent {
   constructor(props) {
     super(props);
@@ -331,7 +323,7 @@ class GameRecent extends PureComponent {
                 <Text style={styles.dataText}>{game.getIn(['stats', 'wardPlaced']) || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
-                <Icon style={styles.iconImage} name="timer" size={getIconSize()} />
+                <Icon style={styles.iconImage} name="timer" size={15} />
                 <Text style={styles.dataText}>{this.getTimePlayed()}</Text>
               </View>
               <View style={styles.iconDataCol}>
@@ -349,7 +341,7 @@ class GameRecent extends PureComponent {
               {renderItemImage(game.getIn(['stats', 'item6']))}
             </Row>
             <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
-              <Icon style={styles.iconImage} name="access-time" size={getIconSize()} />
+              <Icon style={styles.iconImage} name="access-time" size={15} />
               <Text style={styles.dataText}> {moment(game.get('createDate')).fromNow()}</Text>
             </Row>
           </Grid>

@@ -1,6 +1,7 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import { View, StyleSheet, Text, TouchableNativeFeedback, Image } from 'react-native';
+import I18n from 'i18n-js';
+
 import colors from '../utils/colors';
 
 const styles = StyleSheet.create({
@@ -9,9 +10,6 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  icon: {
-    marginBottom: 8,
   },
   retryText: {
     fontSize: 16,
@@ -25,19 +23,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     justifyContent: 'center',
   },
+  image: {
+    width: 100,
+    height: 100,
+    margin: 8,
+  },
 });
 
 class ErrorScreen extends PureComponent {
   render() {
     return (<View style={styles.root}>
-      <Icon style={styles.icon} name="error-outline" size={80} />
+      <Image style={styles.image} source={{ uri: 'sticker_poro_sad' }} />
       <Text style={styles.message}>{this.props.message}</Text>
       {this.props.retryButton &&
         <TouchableNativeFeedback
           onPress={this.props.onPressRetryButton}
         >
           <View style={styles.retryButton}>
-            <Text style={styles.retryText}>REINTENTAR</Text>
+            <Text style={styles.retryText}>{I18n.t('retry').toUpperCase()}</Text>
           </View>
         </TouchableNativeFeedback>
       }

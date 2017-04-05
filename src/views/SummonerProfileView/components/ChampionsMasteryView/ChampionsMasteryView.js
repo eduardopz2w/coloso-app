@@ -115,7 +115,7 @@ class ChampionsMasteryView extends Component {
       progressWidth = 5;
       pageSize = 9;
     } else {
-      championImageSize = 100;
+      championImageSize = 80;
       progressWidth = 7;
       pageSize = 16;
     }
@@ -123,11 +123,10 @@ class ChampionsMasteryView extends Component {
     if (masteriesList.size === 0) {
       return (<View style={{ flex: 1 }}>
         <Summary masteries={masteriesList} />
-        <View style={styles.container}>
-          <Text style={styles.messageText}>
-            {I18n.t('summoner_does_not_have_champions_masteries')}
-          </Text>
-        </View>
+        <ErrorScreen
+          message={I18n.t('summoner_does_not_have_champions_masteries')}
+          retryButton={false}
+        />
       </View>);
     }
 
