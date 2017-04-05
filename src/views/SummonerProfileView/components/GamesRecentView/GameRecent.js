@@ -7,6 +7,8 @@ import moment from 'moment';
 import numeral from 'numeral';
 import _ from 'lodash';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
+import I18n from 'i18n-js';
+
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 import gameModeParser from '../../../../utils/gameModeParser';
@@ -213,6 +215,7 @@ class GameRecent extends PureComponent {
     this.getBorderLeftStyle = this.getBorderLeftStyle.bind(this);
     this.getGameTitleLabel = this.getGameTitleLabel.bind(this);
     this.renderMultiKillBadge = this.renderMultiKillBadge.bind(this);
+    this.getTimePlayed = this.getTimePlayed.bind(this);
   }
 
   getBorderLeftStyle() {
@@ -238,10 +241,18 @@ class GameRecent extends PureComponent {
     const subType = this.props.game.get('subType');
 
     if (subType.includes('RANKED') && !subType.includes('UNRANKED')) {
-      return 'Clasificatoria';
+      return I18n.t('ranked');
     }
 
     return 'Normal';
+  }
+
+  getTimePlayed() {
+    const seconds = this.props.game.getIn(['stats', 'timePlayed']);
+    const duration = moment.duration({ seconds });
+    const minutes = (duration.hours() * 60) + duration.minutes();
+
+    return `${numeral(minutes).format('00')}:${numeral(duration.minutes()).format('00')}`;
   }
 
   renderMultiKillBadge() {
@@ -268,7 +279,6 @@ class GameRecent extends PureComponent {
 
   render() {
     const { game } = this.props;
-    const timePlayedMomentDuration = moment.duration({ seconds: game.getIn(['stats', 'timePlayed']) });
 
     return (<View style={styles.root}>
       <View style={[styles.container, this.getBorderLeftStyle()]}>
@@ -322,7 +332,7 @@ class GameRecent extends PureComponent {
               </View>
               <View style={styles.iconDataCol}>
                 <Icon style={styles.iconImage} name="timer" size={getIconSize()} />
-                <Text style={styles.dataText}>{moment(timePlayedMomentDuration.asMilliseconds()).format('mm:ss')}</Text>
+                <Text style={styles.dataText}>{this.getTimePlayed()}</Text>
               </View>
               <View style={styles.iconDataCol}>
                 <Text style={styles.dataText}>IP: </Text>
