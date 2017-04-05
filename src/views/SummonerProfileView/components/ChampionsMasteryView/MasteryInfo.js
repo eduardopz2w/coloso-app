@@ -6,6 +6,7 @@ import { MKProgress } from 'react-native-material-kit';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import moment from 'moment';
 import I18n from 'i18n-js';
+import numeral from 'numeral';
 
 import styleUtils from '../../../../utils/styleUtils';
 import sentenceCase from '../../../../utils/sentenceCase';
@@ -103,8 +104,8 @@ class MasteryInfo extends Component {
     return (<View style={{ marginBottom: 16 }}>
       <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('progress')}:</Text>
       <View style={{ flexDirection: 'row' }}>
-        <Col><Text style={styles.text}>{championPoints}</Text></Col>
-        <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{nextLevelPoints}</Text></Col>
+        <Col><Text style={styles.text}>{numeral(championPoints).format('0,0')}</Text></Col>
+        <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{numeral(nextLevelPoints).format('0,0')}</Text></Col>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <MKProgress progress={progressNumber} style={styles.progress} progressColor={tintColor} />

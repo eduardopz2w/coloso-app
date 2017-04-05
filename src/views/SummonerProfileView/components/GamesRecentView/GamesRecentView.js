@@ -23,6 +23,10 @@ class GamesRecentView extends PureComponent {
     tracker.trackScreenView('GamesRecentView');
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.gamesRecent, this.props.gamesRecent);
+  }
+
   getGamesList() {
     const gamesList = this.props.gamesRecent.getIn(['data', 'games']);
 

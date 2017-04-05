@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
@@ -51,7 +51,7 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-class SummonerProfileViewToolbar extends Component {
+class SummonerProfileViewToolbar extends PureComponent {
   constructor(props) {
     super(props);
 

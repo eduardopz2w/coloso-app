@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import Immutable from 'immutable';
+import _ from 'lodash';
+
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
@@ -40,6 +43,11 @@ class RunesView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('RunesView');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(nextProps.runes, this.props.runes) ||
+      !_.isEqual(nextState, this.state);
   }
 
   renderContent() {

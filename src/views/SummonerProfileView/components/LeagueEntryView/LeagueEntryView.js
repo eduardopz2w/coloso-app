@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, ListView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   },
 });
 
-class LeagueEntryView extends Component {
+class LeagueEntryView extends PureComponent {
   constructor(props) {
     super(props);
 
@@ -29,14 +29,18 @@ class LeagueEntryView extends Component {
     tracker.trackScreenView('LeagueEntryView');
   }
 
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.leagueEntries, this.props.leagueEntries);
+  }
+
   getEntriesList() {
-    const entriesList = this.props.leagueEntry.getIn(['data', 'entries']);
+    const entriesList = this.props.leagueEntries.getIn(['data', 'entries']);
 
     if (entriesList && entriesList.size > 0) {
       return entriesList;
     }
 
-    if (this.props.leagueEntry.get('isFetching')) {
+    if (this.props.leagueEntries.get('isFetching')) {
       return Immutable.List([]);
     }
 
@@ -71,18 +75,18 @@ class LeagueEntryView extends Component {
   }
 
   render() {
-    const leagueEntry = this.props.leagueEntry;
+    const leagueEntries = this.props.leagueEntries;
 
-    if (leagueEntry.get('isFetching')) {
+    if (leagueEntries.get('isFetching')) {
       return (<View style={{ padding: 16, alignItems: 'center' }}>
         <LoadingIndicator />
       </View>);
-    } else if (leagueEntry.get('fetchError')) {
+    } else if (leagueEntries.get('fetchError')) {
       return (<ErrorScreen
-        message={leagueEntry.get('errorMessage')}
+        message={leagueEntries.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
       />);
-    } else if (leagueEntry.get('fetched')) {
+    } else if (leagueEntries.get('fetched')) {
       return this.renderContent();
     }
 
@@ -91,7 +95,7 @@ class LeagueEntryView extends Component {
 }
 
 LeagueEntryView.propTypes = {
-  leagueEntry: ImmutablePropTypes.mapContains({
+  leagueEntries: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool.isRequired,
     isFetching: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,

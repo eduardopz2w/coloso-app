@@ -1,10 +1,15 @@
 import React, { PureComponent, PropTypes } from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
+import Immutable from 'immutable';
 
 import ProBuildsList from '../../../components/ProBuildsList';
 
 class ProBuildsTab extends PureComponent {
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.favoriteProBuilds, this.props.favoriteProBuilds);
+  }
+
   render() {
     return (<ProBuildsList
       builds={this.props.favoriteProBuilds.get('data')}

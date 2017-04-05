@@ -11,63 +11,72 @@ import {
   fetchSummary,
   clearCache,
 } from '../modules/SummonerProfileActions';
-import denormalize from '../../../utils/denormalize';
+import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
+import keyIn from '../../../utils/keyIn';
+
+const getChampionsMasteriesId = state => state.summonerProfile.getIn(['championsMasteries', 'id']);
+const getChampionsMasteriesEntities = state => state.entities.filter(keyIn('championsMasteries'));
+const getGamesRecentId = state => state.summonerProfile.getIn(['gamesRecent', 'id']);
+const getGamesRecentEntities = state => state.entities.filter(keyIn('gamesRecent'));
+const getMasteriesId = state => state.summonerProfile.getIn(['masteries', 'id']);
+const getMasteriesEntities = state => state.entities.filter(keyIn('masteries'));
+const getLeagueEntriesId = state => state.summonerProfile.getIn(['leagueEntries', 'id']);
+const getLeagueEntriesEntities = state => state.entities.filter(keyIn('leagueEntries'));
+const getRunesId = state => state.summonerProfile.getIn(['runes', 'id']);
+const getRunesEntities = state => state.entities.filter(keyIn('runes'));
+const getSummaryId = state => state.summonerProfile.getIn(['summary', 'id']);
+const getSummaryEntities = state => state.entities.filter(keyIn('statsSummaries'));
+const getSummonerId = state => state.summonerProfile.getIn(['summonerData', 'id']);
+const getSummonerEntities = state => state.entities.filter(keyIn('summoners'));
+
+const getSummoner = createDenormalizeSelector('summoners', getSummonerId, getSummonerEntities);
+const getMasteries = createDenormalizeSelector('masteries', getMasteriesId, getMasteriesEntities);
+const getGamesRecent = createDenormalizeSelector('gamesRecent', getGamesRecentId, getGamesRecentEntities);
+const getLeagueEntries = createDenormalizeSelector('leagueEntries', getLeagueEntriesId, getLeagueEntriesEntities);
+const getChampionsMasteries = createDenormalizeSelector('championsMasteries', getChampionsMasteriesId, getChampionsMasteriesEntities);
+const getRunes = createDenormalizeSelector('runes', getRunesId, getRunesEntities);
+const getSummary = createDenormalizeSelector('statsSummaries', getSummaryId, getSummaryEntities);
 
 function mapStateToProps(state) {
   let summonerData = state.summonerProfile.get('summonerData');
-  let leagueEntry = state.summonerProfile.get('leagueEntry');
+  let leagueEntries = state.summonerProfile.get('leagueEntries');
   let championsMasteries = state.summonerProfile.get('championsMasteries');
   let gamesRecent = state.summonerProfile.get('gamesRecent');
   let masteries = state.summonerProfile.get('masteries');
   let runes = state.summonerProfile.get('runes');
   let summary = state.summonerProfile.get('summary');
-  const entities = state.entities;
 
   if (summonerData.get('fetched')) {
-    summonerData = summonerData.merge({
-      data: denormalize(summonerData.get('summonerUrid'), 'summoners', entities),
-    });
+    summonerData = summonerData.set('data', getSummoner(state));
   }
 
-  if (leagueEntry.get('fetched')) {
-    leagueEntry = leagueEntry.merge({
-      data: denormalize(leagueEntry.get('leagueEntryId'), 'leagueEntries', entities),
-    });
+  if (leagueEntries.get('fetched')) {
+    leagueEntries = leagueEntries.set('data', getLeagueEntries(state));
   }
 
   if (championsMasteries.get('fetched')) {
-    championsMasteries = championsMasteries.merge({
-      data: denormalize(championsMasteries.get('championsMasteriesId'), 'championsMasteries', entities),
-    });
+    championsMasteries = championsMasteries.set('data', getChampionsMasteries(state));
   }
 
   if (gamesRecent.get('fetched')) {
-    gamesRecent = gamesRecent.merge({
-      data: denormalize(gamesRecent.get('gamesRecentId'), 'gamesRecent', entities),
-    });
+    gamesRecent = gamesRecent.set('data', getGamesRecent(state));
   }
 
   if (masteries.get('fetched')) {
-    masteries = masteries.merge({
-      data: denormalize(masteries.get('masteriesId'), 'masteries', entities),
-    });
+    masteries = masteries.set('data', getMasteries(state));
   }
 
   if (runes.get('fetched')) {
-    runes = runes.merge({
-      data: denormalize(runes.get('runesId'), 'runes', entities),
-    });
+    runes = runes.set('data', getRunes(state));
   }
 
   if (summary.get('fetched')) {
-    summary = summary.merge({
-      data: denormalize(summary.get('statsSummariesId'), 'statsSummaries', entities),
-    });
+    summary = summary.set('data', getSummary(state));
   }
 
   return {
     summonerData,
-    leagueEntry,
+    leagueEntries,
     championsMasteries,
     gamesRecent,
     masteries,

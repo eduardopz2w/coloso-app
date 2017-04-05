@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
+import Immutable from 'immutable';
 
 import IconButton from '../../../components/IconButton';
 import regionHumanize from '../../../utils/regionHumanize';
@@ -171,6 +172,10 @@ class SummonerProfileViewToolbar extends Component {
     }
 
     return null;
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.summonerData, this.props.summonerData);
   }
 
   renderSummonerData() {

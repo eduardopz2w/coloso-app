@@ -5,6 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Modal from 'react-native-modalbox';
 import I18n from 'i18n-js';
+import _ from 'lodash';
 
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
@@ -54,7 +55,6 @@ class ChampionsMasteryView extends Component {
     super(props);
 
     this.state = {
-      modalIsOpen: false,
       championSelectedIndex: 0,
     };
 
@@ -70,6 +70,11 @@ class ChampionsMasteryView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('ChampionsMasteryView');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(nextProps.championsMasteries, this.props.championsMasteries) ||
+      !_.isEqual(nextState, this.state);
   }
 
   getModalContent() {
@@ -146,8 +151,6 @@ class ChampionsMasteryView extends Component {
         style={styles.modal}
         position="center"
         ref={(modal) => { this.modal = modal; }}
-        onOpened={() => this.setState({ modalIsOpen: true })}
-        onClosed={() => this.setState({ modalIsOpen: false })}
       >
         {this.getModalContent()}
       </Modal>

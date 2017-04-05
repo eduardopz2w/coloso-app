@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
+import Immutable from 'immutable';
+import _ from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
 import colors from '../../../../utils/colors';
@@ -35,6 +38,11 @@ class MasteriesView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('MasteriesView');
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(nextProps.masteries, this.props.masteries) ||
+      !_.isEqual(nextState, this.state);
   }
 
   renderContent() {

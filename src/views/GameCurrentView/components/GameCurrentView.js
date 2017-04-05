@@ -6,6 +6,7 @@ import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import I18n from 'i18n-js';
+import _ from 'lodash';
 
 import colors from '../../../utils/colors';
 import Team from './Team';
@@ -80,13 +81,20 @@ class GameCurrentView extends Component {
     tracker.trackScreenView('GameCurrentView');
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return !Immutable.is(nextProps.proBuilds, this.props.proBuilds) ||
+      !Immutable.is(nextProps.gameData, this.props.gameData) ||
+      !Immutable.is(nextProps.proPlayers, this.props.proPlayers) ||
+      !_.isEqual(nextState, this.state);
+  }
+
   componentWillUnmount() {
     this.backAndroidListener.remove();
   }
 
   getTeamData(teamId) {
-    const participants = this.props.gameData.get('participants').filter(participant => participant.get('teamId') === teamId);
-    const bannedChampions = this.props.gameData.get('bannedChampions').filter(bannedChamp => bannedChamp.get('teamId') === teamId);
+    const participants = this.props.gameData.getIn(['data', 'participants']).filter(participant => participant.get('teamId') === teamId);
+    const bannedChampions = this.props.gameData.getIn(['data', 'bannedChampions']).filter(bannedChamp => bannedChamp.get('teamId') === teamId);
 
     return {
       participants,
@@ -95,18 +103,18 @@ class GameCurrentView extends Component {
   }
 
   getSummonerRunes(summonerUrid) {
-    return this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === summonerUrid).get('runes');
+    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === summonerUrid).get('runes');
   }
 
   getSummonerMasteries(summonerUrid) {
-    return this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === summonerUrid).get('masteries');
+    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === summonerUrid).get('masteries');
   }
 
   getFocusChampionId() {
-    const focusSummonerUrid = this.props.gameData.get('focusSummonerUrid');
+    const focusSummonerUrid = this.props.gameData.getIn(['data', 'focusSummonerUrid']);
 
     if (focusSummonerUrid) {
-      const participantFound = this.props.gameData.get('participants').find(participant => participant.get('summonerUrid') === focusSummonerUrid);
+      const participantFound = this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === focusSummonerUrid);
 
       if (participantFound) {
         const championId = participantFound.get('championId');
@@ -184,8 +192,8 @@ class GameCurrentView extends Component {
 
     return (<View style={styles.root}>
       <Toolbar
-        mapId={gameData.get('mapId')}
-        gameQueueConfigId={gameData.get('gameQueueConfigId')}
+        mapId={gameData.getIn(['data', 'mapId'])}
+        gameQueueConfigId={gameData.getIn(['data', 'gameQueueConfigId'])}
         onPressBackButton={() => Actions.pop()}
       />
       <ScrollableTabView
@@ -205,7 +213,7 @@ class GameCurrentView extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summonerProfileView({ summonerUrid });
               }}
-              focusSummonerUrid={gameData.get('focusSummonerUrid')}
+              focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />
             <Team
               {...this.getTeamData(200)}
@@ -214,7 +222,7 @@ class GameCurrentView extends Component {
               onPressProfileButton={(summonerUrid) => {
                 Actions.summonerProfileView({ summonerUrid });
               }}
-              focusSummonerUrid={gameData.get('focusSummonerUrid')}
+              focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />
           </ScrollView>
         </View>
@@ -260,13 +268,16 @@ class GameCurrentView extends Component {
 
 GameCurrentView.propTypes = {
   gameData: ImmutablePropTypes.mapContains({
-    participants: ImmutablePropTypes.list,
-    mapId: PropTypes.number,
-    gameQueueConfigId: PropTypes.number,
-    gameLength: PropTypes.number,
-    region: PropTypes.string,
-    gameStartTime: PropTypes.number,
-    focusSummonerUrid: PropTypes.string,
+    id: PropTypes.string,
+    data: ImmutablePropTypes.mapContains({
+      participants: ImmutablePropTypes.list,
+      mapId: PropTypes.number,
+      gameQueueConfigId: PropTypes.number,
+      gameLength: PropTypes.number,
+      region: PropTypes.string,
+      gameStartTime: PropTypes.number,
+      focusSummonerUrid: PropTypes.string,
+    }),
   }),
   proBuilds: ImmutablePropTypes.mapContains({
     builds: ImmutablePropTypes.list,

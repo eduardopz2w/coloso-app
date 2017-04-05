@@ -1,25 +1,23 @@
 import { connect } from 'react-redux';
+
 import { fetchProBuild } from '../modules/ProBuildActions';
 import { fetchMatch } from '../modules/MatchActions';
-import denormalize from '../../../utils/denormalize';
-
+import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
+import keyIn from '../../../utils/keyIn';
 import ProBuildView from '../components/ProBuildView';
 
+const getProBuildId = state => state.proBuild.get('id');
+const getProBuildEntities = state => state.entities.filter(keyIn('proBuilds', 'proPlayers', 'proSummoners'));
+const getMatchId = state => state.match.get('id');
+const getMatchEntities = state => state.entities.filter(keyIn('matches'));
+
+const getProBuild = createDenormalizeSelector('proBuilds', getProBuildId, getProBuildEntities);
+const getMatch = createDenormalizeSelector('matches', getMatchId, getMatchEntities);
+
 function mapStateToProps(state) {
-  let proBuild = state.proBuild;
-  let match = state.match;
-
-  if (proBuild.get('fetched')) {
-    proBuild = proBuild.set('data', denormalize(state.proBuild.get('id'), 'proBuilds', state.entities));
-
-    if (match.get('fetched')) {
-      match = match.set('data', denormalize(state.match.get('urid'), 'matches', state.entities));
-    }
-  }
-
   return {
-    proBuild,
-    match,
+    proBuild: state.proBuild.set('data', getProBuild(state)),
+    match: state.match.set('data', getMatch(state)),
   };
 }
 
