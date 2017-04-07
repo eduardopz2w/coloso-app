@@ -7,7 +7,6 @@ import { Actions } from 'react-native-router-flux';
 import numeral from 'numeral';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import KeepAwake from 'react-native-keep-awake';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
@@ -102,17 +101,12 @@ class ProBuildView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('ProBuildView');
-    KeepAwake.activate();
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return !Immutable.is(nextProps.proBuild, this.props.proBuild) ||
       !Immutable.is(nextProps.match, this.props.match) ||
       !_.isEqual(nextState, this.state);
-  }
-
-  componentWillUnmount() {
-    KeepAwake.deactivate();
   }
 
   fetchMatch() {
