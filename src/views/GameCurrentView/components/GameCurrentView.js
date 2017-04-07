@@ -146,8 +146,14 @@ class GameCurrentView extends Component {
   }
 
   handleOnChangeTab({ i: tabIndex }) {
-    if (tabIndex === 1 && !this.props.proBuilds.get('fetched')) {
-      this.props.fetchProBuilds({ championId: this.getFocusChampionId(), proPlayerId: null }, 1);
+    const proBuilds = this.props.proBuilds;
+    const focusChampionId = this.getFocusChampionId();
+
+    if (tabIndex === 1 &&
+      !proBuilds.get('isFetching') &&
+      proBuilds.getIn(['filters', 'championId']) !== focusChampionId
+    ) {
+      this.props.fetchProBuilds({ championId: focusChampionId, proPlayerId: null }, 1);
     }
   }
 

@@ -8,6 +8,7 @@ import DeviceInfo from 'react-native-device-info';
 import I18n from 'i18n-js';
 import moment from 'moment';
 import Config from 'react-native-config';
+import KeepAwake from 'react-native-keep-awake';
 import 'moment/locale/es';
 
 import versionChecker from './utils/versionChecker';
@@ -103,6 +104,7 @@ class AppContainer extends Component {
       <View style={{ flex: 1 }}>
         <Routes />
         {renderAdmob()}
+        <KeepAwake />
       </View>
     </Provider>);
   }
