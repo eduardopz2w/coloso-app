@@ -165,8 +165,8 @@ ProBuildsList.propTypes = {
   onPressBuild: PropTypes.func,
   onLoadMore: PropTypes.func,
   onRefresh: PropTypes.func,
-  onAddFavorite: PropTypes.func.isRequired,
-  onRemoveFavorite: PropTypes.func.isRequired,
+  onAddFavorite: PropTypes.func,
+  onRemoveFavorite: PropTypes.func,
 };
 
 ProBuildsList.defaultProps = {
