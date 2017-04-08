@@ -152,6 +152,12 @@ class SideMenu extends PureComponent {
           iconName="mail"
           onPress={this.props.onPressSuggestion}
         />
+
+        <MenuItem
+          title={I18n.t('settings')}
+          iconName="settings"
+          onPress={this.props.onPressSettings}
+        />
       </ScrollView>
 
       <Text style={styles.versionText}>v{DeviceInfo.getVersion()}</Text>
@@ -172,6 +178,7 @@ SideMenu.propTypes = {
   onPressSummonerSearch: PropTypes.func,
   onPressMyGame: PropTypes.func,
   onPressManageAccount: PropTypes.func,
+  onPressSettings: PropTypes.func,
 };
 
 export default SideMenu;

@@ -48,6 +48,7 @@ class MainDrawer extends PureComponent {
     this.handleOnPressProBuilds = this.handleOnPressProBuilds.bind(this);
     this.handleOnPressSummonerSearch = this.handleOnPressSummonerSearch.bind(this);
     this.handleOnPressManageAccount = this.handleOnPressManageAccount.bind(this);
+    this.handleOnPressSettings = this.handleOnPressSettings.bind(this);
     this.getSummonerAccountUrid = this.getSummonerAccountUrid.bind(this);
   }
 
@@ -103,6 +104,11 @@ class MainDrawer extends PureComponent {
     this.drawer.close();
   }
 
+  handleOnPressSettings() {
+    Actions.settingsView();
+    this.drawer.close();
+  }
+
   render() {
     const state = this.props.navigationState;
     const children = state.children;
@@ -120,6 +126,7 @@ class MainDrawer extends PureComponent {
         onPressProfile={this.handleOnPressProfile}
         onPressSummonerSearch={this.handleOnPressSummonerSearch}
         onPressManageAccount={this.handleOnPressManageAccount}
+        onPressSettings={this.handleOnPressSettings}
       />}
       captureGestures
       panOpenMask={0.02}
