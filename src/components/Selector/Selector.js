@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, TouchableWithoutFeedback, Image } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import SelectorModal from './SelectorModal';
 import IconButton from '../IconButton';
@@ -61,7 +62,8 @@ class Selector extends Component {
   }
 
   getItemSelected() {
-    const itemSelected = this.props.items.find(item => item.value === this.state.selectedValue);
+    const { items } = this.props;
+    const itemSelected = items.find(item => item.get('value') === this.state.selectedValue);
 
     return itemSelected;
   }
@@ -91,8 +93,8 @@ class Selector extends Component {
     }
 
     return (<View style={styles.selectedContainer}>
-      <Image style={styles.image} source={{ uri: itemSelected.imageUrl }} />
-      <Text style={styles.selectedName} numberOfLines={1}>{itemSelected.name}</Text>
+      <Image style={styles.image} source={{ uri: itemSelected.get('imageUrl') }} />
+      <Text style={styles.selectedName} numberOfLines={1}>{itemSelected.get('name')}</Text>
       <IconButton
         iconSize={24}
         onPress={this.clearSelection}
@@ -110,6 +112,7 @@ class Selector extends Component {
         items={this.props.items}
         placeholder={this.props.placeholder}
         noResultsText={this.props.noResultsText}
+        renderRow={this.props.renderRow}
         onClose={() => { this.setState({ open: false }); }}
         onPressItem={this.changeSelectedValue}
       />);
@@ -126,14 +129,14 @@ class Selector extends Component {
 }
 
 Selector.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  items: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     value: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
     ]).isRequired,
     name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string.isRequired,
   })).isRequired,
+  renderRow: PropTypes.func.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.number,
     PropTypes.string,

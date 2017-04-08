@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { ListView, StyleSheet } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import SelectorItem from './SelectorItem';
 import ErrorScreen from '../ErrorScreen';
@@ -21,18 +22,18 @@ class SelectorList extends Component {
     });
 
     this.state = {
-      dataSource: dataSource.cloneWithRows(props.items),
+      dataSource: dataSource.cloneWithRows(props.items.toArray()),
     };
   }
 
   componentWillReceiveProps(newProps) {
     this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(newProps.items),
+      dataSource: this.state.dataSource.cloneWithRows(newProps.items.toArray()),
     });
   }
 
   render() {
-    if (this.props.items.length === 0) {
+    if (this.props.items.size === 0) {
       return <ErrorScreen message={this.props.noResultsText} retryButton={false} />;
     }
 
@@ -43,8 +44,8 @@ class SelectorList extends Component {
       initialListSize={15}
       pageSize={12}
       renderRow={item => <SelectorItem
-        key={item.value}
         item={item}
+        renderRow={this.props.renderRow}
         onPress={this.props.onPressItem}
       />}
       keyboardShouldPersistTaps="handled"
@@ -53,13 +54,14 @@ class SelectorList extends Component {
 }
 
 SelectorList.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  items: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     value: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
     ]).isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
+  renderRow: PropTypes.func.isRequired,
   noResultsText: PropTypes.string.isRequired,
   onPressItem: PropTypes.func.isRequired,
 };

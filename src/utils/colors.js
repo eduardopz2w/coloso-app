@@ -19,5 +19,7 @@ export default {
   spinnerColor: '#3F51B5',
   text: {
     main: 'rgba(0,0,0,0.5)',
+    primary: 'rgba(0,0,0,0.87)',
+    secondary: 'rgba(0,0,0,0.54)',
   },
 };

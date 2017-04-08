@@ -1,48 +1,29 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableNativeFeedback, Image } from 'react-native';
-
-const styles = StyleSheet.create({
-  root: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  image: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-    marginRight: 24,
-  },
-  name: {
-    fontSize: 17,
-    justifyContent: 'center',
-  },
-});
+import { TouchableNativeFeedback } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 class SelectorItem extends PureComponent {
   render() {
     return (<TouchableNativeFeedback
       onPress={() => {
-        this.props.onPress(this.props.item.value);
+        this.props.onPress(this.props.item.get('value'));
       }}
     >
-      <View style={styles.root}>
-        <Image source={{ uri: this.props.item.imageUrl }} style={styles.image} />
-        <Text style={styles.name}>{this.props.item.name}</Text>
-      </View>
+      {this.props.renderRow(this.props.item)}
     </TouchableNativeFeedback>);
   }
 }
 
 SelectorItem.propTypes = {
-  item: PropTypes.shape({
+  item: ImmutablePropTypes.mapContains({
     value: PropTypes.oneOfType([
       PropTypes.number,
       PropTypes.string,
     ]).isRequired,
     name: PropTypes.string.isRequired,
-    imageUrl: PropTypes.string,
+    imageUrl: PropTypes.string.isRequired,
   }).isRequired,
+  renderRow: PropTypes.func.isRequired,
   onPress: PropTypes.func.isRequired,
 };
 

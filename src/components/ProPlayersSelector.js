@@ -1,10 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
+import Immutable from 'immutable';
 
 import Selector from './Selector';
+import colors from '../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -16,6 +18,27 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
       marginRight: 8,
     },
+    renderRoot: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 8,
+    },
+    image: {
+      width: 50,
+      height: 50,
+      borderRadius: 50,
+      marginRight: 24,
+      borderWidth: 1,
+      borderColor: 'black',
+    },
+    name: {
+      fontSize: 17,
+      color: colors.text.primary,
+    },
+    realName: {
+      fontSize: 14,
+      color: colors.text.secondary,
+    },
   },
   {
     '@media (min-device-width: 600)': {
@@ -25,6 +48,16 @@ const styles = MediaQueryStyleSheet.create(
     },
   },
 );
+
+function renderRow(item) {
+  return (<View style={styles.renderRoot}>
+    <Image source={{ uri: item.get('imageUrl') }} style={styles.image} />
+    <View style={{ flex: 1 }}>
+      <Text style={styles.name}>{item.get('name')}</Text>
+      <Text style={styles.realName}>{item.get('realName')}</Text>
+    </View>
+  </View>);
+}
 
 class ProPlayersSelector extends Component {
   constructor(props) {
@@ -36,14 +69,9 @@ class ProPlayersSelector extends Component {
     };
   }
 
-  getProPlayersArray() {
+  getProPlayersList() {
     return this.props.proPlayers
-      .toJS()
-      .map(proPlayer => ({
-        value: proPlayer.id,
-        name: proPlayer.name,
-        imageUrl: proPlayer.imageUrl,
-      }));
+      .map(proPlayer => proPlayer.set('value', proPlayer.get('id')));
   }
 
   handleOnValueChange(newValue) {
@@ -54,7 +82,7 @@ class ProPlayersSelector extends Component {
   }
 
   render() {
-    const proPlayers = this.getProPlayersArray();
+    const proPlayers = this.getProPlayersList();
 
     return (<View style={[styles.root, this.props.style]}>
       <Text style={[styles.titleText, this.props.titleStyle]}>{I18n.t('player')}: </Text>
@@ -64,8 +92,9 @@ class ProPlayersSelector extends Component {
           value={this.props.value}
           placeholder={I18n.t('select_player')}
           noResultsText={I18n.t('no_results_found')}
-          onChangeSelected={this.handleOnValueChange}
+          renderRow={renderRow}
           disabled={this.props.disabled}
+          onChangeSelected={this.handleOnValueChange}
         />
       </View>
     </View>);
@@ -82,6 +111,7 @@ ProPlayersSelector.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
+    realName: PropTypes.string.isRequired,
   })).isRequired,
 };
 
