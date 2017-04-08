@@ -140,7 +140,6 @@ class ProBuildsList extends Component {
       renderRow={(build, sectionId, rowId) => <ProBuildListRow
         key={rowId}
         build={build}
-        favorites={this.props.favorites}
         onPress={() => { this.props.onPressBuild(build.get('id')); }}
         onAddFavorite={this.handleOnAddFavorite}
         onRemoveFavorite={this.handleOnRemoveFavorite}
@@ -161,21 +160,19 @@ ProBuildsList.propTypes = {
   refreshControl: PropTypes.bool.isRequired,
   fetchError: PropTypes.bool,
   errorMessage: PropTypes.string,
-  favorites: PropTypes.bool,
   emptyListMessage: PropTypes.string.isRequired,
   onPressRetry: PropTypes.func.isRequired,
   onPressBuild: PropTypes.func,
   onLoadMore: PropTypes.func,
   onRefresh: PropTypes.func,
-  onAddFavorite: PropTypes.func,
-  onRemoveFavorite: PropTypes.func,
+  onAddFavorite: PropTypes.func.isRequired,
+  onRemoveFavorite: PropTypes.func.isRequired,
 };
 
 ProBuildsList.defaultProps = {
   builds: Immutable.List([]),
   refreshControl: false,
   isRefreshing: false,
-  favorites: true,
   emptyListMessage: I18n.t('no_results_found'),
 };
 
