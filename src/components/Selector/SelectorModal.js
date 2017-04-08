@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Dimensions, Modal } from 'react-native';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import SelectorHeader from './SelectorHeader';
 import SelectorList from './SelectorList';
@@ -30,7 +31,7 @@ class SelectorModal extends Component {
   getFilteredItems() {
     if (this.state.filterText !== '') {
       return this.props.items
-        .filter(item => item.name.toLowerCase().includes(this.state.filterText.toLowerCase()));
+        .filter(item => item.get('name').toLowerCase().includes(this.state.filterText.toLowerCase()));
     }
 
     return this.props.items;
@@ -66,6 +67,7 @@ class SelectorModal extends Component {
           <SelectorList
             items={this.getFilteredItems()}
             noResultsText={this.props.noResultsText}
+            renderRow={this.props.renderRow}
             onPressItem={this.handleOnPressItem}
           />
         </View>
@@ -75,7 +77,7 @@ class SelectorModal extends Component {
 }
 
 SelectorModal.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.shape({
+  items: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     name: PropTypes.string.isRequired,
     value: PropTypes.oneOfType([
       PropTypes.number,
@@ -84,6 +86,7 @@ SelectorModal.propTypes = {
   })).isRequired,
   placeholder: PropTypes.string.isRequired,
   noResultsText: PropTypes.string.isRequired,
+  renderRow: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   onPressItem: PropTypes.func.isRequired,
 };

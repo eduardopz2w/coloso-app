@@ -156,8 +156,11 @@ class ProBuildView extends Component {
           imageUrl={proBuildData.getIn(['proSummoner', 'proPlayer', 'imageUrl'])}
           role={proBuildData.getIn(['proSummoner', 'proPlayer', 'role'])}
           realName={proBuildData.getIn(['proSummoner', 'proPlayer', 'realName'])}
+          isFavorite={proBuildData.get('isFavorite')}
           onPressBackButton={() => { Actions.pop(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
+          onPressAddFavorite={this.props.addToFavorites}
+          onPressRemoveFavorite={this.props.removeFromFavorites}
         />
         <ScrollableTabView
           initialPage={0}
@@ -241,7 +244,9 @@ ProBuildView.propTypes = {
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string.isRequired,
     isFetching: PropTypes.bool.isRequired,
-    data: ImmutablePropTypes.mapContains({}),
+    data: ImmutablePropTypes.mapContains({
+      isFavorite: PropTypes.bool.isRequired,
+    }),
   }).isRequired,
   match: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool.isRequired,
@@ -253,6 +258,8 @@ ProBuildView.propTypes = {
   // Dispatchers
   fetchProBuild: PropTypes.func.isRequired,
   fetchMatch: PropTypes.func.isRequired,
+  addToFavorites: PropTypes.func.isRequired,
+  removeFromFavorites: PropTypes.func.isRequired,
 };
 
 export default ProBuildView;

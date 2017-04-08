@@ -1,10 +1,15 @@
 import { connect } from 'react-redux';
+import { createSelectorCreator, defaultMemoize } from 'reselect';
+import Immutable from 'immutable';
 
 import GameCurrentView from '../components/GameCurrentView';
 import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
 import keyIn from '../../../utils/keyIn';
 import { fetchBuilds } from '../../../modules/ProBuildsActions';
+import { addFavoriteBuild, removeFavoriteBuild } from '../../../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';
+
+const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);
 
 const getProBuildsIds = state => state.proBuilds.get('ids');
 const getProBuildsEntities = state => state.entities.filter(keyIn('proBuilds', 'proSummoners', 'proPlayers'));
@@ -12,8 +17,22 @@ const getProPlayersIds = state => state.proPlayers.get('ids');
 const getProPlayersEntities = state => state.entities.filter(keyIn('proPlayers', 'proSummoners'));
 const getGameCurrentId = state => state.gameCurrent.get('id');
 const getGameCurrentEntities = state => state.entities.filter(keyIn('gamesCurrent'));
+const getFavoriteProBuildsIds = state => state.favoriteProBuilds.get('ids');
 
-const getProBuilds = createDenormalizeSelector('proBuilds', getProBuildsIds, getProBuildsEntities);
+const getProBuilds = createImmutableSelector(
+  createDenormalizeSelector('proBuilds', getProBuildsIds, getProBuildsEntities),
+  getFavoriteProBuildsIds,
+  (proBuildsList, favoriteIdsList) => proBuildsList.map((proBuildMap) => {
+    const id = proBuildMap.get('id');
+
+    if (favoriteIdsList.includes(id)) {
+      return proBuildMap.set('isFavorite', true);
+    }
+
+    return proBuildMap.set('isFavorite', false);
+  }),
+);
+
 const getProPlayers = createDenormalizeSelector('proPlayers', getProPlayersIds, getProPlayersEntities);
 const getGameCurrent = createDenormalizeSelector('gamesCurrent', getGameCurrentId, getGameCurrentEntities);
 
@@ -32,6 +51,12 @@ function mapDispatchToProps(dispatch) {
     },
     fetchProPlayers: () => {
       dispatch(fetchProPlayers());
+    },
+    addFavoriteBuild: (buildId) => {
+      dispatch(addFavoriteBuild(buildId));
+    },
+    removeFavoriteBuild: (buildId) => {
+      dispatch(removeFavoriteBuild(buildId));
     },
   };
 }

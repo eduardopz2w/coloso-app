@@ -5,6 +5,7 @@ import proPlayers from './reducers/proPlayers';
 import proBuilds from './reducers/proBuildsReducer';
 import favoriteProBuilds from './reducers/favoriteProBuildsReducer';
 import entities from './reducers/entities';
+import appSettings from './reducers/appSettingsReducer';
 
 export default function createReducer(asyncReducers) {
   return combineReducers({
@@ -14,6 +15,7 @@ export default function createReducer(asyncReducers) {
     proBuilds,
     favoriteProBuilds,
     entities,
+    appSettings,
     ...asyncReducers,
   });
 }

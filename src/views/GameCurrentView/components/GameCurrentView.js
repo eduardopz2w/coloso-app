@@ -245,7 +245,6 @@ class GameCurrentView extends Component {
             isFetching={proBuilds.get('isFetching')}
             fetchError={proBuilds.get('fetchError')}
             errorMessage={proBuilds.get('errorMessage')}
-            favorites={false}
             emptyListMessage={I18n.t('no_results_found')}
             onPressBuild={buildId => Actions.proBuildView({ buildId })}
             onLoadMore={this.handleOnLoadMoreBuilds}
@@ -255,6 +254,8 @@ class GameCurrentView extends Component {
                 proPlayerId: proBuilds.getIn(['filters', 'proPlayerId']),
               }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
             }}
+            onAddFavorite={this.props.addFavoriteBuild}
+            onRemoveFavorite={this.props.removeFavoriteBuild}
           />
         </View>
       </ScrollableTabView>
@@ -300,8 +301,11 @@ GameCurrentView.propTypes = {
     isFetching: PropTypes.bool,
     data: ImmutablePropTypes.list,
   }),
-  fetchProBuilds: PropTypes.func,
-  fetchProPlayers: PropTypes.func,
+  // Dispatchers
+  fetchProBuilds: PropTypes.func.isRequired,
+  fetchProPlayers: PropTypes.func.isRequired,
+  addFavoriteBuild: PropTypes.func.isRequired,
+  removeFavoriteBuild: PropTypes.func.isRequired,
 };
 
 export default GameCurrentView;

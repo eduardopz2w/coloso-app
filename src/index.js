@@ -1,23 +1,19 @@
 import React, { Component, PropTypes } from 'react';
+import { Linking } from 'react-native';
 import { Provider } from 'react-redux';
-import { View, Linking } from 'react-native';
 import Dialog from 'react-native-dialogs';
-import { AdMobBanner } from 'react-native-admob';
 import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import I18n from 'i18n-js';
 import moment from 'moment';
-import Config from 'react-native-config';
-import KeepAwake from 'react-native-keep-awake';
 import 'moment/locale/es';
 
+import RootContainer from './containers/RootContainer';
 import versionChecker from './utils/versionChecker';
-import Routes from './routes';
 import translations from './translations';
 import logger from './utils/logger';
 import ColosoClient from './utils/ColosoClient';
-
-const ADMOB_BANNER_ID = Config.ADMOB_BANNER_ID;
+import { loadSettings } from './modules/AppSettingsActions';
 
 I18n.translations = translations;
 
@@ -43,75 +39,72 @@ function goToPlayStore() {
   Linking.openURL(playstoreUrl);
 }
 
-function renderAdmob() {
-  if (__DEV__) {
-    return null;
-  }
+function checkVersion() {
+  versionChecker()
+    .then(({ state }) => {
+      if (state === 'UPDATED') {
+        return;
+      }
 
-  return (<AdMobBanner
-    bannerSize="smartBannerPortrait"
-    adUnitID={ADMOB_BANNER_ID}
-    testDeviceID={DeviceInfo.getUniqueID()}
-  />);
+      const dialog = new Dialog();
+      const dialogOptions = {
+        cancelable: false,
+      };
+
+      if (state === 'UPDATE_AVAILABLE') {
+        dialogOptions.title = I18n.t('update_available');
+        dialogOptions.content = I18n.t('update_available_message');
+        dialogOptions.positiveText = I18n.t('continue');
+        dialogOptions.negativeText = I18n.t('update');
+        dialogOptions.onNegative = goToPlayStore;
+      } else if (state === 'UPDATE_REQUIRED') {
+        dialogOptions.title = I18n.t('update_required');
+        dialogOptions.content = I18n.t('update_required_message');
+        dialogOptions.negativeText = I18n.t('update');
+        dialogOptions.onNegative = () => {
+          goToPlayStore();
+          dialog.show();
+        };
+      }
+
+      dialog.set(dialogOptions);
+      dialog.show();
+    });
+}
+
+function openDrawer() {
+  Actions.refresh({ key: 'drawer', open: true });
 }
 
 class AppContainer extends Component {
   componentWillMount() {
     configureLocale();
-
-    versionChecker()
-      .then(({ state }) => {
-        if (state === 'UPDATED') {
-          return;
-        }
-
-        const dialog = new Dialog();
-        const dialogOptions = {
-          cancelable: false,
-        };
-
-        if (state === 'UPDATE_AVAILABLE') {
-          dialogOptions.title = I18n.t('update_available');
-          dialogOptions.content = I18n.t('update_available_message');
-          dialogOptions.positiveText = I18n.t('continue');
-          dialogOptions.negativeText = I18n.t('update');
-          dialogOptions.onNegative = goToPlayStore;
-        } else if (state === 'UPDATE_REQUIRED') {
-          dialogOptions.title = I18n.t('update_required');
-          dialogOptions.content = I18n.t('update_required_message');
-          dialogOptions.negativeText = I18n.t('update');
-          dialogOptions.onNegative = () => {
-            goToPlayStore();
-            dialog.show();
-          };
-        }
-
-        dialog.set(dialogOptions);
-        dialog.show();
-      });
+    checkVersion();
   }
 
   componentDidMount() {
-    Actions.refresh({ key: 'drawer', open: true });
+    openDrawer();
   }
 
   shouldComponentUpdate() {
     return false;
   }
 
+  loadAppSettings() {
+    this.props.store.dispatch(loadSettings());
+  }
+
   render() {
     return (<Provider store={this.props.store}>
-      <View style={{ flex: 1 }}>
-        <Routes />
-        {renderAdmob()}
-        <KeepAwake />
-      </View>
+      <RootContainer />
     </Provider>);
   }
 }
 
 AppContainer.propTypes = {
-  store: PropTypes.shape({}),
+  store: PropTypes.shape({
+    dispatch: PropTypes.func,
+  }).isRequired,
 };
 
 export default AppContainer;

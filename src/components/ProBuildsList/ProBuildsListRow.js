@@ -192,10 +192,6 @@ class ProBuild extends Component {
   }
 
   renderFavoriteButton() {
-    if (!this.props.favorites) {
-      return null;
-    }
-
     const isFavorite = this.props.build.get('isFavorite');
 
     if (isFavorite) {
@@ -299,7 +295,6 @@ ProBuild.propTypes = {
       role: PropTypes.string,
     }),
   }).isRequired,
-  favorites: PropTypes.bool.isRequired,
   onPress: PropTypes.func,
   onAddFavorite: PropTypes.func,
   onRemoveFavorite: PropTypes.func,

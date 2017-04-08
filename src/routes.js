@@ -12,6 +12,7 @@ import ProBuildsListView from './views/ProBuildsListView';
 import ManageAccountView from './views/ManageAccountView';
 import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
+import SettingsView from './views/SettingsView';
 
 let waitingNextExit = false;
 
@@ -52,6 +53,7 @@ function Routes() {
         <Scene key="summonerProfileView" component={SummonerProfileView} hideNavBar />
         <Scene key="gameCurrentView" component={GameCurrentView} hideNavBar />
         <Scene key="manageAccountView" component={ManageAccountView} hideNavBar />
+        <Scene key="settingsView" component={SettingsView} hideNavBar />
       </Scene>
     </Scene>
   </Router>);
