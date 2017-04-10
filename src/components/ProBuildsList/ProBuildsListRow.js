@@ -270,6 +270,13 @@ class ProBuild extends Component {
                 </View>
               </MediaQuery>
 
+              <MediaQuery minDeviceWidth={800}>
+                <View style={styles.statContainer}>
+                  <Image style={styles.uiIcon} source={{ uri: 'ui_minion' }} />
+                  <Text style={{ fontWeight: 'bold' }}>{build.getIn(['stats', 'minionsKilled']) || 0}</Text>
+                </View>
+              </MediaQuery>
+
               <View style={styles.statContainer}>
                 <Image style={styles.uiIcon} source={{ uri: 'ui_gold' }} />
                 <MediaQuery maxDeviceWidth={399}>
@@ -279,13 +286,6 @@ class ProBuild extends Component {
                   <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
                 </MediaQuery>
               </View>
-
-              <MediaQuery minDeviceWidth={800}>
-                <View style={styles.statContainer}>
-                  <Image style={styles.uiIcon} source={{ uri: 'ui_minion' }} />
-                  <Text style={{ fontWeight: 'bold' }}>{build.getIn(['stats', 'minionsKilled']) || 0}</Text>
-                </View>
-              </MediaQuery>
             </View>
             <View style={styles.itemsContainer} >
               {renderItem(build.getIn(['stats', 'item0']))}
