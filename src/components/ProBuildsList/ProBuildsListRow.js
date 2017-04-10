@@ -92,15 +92,25 @@ const styles = MediaQueryStyleSheet.create(
       marginRight: 8,
     },
 
-    goldImage: {
+    uiIcon: {
       width: 15,
       height: 15,
-      marginRight: 2,
+      marginHorizontal: 4,
     },
 
     scoreText: {
       fontSize: 15,
       fontWeight: 'bold',
+    },
+
+    statsContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+
+    statContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
 
     killsText: {
@@ -139,16 +149,24 @@ const styles = MediaQueryStyleSheet.create(
         width: 25,
         height: 25,
       },
-      championNameAndScore: {
-        flexDirection: 'row',
-      },
       championName: {
-        flex: 0.60,
         fontSize: 16,
       },
       scoreText: {
-        flex: 0.40,
         fontSize: 16,
+      },
+      championNameAndScore: {
+        flex: 0,
+        width: 70,
+        marginRight: 8,
+      },
+      statsContainer: {
+        flex: 1,
+        justifyContent: 'space-around',
+      },
+      statContainer: {
+        flex: 1,
+        justifyContent: 'center',
       },
     },
   },
@@ -228,21 +246,47 @@ class ProBuild extends Component {
               <Image source={{ uri: `summoner_spell_${build.get('spell1Id')}` }} style={styles.summonerSpell} />
               <Image source={{ uri: `summoner_spell_${build.get('spell2Id')}` }} style={styles.summonerSpell} />
             </View>
+
             <View style={styles.championNameAndScore} >
               <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
-              <Text style={styles.scoreText}>
-                <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
-                <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
-                <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
-              </Text>
+              <MediaQuery maxDeviceWidth={599}>
+                <Text style={styles.scoreText}>
+                  <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+                  <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+                  <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
+                </Text>
+              </MediaQuery>
             </View>
-            <Image style={styles.goldImage} source={{ uri: 'ui_gold' }} />
-            <MediaQuery maxDeviceWidth={400}>
-              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
-            </MediaQuery>
-            <MediaQuery minDeviceWidth={401}>
-              <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
-            </MediaQuery>
+
+            <View style={styles.statsContainer}>
+              <MediaQuery minDeviceWidth={600}>
+                <View style={styles.statContainer}>
+                  <Image style={styles.uiIcon} source={{ uri: 'ui_score' }} />
+                  <Text style={styles.scoreText}>
+                    <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
+                    <Text style={styles.deathsText}>{build.getIn(['stats', 'deaths'])}</Text>/
+                    <Text style={styles.assistsText}>{build.getIn(['stats', 'assists'])}</Text>
+                  </Text>
+                </View>
+              </MediaQuery>
+
+              <View style={styles.statContainer}>
+                <Image style={styles.uiIcon} source={{ uri: 'ui_gold' }} />
+                <MediaQuery maxDeviceWidth={399}>
+                  <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0a')}</Text>
+                </MediaQuery>
+                <MediaQuery minDeviceWidth={400}>
+                  <Text style={styles.goldText}>{numeral(build.getIn(['stats', 'goldEarned'])).format('0,0')}</Text>
+                </MediaQuery>
+              </View>
+
+              <MediaQuery minDeviceWidth={800}>
+                <View style={styles.statContainer}>
+                  <Image style={styles.uiIcon} source={{ uri: 'ui_minion' }} />
+                  <Text style={{ fontWeight: 'bold' }}>{build.getIn(['stats', 'minionsKilled']) || 0}</Text>
+                </View>
+              </MediaQuery>
+            </View>
             <View style={styles.itemsContainer} >
               {renderItem(build.getIn(['stats', 'item0']))}
               {renderItem(build.getIn(['stats', 'item1']))}
@@ -288,6 +332,7 @@ ProBuild.propTypes = {
       assists: PropTypes.number.isRequired,
       goldEarned: PropTypes.number.isRequired,
       largestMultiKill: PropTypes.number.isRequired,
+      minionsKilled: PropTypes.number,
     }),
     proPlayer: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
