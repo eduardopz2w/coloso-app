@@ -30,6 +30,7 @@ const styles = MediaQueryStyleSheet.create(
       width: 18,
       height: 18,
       textAlign: 'center',
+      textAlignVertical: 'center',
       fontSize: 11,
       backgroundColor: 'black',
       color: 'white',
@@ -44,6 +45,24 @@ const styles = MediaQueryStyleSheet.create(
     },
     descriptionText: {
       fontSize: 12,
+    },
+  }, {
+    '@media (min-device-width: 600)': {
+      runeImage: {
+        width: 70,
+        height: 70,
+      },
+      countText: {
+        width: 24,
+        height: 24,
+        fontSize: 14,
+      },
+      titleText: {
+        fontSize: 16,
+      },
+      descriptionText: {
+        fontSize: 14,
+      },
     },
   },
 );

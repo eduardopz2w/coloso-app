@@ -4,7 +4,7 @@ import { View, StyleSheet, Image } from 'react-native';
 const styles = StyleSheet.create({
   root: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });
 
@@ -20,7 +20,7 @@ class FinalItems extends PureComponent {
       width: this.props.itemsSie,
       height: this.props.itemsSie,
       borderWidth: 2,
-      borderColor: 'gold',
+      borderColor: 'black',
       backgroundColor: 'black',
     };
 

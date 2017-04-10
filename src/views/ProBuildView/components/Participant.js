@@ -2,61 +2,70 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
 import numeral from 'numeral';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 
 import ParticipantSquare from '../../../components/ParticipantSquare';
 import FinalItems from '../../../components/FinalItems';
 import colors from '../../../utils/colors';
 
-const styles = StyleSheet.create({
-  root: {
-    padding: 16,
-    flexDirection: 'row',
-    borderTopWidth: 1,
-    borderColor: 'rgba(0,0,0,0.3)',
-  },
-  summonerName: {
-    color: 'rgba(0,0,0,0.8)',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginBottom: 4,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  dataCol: {
-    flex: 1,
-  },
-  uiImage: {
-    width: 18,
-    height: 18,
-    marginRight: 2,
-  },
-  totalScore: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  kills: {
-    color: colors.victory,
-  },
-  deaths: {
-    color: colors.defeat,
-  },
-  minionsKilled: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  goldText: {
-    color: colors.tiers.gold,
-    fontWeight: 'bold',
-    textShadowColor: '#000',
-    textShadowOffset: {
-      width: 0.2,
-      height: 0.2,
+const styles = MediaQueryStyleSheet.create(
+  {
+    root: {
+      padding: 16,
+      flexDirection: 'row',
+      borderTopWidth: 1,
+      borderColor: 'rgba(0,0,0,0.3)',
     },
-    fontSize: 16,
+    summonerName: {
+      color: colors.text.primary,
+      fontWeight: 'bold',
+      fontSize: 17,
+      marginBottom: 4,
+    },
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    dataCol: {
+      flex: 1,
+    },
+    uiImage: {
+      width: 18,
+      height: 18,
+      marginRight: 2,
+    },
+    totalScore: {
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    kills: {
+      color: colors.victory,
+    },
+    deaths: {
+      color: colors.defeat,
+    },
+    minionsKilled: {
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+    goldText: {
+      color: colors.tiers.gold,
+      fontWeight: 'bold',
+      textShadowColor: '#000',
+      textShadowOffset: {
+        width: 0.2,
+        height: 0.2,
+      },
+      fontSize: 16,
+    },
+  }, {
+    '@media (min-device-width: 750)': {
+      dataCol: {
+        marginHorizontal: 16,
+      },
+    },
   },
-});
+);
 
 class Participant extends PureComponent {
   constructor(props) {
@@ -64,6 +73,8 @@ class Participant extends PureComponent {
 
     this.deviceWidth = Dimensions.get('window').width;
     this.getGoldText = this.getGoldText.bind(this);
+    this.getParticipantSquareSize = this.getParticipantSquareSize.bind(this);
+    this.getItemSize = this.getItemSize.bind(this);
   }
 
   getGoldText() {
@@ -74,6 +85,34 @@ class Participant extends PureComponent {
     }
 
     return numeral(gold).format('0,0');
+  }
+
+  getParticipantSquareSize() {
+    let size = 40;
+
+    if (this.deviceWidth <= 399) {
+      size = 45;
+    } else if (this.deviceWidth <= 599) {
+      size = 60;
+    } else if (this.deviceWidth >= 600) {
+      size = 70;
+    }
+
+    return size;
+  }
+
+  getItemSize() {
+    let size;
+
+    if (this.deviceWidth <= 399) {
+      size = 24;
+    } else if (this.deviceWidth <= 599) {
+      size = 32;
+    } else if (this.deviceWidth >= 600) {
+      size = 42;
+    }
+
+    return size;
   }
 
   render() {
@@ -91,13 +130,13 @@ class Participant extends PureComponent {
           spell1Id={participantData.get('spell1Id')}
           spell2Id={participantData.get('spell2Id')}
           level={participantData.getIn(['stats', 'champLevel'])}
-          size={this.deviceWidth <= 400 ? 50 : 60}
+          size={this.getParticipantSquareSize()}
         />
         <View style={styles.dataCol}>
           <View style={styles.row}>
             <Text style={styles.summonerName}>{participantData.getIn(['summonerData', 'summonerName'])}</Text>
           </View>
-          <View style={[styles.row, { justifyContent: 'space-around' }]}>
+          <View style={[styles.row, { justifyContent: 'space-between' }]}>
             <View style={styles.row}>
               <Image style={styles.uiImage} source={{ uri: 'ui_score' }} />
               <Text style={styles.totalScore}>
@@ -120,6 +159,15 @@ class Participant extends PureComponent {
                 {this.getGoldText()}
               </Text>
             </View>
+
+            <MediaQuery minDeviceWidth={600}>
+              <View style={styles.row}>
+                <Image style={styles.uiImage} source={{ uri: 'ui_ward' }} />
+                <Text style={styles.minionsKilled}>
+                  {participantData.getIn(['stats', 'wardsPlaced']) || 0}
+                </Text>
+              </View>
+            </MediaQuery>
           </View>
 
           <View style={styles.row}>
@@ -132,7 +180,7 @@ class Participant extends PureComponent {
               item4={participantData.getIn(['stats', 'item4'])}
               item5={participantData.getIn(['stats', 'item5'])}
               item6={participantData.getIn(['stats', 'item6'])}
-              itemsSie={this.deviceWidth <= 400 ? 24 : 32}
+              itemsSie={this.getItemSize()}
             />
           </View>
         </View>
@@ -166,6 +214,7 @@ Participant.propTypes = {
       goldEarned: PropTypes.number.isRequired,
       minionsKilled: PropTypes.number.isRequired,
       champLevel: PropTypes.number.isRequired,
+      wardsPlaced: PropTypes.number,
     }).isRequired,
   }).isRequired,
   onPressParticipant: PropTypes.func.isRequired,

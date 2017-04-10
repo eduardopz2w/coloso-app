@@ -1,74 +1,97 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, ScrollView } from 'react-native';
+import { View, Text, Image, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Immutable from 'immutable';
 
-const styles = StyleSheet.create({
-  rootScrollView: {
-    paddingTop: 10,
+const styles = MediaQueryStyleSheet.create(
+  {
+    rootScrollView: {
+      paddingTop: 10,
+    },
+    root: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      paddingBottom: 16,
+    },
+    masteryRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      marginBottom: 10,
+    },
+    masteryImage: {
+      width: 40,
+      height: 40,
+      borderRadius: 5,
+      borderColor: 'black',
+      borderWidth: 2,
+    },
+    masteryActive: {
+      borderColor: '#d0aa49',
+    },
+    masteryImageContainer: {
+      width: 40,
+      height: 40,
+      position: 'relative',
+    },
+    rankText: {
+      position: 'absolute',
+      bottom: 2,
+      right: 2,
+      width: 20,
+      color: 'white',
+      fontSize: 10,
+      backgroundColor: 'black',
+      textAlign: 'center',
+      borderRadius: 5,
+      fontWeight: 'bold',
+    },
+    masteryPageContainer: {
+      minWidth: 200,
+      padding: 8,
+      borderRadius: 10,
+      alignSelf: 'center',
+      marginBottom: 16,
+      marginRight: 16,
+    },
+    ferocitypage: {
+      backgroundColor: 'rgba(255,0,0,0.2)',
+      borderColor: 'red',
+      borderWidth: 5,
+    },
+    cunningpage: {
+      backgroundColor: 'rgba(0,0,255,0.2)',
+      borderColor: 'blue',
+      borderWidth: 5,
+    },
+    resolvePage: {
+      backgroundColor: 'rgba(0,255,0,0.2)',
+      borderColor: 'green',
+      borderWidth: 5,
+    },
+  }, {
+    '@media (min-device-width: 600)': {
+      masteryPageContainer: {
+        minWidth: 260,
+      },
+      masteryImage: {
+        width: 55,
+        height: 55,
+      },
+      masteryImageContainer: {
+        width: 55,
+        height: 55,
+      },
+      masteryRow: {
+        marginBottom: 16,
+      },
+      rankText: {
+        fontSize: 14,
+      },
+    },
   },
-  root: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    paddingBottom: 16,
-  },
-  masteryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginBottom: 10,
-  },
-  masteryImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 5,
-    borderColor: 'black',
-    borderWidth: 2,
-  },
-  masteryActive: {
-    borderColor: '#d0aa49',
-  },
-  masteryImageContainer: {
-    width: 40,
-    height: 40,
-    position: 'relative',
-  },
-  rankText: {
-    position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 20,
-    color: 'white',
-    fontSize: 10,
-    backgroundColor: 'black',
-    textAlign: 'center',
-    borderRadius: 5,
-    fontWeight: 'bold',
-  },
-  masteryPageContainer: {
-    minWidth: 200,
-    padding: 8,
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginBottom: 16,
-    marginRight: 16,
-  },
-  ferocitypage: {
-    backgroundColor: 'rgba(255,0,0,0.2)',
-    borderColor: 'red',
-    borderWidth: 5,
-  },
-  cunningpage: {
-    backgroundColor: 'rgba(0,0,255,0.2)',
-    borderColor: 'blue',
-    borderWidth: 5,
-  },
-  resolvePage: {
-    backgroundColor: 'rgba(0,255,0,0.2)',
-    borderColor: 'green',
-    borderWidth: 5,
-  },
-});
+);
 
 const FEROCITY_ROWS = [
   [6111, 6114],

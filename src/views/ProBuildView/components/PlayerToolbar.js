@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
 import ProPlayerImage from '../../../components/ProPlayerImage';
@@ -51,6 +51,14 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
+function getProPlayerSize() {
+  if (Dimensions.get('window').width >= 600) {
+    return 75;
+  }
+
+  return 65;
+}
+
 class SummonerProfileViewToolbar extends PureComponent {
   constructor(props) {
     super(props);
@@ -100,7 +108,7 @@ class SummonerProfileViewToolbar extends PureComponent {
           <ProPlayerImage
             imageUrl={this.props.imageUrl}
             role={this.props.role}
-            size={65}
+            size={getProPlayerSize()}
           />
           <View style={styles.dataContainer}>
             <Text style={styles.name}>{this.props.name}</Text>
