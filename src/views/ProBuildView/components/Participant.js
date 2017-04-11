@@ -180,7 +180,7 @@ class Participant extends PureComponent {
               item4={participantData.getIn(['stats', 'item4'])}
               item5={participantData.getIn(['stats', 'item5'])}
               item6={participantData.getIn(['stats', 'item6'])}
-              itemsSie={this.getItemSize()}
+              size={this.getItemSize()}
             />
           </View>
         </View>
