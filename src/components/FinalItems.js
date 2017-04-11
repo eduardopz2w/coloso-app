@@ -17,8 +17,8 @@ class FinalItems extends PureComponent {
 
   renderItem(itemId) {
     const itemStyle = {
-      width: this.props.itemsSie,
-      height: this.props.itemsSie,
+      width: this.props.size,
+      height: this.props.size,
       borderWidth: 2,
       borderColor: 'black',
       backgroundColor: 'black',
@@ -52,12 +52,12 @@ FinalItems.propTypes = {
   item4: PropTypes.number,
   item5: PropTypes.number,
   item6: PropTypes.number,
-  itemsSie: PropTypes.number,
+  size: PropTypes.number,
   style: View.propTypes.style,
 };
 
 FinalItems.defaultProps = {
-  itemsSie: 32,
+  size: 32,
 };
 
 export default FinalItems;

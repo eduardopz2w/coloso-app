@@ -12,6 +12,8 @@ import I18n from 'i18n-js';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 import gameModeParser from '../../../../utils/gameModeParser';
+import ParticipantSquare from '../../../../components/ParticipantSquare';
+import FinalItems from '../../../../components/FinalItems';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -22,39 +24,6 @@ const styles = MediaQueryStyleSheet.create(
     container: {
       flexDirection: 'row',
       padding: 8,
-    },
-    championImage: {
-      width: 50,
-      height: 50,
-      borderRadius: 50,
-      borderColor: 'black',
-      borderWidth: 2,
-    },
-    championImageContainer: {
-      position: 'relative',
-      height: 50,
-      zIndex: 1,
-    },
-    championLevelContainer: {
-      width: 15,
-      height: 15,
-      justifyContent: 'center',
-      backgroundColor: 'black',
-      position: 'absolute',
-      bottom: 0,
-      left: 0,
-      borderRadius: 50,
-    },
-    championLevelText: {
-      color: 'white',
-      textAlign: 'center',
-      fontSize: 10,
-    },
-    spellImage: {
-      width: 25,
-      height: 25,
-      borderRadius: 50,
-      marginLeft: -9,
     },
     scoreText: {
       fontWeight: 'bold',
@@ -73,17 +42,6 @@ const styles = MediaQueryStyleSheet.create(
       width: 15,
       height: 15,
       marginRight: 4,
-    },
-    itemImage: {
-      width: 25,
-      height: 25,
-      borderColor: '#d0aa49',
-      borderWidth: 1.5,
-    },
-    noItem: {
-      width: 24,
-      height: 24,
-      backgroundColor: 'black',
     },
     iconDataRow: {
       flexDirection: 'row',
@@ -126,41 +84,9 @@ const styles = MediaQueryStyleSheet.create(
     },
   },
   {
-    '@media (min-device-width: 400)': {
-      noItem: {
-        width: 32,
-        height: 32,
-      },
-      itemImage: {
-        width: 32,
-        height: 32,
-      },
-    },
-  },
-  {
     '@media (min-device-width: 600)': {
-      championImage: {
-        width: 80,
-        height: 80,
-        borderWidth: 3,
-      },
-      championImageContainer: {
-        width: 80,
-        height: 80,
-      },
-      championLevelContainer: {
-        width: 25,
-        height: 25,
-      },
-      championLevelText: {
-        fontSize: 16,
-      },
-      spellImage: {
-        width: 40,
-        height: 40,
-      },
       multikillText: {
-        fontSize: 18,
+        fontSize: 15,
       },
       dataCol: {
         paddingLeft: 16,
@@ -180,34 +106,21 @@ const styles = MediaQueryStyleSheet.create(
       dataText: {
         fontSize: 16,
       },
-      noItem: {
-        width: 40,
-        height: 40,
-      },
-      itemImage: {
-        width: 40,
-        height: 40,
-      },
     },
   },
 );
-
-function renderItemImage(itemId) {
-  if (itemId) {
-    return <Image style={styles.itemImage} source={{ uri: `item_${itemId}` }} />;
-  }
-
-  return <View style={styles.noItem} />;
-}
 
 class GameRecent extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.deviceDimensions = Dimensions.get('window');
     this.getBorderLeftStyle = this.getBorderLeftStyle.bind(this);
     this.getGameTitleLabel = this.getGameTitleLabel.bind(this);
     this.renderMultiKillBadge = this.renderMultiKillBadge.bind(this);
     this.getTimePlayed = this.getTimePlayed.bind(this);
+    this.getParticipantSquareSize = this.getParticipantSquareSize.bind(this);
+    this.getItemSize = this.getItemSize.bind(this);
   }
 
   getBorderLeftStyle() {
@@ -247,6 +160,34 @@ class GameRecent extends PureComponent {
     return `${numeral(minutes).format('00')}:${numeral(duration.seconds()).format('00')}`;
   }
 
+  getParticipantSquareSize() {
+    let size;
+
+    if (this.deviceDimensions.width <= 599) {
+      size = 50;
+    } else if (this.deviceDimensions.width >= 600) {
+      size = 80;
+    }
+
+    return size;
+  }
+
+  getItemSize() {
+    let size;
+
+    if (this.deviceDimensions.width <= 399) {
+      size = 25;
+    } else if (this.deviceDimensions.width <= 599) {
+      size = 32;
+    } else if (this.deviceDimensions.width <= 749) {
+      size = 40;
+    } else {
+      size = 50;
+    }
+
+    return size;
+  }
+
   renderMultiKillBadge() {
     const largestMultiKill = this.props.game.getIn(['stats', 'largestMultiKill']);
     let multikillText;
@@ -275,18 +216,13 @@ class GameRecent extends PureComponent {
     return (<View style={styles.root}>
       <View style={[styles.container, this.getBorderLeftStyle()]}>
         <View>
-          <View style={styleUtils.flexRow}>
-            <View style={styles.championImageContainer}>
-              <Image style={styles.championImage} source={{ uri: `champion_square_${game.get('championId')}` }} />
-              <View style={styles.championLevelContainer}>
-                <Text style={styles.championLevelText}>{game.getIn(['stats', 'level'])}</Text>
-              </View>
-            </View>
-            <View style={styles.spellsConainer}>
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${game.get('spell1')}` }} />
-              <Image style={styles.spellImage} source={{ uri: `summoner_spell_${game.get('spell2')}` }} />
-            </View>
-          </View>
+          <ParticipantSquare
+            championId={game.get('championId')}
+            spell1Id={game.get('spell1')}
+            spell2Id={game.get('spell2')}
+            level={game.getIn(['stats', 'level'])}
+            size={this.getParticipantSquareSize()}
+          />
           {this.renderMultiKillBadge()}
         </View>
         <View style={styles.dataCol}>
@@ -323,7 +259,7 @@ class GameRecent extends PureComponent {
                 <Text style={styles.dataText}>{game.getIn(['stats', 'wardPlaced']) || 0}</Text>
               </View>
               <View style={styles.iconDataCol}>
-                <Icon style={styles.iconImage} name="timer" size={15} />
+                <Icon style={{ marginRight: 4 }} name="timer" size={15} />
                 <Text style={styles.dataText}>{this.getTimePlayed()}</Text>
               </View>
               <View style={styles.iconDataCol}>
@@ -331,17 +267,20 @@ class GameRecent extends PureComponent {
                 <Text style={styles.dataText}>+{game.get('ipEarned') || 0}</Text>
               </View>
             </View>
-            <Row style={styles.itemsRow}>
-              {renderItemImage(game.getIn(['stats', 'item0']))}
-              {renderItemImage(game.getIn(['stats', 'item1']))}
-              {renderItemImage(game.getIn(['stats', 'item2']))}
-              {renderItemImage(game.getIn(['stats', 'item3']))}
-              {renderItemImage(game.getIn(['stats', 'item4']))}
-              {renderItemImage(game.getIn(['stats', 'item5']))}
-              {renderItemImage(game.getIn(['stats', 'item6']))}
-            </Row>
+            <View style={{ marginVertical: 8 }}>
+              <FinalItems
+                item0={game.getIn(['stats', 'item0'])}
+                item1={game.getIn(['stats', 'item1'])}
+                item2={game.getIn(['stats', 'item2'])}
+                item3={game.getIn(['stats', 'item3'])}
+                item4={game.getIn(['stats', 'item4'])}
+                item5={game.getIn(['stats', 'item5'])}
+                item6={game.getIn(['stats', 'item6'])}
+                size={this.getItemSize()}
+              />
+            </View>
             <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
-              <Icon style={styles.iconImage} name="access-time" size={15} />
+              <Icon name="access-time" size={15} style={{ marginRight: 4 }} />
               <Text style={styles.dataText}> {moment(game.get('createDate')).fromNow()}</Text>
             </Row>
           </Grid>
