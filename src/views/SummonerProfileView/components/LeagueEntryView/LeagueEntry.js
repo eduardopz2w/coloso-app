@@ -1,17 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Dimensions } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
+import _ from 'lodash';
+
 import RankedMiniseries from '../../../../components/RankedMiniseries';
 import rankedQueueParser from '../../../../utils/rankedQueueParser';
 import colors from '../../../../utils/colors';
 import styleUtils from '../../../../utils/styleUtils';
 
+const TIER_SIZE = {
+  phone: 70,
+  phone_big: 80,
+  tablet: 90,
+};
+
 const styles = MediaQueryStyleSheet.create(
   {
     root: {
-      backgroundColor: '#FFF',
       borderBottomWidth: 1,
       borderColor: 'rgba(0,0,0,0.1)',
     },
@@ -19,20 +26,16 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 14,
     },
     titleContainer: {
-      paddingLeft: 16,
-      paddingRight: 16,
-      paddingTop: 5,
-      paddingBottom: 5,
+      paddingHorizontal: 16,
+      paddingVertical: 5,
       backgroundColor: colors.titlesBackground,
     },
     tierImage: {
-      width: 70,
-      height: 70,
-      marginRight: 8,
+      width: TIER_SIZE.phone,
+      height: TIER_SIZE.phone,
     },
     entryContainer: {
-      paddingLeft: 16,
-      paddingRight: 16,
+      paddingHorizontal: 16,
       paddingTop: 8,
       paddingBottom: 16,
       flexDirection: 'row',
@@ -41,64 +44,57 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 20,
       color: colors.victory,
       fontWeight: 'bold',
+      textAlignVertical: 'center',
     },
     defeatsNumberText: {
       fontSize: 20,
       color: colors.defeat,
       fontWeight: 'bold',
-    },
-    leaguePointsTitleText: {
-      textAlign: 'center',
+      textAlignVertical: 'center',
     },
     miniSeriesContainer: {
+      flexDirection: 'row',
       alignItems: 'center',
+      height: 32,
+      justifyContent: 'center',
     },
-    dataText: {
-      fontWeight: 'bold',
+    miniSeries: {
+      flex: 1,
+      maxWidth: 150,
     },
     leaguePointsText: {
       fontWeight: 'bold',
+    },
+    statsRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+    },
+    statTitle: {
+      fontWeight: 'bold',
+      height: 100,
+      textAlignVertical: 'center',
+    },
+    nameText: {
+      textAlign: 'center',
     },
   },
   {
     '@media (min-device-width: 400)': {
       tierImage: {
-        width: 80,
-        height: 80,
+        width: TIER_SIZE.phone_big,
+        height: TIER_SIZE.phone_big,
+      },
+      statsRow: {
+        alignItems: 'center',
       },
     },
-  }, {
     '@media (min-device-width: 600)': {
       tierImage: {
-        width: 120,
-        height: 120,
+        width: TIER_SIZE.tablet,
+        height: TIER_SIZE.tablet,
       },
-      entryContainer: {
-        paddingLeft: 40,
-        paddingRight: 40,
-      },
-      miniSeriesContainer: {
-        width: 250,
-        alignSelf: 'center',
-        marginTop: 10,
-      },
-      nameText: {
-        fontSize: 18,
-      },
-      dataText: {
-        fontSize: 18,
-      },
-      title: {
-        fontSize: 18,
-      },
-      victoriesNumberText: {
-        fontSize: 24,
-      },
-      defeatsNumberText: {
-        fontSize: 24,
-      },
-      leaguePointsText: {
-        fontSize: 20,
+      miniSeries: {
+        maxWidth: 200,
       },
     },
   },
@@ -108,8 +104,10 @@ class LeagueEntry extends Component {
   constructor(props) {
     super(props);
 
+    this.deviceDimensions = Dimensions.get('window');
     this.renderTierImage = this.renderTierImage.bind(this);
     this.getTierTextStyle = this.getTierTextStyle.bind(this);
+    this.getStatStyle = this.getStatStyle.bind(this);
   }
 
 
@@ -118,12 +116,40 @@ class LeagueEntry extends Component {
 
     return {
       color: colors.tiers[tier.toLowerCase()],
+      fontWeight: 'bold',
       textShadowColor: '#000',
       textShadowOffset: {
         width: 0.5,
         height: 0.5,
       },
     };
+  }
+
+  getStatStyle() {
+    const horizontalPadding = 16;
+    const statStyle = {
+      height: 32,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+    };
+
+    if (this.deviceDimensions.width <= 399) {
+      _.merge(statStyle, {
+        width: (this.deviceDimensions.width - (horizontalPadding * 2) - TIER_SIZE.phone) / 2,
+      });
+    } else if (this.deviceDimensions.width <= 599) {
+      _.merge(statStyle, {
+        width: (this.deviceDimensions.width - (horizontalPadding * 2) - TIER_SIZE.phone_big) / 2,
+      });
+    } else {
+      _.merge(statStyle, {
+        flex: 1,
+      });
+    }
+
+
+    return statStyle;
   }
 
   renderTierImage() {
@@ -150,45 +176,43 @@ class LeagueEntry extends Component {
 
         <View style={styleUtils.flexOne}>
           {entries.get('playerOrTeamName') &&
-            <Text style={[styleUtils.centerText, styles.nameText]}>
+            <Text style={styles.nameText}>
               <Text style={styleUtils.boldText}>{I18n.t('name')}: </Text>
               {entries.get('playerOrTeamName')}
             </Text>
           }
 
-          <View style={styleUtils.flexRow}>
-            <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={styles.dataText}>{I18n.t('tier')}: </Text>
-              <Text style={[this.getTierTextStyle(), styles.dataText]}>{I18n.t(`tiers.${leagueEntry.get('tier').toLowerCase()}`).toUpperCase()}</Text>
-            </Text>
-            {entries.get('division') &&
-              <Text style={[styleUtils.flexOne, styleUtils.centerText, styles.dataText]}>
-                <Text style={styleUtils.boldText}>{I18n.t('division')}: </Text>
-                {entries.get('division')}
-              </Text>
-            }
-          </View>
+          <View style={styles.statsRow}>
+            <View style={this.getStatStyle()}>
+              <Text style={styles.statTitle}>{I18n.t('tier')}: </Text>
+              <Text style={this.getTierTextStyle()}>{I18n.t(`tiers.${leagueEntry.get('tier').toLowerCase()}`).toUpperCase()}</Text>
+            </View>
 
-          <View style={styleUtils.flexRow}>
-            <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.victoriesTitleText, styles.dataText]}>{I18n.t('victories')}: </Text>
+            <View style={this.getStatStyle()}>
+              <Text style={styles.statTitle}>{I18n.t('division')}: </Text>
+              <Text>{entries.get('division') || 'I'}</Text>
+            </View>
+
+            <View style={this.getStatStyle()}>
+              <Text style={styles.statTitle}>{I18n.t('victories')}: </Text>
               <Text style={styles.victoriesNumberText}>{entries.get('wins')}</Text>
-            </Text>
-            <Text style={[styleUtils.flexOne, styleUtils.centerText]}>
-              <Text style={[styles.defeatsTitleText, styles.dataText]}>{I18n.t('defeats')}: </Text>
+            </View>
+
+            <View style={this.getStatStyle()}>
+              <Text style={styles.statTitle}>{I18n.t('defeats')}: </Text>
               <Text style={styles.defeatsNumberText}>{entries.get('losses')}</Text>
-            </Text>
+            </View>
           </View>
 
           <View>
             {entries.get('miniSeries') && (
-              <View style={[styleUtils.flexRow, styles.miniSeriesContainer]}>
-                <Text style={[styleUtils.boldText, styles.dataText]}>{I18n.t('progress')}: </Text>
-                <RankedMiniseries progress={entries.getIn(['miniSeries', 'progress'])} style={{ flex: 1 }} />
+              <View style={styles.miniSeriesContainer}>
+                <Text style={styles.statTitle}>{I18n.t('progress')}: </Text>
+                <RankedMiniseries progress={entries.getIn(['miniSeries', 'progress'])} style={styles.miniSeries} />
               </View>
             )}
-            <Text style={styles.leaguePointsTitleText}>
-              <Text style={styles.dataText}>{I18n.t('league_points')}: </Text>
+            <Text style={styleUtils.centerText}>
+              <Text style={styles.statTitle}>{I18n.t('league_points')}: </Text>
               <Text style={styles.leaguePointsText}> {entries.get('leaguePoints') || 0}</Text>
             </Text>
           </View>
