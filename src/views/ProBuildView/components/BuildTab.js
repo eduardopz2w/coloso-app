@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, ScrollView, Image, Dimensions } from 'react-native';
 import I18n from 'i18n-js';
-import { MediaQueryStyleSheet } from 'react-native-responsive';
+import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import numeral from 'numeral';
 import _ from 'lodash';
@@ -21,13 +21,7 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     container: {
-      paddingLeft: 16,
-      paddingRight: 16,
-    },
-
-    basicContainer: {
-      padding: 16,
-      flex: 1,
+      paddingHorizontal: 16,
     },
 
     championImage: {
@@ -161,6 +155,26 @@ const styles = MediaQueryStyleSheet.create(
         borderWidth: 1,
         borderColor: 'rgba(0,0,0,0.2)',
       },
+      championImage: {
+        width: 70,
+        height: 70,
+      },
+      summonerSpell: {
+        width: 35,
+        height: 35,
+        marginLeft: -12,
+      },
+      skillLabel: {
+        width: 40,
+        height: 40,
+        fontSize: 18,
+      },
+      championName: {
+        fontSize: 19,
+      },
+      championTitle: {
+        fontSize: 16,
+      },
     },
   },
 );
@@ -170,6 +184,7 @@ class BuildTab extends Component {
     super(props);
 
     this.deviceDimensions = Dimensions.get('window');
+    console.log(this.deviceDimensions);
     this.getItemStyle = this.getItemStyle.bind(this);
     this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillsPriority = this.renderSkillsPriority.bind(this);
@@ -183,20 +198,24 @@ class BuildTab extends Component {
   getItemStyle() {
     let numCols = 5;
 
-    if (this.deviceDimensions.width >= 400 && this.deviceDimensions.width <= 599) {
+    if (this.deviceDimensions.width <= 399) {
+      numCols = 5;
+    } else if (this.deviceDimensions.width <= 599) {
       numCols = 6;
-    } else if (this.deviceDimensions.width >= 600) {
+    } else if (this.deviceDimensions.width <= 600) {
       numCols = 8;
+    } else if (this.deviceDimensions.width >= 750) {
+      numCols = 10;
     }
 
-    let width = this.deviceDimensions.width - 32;
+    let size = this.deviceDimensions.width - 32;
 
-    width -= numCols * itemsArrowSize;
-    width /= numCols;
+    size -= numCols * itemsArrowSize;
+    size /= numCols;
 
     return {
-      width,
-      height: width,
+      width: size,
+      height: size,
     };
   }
 
@@ -414,6 +433,14 @@ class BuildTab extends Component {
             <Text style={styles.assistsText}>{proBuildData.getIn(['stats', 'assists'])}</Text>
           </Text>
         </View>
+
+        <MediaQuery minDeviceWidth={600}>
+          <View style={{ flexDirection: 'row' }}>
+            <Image style={styles.summaryIcon} source={{ uri: 'ui_minion' }} />
+            <Text style={{ fontWeight: 'bold' }}>{proBuildData.getIn(['stats', 'minionsKilled']) || 0}</Text>
+          </View>
+        </MediaQuery>
+
         <View style={{ flexDirection: 'row' }}>
           <Image style={styles.summaryIcon} source={{ uri: 'ui_gold' }} />
           <Text style={styles.goldText}>

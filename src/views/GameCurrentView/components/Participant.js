@@ -7,6 +7,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 import RankedMiniseries from '../../../components/RankedMiniseries';
 import colors from '../../../utils/colors';
+import styleUtils from '../../../utils/styleUtils';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -67,22 +68,27 @@ const styles = MediaQueryStyleSheet.create(
       alignSelf: 'center',
       marginTop: 10,
     },
+    title: {
+      fontWeight: 'bold',
+      marginTop: 4,
+      color: 'rgba(0,0,0,0.85)',
+      marginVertical: 4,
+    },
     flexOne: {
       flex: 1,
     },
     flexText: {
       flex: 1,
-      fontWeight: 'bold',
     },
-    victoriesNumberText: {
+    victoriesText: {
       fontSize: 16,
       color: '#4CAF50',
-      paddingLeft: 15,
+      fontWeight: 'bold',
     },
-    defeatsNumberText: {
+    defeatsText: {
       fontSize: 16,
       color: '#D32F2F',
-      paddingLeft: 15,
+      fontWeight: 'bold',
     },
     blackText: {
       color: 'black',
@@ -104,9 +110,6 @@ const styles = MediaQueryStyleSheet.create(
       fontSize: 12,
       textAlign: 'center',
       color: colors.primary,
-      fontWeight: 'bold',
-    },
-    dataText: {
       fontWeight: 'bold',
     },
   },
@@ -138,6 +141,42 @@ const styles = MediaQueryStyleSheet.create(
       roundedButton: {
         maxWidth: 150,
       },
+      miniSeries: {
+        maxWidth: 250,
+      },
+      dataTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+      },
+      dataText: {
+        fontSize: 18,
+      },
+      victoriesText: {
+        fontSize: 20,
+      },
+      defeatsText: {
+        fontSize: 20,
+      },
+      title: {
+        fontSize: 18,
+      },
+    },
+    '@media (min-device-width: 750)': {
+      championImage: {
+        width: 100,
+        height: 100,
+      },
+      spellImage: {
+        width: 50,
+        height: 50,
+      },
+      spellsCol: {
+        marginLeft: -12,
+      },
+      tierImage: {
+        width: 100,
+        height: 100,
+      },
     },
   },
 );
@@ -163,7 +202,7 @@ function renderRateText(rate) {
     color = colors.victory;
   }
 
-  return <Text style={{ color, fontSize: 16 }}>{rate}%</Text>;
+  return <Text style={[{ color }, styleUtils.boldText]}>{rate}%</Text>;
 }
 
 function renderKdaText(kda) {
@@ -175,11 +214,11 @@ function renderKdaText(kda) {
     color = colors.tiers.diamond;
   }
 
-  return <Text style={{ color, fontSize: 16 }}>{kda}:1</Text>;
+  return <Text style={{ color }}>{kda}:1</Text>;
 }
 
 function renderAveragesText(kills, deaths, assists) {
-  return (<Text style={{ fontSize: 16 }}>
+  return (<Text style={styleUtils.boldText}>
     <Text style={{ color: colors.victory }}>{kills}</Text> /
     <Text style={{ color: colors.defeat }}> {deaths}</Text> /
     <Text> {assists}</Text>
@@ -329,40 +368,48 @@ class Participant extends Component {
             </View>
             <View style={styles.flexRow}>
               <Text style={styles.flexText}>
-                {I18n.t('tier')}: <Text style={[styles.tierText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>
+                <Text style={styles.dataTitle}>{I18n.t('tier')}: </Text>
+                <Text style={[styles.tierText, styles.dataText, { color: colors.tiers[rankedSoloEntry.get('tier').toLowerCase()] }]}>
                   {I18n.t(`tiers.${rankedSoloEntry.get('tier').toLowerCase()}`).toUpperCase()}
                 </Text>
               </Text>
               {rankedSoloEntry.getIn(['entries', 0, 'division']) &&
               <Text style={styles.flexText}>
-                {I18n.t('division')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
+                <Text style={styles.dataTitle}>{I18n.t('division')}: </Text>
+                <Text style={styles.dataText}>{rankedSoloEntry.getIn(['entries', 0, 'division'])}</Text>
               </Text>
             }
             </View>
 
             <View style={styles.flexRow}>
               <Text style={styles.flexText}>
-                {I18n.t('games')}: <Text style={{ fontSize: 16 }}>{rankedStats.gamesPlayed}</Text>
+                <Text style={styles.dataTitle}>{I18n.t('games')}: </Text>
+                <Text style={styles.dataText}>{rankedStats.gamesPlayed}</Text>
               </Text>
               <Text style={styles.flexText}>
-                Rate: {renderRateText(rankedStats.winRate)}
+                <Text style={styles.dataTitle}>Rate: </Text>
+                <Text style={styles.dataText}>{renderRateText(rankedStats.winRate)}</Text>
               </Text>
             </View>
 
             <View style={styles.flexRow}>
               <Text style={styles.flexText}>
-                {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{rankedStats.victories}</Text>
+                <Text style={styles.dataTitle}>{I18n.t('victories')}: </Text>
+                <Text style={styles.victoriesText}>{rankedStats.victories}</Text>
               </Text>
+
               <Text style={styles.flexText}>
-                {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{rankedStats.defeats}</Text>
+                <Text style={styles.dataTitle}>{I18n.t('defeats')}: </Text>
+                <Text style={styles.defeatsText}>{rankedStats.defeats}</Text>
               </Text>
             </View>
             <View style={styles.flexRow}>
               {rankedSoloEntry.getIn(['entries', 0, 'miniSeries']) ? (
                 <View style={styles.flexRow}>
-                  <Text style={styles.dataText}>{I18n.t('progress')}: </Text>
+                  <Text style={styles.dataTitle}>{I18n.t('progress')}: </Text>
                   <View style={{ flex: 1 }}>
                     <RankedMiniseries
+                      style={styles.miniSeries}
                       progress={rankedSoloEntry.getIn(['entries', 0, 'miniSeries', 'progress'])}
                       iconsSize={getMiniseriesIconsSize()}
                     />
@@ -370,7 +417,8 @@ class Participant extends Component {
                 </View>
               ) : (
                 <Text style={styles.flexText}>
-                  {I18n.t('league_points')}: <Text>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
+                  <Text style={styles.dataTitle}>{I18n.t('league_points')}: </Text>
+                  <Text style={styles.dataText}>{rankedSoloEntry.getIn(['entries', 0, 'leaguePoints']) || 0}</Text>
                 </Text>
               )}
             </View>
@@ -378,41 +426,55 @@ class Participant extends Component {
             {(championRankedStats.gamesPlayed > 0) &&
               <View>
                 <View style={styles.flexRow}>
-                  <Text style={{ fontWeight: 'bold', marginTop: 4, color: 'rgba(0,0,0,0.85)' }}>{I18n.t('champion_stats')}</Text>
+                  <Text style={styles.title}>{I18n.t('champion_stats')}</Text>
                 </View>
 
                 <View style={styles.flexRow}>
                   <Text style={styles.flexText}>
-                    {I18n.t('games')}: <Text style={{ fontSize: 16 }}>{championRankedStats.gamesPlayed}</Text>
+                    <Text style={styles.dataTitle}>{I18n.t('games')}: </Text>
+                    <Text style={styles.dataText}>{championRankedStats.gamesPlayed}</Text>
                   </Text>
                   <Text style={styles.flexText}>
-                    Rate: {renderRateText(championRankedStats.winRate)}
-                  </Text>
-                </View>
-
-                <View style={styles.flexRow}>
-                  <Text style={styles.flexText}>
-                    {I18n.t('victories')}: <Text style={styles.victoriesNumberText}>{championRankedStats.victories}</Text>
-                  </Text>
-                  <Text style={styles.flexText}>
-                    {I18n.t('defeats')}: <Text style={styles.defeatsNumberText}>{championRankedStats.defeats}</Text>
+                    <Text style={styles.dataTitle}>Rate: </Text>
+                    <Text style={styles.dataText}>
+                      {renderRateText(championRankedStats.winRate)}
+                    </Text>
                   </Text>
                 </View>
 
                 <View style={styles.flexRow}>
                   <Text style={styles.flexText}>
-                    KDA: <Text>{renderKdaText(championRankedStats.kda)}</Text>
+                    <Text style={styles.dataTitle}>{I18n.t('victories')}: </Text>
+                    <Text style={styles.victoriesText}>{championRankedStats.victories}</Text>
+                  </Text>
+                  <Text style={styles.flexText}>
+                    <Text style={styles.dataTitle}>{I18n.t('defeats')}: </Text>
+                    <Text style={styles.defeatsText}>{championRankedStats.defeats}</Text>
                   </Text>
                 </View>
 
                 <View style={styles.flexRow}>
                   <Text style={styles.flexText}>
-                    {I18n.t('average')}: {renderAveragesText(championRankedStats.averageKills, championRankedStats.averageDeaths, championRankedStats.averageAssists)}
+                    <Text style={styles.dataTitle}>KDA: </Text>
+                    <Text style={[styles.dataText, styleUtils.boldText]}>
+                      {renderKdaText(championRankedStats.kda)}
+                    </Text>
+                  </Text>
+                </View>
+
+                <View style={styles.flexRow}>
+                  <Text style={styles.flexText}>
+                    <Text style={styles.dataTitle}>{I18n.t('average')}: </Text>
+                    <Text style={styles.dataText}>
+                      {renderAveragesText(championRankedStats.averageKills,
+                        championRankedStats.averageDeaths,
+                        championRankedStats.averageAssists,
+                      )}
+                    </Text>
                   </Text>
                 </View>
               </View>
             }
-
 
             <View style={styles.buttonsRow}>
               <TouchableNativeFeedback

@@ -47,7 +47,7 @@ const styles = MediaQueryStyleSheet.create(
       championImage: {
         width: 80,
         height: 80,
-        borderWidth: 5,
+        borderWidth: 3,
       },
 
       tier: {
@@ -56,11 +56,11 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       championName: {
-        fontSize: 23,
+        fontSize: 21,
       },
 
       championTitle: {
-        fontSize: 19,
+        fontSize: 17,
       },
 
       progress: {

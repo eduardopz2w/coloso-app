@@ -24,6 +24,20 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
       color: '#FFFFFF',
     },
+    filters: {
+      paddingHorizontal: 16,
+      backgroundColor: 'rgba(0,0,0,0.1)',
+    },
+  },
+  {
+    '@media (min-device-width: 600)': {
+      filters: {
+        flexDirection: 'row',
+      },
+      filter: {
+        flex: 1,
+      },
+    },
   },
 );
 
@@ -52,11 +66,11 @@ class Toolbar extends PureComponent {
         <IconButton iconName="filter-list" onPress={this.toggleFilters} />
       </View>
       { this.state.filters &&
-        <View>
+        <View style={styles.filters}>
           <ChampionSelector
             titleStyle={{ width: 70 }}
             value={this.props.championSelected}
-            style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
+            style={styles.filter}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeChampionSelected}
           />
@@ -64,7 +78,7 @@ class Toolbar extends PureComponent {
             titleStyle={{ width: 70 }}
             value={this.props.proPlayerSelected}
             proPlayers={this.props.proPlayers.get('data')}
-            style={{ paddingHorizontal: 16, backgroundColor: 'rgba(0,0,0,0.1)' }}
+            style={styles.filter}
             disabled={this.props.disabledFilters}
             onChangeSelected={this.props.onChangeProPlayerSelected}
           />

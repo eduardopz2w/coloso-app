@@ -127,8 +127,8 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       summonerLevelContainer: {
-        width: 30,
-        height: 30,
+        width: 25,
+        height: 25,
       },
 
       summonerLevelText: {

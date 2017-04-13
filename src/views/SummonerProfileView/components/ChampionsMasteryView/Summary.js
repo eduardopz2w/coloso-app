@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
-import { MediaQueryStyleSheet } from 'react-native-responsive';
+import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
 
@@ -37,12 +37,12 @@ const styles = MediaQueryStyleSheet.create(
   }, {
     '@media (min-device-width: 600)': {
       tierImage: {
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
       },
       summaryText: {
-        fontSize: 18,
-        width: 65,
+        fontSize: 16,
+        width: 50,
       },
     },
   },
@@ -57,6 +57,8 @@ class Summary extends Component {
 
   getSummary() {
     const summary = {
+      level3: 0,
+      level4: 0,
       level5: 0,
       level6: 0,
       level7: 0,
@@ -64,8 +66,11 @@ class Summary extends Component {
 
     this.props.masteries.forEach((mastery) => {
       const championLevel = mastery.get('championLevel');
-
-      if (championLevel === 5) {
+      if (championLevel === 3) {
+        summary.level3 += 1;
+      } else if (championLevel === 4) {
+        summary.level4 += 1;
+      } else if (championLevel === 5) {
         summary.level5 += 1;
       } else if (championLevel === 6) {
         summary.level6 += 1;
@@ -92,6 +97,18 @@ class Summary extends Component {
         <Image style={styles.tierImage} source={{ uri: 'tier_5' }} />
         <Text style={styles.summaryText} >{summary.level5}</Text>
       </View>
+      <MediaQuery minDeviceWidth={600}>
+        <View style={styles.tierDataContainer} >
+          <Image style={styles.tierImage} source={{ uri: 'tier_4' }} />
+          <Text style={styles.summaryText} >{summary.level4}</Text>
+        </View>
+      </MediaQuery>
+      <MediaQuery minDeviceWidth={750}>
+        <View style={styles.tierDataContainer} >
+          <Image style={styles.tierImage} source={{ uri: 'tier_3' }} />
+          <Text style={styles.summaryText} >{summary.level3}</Text>
+        </View>
+      </MediaQuery>
     </View>);
   }
 }
