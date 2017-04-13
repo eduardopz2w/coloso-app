@@ -60,6 +60,10 @@ class ManageAccountView extends Component {
     this.handlePressAddAccount = this.handlePressAddAccount.bind(this);
   }
 
+  componentDidMount() {
+    this.regionSelector.geolocalize();
+  }
+
   handleTextChangeSummonerName(summonerName) {
     this.setState({
       summonerName,
@@ -160,6 +164,7 @@ class ManageAccountView extends Component {
         <View style={styles.formGroup}>
           <Text style={[styles.label]}>Region: </Text>
           <RegionSelector
+            ref={(ref) => { this.regionSelector = ref; }}
             style={styles.inputRegion}
             onChangeRegion={this.handleChangeRegion}
             selectedValue={this.state.region}

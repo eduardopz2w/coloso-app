@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Picker, View } from 'react-native';
 import regionHumanize from '../utils/regionHumanize';
+import getDeviceRiotRegion from '../utils/getDeviceRiotRegion';
 
 
 class RegionSelector extends Component {
@@ -21,18 +22,30 @@ class RegionSelector extends Component {
     ];
 
     this.state = {
-      selectedValue: 'na',
+      selectedValue: props.selectedValue,
     };
 
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
+    this.pristine = true;
   }
+
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.selectedValue) {
+      this.pristine = false;
       this.setState({
         selectedValue: nextProps.selectedValue,
       });
     }
+  }
+
+  geolocalize() {
+    getDeviceRiotRegion()
+    .then((region) => {
+      if (this.pristine) {
+        this.handleOnValueChange(region.toLowerCase());
+      }
+    });
   }
 
   handleOnValueChange(newRegion) {
@@ -58,6 +71,7 @@ class RegionSelector extends Component {
 }
 
 RegionSelector.propTypes = {
+  selectedValue: PropTypes.string,
   style: View.propTypes.style,
   onChangeRegion: PropTypes.func,
 };

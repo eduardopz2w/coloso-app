@@ -53,6 +53,7 @@ class SummonerSearchView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('SummonerSearchView');
+    this.regionSelector.geolocalize();
   }
 
   componentDidUpdate() {
@@ -236,6 +237,7 @@ class SummonerSearchView extends Component {
               <View style={styles.formGroup}>
                 <Text style={[styles.label]}>Region: </Text>
                 <RegionSelector
+                  ref={(ref) => { this.regionSelector = ref; }}
                   selectedValue={this.props.region}
                   onChangeRegion={this.handleChangeRegion}
                 />

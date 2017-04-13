@@ -11,5 +11,6 @@
     "globals": {
       "__DEV__": true,
       "Storage": true,
+      "navigator": true
     }
 }
