@@ -184,7 +184,6 @@ class BuildTab extends Component {
     super(props);
 
     this.deviceDimensions = Dimensions.get('window');
-    console.log(this.deviceDimensions);
     this.getItemStyle = this.getItemStyle.bind(this);
     this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillsPriority = this.renderSkillsPriority.bind(this);

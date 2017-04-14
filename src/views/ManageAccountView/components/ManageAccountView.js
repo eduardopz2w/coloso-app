@@ -8,6 +8,7 @@ import _ from 'lodash';
 
 import Toolbar from './Toolbar';
 import ColosoApi from '../../../utils/ColosoApi';
+import { tracker } from '../../../utils/analytics';
 import colors from '../../../utils/colors';
 import RegionSelector from '../../../components/RegionSelector';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -84,15 +85,19 @@ class ManageAccountView extends Component {
 
       ColosoApi.getSummonerByName(state.summonerName, state.region)
         .then((summonerData) => {
+          const summonerName = summonerData.data.attributes.name;
+          const region = summonerData.data.attributes.region;
+
           this.props.saveAccount({
-            summonerName: summonerData.data.attributes.name,
+            summonerName,
             summonerUrid: summonerData.data.attributes.urid,
             profileIconId: summonerData.data.attributes.profileIconId,
-            region: summonerData.data.attributes.region,
+            region,
           });
 
           const dialog = new Dialog();
 
+          tracker.trackEvent('ManageAccounts', 'Added', { label: `name: ${summonerName} region: ${region}` });
           dialog.set({
             content: I18n.t('account_added'),
             positiveText: 'OK',

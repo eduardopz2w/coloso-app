@@ -33,12 +33,12 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     searchSummoner: (summonerName, region) => {
-      tracker.trackEvent('search profile', `name: ${summonerName} region: ${region}`);
+      tracker.trackEvent('SummonerSearch', 'Profile', { label: `name: ${summonerName} region: ${region}` });
       dispatch(searchSummoner(summonerName, region));
     },
 
     searchGame: (summonerName, region) => {
-      tracker.trackEvent('search game', `name: ${summonerName} region: ${region}`);
+      tracker.trackEvent('SummonerSearch', 'Game', { label: `name: ${summonerName} region: ${region}` });
       dispatch(searchGame(summonerName, region));
     },
 
