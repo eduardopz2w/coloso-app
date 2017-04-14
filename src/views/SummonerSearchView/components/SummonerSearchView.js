@@ -53,7 +53,10 @@ class SummonerSearchView extends Component {
 
   componentDidMount() {
     tracker.trackScreenView('SummonerSearchView');
-    this.regionSelector.geolocalize();
+
+    if (_.isEmpty(this.props.summonerName)) {
+      this.regionSelector.geolocalize();
+    }
   }
 
   componentDidUpdate() {
