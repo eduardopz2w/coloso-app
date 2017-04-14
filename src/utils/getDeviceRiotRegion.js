@@ -50,16 +50,10 @@ function getRiotRegion(countryName) {
   return region;
 }
 
-function getCountryName(latitude, longitude) {
+function getCountryCode() {
   return new Promise((resolve, reject) => {
-    axios.get('http://api.geonames.org/countryCode', {
-      params: {
-        lat: latitude,
-        lng: longitude,
-        username: 'demo',
-      },
-    })
-      .then(({ data }) => resolve(data.trim()))
+    axios.get('http://freegeoip.net/json/')
+      .then(({ data: { country_code: countryCode } }) => resolve(countryCode))
       .catch(reject);
   });
 }
@@ -70,16 +64,14 @@ export default function getDeviceRiotRegion() {
       return resolve(regionCached);
     }
 
-    return navigator.geolocation.getCurrentPosition(({ coords: { latitude, longitude } }) => {
-      getCountryName(latitude, longitude)
-        .then((countryName) => {
-          const region = getRiotRegion(countryName);
+    return getCountryCode()
+      .then(countryCode => getRiotRegion(countryCode))
+      .then((riotRegion) => {
+        cached = true;
+        regionCached = riotRegion;
 
-          cached = true;
-          regionCached = region;
-
-          resolve(region);
-        });
-    }, reject);
+        resolve(regionCached);
+      })
+      .catch(reject);
   });
 }
