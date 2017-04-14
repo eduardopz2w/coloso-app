@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 
-import { tracker } from '../../../utils/analytics';
 import { loadEntries, addEntry, deleteEntry } from '../../../modules/SearchHistoryActions';
 import {
   setSummonerName,
@@ -33,12 +32,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     searchSummoner: (summonerName, region) => {
-      tracker.trackEvent('SummonerSearch', 'Profile', { label: `name: ${summonerName} region: ${region}` });
       dispatch(searchSummoner(summonerName, region));
     },
 
     searchGame: (summonerName, region) => {
-      tracker.trackEvent('SummonerSearch', 'Game', { label: `name: ${summonerName} region: ${region}` });
       dispatch(searchGame(summonerName, region));
     },
 

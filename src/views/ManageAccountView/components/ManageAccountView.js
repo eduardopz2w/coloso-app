@@ -8,7 +8,6 @@ import _ from 'lodash';
 
 import Toolbar from './Toolbar';
 import ColosoApi from '../../../utils/ColosoApi';
-import { tracker } from '../../../utils/analytics';
 import colors from '../../../utils/colors';
 import RegionSelector from '../../../components/RegionSelector';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -97,7 +96,6 @@ class ManageAccountView extends Component {
 
           const dialog = new Dialog();
 
-          tracker.trackEvent('ManageAccounts', 'Added', { label: `name: ${summonerName} region: ${region}` });
           dialog.set({
             content: I18n.t('account_added'),
             positiveText: 'OK',
