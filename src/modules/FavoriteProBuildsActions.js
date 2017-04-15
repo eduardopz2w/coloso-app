@@ -4,6 +4,7 @@ import _ from 'lodash';
 
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../redux/middlewares/ColosoApiMiddleware';
 import Storage from '../utils/Storage';
+import { tracker } from '../utils/analytics';
 
 const STORAGE_KEY = 'favoriteBuildsIds';
 
@@ -57,6 +58,8 @@ export const fetchFavoriteBuilds = () => (dispatch) => {
   *  y asi tener ya todos los ids en el reducer
   */
 export const addFavoriteBuild = createAction('FAVORITE_BUILDS/ADD_BUILD', id => new Promise((resolve, reject) => {
+  tracker.trackEvent('ProBuilds', 'ADD_FAVORITE', { label: `id: ${id}` });
+
   loadIdsFromStorage()
     .then((ids) => {
       const newIds = ids.concat(id);
@@ -77,6 +80,8 @@ export const addFavoriteBuild = createAction('FAVORITE_BUILDS/ADD_BUILD', id => 
 }));
 
 export const removeFavoriteBuild = createAction('FAVORITE_BUILDS/REMOVE_BUILD', id => new Promise((resolve, reject) => {
+  tracker.trackEvent('ProBuilds', 'REMOVE_FAVORITE', { label: `id: ${id}` });
+
   loadIdsFromStorage()
     .then((ids) => {
       const newIds = ids;
