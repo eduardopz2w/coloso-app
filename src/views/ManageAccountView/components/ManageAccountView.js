@@ -60,6 +60,10 @@ class ManageAccountView extends Component {
     this.handlePressAddAccount = this.handlePressAddAccount.bind(this);
   }
 
+  componentDidMount() {
+    this.regionSelector.geolocalize();
+  }
+
   handleTextChangeSummonerName(summonerName) {
     this.setState({
       summonerName,
@@ -80,11 +84,14 @@ class ManageAccountView extends Component {
 
       ColosoApi.getSummonerByName(state.summonerName, state.region)
         .then((summonerData) => {
+          const summonerName = summonerData.data.attributes.name;
+          const region = summonerData.data.attributes.region;
+
           this.props.saveAccount({
-            summonerName: summonerData.data.attributes.name,
+            summonerName,
             summonerUrid: summonerData.data.attributes.urid,
             profileIconId: summonerData.data.attributes.profileIconId,
-            region: summonerData.data.attributes.region,
+            region,
           });
 
           const dialog = new Dialog();
@@ -160,6 +167,7 @@ class ManageAccountView extends Component {
         <View style={styles.formGroup}>
           <Text style={[styles.label]}>Region: </Text>
           <RegionSelector
+            ref={(ref) => { this.regionSelector = ref; }}
             style={styles.inputRegion}
             onChangeRegion={this.handleChangeRegion}
             selectedValue={this.state.region}

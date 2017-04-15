@@ -12,7 +12,7 @@ export const tracker = {
     if (!__DEV__) {
       gaTracker.trackScreenView(screenName);
     } else {
-      console.info(`Tracking Screen: ${screenName}`);
+      console.info('Tracking Screen', screenName);
     }
   },
 
@@ -20,7 +20,7 @@ export const tracker = {
     if (!__DEV__) {
       gaTracker.trackEvent(category, action, optionalValues);
     } else {
-      console.info(`Tracking Event categoery: ${category}, action: ${action}`);
+      console.info('Tracking Event', category, action, optionalValues);
     }
   },
 };
