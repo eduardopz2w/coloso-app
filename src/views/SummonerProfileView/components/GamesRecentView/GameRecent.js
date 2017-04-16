@@ -96,7 +96,7 @@ const styles = MediaQueryStyleSheet.create(
         flex: 1,
       },
       gameTitle: {
-        fontSize: 18,
+        fontSize: 16,
       },
       iconImage: {
         width: 25,
@@ -166,7 +166,7 @@ class GameRecent extends PureComponent {
     if (this.deviceDimensions.width <= 599) {
       size = 50;
     } else if (this.deviceDimensions.width >= 600) {
-      size = 80;
+      size = 70;
     }
 
     return size;
@@ -182,7 +182,7 @@ class GameRecent extends PureComponent {
     } else if (this.deviceDimensions.width <= 749) {
       size = 40;
     } else {
-      size = 50;
+      size = 45;
     }
 
     return size;

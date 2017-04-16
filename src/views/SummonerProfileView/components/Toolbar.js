@@ -108,7 +108,7 @@ const styles = MediaQueryStyleSheet.create(
   {
     '@media (min-device-width: 600)': {
       profileToolbar: {
-        minHeight: 100,
+        minHeight: 110,
       },
 
       profileToolbarContainer: {
@@ -117,13 +117,13 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       summonerImageContainer: {
-        width: 90,
-        height: 90,
+        width: 80,
+        height: 80,
       },
 
       summonerImage: {
-        width: 80,
-        height: 80,
+        width: 70,
+        height: 70,
       },
 
       summonerLevelContainer: {
@@ -132,7 +132,7 @@ const styles = MediaQueryStyleSheet.create(
       },
 
       summonerLevelText: {
-        fontSize: 16,
+        fontSize: 14,
       },
 
       summonerDataContainer: {
@@ -166,16 +166,17 @@ class SummonerProfileViewToolbar extends Component {
     this.renderRetryButton = this.renderRetryButton.bind(this);
   }
 
+
+  shouldComponentUpdate(nextProps) {
+    return !Immutable.is(nextProps.summonerData, this.props.summonerData);
+  }
+
   handleOnPressBackButton() {
     if (this.props.onPressBackButton) {
       return this.props.onPressBackButton();
     }
 
     return null;
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return !Immutable.is(nextProps.summonerData, this.props.summonerData);
   }
 
   renderSummonerData() {

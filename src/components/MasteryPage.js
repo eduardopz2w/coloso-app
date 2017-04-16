@@ -138,23 +138,25 @@ class MasteryPage extends Component {
   renderMasteryImage(masteryId) {
     const masteries = this.props.page.get('masteries');
 
-    const indexFound = masteries.findIndex((mastery) => {
-      if (mastery.get('id') === masteryId) {
-        return true;
-      } else if (mastery.get('masteryId') === masteryId) {
-        return true;
+    if (masteries) {
+      const indexFound = masteries.findIndex((mastery) => {
+        if (mastery.get('id') === masteryId) {
+          return true;
+        } else if (mastery.get('masteryId') === masteryId) {
+          return true;
+        }
+
+        return false;
+      });
+
+      if (indexFound >= 0) {
+        const rank = masteries.getIn([indexFound, 'rank']);
+
+        return (<View style={styles.masteryImageContainer}>
+          <Image style={[styles.masteryImage, styles.masteryActive]} source={{ uri: `mastery_${masteryId}` }} />
+          <Text style={styles.rankText}>{rank}</Text>
+        </View>);
       }
-
-      return false;
-    });
-
-    if (indexFound >= 0) {
-      const rank = masteries.getIn([indexFound, 'rank']);
-
-      return (<View style={styles.masteryImageContainer}>
-        <Image style={[styles.masteryImage, styles.masteryActive]} source={{ uri: `mastery_${masteryId}` }} />
-        <Text style={styles.rankText}>{rank}</Text>
-      </View>);
     }
 
     return (<View style={styles.masteryImageContainer}>
@@ -192,8 +194,8 @@ MasteryPage.propTypes = {
       id: PropTypes.number,
       masteryId: PropTypes.number,
       rank: PropTypes.number.isRequired,
-    })).isRequired,
-  }),
+    })),
+  }).isRequired,
 };
 
 export default MasteryPage;

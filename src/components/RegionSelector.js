@@ -31,7 +31,7 @@ class RegionSelector extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedValue) {
+    if (nextProps.selectedValue !== this.state.selectedValue) {
       this.pristine = false;
       this.setState({
         selectedValue: nextProps.selectedValue,
