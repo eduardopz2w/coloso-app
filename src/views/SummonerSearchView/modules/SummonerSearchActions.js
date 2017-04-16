@@ -9,7 +9,7 @@ export const clearSearchError = createAction('SUMMONER_SEARCH/CLEAR_SEARCH_ERROR
 export const clearFoundData = createAction('SUMMONER_SEARCH/CLEAR_FOUND_DATA');
 export const searchGame = createAction('SUMMONER_SEARCH/SEARCH_GAME',
   (summonerName, region) => {
-    tracker.trackEvent('SummonerSearch', 'Game', { label: `name: ${summonerName} region: ${region}` });
+    tracker.trackEvent('SummonerSearch', 'GAME', { label: `name: ${summonerName} region: ${region}` });
 
     return {
       summonerName,
@@ -22,7 +22,7 @@ export const searchGame = createAction('SUMMONER_SEARCH/SEARCH_GAME',
 );
 export const searchSummoner = createAction('SUMMONER_SEARCH/SEARCH_SUMMONER',
   (summonerName, region) => {
-    tracker.trackEvent('SummonerSearch', 'Profile', { label: `name: ${summonerName} region: ${region}` });
+    tracker.trackEvent('SummonerSearch', 'PROFILE', { label: `name: ${summonerName} region: ${region}` });
 
     return {
       summonerName,
