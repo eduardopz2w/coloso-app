@@ -192,7 +192,7 @@ MasteryPage.propTypes = {
     name: PropTypes.string,
     masteries: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
       id: PropTypes.number,
-      masteryId: PropTypes.number.isRequired,
+      masteryId: PropTypes.number,
       rank: PropTypes.number.isRequired,
     })),
   }).isRequired,
