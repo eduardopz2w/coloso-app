@@ -153,7 +153,7 @@ class LeagueEntry extends Component {
   }
 
   renderTierImage() {
-    return <Image style={styles.tierImage} source={{ uri: this.props.leagueEntry.get('tier') }} />;
+    return <Image style={styles.tierImage} source={{ uri: `tier_${this.props.leagueEntry.get('tier')}` }} />;
   }
 
   render() {
