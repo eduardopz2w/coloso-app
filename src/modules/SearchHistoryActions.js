@@ -37,7 +37,9 @@ export const deleteEntry = createAction('SEARCH_HISTORY/DELETE_ENTRY', (summoner
   Storage.load({ key: 'searchHistoryEntries' })
     .then((entries) => {
       const entriesFiltered = _.filter(entries, (entry) => {
-        if (entry.summonerName === summonerName && entry.region === region) {
+        if (entry.summonerName.toLowerCase() === summonerName.toLowerCase() &&
+          entry.region.toLowerCase() === region.toLowerCase()
+        ) {
           return false;
         }
         return true;
