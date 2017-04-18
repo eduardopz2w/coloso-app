@@ -12,7 +12,7 @@ import {
 
 const initialState = Immutable.fromJS({
   summonerName: '',
-  region: 'na',
+  region: 'NA',
   searchType: 'PROFILE_SEARCH',
   isSearching: false,
   searchError: false,

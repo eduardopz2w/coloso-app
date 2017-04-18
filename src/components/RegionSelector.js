@@ -8,17 +8,17 @@ class RegionSelector extends Component {
   constructor(props) {
     super(props);
     this.regions = [
-      { label: regionHumanize('na'), value: 'na' },
-      { label: regionHumanize('lan'), value: 'lan' },
-      { label: regionHumanize('las'), value: 'las' },
-      { label: regionHumanize('br'), value: 'br' },
-      { label: regionHumanize('euw'), value: 'euw' },
-      { label: regionHumanize('eune'), value: 'eune' },
-      { label: regionHumanize('oce'), value: 'oce' },
-      { label: regionHumanize('jp'), value: 'jp' },
-      { label: regionHumanize('kr'), value: 'kr' },
-      { label: regionHumanize('ru'), value: 'ru' },
-      { label: regionHumanize('tr'), value: 'tr' },
+      { label: regionHumanize('na'), value: 'NA' },
+      { label: regionHumanize('lan'), value: 'LAN' },
+      { label: regionHumanize('las'), value: 'LAS' },
+      { label: regionHumanize('br'), value: 'BR' },
+      { label: regionHumanize('euw'), value: 'EUW' },
+      { label: regionHumanize('eune'), value: 'EUNE' },
+      { label: regionHumanize('oce'), value: 'OCE' },
+      { label: regionHumanize('jp'), value: 'JP' },
+      { label: regionHumanize('kr'), value: 'KR' },
+      { label: regionHumanize('ru'), value: 'RU' },
+      { label: regionHumanize('tr'), value: 'TR' },
     ];
 
     this.state = {
@@ -34,18 +34,18 @@ class RegionSelector extends Component {
     if (nextProps.selectedValue !== this.state.selectedValue) {
       this.pristine = false;
       this.setState({
-        selectedValue: nextProps.selectedValue,
+        selectedValue: nextProps.selectedValue.toUpperCase(),
       });
     }
   }
 
   geolocalize() {
     getDeviceRiotRegion()
-    .then((region) => {
-      if (this.pristine) {
-        this.handleOnValueChange(region.toLowerCase());
-      }
-    });
+      .then((region) => {
+        if (this.pristine) {
+          this.handleOnValueChange(region);
+        }
+      });
   }
 
   handleOnValueChange(newRegion) {

@@ -47,7 +47,7 @@ class ManageAccountView extends Component {
     super(props);
     this.state = {
       summonerName: '',
-      region: 'na',
+      region: 'NA',
       isFetching: false,
       validationErrors: {
         summonerName: null,
