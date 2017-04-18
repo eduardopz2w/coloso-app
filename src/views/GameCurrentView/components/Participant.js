@@ -337,7 +337,7 @@ class Participant extends Component {
   renderTierImage() {
     const leagueEntry = this.getRankedSoloEntry();
 
-    return <Image style={styles.tierImage} source={{ uri: leagueEntry.get('tier') }} />;
+    return <Image style={styles.tierImage} source={{ uri: `tier_${leagueEntry.get('tier')}` }} />;
   }
 
   render() {
