@@ -31,10 +31,10 @@ export default typeToReducer({
       mutator.set('isFetching', false);
       mutator.set('ids', Immutable.List(payload.ids));
     }),
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload }) => state.merge({
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: payload.error.message,
     }),
   },
   [addFavoriteBuild]: {

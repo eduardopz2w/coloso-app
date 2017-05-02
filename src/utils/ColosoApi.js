@@ -1,27 +1,17 @@
 import _ from 'lodash';
 import ColosoClient from './ColosoClient';
 
-function getProBuilds(queryParams, pageParams) {
+function getProBuilds(params) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
-    const params = {
-      page: pageParams,
-    };
+    const requestParams = params;
 
-    if (_.isFinite(queryParams.championId) && queryParams.championId > 0) {
-      params.championId = queryParams.championId;
-    }
-
-    if (!_.isEmpty(queryParams.proPlayerId)) {
-      params.proPlayerId = queryParams.proPlayerId;
-    }
-
-    if (_.isArray(queryParams.ids)) {
-      params.ids = queryParams.ids.toString();
+    if (_.has(requestParams, 'ids') && _.isArray(requestParams.ids)) {
+      requestParams.ids = params.ids.toString();
     }
 
     return ColosoClient.get(url, {
-      params,
+      params: requestParams,
     })
       .then((response) => {
         resolve(response.data);
@@ -191,9 +181,13 @@ function getMatch(matchUrid) {
 }
 
 export default {
-  getProBuilds,
-  getProBuild,
-  getProPlayers,
+  proBuilds: {
+    get: getProBuilds,
+    byId: getProBuild,
+  },
+  proPlayers: {
+    get: getProPlayers,
+  },
   getSummonerByName,
   getSummonerByUrid,
   getLeagueEntry,

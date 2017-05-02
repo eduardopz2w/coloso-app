@@ -67,14 +67,14 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchBuilds: (queryParams, pageNumber) => {
-      dispatch(fetchBuilds(queryParams, pageNumber));
+    fetchBuilds: (params) => {
+      dispatch(fetchBuilds(params));
     },
     fetchFavoriteBuilds: () => {
       dispatch(fetchFavoriteBuilds());
     },
-    refreshBuilds: (queryParams) => {
-      dispatch(refreshBuilds(queryParams));
+    refreshBuilds: (params) => {
+      dispatch(refreshBuilds(params));
     },
     fetchProPlayers: () => {
       dispatch(fetchProPlayers());
