@@ -1,6 +1,6 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { fetchMatch } from './MatchActions';
+import { fetchGame } from './GameActions';
 
 const initialState = Immutable.fromJS({
   fetched: false,
@@ -11,24 +11,24 @@ const initialState = Immutable.fromJS({
 });
 
 export default typeToReducer({
-  [fetchMatch]: {
+  [fetchGame]: {
     PENDING: state => state.merge({
       fetched: false,
       isFetching: true,
       fetchError: false,
     }),
 
-    FULFILLED: (state, { payload }) => state.merge({
+    FULFILLED: (state, { payload: { id } }) => state.merge({
       fetched: true,
       isFetching: false,
-      id: payload.matchUrid,
+      id,
     }),
 
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
 }, initialState);

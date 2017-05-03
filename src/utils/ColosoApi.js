@@ -32,9 +32,9 @@ function getProPlayers() {
   });
 }
 
-function getProBuild(proBuildId) {
+function getProBuild({ id }) {
   return new Promise((resolve, reject) => {
-    const url = `pro-builds/${proBuildId}`;
+    const url = `pro-builds/${id}`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -168,9 +168,9 @@ function getAndroidStatus() {
   });
 }
 
-function getMatch(matchUrid) {
+function getGame({ id }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/matches/${matchUrid}`;
+    const url = `games/${id}`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -188,6 +188,9 @@ export default {
   proPlayers: {
     get: getProPlayers,
   },
+  games: {
+    byId: getGame,
+  },
   getSummonerByName,
   getSummonerByUrid,
   getLeagueEntry,
@@ -198,5 +201,4 @@ export default {
   getRunes,
   getStatsSummary,
   getAndroidStatus,
-  getMatch,
 };

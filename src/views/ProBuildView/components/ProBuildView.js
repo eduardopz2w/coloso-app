@@ -19,7 +19,7 @@ import colors from '../../../utils/colors';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 import BuildTab from './BuildTab';
-import MatchTab from './MatchTab';
+import GameTab from './GameTab';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -87,7 +87,7 @@ class ProBuildView extends Component {
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
-    this.fetchMatch = this.fetchMatch.bind(this);
+    this.fetchGame = this.fetchGame.bind(this);
   }
 
   componentWillMount() {
@@ -105,14 +105,14 @@ class ProBuildView extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return !Immutable.is(nextProps.proBuild, this.props.proBuild) ||
-      !Immutable.is(nextProps.match, this.props.match) ||
+      !Immutable.is(nextProps.game, this.props.game) ||
       !_.isEqual(nextState, this.state);
   }
 
-  fetchMatch() {
-    const matchUrid = this.props.proBuild.getIn(['data', 'matchUrid']);
+  fetchGame() {
+    const gameId = this.props.proBuild.getIn(['data', 'gameId']);
 
-    this.props.fetchMatch(matchUrid);
+    this.props.fetchGame(gameId);
   }
 
   handleOnPressItem(itemData) {
@@ -136,12 +136,12 @@ class ProBuildView extends Component {
 
   handleOnChangeTab({ i }) {
     if (i === 3) {
-      const matchFetched = this.props.match.get('fetched');
-      const matchFetchedUrid = this.props.match.get('id');
-      const actualMatchUrid = this.props.proBuild.getIn(['data', 'matchUrid']);
+      const matchFetched = this.props.game.get('fetched');
+      const matchFetchedUrid = this.props.game.get('id');
+      const actualMatchUrid = this.props.proBuild.getIn(['data', 'gameId']);
 
       if (!matchFetched || matchFetchedUrid !== actualMatchUrid) {
-        this.fetchMatch();
+        this.fetchGame();
       }
     }
   }
@@ -179,10 +179,10 @@ class ProBuildView extends Component {
           />
           <RuneTab tabLabel={I18n.t('runes')} runes={proBuildData.get('runes')} />
           <MasteryTab tabLabel={I18n.t('masteries')} masteries={proBuildData.get('masteries')} />
-          <MatchTab
+          <GameTab
             tabLabel={I18n.t('game')}
-            match={this.props.match}
-            onPressRetryButton={this.fetchMatch}
+            game={this.props.game}
+            onPressRetryButton={this.fetchGame}
             onPressParticipant={handleOnPressParticipant}
           />
         </ScrollableTabView>
@@ -248,7 +248,7 @@ ProBuildView.propTypes = {
       isFavorite: PropTypes.bool.isRequired,
     }),
   }).isRequired,
-  match: ImmutablePropTypes.mapContains({
+  game: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string.isRequired,
@@ -257,7 +257,7 @@ ProBuildView.propTypes = {
   }).isRequired,
   // Dispatchers
   fetchProBuild: PropTypes.func.isRequired,
-  fetchMatch: PropTypes.func.isRequired,
+  fetchGame: PropTypes.func.isRequired,
   addToFavorites: PropTypes.func.isRequired,
   removeFromFavorites: PropTypes.func.isRequired,
 };
