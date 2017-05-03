@@ -49,42 +49,38 @@ class MainDrawer extends PureComponent {
     this.handleOnPressSummonerSearch = this.handleOnPressSummonerSearch.bind(this);
     this.handleOnPressManageAccount = this.handleOnPressManageAccount.bind(this);
     this.handleOnPressSettings = this.handleOnPressSettings.bind(this);
-    this.getSummonerAccountUrid = this.getSummonerAccountUrid.bind(this);
   }
 
   componentWillMount() {
     this.props.loadAccount();
   }
 
-
-  getSummonerAccountUrid() {
-    return this.props.ownerAccount.get('summonerUrid');
-  }
-
   handleOnPressMyGame() {
-    const summonerAccountUrid = this.getSummonerAccountUrid();
+    const { riotAccount } = this.props;
 
-    if (_.isNull(summonerAccountUrid)) {
+    if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
       Actions.manageAccountView();
       this.drawer.close();
     } else if (!this.props.isSearchingGame) {
-      const { ownerAccount } = this.props;
       Actions.summonerSearchView();
       this.drawer.close();
-      this.props.searchGame(ownerAccount.get('summonerName'), ownerAccount.get('region'));
+      this.props.searchGame({
+        summonerName: riotAccount.get('name'),
+        region: riotAccount.get('region'),
+      });
     }
   }
 
   handleOnPressProfile() {
-    const summonerAccountUrid = this.getSummonerAccountUrid();
+    const { riotAccount } = this.props;
 
-    if (_.isNull(summonerAccountUrid)) {
+    if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
       Actions.manageAccountView();
       this.drawer.close();
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerProfileView({ summonerId: summonerAccountUrid });
+      Actions.summonerProfileView({ summonerId: riotAccount.get('id') });
       this.drawer.close();
     }
   }
@@ -119,7 +115,7 @@ class MainDrawer extends PureComponent {
       onClose={() => Actions.refresh({ key: state.key, open: false })}
       type="overlay"
       content={<SideMenu
-        ownerAccount={this.props.ownerAccount}
+        riotAccount={this.props.riotAccount}
         onPressMyGame={this.handleOnPressMyGame}
         onPressSuggestion={handleOnPressSuggestion}
         onPressProBuilds={this.handleOnPressProBuilds}
@@ -149,7 +145,7 @@ MainDrawer.propTypes = {
   navigationState: PropTypes.shape({}),
   isSearchingGame: PropTypes.bool,
   onNavigate: PropTypes.func,
-  ownerAccount: ImmutablePropTypes.map,
+  riotAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
 };

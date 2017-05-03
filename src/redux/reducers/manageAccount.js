@@ -1,10 +1,11 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
-import { loadAccount, saveAccount } from '../../modules/OwnerAccountActions';
+import { loadAccount, saveAccount } from '../../modules/ManageAccountActions';
 
 const initialState = Immutable.fromJS({
-  summonerUrid: null,
-  summonerName: null,
+  id: null,
+  accountId: null,
+  name: null,
   profileIconId: null,
   region: null,
 });

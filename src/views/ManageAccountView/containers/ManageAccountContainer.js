@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveAccount } from '../../../modules/OwnerAccountActions';
+import { saveAccount } from '../../../modules/ManageAccountActions';
 
 import ManageAccountView from '../components/ManageAccountView';
 
@@ -9,8 +9,8 @@ function mapStateToProps() {
 
 function mapDispatchToProps(dispatch) {
   return {
-    saveAccount: (ownerAccount) => {
-      dispatch(saveAccount(ownerAccount));
+    saveAccount: (riotAccount) => {
+      dispatch(saveAccount(riotAccount));
     },
   };
 }

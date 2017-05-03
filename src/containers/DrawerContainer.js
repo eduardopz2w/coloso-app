@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import Drawer from '../components/Drawer';
-import { loadAccount } from '../modules/OwnerAccountActions';
+import { loadAccount } from '../modules/ManageAccountActions';
 import {
   setSummonerName,
   setRegion,
@@ -11,7 +11,7 @@ import {
 
 function mapStateToProps(state) {
   return {
-    ownerAccount: state.ownerAccount,
+    riotAccount: state.manageAccount,
     isSearchingGame: state.summonerSearch.get('isSearching'),
   };
 }
@@ -22,11 +22,11 @@ function mapDispatchToProps(dispatch) {
       dispatch(loadAccount());
     },
 
-    searchGame: (summonerName, region) => {
+    searchGame: ({ summonerName, region }) => {
       dispatch(setSummonerName(summonerName));
       dispatch(setRegion(region));
       dispatch(setSearchType('GAME_SEARCH'));
-      dispatch(searchGame(summonerName, region));
+      dispatch(searchGame({ summonerName, region }));
     },
   };
 }
