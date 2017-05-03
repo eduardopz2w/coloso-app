@@ -1,5 +1,7 @@
 import typeToReducer from 'type-to-reducer';
 import Immutable from 'immutable';
+import _ from 'lodash';
+
 import { fetchBuilds, refreshBuilds } from '../../modules/ProBuildsActions';
 
 const initialState = Immutable.fromJS({
@@ -20,36 +22,31 @@ const initialState = Immutable.fromJS({
 
 export default typeToReducer({
   [fetchBuilds]: {
-    PENDING: (state, { payload }) => state.withMutations((mutator) => {
-      const { queryParams, pageParams } = payload;
-
-      if (pageParams.number === 1) {
+    PENDING: (state, { payload: { params } }) => state.withMutations((mutator) => {
+      if (_.has(params, ['page', 'number']) && params.page.number === 1) {
         mutator.set('ids', Immutable.List([]));
         mutator.set('pagination', Immutable.fromJS({
           currentPage: 1,
           totalPages: 1,
         }));
 
-        const championId = queryParams.championId || 0;
-        const proPlayerId = queryParams.proPlayerId || null;
-
-        mutator.setIn(['filters', 'championId'], championId);
-        mutator.setIn(['filters', 'proPlayerId'], proPlayerId);
+        mutator.setIn(['filters', 'championId'], params.championId || null);
+        mutator.setIn(['filters', 'proPlayerId'], params.proPlayerId || null);
       }
 
       mutator.set('fetchError', false);
       mutator.set('isFetching', true);
       mutator.set('refreshing', false);
     }),
-    FULFILLED: (state, { payload }) => state.withMutations((mutator) => {
+    FULFILLED: (state, { payload: { ids, meta } }) => state.withMutations((mutator) => {
       mutator.set('isFetching', false);
-      mutator.update('ids', proBuilds => proBuilds.concat(payload.ids));
-      mutator.set('pagination', Immutable.fromJS(payload.pagination));
+      mutator.update('ids', proBuilds => proBuilds.concat(ids));
+      mutator.set('pagination', Immutable.fromJS(meta));
     }),
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [refreshBuilds]: {
@@ -58,17 +55,17 @@ export default typeToReducer({
       isRefreshing: true,
       fetchError: false,
     }),
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       isFetching: false,
       isRefreshing: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
-    FULFILLED: (state, { payload }) => state.merge({
+    FULFILLED: (state, { payload: { ids, meta } }) => state.merge({
       isFetching: false,
       isRefreshing: false,
-      ids: Immutable.List(payload.ids),
-      pagination: Immutable.fromJS(payload.pagination),
+      ids: Immutable.List(ids),
+      pagination: Immutable.fromJS(meta),
     }),
   },
 

@@ -16,6 +16,7 @@ const axiosClient = axios.create({
   responseType: 'json',
   headers: {
     common: {
+      Accept: 'application/vnd.coloso.net; version=2',
       'Accept-Language': 'en',
       'App-Version': DeviceInfo.getVersion(),
     },
@@ -60,6 +61,8 @@ axiosClient.interceptors.response.use((response) => {
 });
 
 axiosClient.interceptors.request.use((config) => {
+  _.set(config, 'params', _.omitBy(config.params, _.isNull)); // remove null params
+
   if (__DEV__) {
     logger.groupCollapsed(`Request ${config.method.toUpperCase()} @ ${config.url}`);
     logger.debug('params: ', config.params);

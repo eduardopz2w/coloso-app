@@ -1,27 +1,17 @@
 import _ from 'lodash';
 import ColosoClient from './ColosoClient';
 
-function getProBuilds(queryParams, pageParams) {
+function getProBuilds(params) {
   return new Promise((resolve, reject) => {
     const url = 'pro-builds';
-    const params = {
-      page: pageParams,
-    };
+    const requestParams = params;
 
-    if (_.isFinite(queryParams.championId) && queryParams.championId > 0) {
-      params.championId = queryParams.championId;
-    }
-
-    if (!_.isEmpty(queryParams.proPlayerId)) {
-      params.proPlayerId = queryParams.proPlayerId;
-    }
-
-    if (_.isArray(queryParams.ids)) {
-      params.ids = queryParams.ids.toString();
+    if (_.has(requestParams, 'ids') && _.isArray(requestParams.ids)) {
+      requestParams.ids = params.ids.toString();
     }
 
     return ColosoClient.get(url, {
-      params,
+      params: requestParams,
     })
       .then((response) => {
         resolve(response.data);
@@ -42,9 +32,9 @@ function getProPlayers() {
   });
 }
 
-function getProBuild(proBuildId) {
+function getProBuild({ id }) {
   return new Promise((resolve, reject) => {
-    const url = `pro-builds/${proBuildId}`;
+    const url = `pro-builds/${id}`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -54,9 +44,9 @@ function getProBuild(proBuildId) {
   });
 }
 
-function getSummonerByName(summonerName, region) {
+function getSummonerByName({ summonerName, region }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/by-name/${summonerName}`;
+    const url = `summoners/by-name/${summonerName}`;
 
     return ColosoClient.get(url, { params: { region } })
       .then((response) => {
@@ -66,9 +56,9 @@ function getSummonerByName(summonerName, region) {
   });
 }
 
-function getSummonerByUrid(sumUrid) {
+function getSummonerById({ id }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}`;
+    const url = `summoners/${id}`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -78,9 +68,9 @@ function getSummonerByUrid(sumUrid) {
   });
 }
 
-function getLeagueEntry(sumUrid) {
+function getLeagueEntry({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/league/entry`;
+    const url = `summoners/${summonerId}/league/entry`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -90,9 +80,9 @@ function getLeagueEntry(sumUrid) {
   });
 }
 
-function getChampionsMasteries(sumUrid) {
+function getChampionsMasteries({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/champions-mastery`;
+    const url = `summoners/${summonerId}/champions-mastery`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -102,9 +92,9 @@ function getChampionsMasteries(sumUrid) {
   });
 }
 
-function getGamesRecent(sumUrid) {
+function getGamesRecent({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/games/recent`;
+    const url = `summoners/${summonerId}/games/recent`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -114,9 +104,9 @@ function getGamesRecent(sumUrid) {
   });
 }
 
-function getMasteries(sumUrid) {
+function getMasteries({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/masteries`;
+    const url = `summoners/${summonerId}/masteries`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -126,9 +116,9 @@ function getMasteries(sumUrid) {
   });
 }
 
-function getRunes(sumUrid) {
+function getRunes({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/runes`;
+    const url = `summoners/${summonerId}/runes`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -138,9 +128,9 @@ function getRunes(sumUrid) {
   });
 }
 
-function getGameCurrent(sumUrid) {
+function getGameCurrent({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/games/current`;
+    const url = `summoners/${summonerId}/games/current`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -150,9 +140,9 @@ function getGameCurrent(sumUrid) {
   });
 }
 
-function getStatsSummary(sumUrid, season) {
+function getStatsSummary({ summonerId, season }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/summoner/${sumUrid}/stats/summary`;
+    const url = `summoners/${summonerId}/stats/summary`;
 
     return ColosoClient.get(url, {
       params: {
@@ -178,9 +168,9 @@ function getAndroidStatus() {
   });
 }
 
-function getMatch(matchUrid) {
+function getGame({ id }) {
   return new Promise((resolve, reject) => {
-    const url = `riot-api/matches/${matchUrid}`;
+    const url = `games/${id}`;
 
     return ColosoClient.get(url)
       .then((response) => {
@@ -191,18 +181,26 @@ function getMatch(matchUrid) {
 }
 
 export default {
-  getProBuilds,
-  getProBuild,
-  getProPlayers,
-  getSummonerByName,
-  getSummonerByUrid,
-  getLeagueEntry,
-  getChampionsMasteries,
-  getGamesRecent,
-  getGameCurrent,
-  getMasteries,
-  getRunes,
-  getStatsSummary,
+  proBuilds: {
+    get: getProBuilds,
+    byId: getProBuild,
+  },
+  proPlayers: {
+    get: getProPlayers,
+  },
+  games: {
+    byId: getGame,
+  },
+  summoner: {
+    byName: getSummonerByName,
+    byId: getSummonerById,
+    leagueEntry: getLeagueEntry,
+    championsMasteries: getChampionsMasteries,
+    gamesRecent: getGamesRecent,
+    gameCurrent: getGameCurrent,
+    masteries: getMasteries,
+    runes: getRunes,
+    statsSummary: getStatsSummary,
+  },
   getAndroidStatus,
-  getMatch,
 };

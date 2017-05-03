@@ -43,7 +43,7 @@ class ProBuildsListView extends Component {
 
   componentWillMount() {
     this.props.fetchProPlayers();
-    this.props.fetchBuilds({ championId: null, proPlayerId: null }, 1);
+    this.props.fetchBuilds({ page: { number: 1 } });
     this.props.fetchFavoriteBuilds();
   }
 
@@ -55,7 +55,10 @@ class ProBuildsListView extends Component {
     this.props.fetchBuilds({
       championId: this.props.proBuilds.getIn(['filters', 'championId']),
       proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
-    }, this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1);
+      page: {
+        number: this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1,
+      },
+    });
   }
 
   handleOnPressFavoriteProBuildsTabRetryButton() {
@@ -66,7 +69,8 @@ class ProBuildsListView extends Component {
     this.props.refreshBuilds({
       championId: this.props.proBuilds.getIn(['filters', 'championId']),
       proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
-    }, 1);
+      page: { number: 1 },
+    });
   }
 
   handleOnLoadMoreProBuildsTab() {
@@ -77,10 +81,11 @@ class ProBuildsListView extends Component {
       const championId = this.props.proBuilds.getIn(['filters', 'championId']);
       const proPlayerId = this.props.proBuilds.getIn(['filters', 'proPlayerId']);
 
-      this.props.fetchBuilds(
-        { championId, proPlayerId },
-        pagData.currentPage + 1,
-      );
+      this.props.fetchBuilds({
+        championId,
+        proPlayerId,
+        page: { number: pagData.currentPage + 1 },
+      });
     }
   }
 
@@ -90,7 +95,8 @@ class ProBuildsListView extends Component {
     this.props.fetchBuilds({
       championId: this.state.championId,
       proPlayerId,
-    }, 1);
+      page: { number: 1 },
+    });
     this.props.setFavoriteBuildsFilters({
       championId: this.state.championId,
       proPlayerId,
@@ -103,7 +109,8 @@ class ProBuildsListView extends Component {
     this.props.fetchBuilds({
       championId,
       proPlayerId: this.state.proPlayerId,
-    }, 1);
+      page: { number: 1 },
+    });
     this.props.setFavoriteBuildsFilters({
       championId,
       proPlayerId: this.state.proPlayerId,

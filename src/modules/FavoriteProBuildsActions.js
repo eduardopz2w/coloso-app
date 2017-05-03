@@ -19,15 +19,12 @@ export const fetchFavoriteBuilds = () => (dispatch) => {
       dispatch({
         type: actionType,
         payload: {
-          queryParams: {
-            ids,
-          },
-          pageParams: {
-            number: 1,
-            size: 50,
-          },
           [COLOSO_CALL]: {
             type: COLOSO_CALL_TYPES.PRO_BUILDS,
+            params: {
+              ids,
+              size: 50,
+            },
           },
         },
       });

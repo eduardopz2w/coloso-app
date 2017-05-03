@@ -4,12 +4,14 @@ import { searchGame } from '../../SummonerSearchView/modules/SummonerSearchActio
 
 const initialState = Immutable.fromJS({
   id: null,
+  summonerId: null,
 });
 
 export default typeToReducer({
   [searchGame]: {
     FULFILLED: (state, action) => state.withMutations((mutator) => {
-      mutator.set('id', action.payload.gameId);
+      mutator.set('id', action.payload.id);
+      mutator.set('summonerId', action.payload.summonerId);
     }),
   },
 }, initialState);

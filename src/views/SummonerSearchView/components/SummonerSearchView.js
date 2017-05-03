@@ -73,14 +73,20 @@ class SummonerSearchView extends Component {
       return this.props.clearSearchError();
     }
 
-    if (!_.isNull(this.props.summonerFoundUrid)) {
-      this.props.addSearchEntry(this.props.summonerName, this.props.region);
-      Actions.summonerProfileView({ summonerUrid: this.props.summonerFoundUrid });
+    if (!_.isNull(this.props.summonerFoundId)) {
+      this.props.addSearchEntry({
+        summonerName: this.props.summonerName,
+        region: this.props.region,
+      });
+      Actions.summonerProfileView({ summonerId: this.props.summonerFoundId });
       this.props.clearFoundData();
     }
 
     if (this.props.gameFound) {
-      this.props.addSearchEntry(this.props.summonerName, this.props.region);
+      this.props.addSearchEntry({
+        summonerName: this.props.summonerName,
+        region: this.props.region,
+      });
       this.props.clearFoundData();
       Actions.gameCurrentView();
     }
@@ -104,7 +110,7 @@ class SummonerSearchView extends Component {
   }
 
   handleChangeRegion(newRegion) {
-    this.props.setRegion(newRegion);
+    this.props.setRegion(newRegion.toUpperCase());
   }
 
   handleTextChangeSummonerName(summonerName) {
@@ -150,7 +156,7 @@ class SummonerSearchView extends Component {
   }
 
   handleOnPressDeleteEntry(summonerName, region) {
-    this.props.deleteSearchEntry(summonerName, region);
+    this.props.deleteSearchEntry({ summonerName, region });
   }
 
   performSearch() {
@@ -158,9 +164,15 @@ class SummonerSearchView extends Component {
 
     if (!this.props.isSearching) {
       if (this.props.searchType === PROFILE_SEARCH) {
-        this.props.searchSummoner(this.props.summonerName, this.props.region);
+        this.props.searchSummoner({
+          summonerName: this.props.summonerName,
+          region: this.props.region,
+        });
       } else if (this.props.searchType === GAME_SEARCH) {
-        this.props.searchGame(this.props.summonerName, this.props.region);
+        this.props.searchGame({
+          summonerName: this.props.summonerName,
+          region: this.props.region,
+        });
       }
     }
   }
@@ -288,7 +300,7 @@ SummonerSearchView.propTypes = {
   isSearching: PropTypes.bool,
   searchSummoner: PropTypes.func,
   errorMessage: PropTypes.string,
-  summonerFoundUrid: PropTypes.string,
+  summonerFoundId: PropTypes.string,
   searchError: PropTypes.bool.isRequired,
   gameFound: PropTypes.bool,
   // Dispatchers

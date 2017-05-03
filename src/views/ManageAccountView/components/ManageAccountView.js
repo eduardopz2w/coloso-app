@@ -82,17 +82,16 @@ class ManageAccountView extends Component {
     if (this.validateForm()) {
       this.setState({ isFetching: true });
 
-      ColosoApi.getSummonerByName(state.summonerName, state.region)
-        .then((summonerData) => {
-          const summonerName = summonerData.data.attributes.name;
-          const region = summonerData.data.attributes.region;
-
-          this.props.saveAccount({
-            summonerName,
-            summonerUrid: summonerData.data.attributes.urid,
-            profileIconId: summonerData.data.attributes.profileIconId,
-            region,
+      ColosoApi.summoner.byName({
+        summonerName: state.summonerName,
+        region: state.region,
+      })
+        .then((response) => {
+          const riotAccount = _.extend(response.data.attributes, {
+            id: response.data.id,
           });
+
+          this.props.saveAccount(riotAccount);
 
           const dialog = new Dialog();
 

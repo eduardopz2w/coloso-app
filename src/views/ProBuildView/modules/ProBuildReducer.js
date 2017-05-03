@@ -18,17 +18,17 @@ export default typeToReducer({
       fetchError: false,
     }),
 
-    FULFILLED: (state, { payload }) => state.merge({
+    FULFILLED: (state, { payload: { id } }) => state.merge({
       fetched: true,
       isFetching: false,
-      id: payload.proBuildId,
+      id,
     }),
 
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
 }, initialState);

@@ -180,10 +180,6 @@ function renderItem(itemId) {
   return <View style={styles.item} />;
 }
 
-function getTimeAgo(creationTime) {
-  return moment(creationTime).fromNow();
-}
-
 class ProBuild extends Component {
   constructor(props) {
     super(props);
@@ -195,6 +191,11 @@ class ProBuild extends Component {
     this.renderFavoriteButton = this.renderFavoriteButton.bind(this);
     this.handleOnPressAddFavorite = this.handleOnPressAddFavorite.bind(this);
     this.handleOnPressRemoveFavorite = this.handleOnPressRemoveFavorite.bind(this);
+    this.getTimeAgo = this.getTimeAgo.bind(this);
+  }
+
+  getTimeAgo() {
+    return moment(this.props.build.get('gameCreation') - (this.props.build.get('gameDuration') * 1000)).fromNow();
   }
 
   handleOnPressAddFavorite() {
@@ -230,7 +231,7 @@ class ProBuild extends Component {
     const { build } = this.props;
 
     return (<TouchableNativeFeedback onPress={this.props.onPress} >
-      <View style={[styles.root, build.getIn(['stats', 'winner']) ? styles.win : styles.loss]}>
+      <View style={[styles.root, build.getIn(['stats', 'win']) ? styles.win : styles.loss]}>
         <View>
           <View style={styles.playerData}>
             <ProPlayerImage
@@ -248,7 +249,7 @@ class ProBuild extends Component {
             </View>
 
             <View style={styles.championNameAndScore} >
-              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
+              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['champion', 'name'])}</Text>
               <MediaQuery maxDeviceWidth={599}>
                 <Text style={styles.scoreText}>
                   <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
@@ -273,7 +274,7 @@ class ProBuild extends Component {
               <MediaQuery minDeviceWidth={800}>
                 <View style={styles.statContainer}>
                   <Image style={styles.uiIcon} source={{ uri: 'ui_minion' }} />
-                  <Text style={{ fontWeight: 'bold' }}>{build.getIn(['stats', 'minionsKilled']) || 0}</Text>
+                  <Text style={{ fontWeight: 'bold' }}>{build.getIn(['stats', 'totalMinionsKilled']) || 0}</Text>
                 </View>
               </MediaQuery>
 
@@ -298,7 +299,7 @@ class ProBuild extends Component {
             {renderItem(build.getIn(['stats', 'item6']))}
           </View>
           <View style={styles.timeAgoRow}>
-            <Text style={{ textAlign: 'right' }}>{getTimeAgo(build.get('matchCreation'))}</Text>
+            <Text style={{ textAlign: 'right' }}>{this.getTimeAgo()}</Text>
           </View>
         </View>
       </View>
@@ -312,14 +313,14 @@ ProBuild.propTypes = {
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
-    championData: ImmutablePropTypes.mapContains({
+    champion: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       title: PropTypes.string,
     }),
-    matchCreation: PropTypes.number.isRequired,
+    gameCreation: PropTypes.number.isRequired,
+    gameDuration: PropTypes.number.isRequired,
     stats: ImmutablePropTypes.mapContains({
-      winner: PropTypes.bool,
-      champLevel: PropTypes.number,
+      win: PropTypes.bool.isRequired,
       item0: PropTypes.number.isRequired,
       item1: PropTypes.number.isRequired,
       item2: PropTypes.number.isRequired,
@@ -332,8 +333,8 @@ ProBuild.propTypes = {
       assists: PropTypes.number.isRequired,
       goldEarned: PropTypes.number.isRequired,
       largestMultiKill: PropTypes.number.isRequired,
-      minionsKilled: PropTypes.number,
-    }),
+      totalMinionsKilled: PropTypes.number.isRequired,
+    }).isRequired,
     proPlayer: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
       imageUrl: PropTypes.string,

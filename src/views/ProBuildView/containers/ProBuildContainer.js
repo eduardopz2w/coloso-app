@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 
 import { fetchProBuild } from '../modules/ProBuildActions';
 import { addFavoriteBuild, removeFavoriteBuild } from '../../../modules/FavoriteProBuildsActions';
-import { fetchMatch } from '../modules/MatchActions';
+import { fetchGame } from '../modules/GameActions';
 import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
 import keyIn from '../../../utils/keyIn';
 import ProBuildView from '../components/ProBuildView';
@@ -13,8 +13,8 @@ const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.
 
 const getProBuildId = state => state.proBuild.get('id');
 const getProBuildEntities = state => state.entities.filter(keyIn('proBuilds', 'proPlayers', 'proSummoners'));
-const getMatchId = state => state.match.get('id');
-const getMatchEntities = state => state.entities.filter(keyIn('matches'));
+const getGameId = state => state.game.get('id');
+const getGameEntities = state => state.entities.filter(keyIn('games'));
 const getFavoriteProBuildsIds = state => state.favoriteProBuilds.get('ids');
 
 const getProBuild = createImmutableSelector(
@@ -31,12 +31,12 @@ const getProBuild = createImmutableSelector(
   },
 );
 
-const getMatch = createDenormalizeSelector('matches', getMatchId, getMatchEntities);
+const getGame = createDenormalizeSelector('games', getGameId, getGameEntities);
 
 function mapStateToProps(state) {
   return {
     proBuild: state.proBuild.set('data', getProBuild(state)),
-    match: state.match.set('data', getMatch(state)),
+    game: state.game.set('data', getGame(state)),
   };
 }
 
@@ -46,8 +46,8 @@ function mapDispatchToProps(dispatch, props) {
       dispatch(fetchProBuild(props.buildId));
     },
 
-    fetchMatch: (urid) => {
-      dispatch(fetchMatch(urid));
+    fetchGame: (id) => {
+      dispatch(fetchGame(id));
     },
 
     addToFavorites: () => {

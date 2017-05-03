@@ -79,13 +79,13 @@ class TeamHeader extends PureComponent {
   }
 
   renderWinStatus() {
-    const winner = this.props.team.get('winner');
-    const winStatusText = winner ? I18n.t('victory') : I18n.t('defeat');
+    const win = this.props.team.get('win');
+    const winStatusText = win === 'Win' ? I18n.t('victory') : I18n.t('defeat');
 
     return (<Text
       style={[
         styles.winStatus,
-        winner ? { color: colors.victory } : { color: colors.defeat },
+        win === 'Win' ? { color: colors.victory } : { color: colors.defeat },
       ]}
     >
       {winStatusText}
@@ -110,7 +110,7 @@ class TeamHeader extends PureComponent {
 TeamHeader.propTypes = {
   team: ImmutablePropTypes.mapContains({
     teamId: PropTypes.number.isRequired,
-    winner: PropTypes.bool.isRequired,
+    win: PropTypes.string.isRequired,
   }).isRequired,
   participants: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     stats: ImmutablePropTypes.mapContains({

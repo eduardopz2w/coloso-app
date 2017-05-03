@@ -9,7 +9,7 @@ const initialState = Immutable.fromJS({
   proBuilds: {},
   proPlayers: {},
   proSummoners: {},
-  matches: {},
+  games: {},
   statsSummaries: {},
 });
 

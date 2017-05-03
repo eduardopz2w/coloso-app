@@ -8,27 +8,32 @@ export const setSearchType = createAction('SUMMONER_SEARCH/SET_SEARCH_TYPE');
 export const clearSearchError = createAction('SUMMONER_SEARCH/CLEAR_SEARCH_ERROR');
 export const clearFoundData = createAction('SUMMONER_SEARCH/CLEAR_FOUND_DATA');
 export const searchGame = createAction('SUMMONER_SEARCH/SEARCH_GAME',
-  (summonerName, region) => {
+  ({ summonerName, region }) => {
     tracker.trackEvent('SummonerSearch', 'GAME', { label: `name: ${summonerName} region: ${region}` });
 
     return {
-      summonerName,
-      region,
       [COLOSO_CALL]: {
         type: COLOSO_CALL_TYPES.GAME_CURRENT,
+        params: {
+          summonerName,
+          region,
+        },
       },
     };
   },
 );
+
 export const searchSummoner = createAction('SUMMONER_SEARCH/SEARCH_SUMMONER',
-  (summonerName, region) => {
+  ({ summonerName, region }) => {
     tracker.trackEvent('SummonerSearch', 'PROFILE', { label: `name: ${summonerName} region: ${region}` });
 
     return {
-      summonerName,
-      region,
       [COLOSO_CALL]: {
         type: COLOSO_CALL_TYPES.SUMMONER_BY_NAME,
+        params: {
+          summonerName,
+          region,
+        },
       },
     };
   },

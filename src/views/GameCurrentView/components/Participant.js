@@ -347,7 +347,7 @@ class Participant extends Component {
     const rankedStats = this.getRankedStats();
 
     return (<TouchableNativeFeedback
-      onPress={() => this.props.onPressProfileButton(participant.get('summonerUrid'))}
+      onPress={() => this.props.onPressProfileButton(participant.get('summonerId'))}
     >
       <View style={[styles.root, participant.get('teamId') === 200 && styles.redTeam, this.props.style]}>
         <View style={styles.container}>
@@ -478,7 +478,7 @@ class Participant extends Component {
 
             <View style={styles.buttonsRow}>
               <TouchableNativeFeedback
-                onPress={() => this.props.onPressRunesButton(participant.get('summonerUrid'))}
+                onPress={() => this.props.onPressRunesButton(participant.get('summonerId'))}
               >
                 <View style={styles.roundedButton}>
                   <Text style={styles.roundedButtonText}>{I18n.t('runes').toUpperCase()}</Text>
@@ -486,7 +486,7 @@ class Participant extends Component {
               </TouchableNativeFeedback>
 
               <TouchableNativeFeedback
-                onPress={() => this.props.onPressMasteriesButton(participant.get('summonerUrid'))}
+                onPress={() => this.props.onPressMasteriesButton(participant.get('summonerId'))}
               >
                 <View style={styles.roundedButton}>
                   <Text style={styles.roundedButtonText}>{I18n.t('masteries').toUpperCase()}</Text>

@@ -14,9 +14,26 @@ export const COLOSO_CALL_TYPES = {
   RUNES: 'COLOSO_CALL/RUNES',
   STATS_SUMMARY: 'COLOSO_CALL/STATS_SUMMARY',
   PRO_BUILDS: 'COLOSO_CALL/PRO_BUILDS',
+  PRO_BUILD: 'COLOSO_CALL/PRO_BUILD',
   PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
   GAME_CURRENT: 'COLOSO_CALL/GAME_CURRENT',
-  MATCH: 'COLOSO_CALL/MATCH',
+  GAME: 'COLOSO_CALL/GAME',
+};
+
+const COLOSO_CALL_FUNC = {
+  [COLOSO_CALL_TYPES.SUMMONER_BY_NAME]: ColosoApi.summoner.byName,
+  [COLOSO_CALL_TYPES.SUMMONER]: ColosoApi.summoner.byId,
+  [COLOSO_CALL_TYPES.LEAGUE_ENTRY]: ColosoApi.summoner.leagueEntry,
+  [COLOSO_CALL_TYPES.CHAMPIONS_MASTERIES]: ColosoApi.summoner.championsMasteries,
+  [COLOSO_CALL_TYPES.GAMES_RECENT]: ColosoApi.summoner.gamesRecent,
+  [COLOSO_CALL_TYPES.MASTERIES]: ColosoApi.summoner.masteries,
+  [COLOSO_CALL_TYPES.RUNES]: ColosoApi.summoner.runes,
+  [COLOSO_CALL_TYPES.STATS_SUMMARY]: ColosoApi.summoner.statsSummary,
+  [COLOSO_CALL_TYPES.PRO_BUILD]: ColosoApi.proBuilds.byId,
+  [COLOSO_CALL_TYPES.PRO_BUILDS]: ColosoApi.proBuilds.get,
+  [COLOSO_CALL_TYPES.PRO_PLAYERS]: ColosoApi.proPlayers.get,
+  [COLOSO_CALL_TYPES.GAME]: ColosoApi.games.byId,
+  [COLOSO_CALL_TYPES.GAME_CURRENT]: ColosoApi.summoner.gameCurrent,
 };
 
 const middleware = ({ dispatch }) => next => (action) => {
@@ -28,233 +45,61 @@ const middleware = ({ dispatch }) => next => (action) => {
     dispatch({
       type: `${action.type}_REJECTED`,
       payload: {
-        errorMessage: error.message,
+        error,
       },
+    });
+  }
+
+  function dispatchSuccess(payload) {
+    dispatch({
+      type: `${action.type}_FULFILLED`,
+      payload,
     });
   }
 
   dispatch({
     type: `${action.type}_PENDING`,
-    payload: _.omit(action.payload, COLOSO_CALL),
+    payload: _.omit(action.payload[COLOSO_CALL], 'type'),
   });
 
-  const callData = action.payload[COLOSO_CALL];
+  const callPayload = action.payload[COLOSO_CALL];
 
-  if (callData.type === COLOSO_CALL_TYPES.SUMMONER_BY_NAME) {
-    ColosoApi.getSummonerByName(action.payload.summonerName, action.payload.region)
+  if (callPayload.type === COLOSO_CALL_TYPES.GAME_CURRENT) {
+    let summonerId;
+
+    return ColosoApi.summoner.byName(callPayload.params)
       .then((response) => {
-        const normalized = normalize(response);
+        summonerId = response.data.id;
 
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            summonerUrid: _.first(_.keys(normalized.summoners)),
-          },
-        });
+        return ColosoApi.summoner.gameCurrent({ summonerId });
       })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.SUMMONER) {
-    ColosoApi.getSummonerByUrid(action.payload.summonerUrid)
       .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            summonerUrid: action.payload.summonerUrid,
-          },
-        });
+        dispatch(mergeEntities(normalize(response)));
+        dispatchSuccess({ id: response.data.id, summonerId });
       })
       .catch(handleError);
   }
 
-  if (callData.type === COLOSO_CALL_TYPES.LEAGUE_ENTRY) {
-    ColosoApi.getLeagueEntry(action.payload.summonerUrid)
-      .then((response) => {
-        const normalized = normalize(response);
+  return COLOSO_CALL_FUNC[callPayload.type](callPayload.params)
+    .then((response) => {
+      const nextPayload = {};
+      const normalized = normalize(response);
 
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            leagueEntryId: _.first(_.keys(normalized.leagueEntries)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
+      dispatch(mergeEntities(normalized));
 
-  if (callData.type === COLOSO_CALL_TYPES.CHAMPIONS_MASTERIES) {
-    ColosoApi.getChampionsMasteries(action.payload.summonerUrid)
-      .then((response) => {
-        const normalized = normalize(response);
+      if (_.has(response, 'meta')) {
+        nextPayload.meta = response.meta;
+      }
 
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            championsMasteriesId: _.first(_.keys(normalized.championsMasteries)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
+      if (_.isArray(response.data)) {
+        _.merge(nextPayload, { ids: response.data.map(data => data.id) });
+      } else {
+        _.merge(nextPayload, { id: response.data.id });
+      }
 
-  if (callData.type === COLOSO_CALL_TYPES.GAMES_RECENT) {
-    ColosoApi.getGamesRecent(action.payload.summonerUrid)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            gamesRecentId: _.first(_.keys(normalized.gamesRecent)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.MASTERIES) {
-    ColosoApi.getMasteries(action.payload.summonerUrid)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            masteriesId: _.first(_.keys(normalized.masteries)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.RUNES) {
-    ColosoApi.getRunes(action.payload.summonerUrid)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            runesId: _.first(_.keys(normalized.runes)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.STATS_SUMMARY) {
-    ColosoApi.getStatsSummary(action.payload.summonerUrid, action.payload.season)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            statsSummariesId: _.first(_.keys(normalized.statsSummaries)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.PRO_BUILDS) {
-    ColosoApi.getProBuilds(action.payload.queryParams, action.payload.pageParams)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            ids: _.map(response.data, data => data.id),
-            pagination: {
-              currentPage: response.meta.currentPage,
-              totalPages: response.meta.totalPages,
-            },
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.PRO_PLAYERS) {
-    ColosoApi.getProPlayers()
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            proPlayersIds: _.map(response.data, data => data.id),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.PRO_BUILD) {
-    ColosoApi.getProBuild(action.payload.proBuildId)
-      .then((response) => {
-        const normalized = normalize(response);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            proBuildId: action.payload.proBuildId,
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.GAME_CURRENT) {
-    ColosoApi.getSummonerByName(action.payload.summonerName, action.payload.region)
-      .then(({ data }) => ColosoApi
-        .getGameCurrent(data.id))
-      .then((gameData) => {
-        const normalized = normalize(gameData);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            gameId: _.first(_.keys(normalized.gamesCurrent)),
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  if (callData.type === COLOSO_CALL_TYPES.MATCH) {
-    ColosoApi.getMatch(action.payload.matchUrid)
-      .then((matchData) => {
-        const normalized = normalize(matchData);
-
-        dispatch(mergeEntities(normalized));
-        dispatch({
-          type: `${action.type}_FULFILLED`,
-          payload: {
-            matchUrid: action.payload.matchUrid,
-          },
-        });
-      })
-      .catch(handleError);
-  }
-
-  return null;
+      dispatchSuccess(nextPayload);
+    })
+    .catch(handleError);
 };
 
 export default middleware;

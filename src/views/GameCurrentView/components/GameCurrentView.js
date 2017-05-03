@@ -102,19 +102,19 @@ class GameCurrentView extends Component {
     };
   }
 
-  getSummonerRunes(summonerUrid) {
-    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === summonerUrid).get('runes');
+  getSummonerRunes(summonerId) {
+    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerId') === summonerId).get('runes');
   }
 
-  getSummonerMasteries(summonerUrid) {
-    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === summonerUrid).get('masteries');
+  getSummonerMasteries(summonerId) {
+    return this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerId') === summonerId).get('masteries');
   }
 
   getFocusChampionId() {
-    const focusSummonerUrid = this.props.gameData.getIn(['data', 'focusSummonerUrid']);
+    const focusSummonerId = this.props.gameData.get('summonerId');
 
-    if (focusSummonerUrid) {
-      const participantFound = this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerUrid') === focusSummonerUrid);
+    if (focusSummonerId) {
+      const participantFound = this.props.gameData.getIn(['data', 'participants']).find(participant => participant.get('summonerId') === focusSummonerId);
 
       if (participantFound) {
         const championId = participantFound.get('championId');
@@ -126,13 +126,13 @@ class GameCurrentView extends Component {
     return 0;
   }
 
-  handleOnPressRunesButton(summonerUrid) {
-    this.setState({ summonerSelectedId: summonerUrid, modalType: 'RUNES' });
+  handleOnPressRunesButton(summonerId) {
+    this.setState({ summonerSelectedId: summonerId, modalType: 'RUNES' });
     this.modal.open();
   }
 
-  handleOnPressMasteriesButton(summonerUrid) {
-    this.setState({ summonerSelectedId: summonerUrid, modalType: 'MASTERIES' });
+  handleOnPressMasteriesButton(summonerId) {
+    this.setState({ summonerSelectedId: summonerId, modalType: 'MASTERIES' });
     this.modal.open();
   }
 
@@ -153,7 +153,11 @@ class GameCurrentView extends Component {
       !proBuilds.get('isFetching') &&
       proBuilds.getIn(['filters', 'championId']) !== focusChampionId
     ) {
-      this.props.fetchProBuilds({ championId: focusChampionId, proPlayerId: null }, 1);
+      this.props.fetchProBuilds({
+        championId: focusChampionId,
+        proPlayerId: null,
+        page: { number: 1 },
+      });
     }
   }
 
@@ -163,7 +167,10 @@ class GameCurrentView extends Component {
       this.props.fetchProBuilds({
         championId: this.getFocusChampionId(),
         proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
-      }, pagData.get('currentPage') + 1);
+        page: {
+          number: pagData.get('currentPage') + 1,
+        },
+      });
     }
   }
 
@@ -171,7 +178,8 @@ class GameCurrentView extends Component {
     this.props.fetchProBuilds({
       championId: this.getFocusChampionId(),
       proPlayerId,
-    }, 1);
+      page: { number: 1 },
+    });
   }
 
   render() {
@@ -216,19 +224,17 @@ class GameCurrentView extends Component {
               {...this.getTeamData(100)}
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
-              onPressProfileButton={(summonerUrid) => {
-                Actions.summonerProfileView({ summonerUrid });
+              onPressProfileButton={(summonerId) => {
+                Actions.summonerProfileView({ summonerId });
               }}
-              focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />
             <Team
               {...this.getTeamData(200)}
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
-              onPressProfileButton={(summonerUrid) => {
-                Actions.summonerProfileView({ summonerUrid });
+              onPressProfileButton={(summonerId) => {
+                Actions.summonerProfileView({ summonerId });
               }}
-              focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />
           </ScrollView>
         </View>
@@ -275,7 +281,8 @@ class GameCurrentView extends Component {
 
 GameCurrentView.propTypes = {
   gameData: ImmutablePropTypes.mapContains({
-    id: PropTypes.string,
+    id: PropTypes.string.isRequired,
+    summonerId: PropTypes.string.isRequired,
     data: ImmutablePropTypes.mapContains({
       participants: ImmutablePropTypes.list,
       mapId: PropTypes.number,
@@ -283,7 +290,6 @@ GameCurrentView.propTypes = {
       gameLength: PropTypes.number,
       region: PropTypes.string,
       gameStartTime: PropTypes.number,
-      focusSummonerUrid: PropTypes.string,
     }),
   }),
   proBuilds: ImmutablePropTypes.mapContains({
