@@ -130,7 +130,7 @@ function getRunes({ summonerId }) {
 
 function getGameCurrent({ summonerId }) {
   return new Promise((resolve, reject) => {
-    const url = `summoner/${summonerId}/games/current`;
+    const url = `summoners/${summonerId}/games/current`;
 
     return ColosoClient.get(url)
       .then((response) => {

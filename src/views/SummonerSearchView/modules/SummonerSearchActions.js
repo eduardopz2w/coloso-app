@@ -22,6 +22,7 @@ export const searchGame = createAction('SUMMONER_SEARCH/SEARCH_GAME',
     };
   },
 );
+
 export const searchSummoner = createAction('SUMMONER_SEARCH/SEARCH_SUMMONER',
   ({ summonerName, region }) => {
     tracker.trackEvent('SummonerSearch', 'PROFILE', { label: `name: ${summonerName} region: ${region}` });

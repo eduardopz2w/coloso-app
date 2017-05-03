@@ -33,6 +33,7 @@ const COLOSO_CALL_FUNC = {
   [COLOSO_CALL_TYPES.PRO_BUILDS]: ColosoApi.proBuilds.get,
   [COLOSO_CALL_TYPES.PRO_PLAYERS]: ColosoApi.proPlayers.get,
   [COLOSO_CALL_TYPES.GAME]: ColosoApi.games.byId,
+  [COLOSO_CALL_TYPES.GAME_CURRENT]: ColosoApi.summoner.gameCurrent,
 };
 
 const middleware = ({ dispatch }) => next => (action) => {
@@ -63,7 +64,23 @@ const middleware = ({ dispatch }) => next => (action) => {
 
   const callPayload = action.payload[COLOSO_CALL];
 
-  COLOSO_CALL_FUNC[callPayload.type](callPayload.params)
+  if (callPayload.type === COLOSO_CALL_TYPES.GAME_CURRENT) {
+    let summonerId;
+
+    return ColosoApi.summoner.byName(callPayload.params)
+      .then((response) => {
+        summonerId = response.data.id;
+
+        return ColosoApi.summoner.gameCurrent({ summonerId });
+      })
+      .then((response) => {
+        dispatch(mergeEntities(normalize(response)));
+        dispatchSuccess({ id: response.data.id, summonerId });
+      })
+      .catch(handleError);
+  }
+
+  return COLOSO_CALL_FUNC[callPayload.type](callPayload.params)
     .then((response) => {
       const nextPayload = {};
       const normalized = normalize(response);
@@ -83,8 +100,6 @@ const middleware = ({ dispatch }) => next => (action) => {
       dispatchSuccess(nextPayload);
     })
     .catch(handleError);
-
-  return null;
 };
 
 export default middleware;
