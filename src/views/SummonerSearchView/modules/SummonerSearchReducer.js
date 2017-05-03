@@ -17,7 +17,7 @@ const initialState = Immutable.fromJS({
   isSearching: false,
   searchError: false,
   errorMessage: null,
-  summonerFoundUrid: null,
+  summonerFoundId: null,
   gameFound: false,
 });
 
@@ -28,15 +28,15 @@ export default typeToReducer({
   [searchSummoner]: {
     PENDING: state => state.set('isSearching', true),
 
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       isSearching: false,
       searchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
 
-    FULFILLED: (state, action) => state.merge({
+    FULFILLED: (state, { payload: { id } }) => state.merge({
       isSearching: false,
-      summonerFoundUrid: action.payload.summonerUrid,
+      summonerFoundId: id,
     }),
   },
   [searchGame]: {
@@ -47,10 +47,10 @@ export default typeToReducer({
       gameFound: true,
     }),
 
-    REJECTED: (state, action) => state.merge({
+    REJECTED: (state, { payload: { error } }) => state.merge({
       isSearching: false,
       searchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [clearSearchError]: state => state.merge({
@@ -59,7 +59,7 @@ export default typeToReducer({
     errorMessage: null,
   }),
   [clearFoundData]: state => state.merge({
-    summonerFoundUrid: null,
+    summonerFoundId: null,
     gameFound: false,
   }),
 }, initialState);
