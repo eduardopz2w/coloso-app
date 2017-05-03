@@ -75,7 +75,7 @@ class SummonerSearchView extends Component {
 
     if (!_.isNull(this.props.summonerFoundUrid)) {
       this.props.addSearchEntry(this.props.summonerName, this.props.region);
-      Actions.summonerProfileView({ summonerUrid: this.props.summonerFoundUrid });
+      Actions.summonerProfileView({ summonerId: this.props.summonerFoundUrid });
       this.props.clearFoundData();
     }
 

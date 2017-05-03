@@ -217,7 +217,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerUrid) => {
-                Actions.summonerProfileView({ summonerUrid });
+                Actions.summonerProfileView({ summonerId: summonerUrid });
               }}
               focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />
@@ -226,7 +226,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerUrid) => {
-                Actions.summonerProfileView({ summonerUrid });
+                Actions.summonerProfileView({ summonerId: summonerUrid });
               }}
               focusSummonerUrid={gameData.getIn(['data', 'focusSummonerUrid'])}
             />

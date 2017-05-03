@@ -84,7 +84,7 @@ class MainDrawer extends PureComponent {
       Actions.manageAccountView();
       this.drawer.close();
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerProfileView({ summonerUrid: summonerAccountUrid });
+      Actions.summonerProfileView({ summonerId: summonerAccountUrid });
       this.drawer.close();
     }
   }

@@ -86,35 +86,35 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
-  const { summonerUrid } = ownProps;
+  const { summonerId } = ownProps;
 
   return {
     fetchSummonerData: () => {
-      dispatch(fetchSummonerData(summonerUrid));
+      dispatch(fetchSummonerData({ id: summonerId }));
     },
 
     fetchLeagueEntry: () => {
-      dispatch(fetchLeagueEntry(summonerUrid));
+      dispatch(fetchLeagueEntry({ summonerId }));
     },
 
     fetchChampionsMasteries: () => {
-      dispatch(fetchChampionsMasteries(summonerUrid));
+      dispatch(fetchChampionsMasteries({ summonerId }));
     },
 
     fetchGamesRecent: () => {
-      dispatch(fetchGamesRecent(summonerUrid));
+      dispatch(fetchGamesRecent({ summonerId }));
     },
 
     fetchMasteries: () => {
-      dispatch(fetchMasteries(summonerUrid));
+      dispatch(fetchMasteries({ summonerId }));
     },
 
     fetchRunes: () => {
-      dispatch(fetchRunes(summonerUrid));
+      dispatch(fetchRunes({ summonerId }));
     },
 
     fetchSummary: (season) => {
-      dispatch(fetchSummary(summonerUrid, season));
+      dispatch(fetchSummary({ summonerId, season }));
     },
 
     clearCache: () => {

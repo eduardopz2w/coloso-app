@@ -18,10 +18,17 @@ export const COLOSO_CALL_TYPES = {
   PRO_PLAYERS: 'COLOSO_CALL/PRO_PLAYERS',
   GAME_CURRENT: 'COLOSO_CALL/GAME_CURRENT',
   GAME: 'COLOSO_CALL/GAME',
-  MATCH: 'COLOSO_CALL/MATCH',
 };
 
 const COLOSO_CALL_FUNC = {
+  [COLOSO_CALL_TYPES.SUMMONER_BY_NAME]: ColosoApi.summoner.byName,
+  [COLOSO_CALL_TYPES.SUMMONER]: ColosoApi.summoner.byId,
+  [COLOSO_CALL_TYPES.LEAGUE_ENTRY]: ColosoApi.summoner.leagueEntry,
+  [COLOSO_CALL_TYPES.CHAMPIONS_MASTERIES]: ColosoApi.summoner.championsMasteries,
+  [COLOSO_CALL_TYPES.GAMES_RECENT]: ColosoApi.summoner.gamesRecent,
+  [COLOSO_CALL_TYPES.MASTERIES]: ColosoApi.summoner.masteries,
+  [COLOSO_CALL_TYPES.RUNES]: ColosoApi.summoner.runes,
+  [COLOSO_CALL_TYPES.STATS_SUMMARY]: ColosoApi.summoner.statsSummary,
   [COLOSO_CALL_TYPES.PRO_BUILD]: ColosoApi.proBuilds.byId,
   [COLOSO_CALL_TYPES.PRO_BUILDS]: ColosoApi.proBuilds.get,
   [COLOSO_CALL_TYPES.PRO_PLAYERS]: ColosoApi.proPlayers.get,

@@ -77,17 +77,16 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    REJECTED: (state, action) => state.mergeIn(['summonerData'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['summonerData'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['summonerData'], {
-      ...action.payload,
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['summonerData'], {
       isFetching: false,
       fetched: true,
-      id: action.payload.summonerUrid,
+      id,
     }),
   },
   [fetchLeagueEntry]: {
@@ -96,17 +95,17 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['leagueEntries'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['leagueEntries'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.leagueEntryId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['leagueEntries'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['leagueEntries'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [fetchChampionsMasteries]: {
@@ -115,17 +114,17 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['championsMasteries'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['championsMasteries'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.championsMasteriesId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['championsMasteries'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['championsMasteries'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [fetchGamesRecent]: {
@@ -134,17 +133,17 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['gamesRecent'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['gamesRecent'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.gamesRecentId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['gamesRecent'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['gamesRecent'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [fetchMasteries]: {
@@ -153,17 +152,17 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['masteries'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['masteries'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.masteriesId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['masteries'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['masteries'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [fetchRunes]: {
@@ -172,37 +171,37 @@ export default typeToReducer({
       isFetching: true,
       fetchError: false,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['runes'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['runes'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.runesId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['runes'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['runes'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [fetchSummary]: {
-    PENDING: (state, action) => state.mergeIn(['summary'], {
+    PENDING: (state, { payload: { season } }) => state.mergeIn(['summary'], {
       isFetching: true,
       fetchError: false,
       fetched: false,
-      season: action.payload.season,
+      season,
     }),
-    FULFILLED: (state, action) => state.mergeIn(['summary'], {
+    FULFILLED: (state, { payload: { id } }) => state.mergeIn(['summary'], {
       fetched: true,
       isFetching: false,
       fetchError: false,
-      id: action.payload.statsSummariesId,
+      id,
     }),
-    REJECTED: (state, action) => state.mergeIn(['summary'], {
+    REJECTED: (state, { payload: { error } }) => state.mergeIn(['summary'], {
       fetched: false,
       isFetching: false,
       fetchError: true,
-      errorMessage: action.payload.errorMessage,
+      errorMessage: error.message,
     }),
   },
   [clearCache]: () => initialState,

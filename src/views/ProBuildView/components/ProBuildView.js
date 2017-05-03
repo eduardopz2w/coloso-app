@@ -65,9 +65,9 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-function handleOnPressParticipant(summonerUrid) {
+function handleOnPressParticipant(summonerId) {
   Actions.summonerProfileView({
-    summonerUrid,
+    summonerId,
   });
 }
 
@@ -130,7 +130,7 @@ class ProBuildView extends Component {
 
   handleOnPressProfileButton() {
     Actions.summonerProfileView({
-      summonerUrid: this.props.proBuild.getIn(['data', 'proSummoner', 'summonerUrid']),
+      summonerId: this.props.proBuild.getIn(['data', 'proSummoner', 'summonerId']),
     });
   }
 
