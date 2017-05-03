@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
 import numeral from 'numeral';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
