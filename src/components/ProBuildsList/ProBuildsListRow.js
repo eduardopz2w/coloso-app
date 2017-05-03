@@ -249,7 +249,7 @@ class ProBuild extends Component {
             </View>
 
             <View style={styles.championNameAndScore} >
-              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['championData', 'name'])}</Text>
+              <Text numberOfLines={1} style={styles.championName}>{build.getIn(['champion', 'name'])}</Text>
               <MediaQuery maxDeviceWidth={599}>
                 <Text style={styles.scoreText}>
                   <Text style={styles.killsText}>{build.getIn(['stats', 'kills'])}</Text>/
@@ -313,7 +313,7 @@ ProBuild.propTypes = {
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
-    championData: ImmutablePropTypes.mapContains({
+    champion: ImmutablePropTypes.mapContains({
       name: PropTypes.string,
       title: PropTypes.string,
     }),
