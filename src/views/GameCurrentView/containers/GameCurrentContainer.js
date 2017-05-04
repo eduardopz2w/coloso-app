@@ -46,8 +46,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchProBuilds: (queryParams, page) => {
-      dispatch(fetchBuilds(queryParams, page));
+    fetchProBuilds: (params) => {
+      dispatch(fetchBuilds(params));
     },
     fetchProPlayers: () => {
       dispatch(fetchProPlayers());

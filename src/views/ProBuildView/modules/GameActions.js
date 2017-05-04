@@ -1,11 +1,13 @@
 import { createAction } from 'redux-actions';
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../../../redux/middlewares/ColosoApiMiddleware';
 
-export const fetchMatch = createAction('MATCH/FETCH', matchUrid => ({
-  matchUrid,
+export const fetchGame = createAction('GAME/FETCH', id => ({
   [COLOSO_CALL]: {
-    type: COLOSO_CALL_TYPES.MATCH,
+    type: COLOSO_CALL_TYPES.GAME,
+    params: {
+      id,
+    },
   },
 }));
 
-export default fetchMatch;
+export default fetchGame;

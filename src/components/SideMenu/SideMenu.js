@@ -87,9 +87,9 @@ class SideMenu extends PureComponent {
   }
 
   renderAccountData() {
-    const ownerAccount = this.props.ownerAccount;
+    const riotAccount = this.props.riotAccount;
 
-    if (_.isNull(ownerAccount.get('summonerUrid'))) {
+    if (_.isNull(riotAccount.get('id'))) {
       return (<TouchableWithoutFeedback
         onPress={this.props.onPressManageAccount}
       >
@@ -108,10 +108,10 @@ class SideMenu extends PureComponent {
       onPress={this.props.onPressManageAccount}
     >
       <View style={styles.accountDataContainer}>
-        <ProfileImage id={ownerAccount.get('profileIconId')} style={styles.accountImage} />
+        <ProfileImage id={riotAccount.get('profileIconId')} style={styles.accountImage} />
         <View style={styles.accountDataRow}>
-          <Text style={styles.summonerName}>{ownerAccount.get('summonerName')}</Text>
-          <Text style={styles.accountDataText}>{regionHumanize(ownerAccount.get('region'))}</Text>
+          <Text style={styles.summonerName}>{riotAccount.get('name')}</Text>
+          <Text style={styles.accountDataText}>{regionHumanize(riotAccount.get('region'))}</Text>
         </View>
       </View>
     </TouchableWithoutFeedback>);
@@ -166,9 +166,9 @@ class SideMenu extends PureComponent {
 }
 
 SideMenu.propTypes = {
-  ownerAccount: ImmutablePropTypes.mapContains({
-    summonerUrid: PropTypes.string,
-    summonerName: PropTypes.string,
+  riotAccount: ImmutablePropTypes.mapContains({
+    id: PropTypes.string,
+    name: PropTypes.string,
     profileIconId: PropTypes.number,
     region: PropTypes.string,
   }),

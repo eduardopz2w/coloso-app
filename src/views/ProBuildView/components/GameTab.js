@@ -17,17 +17,17 @@ class Matchtab extends PureComponent {
   }
 
   shouldComponentUpdate(nextProps) {
-    return !Immutable.is(nextProps.match, this.props.match);
+    return !Immutable.is(nextProps.game, this.props.game);
   }
 
   getTeam(teamId) {
-    const teamsDataList = this.props.match.getIn(['data', 'teams']);
+    const teamsDataList = this.props.game.getIn(['data', 'teams']);
 
     return teamsDataList.find(team => team.get('teamId') === teamId);
   }
 
   getParticipants(teamId) {
-    const participantsList = this.props.match.getIn(['data', 'participants']);
+    const participantsList = this.props.game.getIn(['data', 'participants']);
 
     return participantsList.filter(participant => participant.get('teamId') === teamId);
   }
@@ -57,18 +57,18 @@ class Matchtab extends PureComponent {
   }
 
   render() {
-    const match = this.props.match;
+    const game = this.props.game;
 
-    if (match.get('isFetching')) {
+    if (game.get('isFetching')) {
       return (<View style={{ padding: 16, alignItems: 'center' }}>
         <LoadingIndicator />
       </View>);
-    } else if (match.get('fetchError')) {
+    } else if (game.get('fetchError')) {
       return (<ErrorScreen
-        message={match.get('errorMessage')}
+        message={game.get('errorMessage')}
         onPressRetryButton={this.props.onPressRetryButton}
       />);
-    } else if (match.get('fetched')) {
+    } else if (game.get('fetched')) {
       return this.renderContent();
     }
 
@@ -77,7 +77,7 @@ class Matchtab extends PureComponent {
 }
 
 Matchtab.propTypes = {
-  match: ImmutablePropTypes.mapContains({
+  game: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool.isRequired,
     fetchError: PropTypes.bool.isRequired,
     errorMessage: PropTypes.string.isRequired,

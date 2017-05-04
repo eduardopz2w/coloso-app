@@ -23,7 +23,7 @@ function mapStateToProps(state) {
     isSearching: searchViewState.get('isSearching'),
     searchError: searchViewState.get('searchError'),
     errorMessage: searchViewState.get('errorMessage'),
-    summonerFoundUrid: searchViewState.get('summonerFoundUrid'),
+    summonerFoundId: searchViewState.get('summonerFoundId'),
     gameFound: searchViewState.get('gameFound'),
     searchHistoryEntries: state.searchHistory.get('entries'),
   };
@@ -31,12 +31,12 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    searchSummoner: (summonerName, region) => {
-      dispatch(searchSummoner(summonerName, region));
+    searchSummoner: (params) => {
+      dispatch(searchSummoner(params));
     },
 
-    searchGame: (summonerName, region) => {
-      dispatch(searchGame(summonerName, region));
+    searchGame: (params) => {
+      dispatch(searchGame(params));
     },
 
     clearSearchError: () => {
@@ -51,12 +51,12 @@ function mapDispatchToProps(dispatch) {
       dispatch(loadEntries());
     },
 
-    addSearchEntry: (summonerName, region) => {
-      dispatch(addEntry(summonerName, region));
+    addSearchEntry: (params) => {
+      dispatch(addEntry(params));
     },
 
-    deleteSearchEntry: (summonerName, region) => {
-      dispatch(deleteEntry(summonerName, region));
+    deleteSearchEntry: (params) => {
+      dispatch(deleteEntry(params));
     },
 
     setSummonerName: (summonerName) => {

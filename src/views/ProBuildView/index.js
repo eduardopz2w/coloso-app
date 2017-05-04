@@ -1,9 +1,9 @@
 import ProBuildContainer from './containers/ProBuildContainer';
 import ProBuildReducer from './modules/ProBuildReducer';
-import MatchReducer from './modules/MatchReducer';
+import GameReducer from './modules/GameReducer';
 import { injectReducer } from '../../redux/store';
 
 injectReducer('proBuild', ProBuildReducer);
-injectReducer('match', MatchReducer);
+injectReducer('game', GameReducer);
 
 export default ProBuildContainer;

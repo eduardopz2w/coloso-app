@@ -29,7 +29,7 @@ class SummonerProfileView extends Component {
   }
 
   componentWillMount() {
-    if (this.props.summonerUrid !== this.props.summonerData.getIn(['data', 'summonerUrid'])) {
+    if (this.props.summonerId !== this.props.summonerData.getIn(['data', 'summonerId'])) {
       this.props.clearCache();
       this.props.fetchSummonerData();
       this.props.fetchLeagueEntry();
@@ -138,7 +138,7 @@ class SummonerProfileView extends Component {
 
 
 SummonerProfileView.propTypes = {
-  summonerUrid: PropTypes.string.isRequired,
+  summonerId: PropTypes.string.isRequired,
   fetchSummonerData: PropTypes.func.isRequired,
   fetchLeagueEntry: PropTypes.func.isRequired,
   fetchChampionsMasteries: PropTypes.func.isRequired,

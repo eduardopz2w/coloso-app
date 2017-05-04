@@ -77,7 +77,7 @@ class History extends Component {
         }}
       >
         <View style={styles.dataContainer}>
-          <Text style={styles.region}>{region.toUpperCase()}</Text>
+          <Text style={styles.region}>{region}</Text>
           <Text style={styles.summonerName}>{summonerName}</Text>
         </View>
       </TouchableNativeFeedback>

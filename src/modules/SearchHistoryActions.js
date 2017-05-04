@@ -3,7 +3,7 @@ import _ from 'lodash';
 import logger from '../utils/logger';
 import Storage from '../utils/Storage';
 
-export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, region) => new Promise((resolve, reject) => {
+export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', ({ summonerName, region }) => new Promise((resolve, reject) => {
   Storage.load({ key: 'searchHistoryEntries' })
     .then((entries) => {
       const duplicateIndex = _.findIndex(entries, (entry) => {
@@ -33,7 +33,7 @@ export const addEntry = createAction('SEARCH_HISTORY/ADD_ENTRY', (summonerName, 
     });
 }));
 
-export const deleteEntry = createAction('SEARCH_HISTORY/DELETE_ENTRY', (summonerName, region) => new Promise((resolve, reject) => {
+export const deleteEntry = createAction('SEARCH_HISTORY/DELETE_ENTRY', ({ summonerName, region }) => new Promise((resolve, reject) => {
   Storage.load({ key: 'searchHistoryEntries' })
     .then((entries) => {
       const entriesFiltered = _.filter(entries, (entry) => {

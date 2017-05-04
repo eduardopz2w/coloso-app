@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
+import { View, Text, Image, Dimensions, TouchableNativeFeedback } from 'react-native';
 import numeral from 'numeral';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
@@ -120,7 +120,7 @@ class Participant extends PureComponent {
 
     return (<TouchableNativeFeedback
       onPress={() => {
-        this.props.onPressParticipant(this.props.participant.getIn(['summonerData', 'summonerUrid']));
+        this.props.onPressParticipant(this.props.participant.getIn(['summoner', 'summonerId']));
       }}
     >
       <View style={styles.root}>
@@ -134,7 +134,7 @@ class Participant extends PureComponent {
         />
         <View style={styles.dataCol}>
           <View style={styles.row}>
-            <Text style={styles.summonerName}>{participantData.getIn(['summonerData', 'summonerName'])}</Text>
+            <Text style={styles.summonerName}>{participantData.getIn(['summoner', 'summonerName'])}</Text>
           </View>
           <View style={[styles.row, { justifyContent: 'space-between' }]}>
             <View style={styles.row}>
@@ -149,7 +149,7 @@ class Participant extends PureComponent {
             <View style={styles.row}>
               <Image style={styles.uiImage} source={{ uri: 'ui_minion' }} />
               <Text style={styles.minionsKilled}>
-                {participantData.getIn(['stats', 'minionsKilled']) || 0}
+                {participantData.getIn(['stats', 'totalMinionsKilled']) || 0}
               </Text>
             </View>
 
@@ -194,10 +194,11 @@ Participant.propTypes = {
     spell1Id: PropTypes.number.isRequired,
     spell2Id: PropTypes.number.isRequired,
     championId: PropTypes.number.isRequired,
-    summonerData: ImmutablePropTypes.mapContains({
+    summoner: ImmutablePropTypes.mapContains({
+      summonerId: PropTypes.string.isRequired,
       summonerName: PropTypes.string.isRequired,
     }).isRequired,
-    championData: ImmutablePropTypes.mapContains({
+    champion: ImmutablePropTypes.mapContains({
       name: PropTypes.string.isRequired,
     }).isRequired,
     stats: ImmutablePropTypes.mapContains({
@@ -212,7 +213,7 @@ Participant.propTypes = {
       deaths: PropTypes.number,
       assists: PropTypes.number,
       goldEarned: PropTypes.number.isRequired,
-      minionsKilled: PropTypes.number.isRequired,
+      totalMinionsKilled: PropTypes.number.isRequired,
       champLevel: PropTypes.number.isRequired,
       wardsPlaced: PropTypes.number,
     }).isRequired,
