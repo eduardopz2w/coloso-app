@@ -1,21 +1,45 @@
-import { createAction } from 'redux-actions';
-import logger from '../utils/logger';
-import Storage from '../utils/Storage';
-import { tracker } from '../utils/analytics';
+import {
+  logger,
+  Storage,
+  ColosoApi,
+  tracker,
+  createThunkAction,
+} from '../utils';
 
 const STORAGE_KEY = 'riotAccount';
 
-export const loadAccount = createAction('MANAGE_ACCOUNT/LOAD_ACCOUNT', () => new Promise((resolve) => {
-  Storage.load({ key: STORAGE_KEY })
-    .then(resolve)
-    .catch(() => {
-      logger.debug('Can not load RiotAccount from storeage');
-    });
-}));
+function saveAccountToStorage(account, trackEvent = true) {
+  logger.debug('Saving account to storage', account);
 
-export const saveAccount = createAction('MANAGE_ACCOUNT/SAVE_ACCOUNT', (riotAccount) => {
-  tracker.trackEvent('ManageAccounts', 'ADD_ACCOUNT', { label: `summonerId: ${riotAccount.id}` });
-  Storage.save({ key: STORAGE_KEY, rawData: riotAccount });
+  Storage.save({ key: STORAGE_KEY, rawData: account });
 
-  return riotAccount;
+  if (trackEvent) {
+    tracker.trackEvent('ManageAccounts', 'ADD_ACCOUNT', { label: `summonerId: ${account.id}` });
+  }
+}
+
+export const fetchAccount = createThunkAction('MANAGE_ACCOUNT/FETCH_ACCOUNT', params => (dispatch) => {
+  dispatch({
+    type: 'MANAGE_ACCOUNT/FETCH_ACCOUNT',
+    payload: ColosoApi.summoner.byName(params),
+  })
+    .then(({ value: response }) => ({
+      id: response.data.id,
+      ...response.data.attributes,
+    }))
+    .then(account => saveAccountToStorage(account, params.trackEvent))
+    .catch(logger.debug);
+});
+
+export const loadAccount = createThunkAction('MANAGE_ACCOUNT/LOAD_ACCOUNT', () => (dispatch) => {
+  dispatch({
+    type: 'MANAGE_ACCOUNT/LOAD_ACCOUNT',
+    payload: Storage.load({ key: STORAGE_KEY }),
+  })
+    .then(({ value: riotAccount }) => dispatch(fetchAccount({
+      summonerName: riotAccount.name,
+      region: riotAccount.region,
+      trackEvent: false,
+    })))
+    .catch(logger.debug);
 });

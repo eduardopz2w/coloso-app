@@ -195,7 +195,9 @@ class ProBuild extends Component {
   }
 
   getTimeAgo() {
-    return moment(this.props.build.get('gameCreation') - (this.props.build.get('gameDuration') * 1000)).fromNow();
+    const build = this.props.build;
+
+    return moment(build.get('gameCreation')).add(build.get('gameDuration'), 'seconds').fromNow();
   }
 
   handleOnPressAddFavorite() {
