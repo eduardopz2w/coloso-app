@@ -52,11 +52,17 @@ class ProBuildsListView extends Component {
   }
 
   handleOnPressProBuildsTabRetryButton() {
+    let page = 1;
+
+    if (this.props.proBuilds.getIn(['pagination', 'currentPage']) !== 1) {
+      page = this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1;
+    }
+
     this.props.fetchBuilds({
       championId: this.props.proBuilds.getIn(['filters', 'championId']),
       proPlayerId: this.props.proBuilds.getIn(['filters', 'proPlayerId']),
       page: {
-        number: this.props.proBuilds.getIn(['pagination', 'currentPage']) + 1,
+        number: page,
       },
     });
   }

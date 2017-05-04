@@ -7,7 +7,6 @@ import update from 'immutability-helper';
 import _ from 'lodash';
 
 import Toolbar from './Toolbar';
-import ColosoApi from '../../../utils/ColosoApi';
 import colors from '../../../utils/colors';
 import RegionSelector from '../../../components/RegionSelector';
 import LoadingIndicator from '../../../components/LoadingIndicator';
@@ -48,7 +47,6 @@ class ManageAccountView extends Component {
     this.state = {
       summonerName: '',
       region: 'NA',
-      isFetching: false,
       validationErrors: {
         summonerName: null,
       },
@@ -58,10 +56,32 @@ class ManageAccountView extends Component {
     this.handleTextChangeSummonerName = this.handleTextChangeSummonerName.bind(this);
     this.handleChangeRegion = this.handleChangeRegion.bind(this);
     this.handlePressAddAccount = this.handlePressAddAccount.bind(this);
+    this.dialog = new Dialog();
   }
 
   componentDidMount() {
     this.regionSelector.geolocalize();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.fetched) {
+      this.dialog.set({
+        content: I18n.t('account_added'),
+        positiveText: 'OK',
+      });
+
+      this.dialog.show();
+      Actions.pop();
+    }
+
+    if (newProps.fetchError) {
+      this.dialog.set({
+        content: newProps.errorMessage,
+        positiveText: 'OK',
+      });
+
+      this.dialog.show();
+    }
   }
 
   handleTextChangeSummonerName(summonerName) {
@@ -77,43 +97,10 @@ class ManageAccountView extends Component {
   }
 
   handlePressAddAccount() {
-    const state = this.state;
-
     if (this.validateForm()) {
-      this.setState({ isFetching: true });
+      const { summonerName, region } = this.state;
 
-      ColosoApi.summoner.byName({
-        summonerName: state.summonerName,
-        region: state.region,
-      })
-        .then((response) => {
-          const riotAccount = _.extend(response.data.attributes, {
-            id: response.data.id,
-          });
-
-          this.props.saveAccount(riotAccount);
-
-          const dialog = new Dialog();
-
-          dialog.set({
-            content: I18n.t('account_added'),
-            positiveText: 'OK',
-          });
-
-          dialog.show();
-          Actions.pop();
-        })
-        .catch(({ message }) => {
-          const dialog = new Dialog();
-
-          dialog.set({
-            content: message,
-            positiveText: 'OK',
-          });
-
-          dialog.show();
-          this.setState({ isFetching: false });
-        });
+      this.props.fetchAccount({ summonerName, region });
     }
   }
 
@@ -172,7 +159,7 @@ class ManageAccountView extends Component {
             selectedValue={this.state.region}
           />
         </View>
-        {!this.state.isFetching &&
+        {!this.props.fetching &&
           <TouchableNativeFeedback
             onPress={this.handlePressAddAccount}
           >
@@ -182,7 +169,7 @@ class ManageAccountView extends Component {
           </TouchableNativeFeedback>
         }
 
-        {this.state.isFetching &&
+        {this.props.fetching &&
           <View style={{ alignItems: 'center' }}>
             <LoadingIndicator />
           </View>
@@ -193,7 +180,13 @@ class ManageAccountView extends Component {
 }
 
 ManageAccountView.propTypes = {
-  saveAccount: PropTypes.func,
+  fetching: PropTypes.bool.isRequired,
+  /* eslint-disable react/no-unused-prop-types*/
+  fetched: PropTypes.bool.isRequired,
+  fetchError: PropTypes.bool.isRequired,
+  errorMessage: PropTypes.string,
+  /* eslint-enable react/no-unused-prop-types*/
+  fetchAccount: PropTypes.func.isRequired,
 };
 
 export default ManageAccountView;

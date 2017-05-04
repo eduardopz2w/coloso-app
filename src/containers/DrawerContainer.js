@@ -11,7 +11,7 @@ import {
 
 function mapStateToProps(state) {
   return {
-    riotAccount: state.manageAccount,
+    riotAccount: state.manageAccount.get('data'),
     isSearchingGame: state.summonerSearch.get('isSearching'),
   };
 }
