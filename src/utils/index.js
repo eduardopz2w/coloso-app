@@ -4,3 +4,4 @@ export { default as Storage } from './Storage';
 export { default as ColosoApi } from './ColosoApi';
 export { default as tracker } from './tracker';
 export { default as logger } from './logger';
+export { default as colors } from './colors';
