@@ -19,19 +19,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   header: {
-    width: 240,
     height: 150,
     paddingHorizontal: 18,
     position: 'relative',
     justifyContent: 'center',
     backgroundColor: colors.primary,
-  },
-  headerImage: {
-    width: 240,
-    height: 150,
-    position: 'absolute',
-    top: 0,
-    left: 0,
   },
   accountDataContainer: {
     flexDirection: 'row',
@@ -148,6 +140,12 @@ class SideMenu extends PureComponent {
         />
 
         <MenuItem
+          title="Coloso Web"
+          iconName="web"
+          onPress={this.props.onPressWeb}
+        />
+
+        <MenuItem
           title={I18n.t('suggestion')}
           iconName="mail"
           onPress={this.props.onPressSuggestion}
@@ -179,6 +177,7 @@ SideMenu.propTypes = {
   onPressMyGame: PropTypes.func,
   onPressManageAccount: PropTypes.func,
   onPressSettings: PropTypes.func,
+  onPressWeb: PropTypes.func,
 };
 
 export default SideMenu;
