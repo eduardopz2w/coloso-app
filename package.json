@@ -27,7 +27,6 @@
     "react-native-device-info": "^0.9.7",
     "react-native-dialogs": "0.0.19",
     "react-native-drawer": "^2.3.0",
-    "react-native-easy-grid": "^0.1.9",
     "react-native-google-analytics-bridge": "^4.0.2",
     "react-native-infinite-scroll-view": "^0.4.2",
     "react-native-keep-awake": "^2.0.4",

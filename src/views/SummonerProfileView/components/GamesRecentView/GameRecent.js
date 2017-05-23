@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Dimensions, Image, Text } from 'react-native';
-import { Grid, Row } from 'react-native-easy-grid';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
@@ -229,7 +228,7 @@ class GameRecent extends PureComponent {
           <Text style={styles.gameTitle}>
             {gameModeParser(game.get('gameMode'))} ({this.getGameTitleLabel()})
           </Text>
-          <Grid>
+          <View>
             <View style={styles.iconDataRow}>
               <View style={[styles.iconDataCol, styles.firstIconDataCol]}>
                 <Image style={styles.iconImage} source={{ uri: 'ui_score' }} />
@@ -279,11 +278,11 @@ class GameRecent extends PureComponent {
                 size={this.getItemSize()}
               />
             </View>
-            <Row style={[styleUtils.flexRow, styles.timeAgoRow]}>
+            <View style={[styleUtils.flexRow, styles.timeAgoRow]}>
               <Icon name="access-time" size={15} style={{ marginRight: 4 }} />
               <Text style={styles.dataText}> {moment(game.get('createDate')).fromNow()}</Text>
-            </Row>
-          </Grid>
+            </View>
+          </View>
         </View>
       </View>
     </View>);
