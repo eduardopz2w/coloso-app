@@ -10,6 +10,7 @@ import _ from 'lodash';
 import I18n from 'i18n-js';
 
 import SideMenu from './SideMenu';
+import tracker from '../utils/tracker';
 
 
 const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
@@ -41,6 +42,7 @@ function handleOnPressSuggestion() {
 }
 
 function goToWeb() {
+  tracker.trackEvent('ColosoWeb', 'OPEN');
   Linking.openURL('http://www.coloso.net');
 }
 
