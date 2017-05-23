@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, ScrollView, Image } from 'react-native';
 import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -25,6 +25,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.primary,
   },
+
+  headerBackground: {
+    width: 240,
+    height: 160,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+
   accountDataContainer: {
     flexDirection: 'row',
   },
@@ -112,6 +121,7 @@ class SideMenu extends PureComponent {
   render() {
     return (<View style={styles.root}>
       <View style={styles.header}>
+        <Image style={styles.headerBackground} source={{ uri: 'background_shapes' }} />
         {this.renderAccountData()}
       </View>
       <ScrollView>
