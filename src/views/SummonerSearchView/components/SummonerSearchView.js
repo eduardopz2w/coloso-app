@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Keyboard, Dimensions, BackAndroid, ScrollView, TouchableNativeFeedback } from 'react-native';
+import { View, Text, Keyboard, Dimensions, ScrollView, TouchableNativeFeedback } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
@@ -48,7 +48,6 @@ class SummonerSearchView extends Component {
     this.props.loadSearchHistory();
     this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this.handleKeyboardDidShow.bind(this));
     this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this.handleKeyboardDidHide.bind(this));
-    this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
   }
 
   componentDidMount() {
@@ -97,16 +96,6 @@ class SummonerSearchView extends Component {
   componentWillUnmount() {
     this.keyboardDidShowListener.remove();
     this.keyboardDidHideListener.remove();
-    this.backAndroidListener.remove();
-  }
-
-  handleOnBackAndroid() {
-    if (this.historyModal.isOpen()) {
-      this.historyModal.close();
-      return true;
-    }
-
-    return false;
   }
 
   handleChangeRegion(newRegion) {
