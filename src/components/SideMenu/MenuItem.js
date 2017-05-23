@@ -4,19 +4,16 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const styles = StyleSheet.create({
   menuItem: {
-    height: 56,
+    height: 48,
     paddingLeft: 16,
-    borderBottomWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
     flexDirection: 'row',
     alignItems: 'center',
   },
   menuItemText: {
     fontSize: 14,
-    fontWeight: 'bold',
   },
   icon: {
-    marginRight: 16,
+    marginRight: 28,
   },
 });
 

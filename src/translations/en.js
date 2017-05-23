@@ -111,6 +111,8 @@ export default {
   update: 'Update',
   loading: 'Loading',
   no_results_found: 'No results found',
+  minutes: 'Minutes',
+  webDisclaimer: 'The web version www.coloso.net was designed for use from your computer',
   regions: {
     na: 'North America',
     lan: 'Latin America North',

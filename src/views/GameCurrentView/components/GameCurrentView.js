@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Dimensions, BackAndroid, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Dimensions, BackHandler, Text, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
@@ -70,7 +70,7 @@ class GameCurrentView extends Component {
   }
 
   componentWillMount() {
-    this.backAndroidListener = BackAndroid.addEventListener('hardwareBackPress', this.handleOnBackAndroid.bind(this));
+    BackHandler.addEventListener('hardwareBackPress', this.handleOnBack.bind(this));
 
     if (!this.props.proPlayers.get('isFetched')) {
       this.props.fetchProPlayers();
@@ -89,7 +89,7 @@ class GameCurrentView extends Component {
   }
 
   componentWillUnmount() {
-    this.backAndroidListener.remove();
+    BackHandler.removeEventListener('hardwareBackPress', this.handleOnBack);
   }
 
   getTeamData(teamId) {
@@ -136,7 +136,7 @@ class GameCurrentView extends Component {
     this.modal.open();
   }
 
-  handleOnBackAndroid() {
+  handleOnBack() {
     if (this.state.modalIsOpen) {
       this.modal.close();
       return true;

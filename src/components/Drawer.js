@@ -1,4 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
+import { Linking } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
@@ -9,6 +10,7 @@ import _ from 'lodash';
 import I18n from 'i18n-js';
 
 import SideMenu from './SideMenu';
+import tracker from '../utils/tracker';
 
 
 const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
@@ -37,6 +39,23 @@ function handleOnPressSuggestion() {
     recipients: [SUGGESTION_EMAIL],
     body: suggestionTemplate,
   }, () => {});
+}
+
+function goToWeb() {
+  tracker.trackEvent('ColosoWeb', 'OPEN');
+  Linking.openURL('http://www.coloso.net');
+}
+
+function handleOnPressWeb() {
+  const dialog = new Dialog();
+  dialog.set({
+    title: I18n.t('suggestion'),
+    content: I18n.t('webDisclaimer'),
+    positiveText: 'OK',
+    onPositive: goToWeb,
+  });
+
+  dialog.show();
 }
 
 class MainDrawer extends PureComponent {
@@ -123,6 +142,7 @@ class MainDrawer extends PureComponent {
         onPressSummonerSearch={this.handleOnPressSummonerSearch}
         onPressManageAccount={this.handleOnPressManageAccount}
         onPressSettings={this.handleOnPressSettings}
+        onPressWeb={handleOnPressWeb}
       />}
       captureGestures
       panOpenMask={0.02}

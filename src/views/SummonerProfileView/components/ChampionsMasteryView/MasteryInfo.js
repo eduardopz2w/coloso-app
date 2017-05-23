@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { View, Text, Image } from 'react-native';
-import { Col } from 'react-native-easy-grid';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import { MKProgress } from 'react-native-material-kit';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -104,8 +103,8 @@ class MasteryInfo extends Component {
     return (<View style={{ marginBottom: 16 }}>
       <Text style={[styleUtils.boldText, styles.text]}>{I18n.t('progress')}:</Text>
       <View style={{ flexDirection: 'row' }}>
-        <Col><Text style={styles.text}>{numeral(championPoints).format('0,0')}</Text></Col>
-        <Col><Text style={[{ textAlign: 'right' }, styles.text]}>{numeral(nextLevelPoints).format('0,0')}</Text></Col>
+        <View style={{ flex: 1 }}><Text style={styles.text}>{numeral(championPoints).format('0,0')}</Text></View>
+        <View style={{ flex: 1 }}><Text style={[{ textAlign: 'right' }, styles.text]}>{numeral(nextLevelPoints).format('0,0')}</Text></View>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <MKProgress progress={progressNumber} style={styles.progress} progressColor={tintColor} />

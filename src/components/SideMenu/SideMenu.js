@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableWithoutFeedback, ScrollView } from 'react-native';
+import { View, StyleSheet, Text, TouchableWithoutFeedback, ScrollView, Image } from 'react-native';
 import _ from 'lodash';
 import DeviceInfo from 'react-native-device-info';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -19,20 +19,21 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   header: {
-    width: 240,
     height: 150,
     paddingHorizontal: 18,
     position: 'relative',
     justifyContent: 'center',
     backgroundColor: colors.primary,
   },
-  headerImage: {
+
+  headerBackground: {
     width: 240,
-    height: 150,
+    height: 160,
     position: 'absolute',
     top: 0,
     left: 0,
   },
+
   accountDataContainer: {
     flexDirection: 'row',
   },
@@ -120,6 +121,7 @@ class SideMenu extends PureComponent {
   render() {
     return (<View style={styles.root}>
       <View style={styles.header}>
+        <Image style={styles.headerBackground} source={{ uri: 'background_shapes' }} />
         {this.renderAccountData()}
       </View>
       <ScrollView>
@@ -145,6 +147,12 @@ class SideMenu extends PureComponent {
           title={I18n.t('pro_builds')}
           iconName="gavel"
           onPress={this.props.onPressProBuilds}
+        />
+
+        <MenuItem
+          title="Coloso Web"
+          iconName="web"
+          onPress={this.props.onPressWeb}
         />
 
         <MenuItem
@@ -179,6 +187,7 @@ SideMenu.propTypes = {
   onPressMyGame: PropTypes.func,
   onPressManageAccount: PropTypes.func,
   onPressSettings: PropTypes.func,
+  onPressWeb: PropTypes.func,
 };
 
 export default SideMenu;

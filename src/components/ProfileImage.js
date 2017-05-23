@@ -3,7 +3,7 @@ import { View, Image } from 'react-native';
 
 class ProfileImage extends PureComponent {
   render() {
-    const url = `http://coloso.net/images/profileicon/${this.props.id}.jpg`;
+    const url = `http://static.coloso.net/images/profileicons/${this.props.id}.jpg`;
 
     return <Image source={{ uri: url }} style={this.props.style} />;
   }
