@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Immutable from 'immutable';
 
 import sentenceCase from '../../../utils/sentenceCase';
-import Item from './Item';
+import ItemsOrder from './ItemsOrder';
 import colors from '../../../utils/colors';
 
 const itemsArrowSize = 20;
@@ -184,83 +184,12 @@ class BuildTab extends Component {
     super(props);
 
     this.deviceDimensions = Dimensions.get('window');
-    this.getItemStyle = this.getItemStyle.bind(this);
-    this.getParsedItems = this.getParsedItems.bind(this);
     this.renderSkillsPriority = this.renderSkillsPriority.bind(this);
     this.renderSkillsOrder = this.renderSkillsOrder.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
     return !Immutable.is(nextProps.proBuild, this.props.proBuild);
-  }
-
-  getItemStyle() {
-    let numCols = 5;
-
-    if (this.deviceDimensions.width <= 399) {
-      numCols = 5;
-    } else if (this.deviceDimensions.width <= 599) {
-      numCols = 6;
-    } else if (this.deviceDimensions.width <= 600) {
-      numCols = 8;
-    } else if (this.deviceDimensions.width >= 750) {
-      numCols = 10;
-    }
-
-    let size = this.deviceDimensions.width - 32;
-
-    size -= numCols * itemsArrowSize;
-    size /= numCols;
-
-    return {
-      width: size,
-      height: size,
-    };
-  }
-
-  getParsedItems() {
-    const countedItems = [];
-    const items = this.props.proBuild.getIn(['data', 'itemsOrder']).toJS();
-    let j;
-
-    for (let i = 0; i < items.length + 1; i += 1) {
-      let count = 1;
-
-      for (j = i + 1; j < items.length; j += 1) {
-        if (items[i].itemId === items[j].itemId) {
-          count += 1;
-        } else {
-          break;
-        }
-      }
-
-      if (items[i]) {
-        countedItems.push({
-          ...items[i],
-          count,
-          final: false,
-        });
-      }
-
-      i = j - 1;
-    }
-
-    for (let i = 6; i >= 0; i -= 1) {
-      const finalItemId = this.props.proBuild.getIn(['data', 'stats', `item${i}`]);
-
-      if (finalItemId > 0) {
-        _.eachRight(countedItems, (countedItem) => {
-          if (countedItem.itemId === finalItemId) {
-            _.assign(countedItem, { final: true });
-            return false;
-          }
-
-          return true;
-        });
-      }
-    }
-
-    return countedItems;
   }
 
   renderSkillsPriority() {
@@ -378,30 +307,6 @@ class BuildTab extends Component {
 
   render() {
     const proBuildData = this.props.proBuild.get('data');
-    const items = this.getParsedItems();
-    const itemsAndSeparators = [];
-    let itemData;
-
-    for (let i = 0; i < items.length; i += 1) {
-      itemData = items[i];
-
-      itemsAndSeparators.push(<Item
-        key={`item_${i}`}
-        style={this.getItemStyle()}
-        itemData={itemData}
-        onPress={this.props.onPressItem}
-      />);
-
-      if (i !== items.length - 1) {
-        itemsAndSeparators.push(<Icon
-          key={`arrow_${i}`}
-          style={styles.itemsArrow}
-          name="keyboard-arrow-right"
-          color="rgba(0,0,0,0.5)"
-          size={18}
-        />);
-      }
-    }
 
     return (<ScrollView
       contentContainerStyle={styles.container}
@@ -458,9 +363,10 @@ class BuildTab extends Component {
 
       <Text style={styles.title}>{I18n.t('buy_order')}</Text>
 
-      <View style={styles.itemsContainer}>
-        {itemsAndSeparators}
-      </View>
+      <ItemsOrder
+        itemsOrder={this.props.proBuild.getIn(['data', 'itemsOrder'])}
+        onPressItem={this.props.onPressItem}
+      />
     </ScrollView>);
   }
 }

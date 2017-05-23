@@ -111,6 +111,7 @@ export default {
   update: 'Update',
   loading: 'Loading',
   no_results_found: 'No results found',
+  minutes: 'Minutes',
   regions: {
     na: 'North America',
     lan: 'Latin America North',
