@@ -2,10 +2,10 @@ import { connect } from 'react-redux';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import Immutable from 'immutable';
 
+import { keyIn, createDenormalizeSelector } from 'utils';
 import { fetchProBuild } from '../modules/ProBuildActions';
 import { addFavoriteBuild, removeFavoriteBuild } from '../../../modules/FavoriteProBuildsActions';
 import { fetchGame } from '../modules/GameActions';
-import { keyIn, createDenormalizeSelector } from 'utils';
 import ProBuildView from '../components/ProBuildView';
 
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);

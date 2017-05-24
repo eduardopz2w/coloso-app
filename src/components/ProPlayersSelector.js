@@ -4,8 +4,8 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
-import Selector from './Selector';
 import { colors } from 'utils';
+import Selector from './Selector';
 
 const styles = MediaQueryStyleSheet.create(
   {

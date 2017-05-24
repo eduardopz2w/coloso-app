@@ -10,10 +10,10 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
+import { colors, tracker } from 'utils';
 import { LoadingIndicator, ErrorScreen } from 'components';
 import PlayerToolbar from './PlayerToolbar';
 import BasicToolbar from './BasicToolbar';
-import { colors, tracker } from 'utils';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 import BuildTab from './BuildTab';

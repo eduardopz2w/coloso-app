@@ -3,9 +3,9 @@ import { View, StyleSheet, ListView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
-import LeagueEntry from './LeagueEntry';
 import { LoadingIndicator, ErrorScreen } from 'components';
 import { tracker } from 'utils';
+import LeagueEntry from './LeagueEntry';
 
 const styles = StyleSheet.create({
   rootScrollView: {

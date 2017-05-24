@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 
+import { keyIn, createDenormalizeSelector } from 'utils';
 import SummonerProfileView from '../components/SummonerProfileView';
 import {
   fetchSummonerData,
@@ -11,7 +12,6 @@ import {
   fetchSummary,
   clearCache,
 } from '../modules/SummonerProfileActions';
-import { keyIn, createDenormalizeSelector } from 'utils';
 
 const getChampionsMasteriesId = state => state.summonerProfile.getIn(['championsMasteries', 'id']);
 const getChampionsMasteriesEntities = state => state.entities.filter(keyIn('championsMasteries'));
