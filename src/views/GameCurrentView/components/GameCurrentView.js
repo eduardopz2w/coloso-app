@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Dimensions, BackHandler, Text, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
-import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
@@ -204,11 +203,11 @@ class GameCurrentView extends Component {
       <Toolbar
         mapId={gameData.getIn(['data', 'mapId'])}
         gameQueueConfigId={gameData.getIn(['data', 'gameQueueConfigId'])}
-        onPressBackButton={() => Actions.pop()}
+        onPressBackButton={() => this.props.goBack()}
       />
       <ScrollableTabView
         tabBarBackgroundColor={colors.primary}
-        tabBarActiveTextColor={colors.accent}
+        tabBarActiveTextColor="white"
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         renderTabBar={() => <DefaultTabBar />}
@@ -221,7 +220,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerId) => {
-                Actions.summonerProfileView({ summonerId });
+                this.props.goToSummonerProfile(summonerId);
               }}
             />
             <Team
@@ -229,7 +228,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerId) => {
-                Actions.summonerProfileView({ summonerId });
+                this.props.goToSummonerProfile(summonerId);
               }}
             />
           </ScrollView>
@@ -248,7 +247,7 @@ class GameCurrentView extends Component {
             fetchError={proBuilds.get('fetchError')}
             errorMessage={proBuilds.get('errorMessage')}
             emptyListMessage={I18n.t('no_results_found')}
-            onPressBuild={buildId => Actions.proBuildView({ buildId })}
+            onPressBuild={buildId => this.props.goToBuild(buildId)}
             onLoadMore={this.handleOnLoadMoreBuilds}
             onPressRetry={() => {
               this.props.fetchProBuilds({
@@ -308,6 +307,9 @@ GameCurrentView.propTypes = {
   fetchProPlayers: PropTypes.func.isRequired,
   addFavoriteBuild: PropTypes.func.isRequired,
   removeFavoriteBuild: PropTypes.func.isRequired,
+  goToSummonerProfile: PropTypes.func.isRequired,
+  goToBuild: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 export default GameCurrentView;

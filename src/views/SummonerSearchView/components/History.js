@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   region: {
     width: 50,
     height: 25,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
     marginRight: 16,
     textAlign: 'center',
     textAlignVertical: 'center',

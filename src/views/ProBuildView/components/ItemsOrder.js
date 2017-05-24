@@ -60,18 +60,21 @@ class ItemsOrder extends Component {
   }
 
   render() {
+    const itemsTimelines = this.getItemsTimelines();
+
     return (<View style={styles.root}>
-      {this.getItemsTimelines().map((timelineEntry, key) => <View
+      {itemsTimelines.map((timelineEntry, idx) => <View
         style={styles.groupAndArrow}
-        key={key}
+        key={idx}
       >
         <GroupedItems
           items={timelineEntry.items}
           timestamp={timelineEntry.timestamp}
           onPressItem={this.props.onPressItem}
         />
-
-        <Icon style={styles.arrowIcon} name="keyboard-arrow-right" size={24} />
+        {(idx !== (itemsTimelines.length - 1)) &&
+          <Icon style={styles.arrowIcon} name="keyboard-arrow-right" size={24} />
+        }
       </View>)}
     </View>);
   }

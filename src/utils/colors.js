@@ -14,9 +14,8 @@ export default {
   titlesBackground: 'rgba(0,0,0,0.06)',
   blueTeam: '#3F51B5',
   redTeam: '#D32F2F',
-  primary: '#3F51B5',
-  accent: 'white',
-  spinnerColor: '#3F51B5',
+  primary: '#2196f3',
+  accent: '#FF5722',
   text: {
     main: 'rgba(0,0,0,0.5)',
     primary: 'rgba(0,0,0,0.87)',

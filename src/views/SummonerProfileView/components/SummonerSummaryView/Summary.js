@@ -5,7 +5,7 @@ import numeral from 'numeral';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import CollapsibleBar from 'react-native-bar-collapsible';
-import { colors, constantsParser } from 'utils';
+import { colors, riotConstantsParser } from 'utils';
 
 const PADDING = 16;
 
@@ -72,7 +72,7 @@ class Summary extends PureComponent {
   render() {
     const summary = this.props.summary;
     const aggregatedStats = summary.get('aggregatedStats');
-    const title = constantsParser.playerStatSummaryType(summary.get('playerStatSummaryType'));
+    const title = riotConstantsParser.playerStatSummaryType(summary.get('playerStatSummaryType'));
 
     return (<CollapsibleBar
       style={styles.collapsible}

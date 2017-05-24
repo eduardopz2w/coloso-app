@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     fontSize: 16,
-    color: colors.primary,
+    color: colors.accent,
     fontWeight: 'bold',
   },
   retryButton: {

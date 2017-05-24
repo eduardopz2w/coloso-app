@@ -56,7 +56,7 @@ const styles = MediaQueryStyleSheet.create(
       marginBottom: 6,
     },
     multikillContainer: {
-      backgroundColor: '#d0aa49',
+      backgroundColor: colors.accent,
       borderRadius: 5,
       marginTop: 8,
     },

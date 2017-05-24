@@ -133,7 +133,7 @@ class ProBuildsList extends Component {
           }
           enabled={this.props.refreshControl}
           onRefresh={this.handleOnRefresh}
-          colors={[colors.primary]}
+          colors={[colors.accent]}
         />
       }
       renderScrollComponent={props => <InfiniteScrollView {...props} />}

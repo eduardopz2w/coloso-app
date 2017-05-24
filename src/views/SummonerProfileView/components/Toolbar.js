@@ -48,7 +48,7 @@ const styles = MediaQueryStyleSheet.create(
       position: 'relative',
       alignSelf: 'center',
       justifyContent: 'center',
-      borderColor: colors.accent,
+      borderColor: 'white',
       borderRadius: 50,
       borderWidth: 4,
       alignItems: 'center',
@@ -64,9 +64,9 @@ const styles = MediaQueryStyleSheet.create(
       position: 'absolute',
       width: 20,
       height: 20,
-      backgroundColor: colors.accent,
-      bottom: 0,
-      right: 0,
+      backgroundColor: 'white',
+      bottom: -3,
+      right: -3,
       justifyContent: 'center',
       alignItems: 'center',
       borderRadius: 50,
@@ -84,12 +84,13 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     summonerNameText: {
-      fontSize: 16,
+      fontSize: 17,
       color: '#FFF',
       textShadowColor: '#000',
+      fontWeight: 'bold',
       textShadowOffset: {
-        width: 2,
-        height: 2,
+        width: 1,
+        height: 1,
       },
     },
 
@@ -98,8 +99,8 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: 'center',
       textShadowColor: '#000',
       textShadowOffset: {
-        width: 1.5,
-        height: 1.5,
+        width: 1,
+        height: 1,
       },
     },
   },
@@ -206,7 +207,7 @@ class SummonerProfileViewToolbar extends Component {
         style={{ backgroundColor: 'white', borderRadius: 50, width: 40, height: 40 }}
         onPress={this.props.onPressRetryButton}
         iconName="refresh"
-        iconColor={colors.primary}
+        iconColor={colors.accent}
       />
     </View>);
   }

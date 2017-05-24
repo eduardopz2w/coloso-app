@@ -121,7 +121,7 @@ const styles = MediaQueryStyleSheet.create(
     skillLabel: {
       width: 35,
       height: 35,
-      backgroundColor: colors.primary,
+      backgroundColor: colors.accent,
       color: 'white',
       textAlign: 'center',
       textAlignVertical: 'center',

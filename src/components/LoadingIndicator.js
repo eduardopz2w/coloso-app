@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 
 function LoadingIndicator() {
   return (<View style={styles.root}>
-    <MKSpinner style={styles.spinner} strokeWidth={2.40} strokeColor={colors.spinnerColor} />
+    <MKSpinner style={styles.spinner} strokeWidth={2.40} strokeColor={colors.accent} />
   </View>);
 }
 

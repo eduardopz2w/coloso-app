@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { View, StyleSheet, Text, TouchableNativeFeedback, BackHandler } from 'react-native';
 import Dialog from 'react-native-dialogs';
 import I18n from 'i18n-js';
 import update from 'immutability-helper';
@@ -54,7 +53,12 @@ class ManageAccountView extends Component {
     this.handleTextChangeSummonerName = this.handleTextChangeSummonerName.bind(this);
     this.handleChangeRegion = this.handleChangeRegion.bind(this);
     this.handlePressAddAccount = this.handlePressAddAccount.bind(this);
+    this.handleHardwareBack = this.handleHardwareBack.bind(this);
     this.dialog = new Dialog();
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleHardwareBack);
   }
 
   componentDidMount() {
@@ -69,7 +73,7 @@ class ManageAccountView extends Component {
       });
 
       this.dialog.show();
-      Actions.pop();
+      this.props.goBack();
     }
 
     if (newProps.fetchError) {
@@ -80,6 +84,10 @@ class ManageAccountView extends Component {
 
       this.dialog.show();
     }
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleHardwareBack);
   }
 
   handleTextChangeSummonerName(summonerName) {
@@ -100,6 +108,12 @@ class ManageAccountView extends Component {
 
       this.props.fetchAccount({ summonerName, region });
     }
+  }
+
+  handleHardwareBack() {
+    this.props.goBack();
+
+    return true;
   }
 
   validateForm() {
@@ -133,9 +147,7 @@ class ManageAccountView extends Component {
   render() {
     return (<View style={styles.root}>
       <Toolbar
-        onPressBackButton={() => {
-          Actions.pop();
-        }}
+        onPressBackButton={this.props.goBack}
       />
       <View style={styles.container}>
         <View style={styles.formGroup}>
@@ -185,6 +197,7 @@ ManageAccountView.propTypes = {
   errorMessage: PropTypes.string,
   /* eslint-enable react/no-unused-prop-types*/
   fetchAccount: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 export default ManageAccountView;

@@ -5,7 +5,6 @@ import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import { MKRadioButton } from 'react-native-material-kit';
-import { Actions } from 'react-native-router-flux';
 import update from 'immutability-helper';
 
 import { tracker } from 'utils';
@@ -75,7 +74,7 @@ class SummonerSearchView extends Component {
         summonerName: this.props.summonerName,
         region: this.props.region,
       });
-      Actions.summonerProfileView({ summonerId: this.props.summonerFoundId });
+      this.props.goToSummonerProfile(this.props.summonerFoundId);
       this.props.clearFoundData();
     }
 
@@ -85,7 +84,7 @@ class SummonerSearchView extends Component {
         region: this.props.region,
       });
       this.props.clearFoundData();
-      Actions.gameCurrentView();
+      this.props.goToGameCurrent();
     }
 
     return null;
@@ -220,7 +219,7 @@ class SummonerSearchView extends Component {
     return (<View style={styles.root}>
       <SearchViewToolbar
         onPressHistoryButton={this.handleOnPressHistoryButton}
-        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+        onPressMenuButton={this.props.openDrawer}
       />
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
@@ -301,6 +300,9 @@ SummonerSearchView.propTypes = {
   loadSearchHistory: PropTypes.func.isRequired,
   addSearchEntry: PropTypes.func.isRequired,
   deleteSearchEntry: PropTypes.func,
+  openDrawer: PropTypes.func,
+  goToSummonerProfile: PropTypes.func,
+  goToGameCurrent: PropTypes.func,
 };
 
 export default SummonerSearchView;

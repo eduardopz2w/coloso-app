@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
-import { fetchAccount } from '../../../modules/ManageAccountActions';
+import { NavigationActions } from 'react-navigation';
 
+import { fetchAccount } from '../../../modules/ManageAccountActions';
 import ManageAccountView from '../components/ManageAccountView';
 
 function mapStateToProps(state) {
@@ -16,6 +17,10 @@ function mapDispatchToProps(dispatch) {
   return {
     fetchAccount: (params) => {
       dispatch(fetchAccount(params));
+    },
+
+    goBack: () => {
+      dispatch(NavigationActions.back());
     },
   };
 }
