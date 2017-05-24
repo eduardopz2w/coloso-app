@@ -4,7 +4,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import { PageSelector, MasteryPage, ErrorScreen, LoadingIndicator } from '../../../../components';
+import { PageSelector, MasteryPage, ErrorScreen, LoadingIndicator } from 'components';
 import { colors, tracker } from 'utils';
 
 const styles = StyleSheet.create({

@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
-import { IconButton, ProPlayerImage } from '../../../components';
+import { IconButton, ProPlayerImage } from 'components';
 import { colors } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(

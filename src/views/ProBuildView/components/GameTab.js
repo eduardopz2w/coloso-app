@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
-import { ErrorScreen, LoadingIndicator, BannedChampions } from '../../../components';
+import { ErrorScreen, LoadingIndicator, BannedChampions } from 'components';
 import TeamHeader from './TeamHeader';
 import Participant from './Participant';
 

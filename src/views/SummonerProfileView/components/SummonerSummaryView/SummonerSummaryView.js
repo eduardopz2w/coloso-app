@@ -3,7 +3,7 @@ import { StyleSheet, ListView, View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
-import { LoadingIndicator, ErrorScreen, SeasonSelector } from '../../../../components';
+import { LoadingIndicator, ErrorScreen, SeasonSelector } from 'components';
 import Summary from './Summary';
 
 const styles = StyleSheet.create({

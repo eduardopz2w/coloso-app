@@ -4,7 +4,7 @@ import numeral from 'numeral';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MediaQuery, MediaQueryStyleSheet } from 'react-native-responsive';
 
-import { ParticipantSquare, FinalItems } from '../../../components';
+import { ParticipantSquare, FinalItems } from 'components';
 import { colors } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(

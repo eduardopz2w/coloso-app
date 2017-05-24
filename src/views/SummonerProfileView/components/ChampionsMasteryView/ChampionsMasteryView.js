@@ -7,7 +7,7 @@ import Modal from 'react-native-modalbox';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 
-import { LoadingIndicator, ErrorScreen } from '../../../../components';
+import { LoadingIndicator, ErrorScreen } from 'components';
 import { tracker } from 'utils';
 import ChampionMastery from './ChampionMastery';
 import MasteryInfo from './MasteryInfo';

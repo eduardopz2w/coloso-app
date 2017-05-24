@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
 import { colors } from 'utils';
-import { IconButton, ChampionSelector, ProPlayersSelector } from '../../../components';
+import { IconButton, ChampionSelector, ProPlayersSelector } from 'components';
 
 const styles = MediaQueryStyleSheet.create(
   {

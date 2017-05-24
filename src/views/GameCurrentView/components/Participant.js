@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
-import { RankedMiniseries } from '../../../components';
+import { RankedMiniseries } from 'components';
 import { colors, styleUtils } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
