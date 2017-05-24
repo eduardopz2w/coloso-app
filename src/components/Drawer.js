@@ -1,8 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { Linking } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Drawer from 'react-native-drawer';
-import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import Dialog from 'react-native-dialogs';
 /* eslint-disable */
@@ -71,6 +69,7 @@ class MainDrawer extends PureComponent {
     this.handleOnPressSummonerSearch = this.handleOnPressSummonerSearch.bind(this);
     this.handleOnPressManageAccount = this.handleOnPressManageAccount.bind(this);
     this.handleOnPressSettings = this.handleOnPressSettings.bind(this);
+    this.goToRoute = this.goToRoute.bind(this);
   }
 
   componentWillMount() {
@@ -82,11 +81,9 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      Actions.manageAccountView();
-      this.drawer.close();
+      this.goToRoute('ManageAccountView');
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerSearchView();
-      this.drawer.close();
+      this.goToRoute('SummonerSearchView');
       this.props.searchGame({
         summonerName: riotAccount.get('name'),
         region: riotAccount.get('region'),
@@ -99,75 +96,55 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      Actions.manageAccountView();
-      this.drawer.close();
+      this.goToRoute('ManageAccountView');
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerProfileView({ summonerId: riotAccount.get('id') });
-      this.drawer.close();
+      this.goToRoute('SummonerProfileView', { summonerId: riotAccount.get('id') });
     }
   }
 
   handleOnPressProBuilds() {
-    Actions.proBuildsListView();
-    this.drawer.close();
+    this.goToRoute('ProBuildsListView');
   }
 
   handleOnPressSummonerSearch() {
-    Actions.summonerSearchView();
-    this.drawer.close();
+    this.goToRoute('SummonerSearchView');
   }
 
   handleOnPressManageAccount() {
-    Actions.manageAccountView();
-    this.drawer.close();
+    this.goToRoute('ManageAccountView');
   }
 
   handleOnPressSettings() {
-    Actions.settingsView();
-    this.drawer.close();
+    this.goToRoute('SettingsView');
+  }
+
+  goToRoute(...args) {
+    this.props.navigation.navigate(...args);
+    setTimeout(() => {
+      this.props.navigation.navigate('DrawerClose');
+    }, 1);
   }
 
   render() {
-    const state = this.props.navigationState;
-    const children = state.children;
-
-    return (<Drawer
-      open={state.open}
-      onOpen={() => Actions.refresh({ key: state.key, open: true })}
-      onClose={() => Actions.refresh({ key: state.key, open: false })}
-      type="overlay"
-      content={<SideMenu
-        riotAccount={this.props.riotAccount}
-        onPressMyGame={this.handleOnPressMyGame}
-        onPressSuggestion={handleOnPressSuggestion}
-        onPressProBuilds={this.handleOnPressProBuilds}
-        onPressProfile={this.handleOnPressProfile}
-        onPressSummonerSearch={this.handleOnPressSummonerSearch}
-        onPressManageAccount={this.handleOnPressManageAccount}
-        onPressSettings={this.handleOnPressSettings}
-        onPressWeb={handleOnPressWeb}
-      />}
-      captureGestures
-      panOpenMask={0.02}
-      panCloseMask={0.2}
-      tapToClose
-      negotiatePan
-      ref={(drawer) => { this.drawer = drawer; }}
-      tweenHandler={ratio => ({
-        mainOverlay: {
-          backgroundColor: `rgba(0,0,0,0.${ratio * 3})`,
-        },
-      })}
-    >
-      <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
-    </Drawer>);
+    return (<SideMenu
+      riotAccount={this.props.riotAccount}
+      onPressMyGame={this.handleOnPressMyGame}
+      onPressSuggestion={handleOnPressSuggestion}
+      onPressProBuilds={this.handleOnPressProBuilds}
+      onPressProfile={this.handleOnPressProfile}
+      onPressSummonerSearch={this.handleOnPressSummonerSearch}
+      onPressManageAccount={this.handleOnPressManageAccount}
+      onPressSettings={this.handleOnPressSettings}
+      onPressWeb={handleOnPressWeb}
+    />);
   }
 }
 
 MainDrawer.propTypes = {
-  navigationState: PropTypes.shape({}),
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func.isRequired,
+  }),
   isSearchingGame: PropTypes.bool,
-  onNavigate: PropTypes.func,
   riotAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,

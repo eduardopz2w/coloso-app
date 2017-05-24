@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import Dialog from 'react-native-dialogs';
 import I18n from 'i18n-js';
 import update from 'immutability-helper';
@@ -69,7 +68,7 @@ class ManageAccountView extends Component {
       });
 
       this.dialog.show();
-      Actions.pop();
+      this.props.navigation.goBack();
     }
 
     if (newProps.fetchError) {
@@ -134,7 +133,7 @@ class ManageAccountView extends Component {
     return (<View style={styles.root}>
       <Toolbar
         onPressBackButton={() => {
-          Actions.pop();
+          this.props.navigation.goBack();
         }}
       />
       <View style={styles.container}>
@@ -178,6 +177,10 @@ class ManageAccountView extends Component {
 }
 
 ManageAccountView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }),
   fetching: PropTypes.bool.isRequired,
   /* eslint-disable react/no-unused-prop-types*/
   fetched: PropTypes.bool.isRequired,

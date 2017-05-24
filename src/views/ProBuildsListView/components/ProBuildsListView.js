@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
 
@@ -127,7 +126,9 @@ class ProBuildsListView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         disabledFilters={this.props.proBuilds.get('isFetching')}
-        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+        onPressMenuButton={() => {
+          this.props.navigation.navigate('DrawerOpen');
+        }}
         championSelected={this.state.championId}
         proPlayerSelected={this.state.proPlayerId}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
@@ -149,7 +150,7 @@ class ProBuildsListView extends Component {
           proBuilds={this.props.proBuilds}
           onPressRetryButton={this.handleOnPressProBuildsTabRetryButton}
           onPressRefreshButton={this.handleOnPressProBuildsTabRefreshButton}
-          onPressBuild={buildId => Actions.proBuildView({ buildId })}
+          onPressBuild={buildId => this.props.navigation.navigate('ProBuildView', { buildId })}
           onLoadMore={this.handleOnLoadMoreProBuildsTab}
           onAddFavorite={this.props.addFavoriteBuild}
           onRemoveFavorite={this.props.removeFavoriteBuild}
@@ -158,7 +159,7 @@ class ProBuildsListView extends Component {
           tabLabel={I18n.t('favorites')}
           favoriteProBuilds={this.props.favoriteProBuilds}
           onPressRetryButton={this.handleOnPressFavoriteProBuildsTabRetryButton}
-          onPressBuild={buildId => Actions.proBuildView({ buildId })}
+          onPressBuild={buildId => this.props.navigation.navigate('ProBuildView', { buildId })}
           onRemoveFavorite={this.props.removeFavoriteBuild}
         />
       </ScrollableTabView>
@@ -167,6 +168,10 @@ class ProBuildsListView extends Component {
 }
 
 ProBuildsListView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }),
   proBuilds: ImmutablePropTypes.mapContains({
     data: ImmutablePropTypes.list.isRequired,
     isFetching: PropTypes.bool.isRequired,

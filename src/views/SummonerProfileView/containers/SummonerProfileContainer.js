@@ -84,35 +84,33 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { summonerId } = ownProps;
-
+function mapDispatchToProps(dispatch) {
   return {
-    fetchSummonerData: () => {
+    fetchSummonerData: (summonerId) => {
       dispatch(fetchSummonerData({ id: summonerId }));
     },
 
-    fetchLeagueEntry: () => {
+    fetchLeagueEntry: (summonerId) => {
       dispatch(fetchLeagueEntry({ summonerId }));
     },
 
-    fetchChampionsMasteries: () => {
+    fetchChampionsMasteries: (summonerId) => {
       dispatch(fetchChampionsMasteries({ summonerId }));
     },
 
-    fetchGamesRecent: () => {
+    fetchGamesRecent: (summonerId) => {
       dispatch(fetchGamesRecent({ summonerId }));
     },
 
-    fetchMasteries: () => {
+    fetchMasteries: (summonerId) => {
       dispatch(fetchMasteries({ summonerId }));
     },
 
-    fetchRunes: () => {
+    fetchRunes: (summonerId) => {
       dispatch(fetchRunes({ summonerId }));
     },
 
-    fetchSummary: (season) => {
+    fetchSummary: (summonerId, season) => {
       dispatch(fetchSummary({ summonerId, season }));
     },
 

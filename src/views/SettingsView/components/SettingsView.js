@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
@@ -16,26 +15,27 @@ const styles = StyleSheet.create({
   },
 });
 
-function handleOnPressBackButton() {
-  Actions.pop();
-}
-
 class SettingsView extends PureComponent {
   constructor(props) {
     super(props);
 
     this.handleOnKeepAwakeCheckedChange = this.handleOnKeepAwakeCheckedChange.bind(this);
+    this.handleOnPressBackButton = this.handleOnPressBackButton.bind(this);
   }
 
   handleOnKeepAwakeCheckedChange({ checked }) {
     this.props.setSetting('keepAwake', checked);
   }
 
+  handleOnPressBackButton() {
+    this.props.navigation.goBack();
+  }
+
   render() {
     const settings = this.props.settings;
 
     return (<View style={styles.root}>
-      <Toolbar onPressBackButton={handleOnPressBackButton} />
+      <Toolbar onPressBackButton={this.handleOnPressBackButton} />
       <View style={styles.container}>
         <SwitchSetting
           title={I18n.t('keep_awake')}
@@ -49,6 +49,10 @@ class SettingsView extends PureComponent {
 }
 
 SettingsView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }),
   settings: ImmutablePropTypes.mapContains({
     keepAwake: PropTypes.bool.isRequired,
   }).isRequired,

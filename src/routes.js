@@ -1,7 +1,6 @@
-import React from 'react';
-import { ToastAndroid } from 'react-native';
-import { Scene, Router, ActionConst } from 'react-native-router-flux';
-import I18n from 'i18n-js';
+// import { ToastAndroid } from 'react-native';
+import { DrawerNavigator } from 'react-navigation';
+// import I18n from 'i18n-js';
 
 import Drawer from './containers/DrawerContainer';
 
@@ -14,49 +13,47 @@ import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
 import SettingsView from './views/SettingsView';
 
-let waitingNextExit = false;
+// let waitingNextExit = false;
+//
+// function handleOnExitApp() {
+//   if (waitingNextExit) {
+//     return false;
+//   }
+//
+//   waitingNextExit = true;
+//
+//   setTimeout(() => {
+//     waitingNextExit = false;
+//   }, 3000);
+//
+//   ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
+//
+//   return true;
+// }
 
-function handleOnExitApp() {
-  if (waitingNextExit) {
-    return false;
-  }
-
-  waitingNextExit = true;
-
-  setTimeout(() => {
-    waitingNextExit = false;
-  }, 3000);
-
-  ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
-
-  return true;
-}
-
-function Routes() {
-  return (<Router onExitApp={handleOnExitApp}>
-    <Scene key="drawer" component={Drawer}>
-      <Scene key="root">
-        <Scene
-          key="summonerSearchView"
-          component={SummonerSearchView}
-          hideNavBar
-          type={ActionConst.RESET}
-          initial
-        />
-        <Scene
-          key="proBuildsListView"
-          component={ProBuildsListView}
-          hideNavBar
-          type={ActionConst.RESET}
-        />
-        <Scene key="proBuildView" component={ProBuildView} hideNavBar />
-        <Scene key="summonerProfileView" component={SummonerProfileView} hideNavBar />
-        <Scene key="gameCurrentView" component={GameCurrentView} hideNavBar />
-        <Scene key="manageAccountView" component={ManageAccountView} hideNavBar />
-        <Scene key="settingsView" component={SettingsView} hideNavBar />
-      </Scene>
-    </Scene>
-  </Router>);
-}
-
-export default Routes;
+export default DrawerNavigator({
+  SummonerSearchView: {
+    screen: SummonerSearchView,
+  },
+  ProBuildsListView: {
+    screen: ProBuildsListView,
+  },
+  ProBuildView: {
+    screen: ProBuildView,
+  },
+  SummonerProfileView: {
+    screen: SummonerProfileView,
+  },
+  GameCurrentView: {
+    screen: GameCurrentView,
+  },
+  ManageAccountView: {
+    screen: ManageAccountView,
+  },
+  SettingsView: {
+    screen: SettingsView,
+  },
+}, {
+  drawerWidth: 250,
+  contentComponent: Drawer,
+});

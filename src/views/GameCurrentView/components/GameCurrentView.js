@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, Dimensions, BackHandler, Text, ScrollView } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
-import { Actions } from 'react-native-router-flux';
 import Modal from 'react-native-modalbox';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
@@ -204,7 +203,7 @@ class GameCurrentView extends Component {
       <Toolbar
         mapId={gameData.getIn(['data', 'mapId'])}
         gameQueueConfigId={gameData.getIn(['data', 'gameQueueConfigId'])}
-        onPressBackButton={() => Actions.pop()}
+        onPressBackButton={() => this.props.navigation.goBack()}
       />
       <ScrollableTabView
         tabBarBackgroundColor={colors.primary}
@@ -221,7 +220,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerId) => {
-                Actions.summonerProfileView({ summonerId });
+                this.props.navigation.navigate('SummonerProfileView', { summonerId });
               }}
             />
             <Team
@@ -229,7 +228,7 @@ class GameCurrentView extends Component {
               onPressRunesButton={this.handleOnPressRunesButton}
               onPressMasteriesButton={this.handleOnPressMasteriesButton}
               onPressProfileButton={(summonerId) => {
-                Actions.summonerProfileView({ summonerId });
+                this.props.navigation.navigate('SummonerProfileView', { summonerId });
               }}
             />
           </ScrollView>
@@ -248,7 +247,7 @@ class GameCurrentView extends Component {
             fetchError={proBuilds.get('fetchError')}
             errorMessage={proBuilds.get('errorMessage')}
             emptyListMessage={I18n.t('no_results_found')}
-            onPressBuild={buildId => Actions.proBuildView({ buildId })}
+            onPressBuild={buildId => this.props.navigation.navigate('ProBuildView', { buildId })}
             onLoadMore={this.handleOnLoadMoreBuilds}
             onPressRetry={() => {
               this.props.fetchProBuilds({
@@ -276,6 +275,10 @@ class GameCurrentView extends Component {
 }
 
 GameCurrentView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }),
   gameData: ImmutablePropTypes.mapContains({
     id: PropTypes.string.isRequired,
     summonerId: PropTypes.string.isRequired,

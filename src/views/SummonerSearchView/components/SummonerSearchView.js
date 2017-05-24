@@ -5,7 +5,6 @@ import Dialog from 'react-native-dialogs';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import { MKRadioButton } from 'react-native-material-kit';
-import { Actions } from 'react-native-router-flux';
 import update from 'immutability-helper';
 
 import { tracker } from 'utils';
@@ -75,7 +74,7 @@ class SummonerSearchView extends Component {
         summonerName: this.props.summonerName,
         region: this.props.region,
       });
-      Actions.summonerProfileView({ summonerId: this.props.summonerFoundId });
+      this.props.navigation.navigate('SummonerProfileView', { summonerId: this.props.summonerFoundId });
       this.props.clearFoundData();
     }
 
@@ -85,7 +84,7 @@ class SummonerSearchView extends Component {
         region: this.props.region,
       });
       this.props.clearFoundData();
-      Actions.gameCurrentView();
+      this.props.navigation.navigate('GameCurrentView');
     }
 
     return null;
@@ -220,7 +219,9 @@ class SummonerSearchView extends Component {
     return (<View style={styles.root}>
       <SearchViewToolbar
         onPressHistoryButton={this.handleOnPressHistoryButton}
-        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+        onPressMenuButton={() => {
+          this.props.navigation.navigate('DrawerOpen');
+        }}
       />
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
@@ -281,6 +282,10 @@ class SummonerSearchView extends Component {
 }
 
 SummonerSearchView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+  }),
   summonerName: PropTypes.string,
   region: PropTypes.string,
   searchType: PropTypes.string,

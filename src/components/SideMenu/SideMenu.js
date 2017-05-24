@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: 'white',
     flex: 1,
-    width: 240,
     position: 'relative',
   },
   header: {
@@ -26,7 +25,6 @@ const styles = StyleSheet.create({
   },
 
   headerBackground: {
-    width: 240,
     height: 160,
     position: 'absolute',
     top: 0,

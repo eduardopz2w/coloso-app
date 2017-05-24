@@ -2,7 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Linking } from 'react-native';
 import { Provider } from 'react-redux';
 import Dialog from 'react-native-dialogs';
-import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import I18n from 'i18n-js';
 import moment from 'moment';
@@ -70,18 +69,10 @@ function checkVersion() {
     });
 }
 
-function openDrawer() {
-  Actions.refresh({ key: 'drawer', open: true });
-}
-
 class AppContainer extends Component {
   componentWillMount() {
     configureLocale();
     checkVersion();
-  }
-
-  componentDidMount() {
-    openDrawer();
   }
 
   shouldComponentUpdate() {

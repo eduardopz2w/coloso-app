@@ -3,7 +3,6 @@ import { View, Image, Text } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Modal from 'react-native-modalbox';
-import { Actions } from 'react-native-router-flux';
 import numeral from 'numeral';
 import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
@@ -63,12 +62,6 @@ const styles = MediaQueryStyleSheet.create(
   },
 );
 
-function handleOnPressParticipant(summonerId) {
-  Actions.summonerProfileView({
-    summonerId,
-  });
-}
-
 class ProBuildView extends Component {
   constructor(props) {
     super(props);
@@ -85,7 +78,11 @@ class ProBuildView extends Component {
     this.handleOnPressItem = this.handleOnPressItem.bind(this);
     this.handleOnPressProfileButton = this.handleOnPressProfileButton.bind(this);
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
+    this.handleOnPressParticipant = this.handleOnPressParticipant.bind(this);
+    this.handleOnPressAddToFavorites = this.handleOnPressAddToFavorites.bind(this);
+    this.handleOnPressRemoveFromFavorites = this.handleOnPressRemoveFromFavorites.bind(this);
     this.fetchGame = this.fetchGame.bind(this);
+    this.fetchBuild = this.fetchBuild.bind(this);
   }
 
   componentWillMount() {
@@ -93,7 +90,7 @@ class ProBuildView extends Component {
     const fetchedProBuildId = this.props.proBuild.getIn(['data', 'id']);
 
     if (!fetched || fetchedProBuildId !== this.props.buildId) {
-      this.props.fetchProBuild();
+      this.fetchBuild();
     }
   }
 
@@ -113,6 +110,23 @@ class ProBuildView extends Component {
     this.props.fetchGame(gameId);
   }
 
+  fetchBuild() {
+    const buildId = this.props.navigation.state.params.buildId;
+
+    this.props.fetchProBuild(buildId);
+  }
+
+  handleOnPressAddToFavorites() {
+    const buildId = this.props.navigation.state.params.buildId;
+
+    this.props.addToFavorites(buildId);
+  }
+
+  handleOnPressRemoveFromFavorites() {
+    const buildId = this.props.navigation.state.params.buildId;
+
+    this.props.removeFromFavorites(buildId);
+  }
   handleOnPressItem(itemData) {
     this.setState({
       modalData: {
@@ -126,10 +140,14 @@ class ProBuildView extends Component {
     });
   }
 
+  handleOnPressParticipant(summonerId) {
+    this.props.navigation.navigate('SummonerProfileView', { summonerId });
+  }
+
   handleOnPressProfileButton() {
-    Actions.summonerProfileView({
-      summonerId: this.props.proBuild.getIn(['data', 'proSummoner', 'summonerId']),
-    });
+    const summonerId = this.props.proBuild.getIn(['data', 'proSummoner', 'summonerId']);
+
+    this.handleOnPressParticipant(summonerId);
   }
 
   handleOnChangeTab({ i }) {
@@ -155,10 +173,10 @@ class ProBuildView extends Component {
           role={proBuildData.getIn(['proSummoner', 'proPlayer', 'role'])}
           realName={proBuildData.getIn(['proSummoner', 'proPlayer', 'realName'])}
           isFavorite={proBuildData.get('isFavorite')}
-          onPressBackButton={() => { Actions.pop(); }}
+          onPressBackButton={() => { this.props.navigation.goBack(); }}
           onPressProfileButton={this.handleOnPressProfileButton}
-          onPressAddFavorite={this.props.addToFavorites}
-          onPressRemoveFavorite={this.props.removeFromFavorites}
+          onPressAddFavorite={this.handleOnPressAddToFavorites}
+          onPressRemoveFavorite={this.handleOnPressRemoveFromFavorites}
         />
         <ScrollableTabView
           initialPage={0}
@@ -181,7 +199,7 @@ class ProBuildView extends Component {
             tabLabel={I18n.t('game')}
             game={this.props.game}
             onPressRetryButton={this.fetchGame}
-            onPressParticipant={handleOnPressParticipant}
+            onPressParticipant={this.handleOnPressParticipant}
           />
         </ScrollableTabView>
 
@@ -212,7 +230,7 @@ class ProBuildView extends Component {
     } else if (this.props.proBuild.get('isFetching')) {
       return (<View style={styles.root}>
         <BasicToolbar
-          onPressBackButton={() => { Actions.pop(); }}
+          onPressBackButton={() => { this.props.navigation.goBack(); }}
         />
         <View style={[styles.basicContainer, { alignItems: 'center' }]}>
           <LoadingIndicator />
@@ -222,12 +240,12 @@ class ProBuildView extends Component {
 
     return (<View style={styles.root}>
       <BasicToolbar
-        onPressBackButton={() => { Actions.pop(); }}
+        onPressBackButton={() => { this.props.navigation.goBack(); }}
       />
       <View style={styles.basicContainer}>
         <ErrorScreen
           message={this.props.proBuild.get('errorMessage')}
-          onPressRetryButton={this.props.fetchProBuild}
+          onPressRetryButton={this.fetchBuild}
           retryButton
         />
       </View>
@@ -236,6 +254,15 @@ class ProBuildView extends Component {
 }
 
 ProBuildView.propTypes = {
+  navigation: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+    navigate: PropTypes.func.isRequired,
+    state: PropTypes.shape({
+      params: PropTypes.shape({
+        buildId: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }),
   buildId: PropTypes.string,
   proBuild: ImmutablePropTypes.mapContains({
     fetched: PropTypes.bool.isRequired,

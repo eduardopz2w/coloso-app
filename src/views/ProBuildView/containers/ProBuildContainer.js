@@ -39,22 +39,22 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch) {
   return {
-    fetchProBuild: () => {
-      dispatch(fetchProBuild(props.buildId));
+    fetchProBuild: (buildId) => {
+      dispatch(fetchProBuild(buildId));
     },
 
-    fetchGame: (id) => {
-      dispatch(fetchGame(id));
+    fetchGame: (gameId) => {
+      dispatch(fetchGame(gameId));
     },
 
-    addToFavorites: () => {
-      dispatch(addFavoriteBuild(props.buildId));
+    addToFavorites: (buildId) => {
+      dispatch(addFavoriteBuild(buildId));
     },
 
-    removeFromFavorites: () => {
-      dispatch(removeFavoriteBuild(props.buildId));
+    removeFromFavorites: (buildId) => {
+      dispatch(removeFavoriteBuild(buildId));
     },
   };
 }
