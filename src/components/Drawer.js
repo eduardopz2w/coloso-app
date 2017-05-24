@@ -63,22 +63,12 @@ class Drawer extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = {
-      activeRouteKey: 'SummonerSearchView',
-    };
-
     this.handleOnPressMyGame = this.handleOnPressMyGame.bind(this);
     this.handleOnPressProfile = this.handleOnPressProfile.bind(this);
   }
 
   componentWillMount() {
     this.props.loadAccount();
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (!newProps.navigation.state.key.includes('Drawer')) {
-      this.setState({ activeRouteKey: newProps.navigation.state.key });
-    }
   }
 
   handleOnPressMyGame() {
@@ -110,7 +100,6 @@ class Drawer extends PureComponent {
   render() {
     return (<SideMenu
       riotAccount={this.props.riotAccount}
-      activeRouteKey={this.state.activeRouteKey}
       onPressMyGame={this.handleOnPressMyGame}
       onPressSuggestion={handleOnPressSuggestion}
       onPressProBuilds={this.props.goToProBuildsList}

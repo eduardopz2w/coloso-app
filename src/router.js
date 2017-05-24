@@ -83,15 +83,15 @@ const navReducer = (state = initialState, action) => {
 
 injectReducer('router', navReducer);
 
-const initialState2 = ContentNavigator.router.getStateForAction(ContentNavigator.router.getActionForPathAndParams('SummonerSearchView'));
+const contentInitialState = ContentNavigator.router.getStateForAction(ContentNavigator.router.getActionForPathAndParams('SummonerSearchView'));
 
-const navReducer2 = (state = initialState2, action) => {
+const contentReducer = (state = contentInitialState, action) => {
   const nextState = ContentNavigator.router.getStateForAction(action, state);
 
   // Simply return the original `state` if `nextState` is null or undefined.
   return nextState || state;
 };
 
-injectReducer('router2', navReducer2);
+injectReducer('contentRouter', contentReducer);
 
 export default AppNavigator;
