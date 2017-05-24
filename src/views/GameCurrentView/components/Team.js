@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { MKColor } from 'react-native-material-kit';
 import Immutable from 'immutable';
 
-import BannedChampions from '../../../components/BannedChampions';
+import { BannedChampions } from '../../../components';
 import Participant from './Participant';
 
 const styles = StyleSheet.create({

@@ -4,10 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import LoadingIndicator from '../../../../components/LoadingIndicator';
-import PageSelector from '../../../../components/PageSelector';
-import RunePage from '../../../../components/RunePage';
-import ErrorScreen from '../../../../components/ErrorScreen';
+import { LoadingIndicator, PageSelector, RunePage, ErrorScreen } from '../../../../components';
 import { tracker } from '../../../../utils';
 
 const styles = StyleSheet.create({

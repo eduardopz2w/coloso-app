@@ -8,9 +8,7 @@ import _ from 'lodash';
 
 import Toolbar from './Toolbar';
 import { colors } from '../../../utils';
-import RegionSelector from '../../../components/RegionSelector';
-import LoadingIndicator from '../../../components/LoadingIndicator';
-import TextField from '../../../components/TextField';
+import { RegionSelector, LoadingIndicator, TextField } from '../../../components';
 
 const styles = StyleSheet.create({
   root: {

@@ -3,7 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 import Immutable from 'immutable';
 
-import ProBuildsList from '../../../components/ProBuildsList';
+import { ProBuildsList } from '../../../components';
 
 class ProBuildsTab extends PureComponent {
   shouldComponentUpdate(nextProps) {

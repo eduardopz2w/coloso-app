@@ -9,10 +9,7 @@ import I18n from 'i18n-js';
 import _ from 'lodash';
 
 import Team from './Team';
-import RunePage from '../../../components/RunePage';
-import MasteryPage from '../../../components/MasteryPage';
-import ProBuildsList from '../../../components/ProBuildsList';
-import ProPlayersSelector from '../../../components/ProPlayersSelector';
+import { RunePage, MasteryPage, ProBuildsList, ProPlayersSelector } from '../../../components';
 import { tracker, colors } from '../../../utils';
 import Toolbar from './Toolbar';
 

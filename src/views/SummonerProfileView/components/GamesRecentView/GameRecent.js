@@ -9,8 +9,7 @@ import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
 import { colors, styleUtils, gameModeParser } from '../../../../utils';
-import ParticipantSquare from '../../../../components/ParticipantSquare';
-import FinalItems from '../../../../components/FinalItems';
+import { ParticipantSquare, FinalItems } from '../../../../components';
 
 const styles = MediaQueryStyleSheet.create(
   {

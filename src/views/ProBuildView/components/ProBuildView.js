@@ -10,8 +10,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import LoadingIndicator from '../../../components/LoadingIndicator';
-import ErrorScreen from '../../../components/ErrorScreen';
+import { LoadingIndicator, ErrorScreen } from '../../../components';
 import PlayerToolbar from './PlayerToolbar';
 import BasicToolbar from './BasicToolbar';
 import { colors, tracker } from '../../../utils';
