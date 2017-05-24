@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Picker, View } from 'react-native';
-import { regionHumanize, getDeviceRiotRegion } from '../utils';
+import { regionHumanize, getDeviceRiotRegion } from 'utils';
 
 class RegionSelector extends Component {
   constructor(props) {

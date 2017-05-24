@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
-import { colors } from '../../../utils';
+import { colors } from 'utils';
 import { IconButton } from '../../../components';
 
 const styles = MediaQueryStyleSheet.create(

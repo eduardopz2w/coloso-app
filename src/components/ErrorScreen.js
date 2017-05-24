@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, TouchableNativeFeedback, Image } from 'react-native';
 import I18n from 'i18n-js';
 
-import { colors } from '../utils';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

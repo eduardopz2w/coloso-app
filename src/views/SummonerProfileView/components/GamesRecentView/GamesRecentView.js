@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
 import { ErrorScreen, LoadingIndicator } from '../../../../components';
-import { tracker } from '../../../../utils';
+import { tracker } from 'utils';
 import GameRecent from './GameRecent';
 
 class GamesRecentView extends PureComponent {

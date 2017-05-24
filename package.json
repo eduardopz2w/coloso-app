@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "axios": "^0.15.3",
+    "babel-plugin-module-alias": "^1.6.0",
     "eslint": "^3.19.0",
     "i18n-js": "^1.0.0",
     "immutability-helper": "^2.2.2",

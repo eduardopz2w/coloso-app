@@ -13,7 +13,7 @@ import _ from 'lodash';
 import { LoadingIndicator, ErrorScreen } from '../../../components';
 import PlayerToolbar from './PlayerToolbar';
 import BasicToolbar from './BasicToolbar';
-import { colors, tracker } from '../../../utils';
+import { colors, tracker } from 'utils';
 import RuneTab from './RuneTab';
 import MasteryTab from './MasteryTab';
 import BuildTab from './BuildTab';

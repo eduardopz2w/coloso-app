@@ -12,7 +12,7 @@ import GamesRecentView from './GamesRecentView';
 import MasteriesView from './MasteriesView';
 import SummonerSummaryView from './SummonerSummaryView';
 import RunesView from './RunesView';
-import { tracker, colors } from '../../../utils';
+import { tracker, colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

@@ -3,7 +3,7 @@ import I18n from 'i18n-js';
 import _ from 'lodash';
 
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../redux/middlewares/ColosoApiMiddleware';
-import { tracker, Storage } from '../utils';
+import { tracker, Storage } from 'utils';
 
 const STORAGE_KEY = 'favoriteBuildsIds';
 

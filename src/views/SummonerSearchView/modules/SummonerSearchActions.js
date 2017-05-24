@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../../../redux/middlewares/ColosoApiMiddleware';
-import { tracker } from '../../../utils';
+import { tracker } from 'utils';
 
 export const setSummonerName = createAction('SUMMONER_SEARCH/SET_SUMMONER_NAME');
 export const setRegion = createAction('SUMMONER_SEARCH/SET_REGION');

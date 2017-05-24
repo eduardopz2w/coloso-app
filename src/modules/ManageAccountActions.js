@@ -4,7 +4,7 @@ import {
   ColosoApi,
   tracker,
   createThunkAction,
-} from '../utils';
+} from 'utils';
 
 const STORAGE_KEY = 'riotAccount';
 

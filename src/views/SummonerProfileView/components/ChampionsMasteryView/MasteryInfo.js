@@ -7,7 +7,7 @@ import moment from 'moment';
 import I18n from 'i18n-js';
 import numeral from 'numeral';
 
-import { styleUtils, sentenceCase } from '../../../../utils';
+import { styleUtils, sentenceCase } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

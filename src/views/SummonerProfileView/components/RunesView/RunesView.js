@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { LoadingIndicator, PageSelector, RunePage, ErrorScreen } from '../../../../components';
-import { tracker } from '../../../../utils';
+import { tracker } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

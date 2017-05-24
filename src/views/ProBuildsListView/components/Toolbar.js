@@ -4,7 +4,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
-import { colors } from '../../../utils';
+import { colors } from 'utils';
 import { IconButton, ChampionSelector, ProPlayersSelector } from '../../../components';
 
 const styles = MediaQueryStyleSheet.create(

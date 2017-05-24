@@ -6,7 +6,7 @@ import I18n from 'i18n-js';
 import Immutable from 'immutable';
 
 import { IconButton, ProfileImage } from '../../../components';
-import { colors, regionHumanize } from '../../../utils';
+import { colors, regionHumanize } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

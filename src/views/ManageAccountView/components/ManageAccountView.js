@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 import _ from 'lodash';
 
 import Toolbar from './Toolbar';
-import { colors } from '../../../utils';
+import { colors } from 'utils';
 import { RegionSelector, LoadingIndicator, TextField } from '../../../components';
 
 const styles = StyleSheet.create({

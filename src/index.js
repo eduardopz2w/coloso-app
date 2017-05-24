@@ -10,7 +10,7 @@ import 'moment/locale/es';
 
 import RootContainer from './containers/RootContainer';
 import translations from './translations';
-import { ColosoClient, versionChecker, logger } from './utils';
+import { ColosoClient, versionChecker, logger } from 'utils';
 import { loadSettings } from './modules/AppSettingsActions';
 
 I18n.translations = translations;

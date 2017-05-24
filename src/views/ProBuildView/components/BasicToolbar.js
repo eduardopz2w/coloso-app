@@ -4,7 +4,7 @@ import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
 import { IconButton } from '../../../components';
-import { colors } from '../../../utils';
+import { colors } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

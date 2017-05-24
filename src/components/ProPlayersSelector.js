@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
 import Selector from './Selector';
-import { colors } from '../utils';
+import { colors } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

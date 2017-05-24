@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
 import IconButton from '../IconButton';
-import { colors } from '../../utils';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

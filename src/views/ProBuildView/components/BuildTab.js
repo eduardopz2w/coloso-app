@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Immutable from 'immutable';
 
 import ItemsOrder from './ItemsOrder';
-import { colors, sentenceCase } from '../../../utils';
+import { colors, sentenceCase } from 'utils';
 
 const itemsArrowSize = 20;
 
