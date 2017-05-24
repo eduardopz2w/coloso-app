@@ -3,6 +3,8 @@ import { View, Image, TouchableWithoutFeedback } from 'react-native';
 import { CircularProgress } from 'react-native-circular-progress';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
+import { colors } from 'utils';
+
 class ChampionsMastery extends Component {
   constructor(props) {
     super(props);
@@ -68,7 +70,7 @@ class ChampionsMastery extends Component {
 
   renderProgress() {
     let fill;
-    let tintColor = '#2196F3'; // Default color
+    let tintColor = colors.primary; // Default color
     const championPoints = this.props.mastery.get('championPoints');
     const championPointsUntilNextLevel = this.props.mastery.get('championPointsUntilNextLevel');
 

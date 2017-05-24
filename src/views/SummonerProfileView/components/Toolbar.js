@@ -84,12 +84,13 @@ const styles = MediaQueryStyleSheet.create(
     },
 
     summonerNameText: {
-      fontSize: 16,
+      fontSize: 17,
       color: '#FFF',
       textShadowColor: '#000',
+      fontWeight: 'bold',
       textShadowOffset: {
-        width: 2,
-        height: 2,
+        width: 1,
+        height: 1,
       },
     },
 
@@ -98,8 +99,8 @@ const styles = MediaQueryStyleSheet.create(
       textAlign: 'center',
       textShadowColor: '#000',
       textShadowOffset: {
-        width: 1.5,
-        height: 1.5,
+        width: 1,
+        height: 1,
       },
     },
   },
