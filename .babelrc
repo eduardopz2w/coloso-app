@@ -1,9 +1,12 @@
 {
   "presets": ["react-native"],
   "plugins": [
-    ["module-alias", [
-      { "src": "./src/utils", "expose": "utils" },
-      { "src": "./src/components", "expose": "components" }
-    ]]
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "utils": "./utils",
+        "components": "./components"
+      }
+    }]
   ]
 }

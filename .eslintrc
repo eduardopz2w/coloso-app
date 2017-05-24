@@ -12,5 +12,10 @@
       "__DEV__": true,
       "Storage": true,
       "navigator": true
+    },
+    "settings": {
+      "import/resolver": {
+        "babel-module": {}
+      }
     }
 }
