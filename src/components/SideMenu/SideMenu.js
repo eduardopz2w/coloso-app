@@ -138,12 +138,14 @@ class SideMenu extends PureComponent {
           iconName="search"
           title={I18n.t('searches')}
           onPress={this.props.onPressSummonerSearch}
+          active={this.props.activeRouteKey === 'SummonerSearchView'}
         />
 
         <MenuItem
           title={I18n.t('pro_builds')}
           iconName="gavel"
           onPress={this.props.onPressProBuilds}
+          active={this.props.activeRouteKey === 'ProBuildsListView'}
         />
 
         <MenuItem
@@ -162,6 +164,7 @@ class SideMenu extends PureComponent {
           title={I18n.t('settings')}
           iconName="settings"
           onPress={this.props.onPressSettings}
+          active={this.props.activeRouteKey === 'SettingsView'}
         />
       </ScrollView>
 
@@ -177,6 +180,7 @@ SideMenu.propTypes = {
     profileIconId: PropTypes.number,
     region: PropTypes.string,
   }),
+  activeRouteKey: PropTypes.string.isRequired,
   onPressSuggestion: PropTypes.func,
   onPressProfile: PropTypes.func,
   onPressProBuilds: PropTypes.func,

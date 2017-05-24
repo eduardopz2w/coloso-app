@@ -98,7 +98,7 @@ class SummonerProfileView extends Component {
         initialPage={0}
         renderTabBar={() => <ScrollableTabBar />}
         tabBarBackgroundColor={colors.primary}
-        tabBarActiveTextColor={colors.accent}
+        tabBarActiveTextColor="white"
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}

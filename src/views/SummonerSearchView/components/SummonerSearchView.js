@@ -74,7 +74,7 @@ class SummonerSearchView extends Component {
         summonerName: this.props.summonerName,
         region: this.props.region,
       });
-      this.props.navigation.navigate('SummonerProfileView', { summonerId: this.props.summonerFoundId });
+      this.props.goToSummonerProfile(this.props.summonerFoundId);
       this.props.clearFoundData();
     }
 
@@ -84,7 +84,7 @@ class SummonerSearchView extends Component {
         region: this.props.region,
       });
       this.props.clearFoundData();
-      this.props.navigation.navigate('GameCurrentView');
+      this.props.goToGameCurrent();
     }
 
     return null;
@@ -219,9 +219,7 @@ class SummonerSearchView extends Component {
     return (<View style={styles.root}>
       <SearchViewToolbar
         onPressHistoryButton={this.handleOnPressHistoryButton}
-        onPressMenuButton={() => {
-          this.props.navigation.navigate('DrawerOpen');
-        }}
+        onPressMenuButton={this.props.openDrawer}
       />
       <View style={styles.wrapper}>
         <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
@@ -282,10 +280,6 @@ class SummonerSearchView extends Component {
 }
 
 SummonerSearchView.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
-    navigate: PropTypes.func.isRequired,
-  }),
   summonerName: PropTypes.string,
   region: PropTypes.string,
   searchType: PropTypes.string,
@@ -306,6 +300,9 @@ SummonerSearchView.propTypes = {
   loadSearchHistory: PropTypes.func.isRequired,
   addSearchEntry: PropTypes.func.isRequired,
   deleteSearchEntry: PropTypes.func,
+  openDrawer: PropTypes.func,
+  goToSummonerProfile: PropTypes.func,
+  goToGameCurrent: PropTypes.func,
 };
 
 export default SummonerSearchView;

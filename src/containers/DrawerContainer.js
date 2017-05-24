@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import Drawer from '../components/Drawer';
 import { loadAccount } from '../modules/ManageAccountActions';
@@ -27,6 +28,26 @@ function mapDispatchToProps(dispatch) {
       dispatch(setRegion(region));
       dispatch(setSearchType('GAME_SEARCH'));
       dispatch(searchGame({ summonerName, region }));
+    },
+
+    goToProBuildsList: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'ProBuildsListView' }));
+    },
+
+    goToSummonerSearch: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerSearchView' }));
+    },
+
+    goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
+    },
+
+    goToManageAccount: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'ManageAccountView' }));
+    },
+
+    goToSettings: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'SettingsView' }));
     },
   };
 }

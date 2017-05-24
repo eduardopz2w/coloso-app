@@ -126,9 +126,7 @@ class ProBuildsListView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         disabledFilters={this.props.proBuilds.get('isFetching')}
-        onPressMenuButton={() => {
-          this.props.navigation.navigate('DrawerOpen');
-        }}
+        onPressMenuButton={this.props.openDrawer}
         championSelected={this.state.championId}
         proPlayerSelected={this.state.proPlayerId}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
@@ -139,7 +137,7 @@ class ProBuildsListView extends Component {
         style={{ flex: 1 }}
         renderTabBar={() => <DefaultTabBar />}
         tabBarBackgroundColor={colors.primary}
-        tabBarActiveTextColor={colors.accent}
+        tabBarActiveTextColor="white"
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}
@@ -150,7 +148,7 @@ class ProBuildsListView extends Component {
           proBuilds={this.props.proBuilds}
           onPressRetryButton={this.handleOnPressProBuildsTabRetryButton}
           onPressRefreshButton={this.handleOnPressProBuildsTabRefreshButton}
-          onPressBuild={buildId => this.props.navigation.navigate('ProBuildView', { buildId })}
+          onPressBuild={this.props.goToBuild}
           onLoadMore={this.handleOnLoadMoreProBuildsTab}
           onAddFavorite={this.props.addFavoriteBuild}
           onRemoveFavorite={this.props.removeFavoriteBuild}
@@ -159,7 +157,7 @@ class ProBuildsListView extends Component {
           tabLabel={I18n.t('favorites')}
           favoriteProBuilds={this.props.favoriteProBuilds}
           onPressRetryButton={this.handleOnPressFavoriteProBuildsTabRetryButton}
-          onPressBuild={buildId => this.props.navigation.navigate('ProBuildView', { buildId })}
+          onPressBuild={this.props.goToBuild}
           onRemoveFavorite={this.props.removeFavoriteBuild}
         />
       </ScrollableTabView>
@@ -168,10 +166,6 @@ class ProBuildsListView extends Component {
 }
 
 ProBuildsListView.propTypes = {
-  navigation: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
-    navigate: PropTypes.func.isRequired,
-  }),
   proBuilds: ImmutablePropTypes.mapContains({
     data: ImmutablePropTypes.list.isRequired,
     isFetching: PropTypes.bool.isRequired,
@@ -206,6 +200,8 @@ ProBuildsListView.propTypes = {
   addFavoriteBuild: PropTypes.func.isRequired,
   removeFavoriteBuild: PropTypes.func.isRequired,
   setFavoriteBuildsFilters: PropTypes.func.isRequired,
+  goToBuild: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
 export default ProBuildsListView;

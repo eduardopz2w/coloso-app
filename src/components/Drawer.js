@@ -59,21 +59,26 @@ function handleOnPressWeb() {
   dialog.show();
 }
 
-class MainDrawer extends PureComponent {
+class Drawer extends PureComponent {
   constructor(props) {
     super(props);
 
+    this.state = {
+      activeRouteKey: 'SummonerSearchView',
+    };
+
     this.handleOnPressMyGame = this.handleOnPressMyGame.bind(this);
     this.handleOnPressProfile = this.handleOnPressProfile.bind(this);
-    this.handleOnPressProBuilds = this.handleOnPressProBuilds.bind(this);
-    this.handleOnPressSummonerSearch = this.handleOnPressSummonerSearch.bind(this);
-    this.handleOnPressManageAccount = this.handleOnPressManageAccount.bind(this);
-    this.handleOnPressSettings = this.handleOnPressSettings.bind(this);
-    this.goToRoute = this.goToRoute.bind(this);
   }
 
   componentWillMount() {
     this.props.loadAccount();
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (!newProps.navigation.state.key.includes('Drawer')) {
+      this.setState({ activeRouteKey: newProps.navigation.state.key });
+    }
   }
 
   handleOnPressMyGame() {
@@ -81,9 +86,9 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      this.goToRoute('ManageAccountView');
+      this.props.goToManageAccount();
     } else if (!this.props.isSearchingGame) {
-      this.goToRoute('SummonerSearchView');
+      this.props.goToSummonerSearch();
       this.props.searchGame({
         summonerName: riotAccount.get('name'),
         region: riotAccount.get('region'),
@@ -96,58 +101,38 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      this.goToRoute('ManageAccountView');
+      this.props.goToManageAccount();
     } else if (!this.props.isSearchingGame) {
-      this.goToRoute('SummonerProfileView', { summonerId: riotAccount.get('id') });
+      this.props.goToSummonerProfile(riotAccount.get('id'));
     }
-  }
-
-  handleOnPressProBuilds() {
-    this.goToRoute('ProBuildsListView');
-  }
-
-  handleOnPressSummonerSearch() {
-    this.goToRoute('SummonerSearchView');
-  }
-
-  handleOnPressManageAccount() {
-    this.goToRoute('ManageAccountView');
-  }
-
-  handleOnPressSettings() {
-    this.goToRoute('SettingsView');
-  }
-
-  goToRoute(...args) {
-    this.props.navigation.navigate(...args);
-    setTimeout(() => {
-      this.props.navigation.navigate('DrawerClose');
-    }, 1);
   }
 
   render() {
     return (<SideMenu
       riotAccount={this.props.riotAccount}
+      activeRouteKey={this.state.activeRouteKey}
       onPressMyGame={this.handleOnPressMyGame}
       onPressSuggestion={handleOnPressSuggestion}
-      onPressProBuilds={this.handleOnPressProBuilds}
+      onPressProBuilds={this.props.goToProBuildsList}
       onPressProfile={this.handleOnPressProfile}
-      onPressSummonerSearch={this.handleOnPressSummonerSearch}
-      onPressManageAccount={this.handleOnPressManageAccount}
-      onPressSettings={this.handleOnPressSettings}
+      onPressSummonerSearch={this.props.goToSummonerSearch}
+      onPressManageAccount={this.props.goToManageAccount}
+      onPressSettings={this.props.goToSettings}
       onPressWeb={handleOnPressWeb}
     />);
   }
 }
 
-MainDrawer.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }),
+Drawer.propTypes = {
   isSearchingGame: PropTypes.bool,
   riotAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
+  goToProBuildsList: PropTypes.func.isRequired,
+  goToSummonerSearch: PropTypes.func.isRequired,
+  goToManageAccount: PropTypes.func.isRequired,
+  goToSettings: PropTypes.func.isRequired,
+  goToSummonerProfile: PropTypes.func.isRequired,
 };
 
-export default MainDrawer;
+export default Drawer;

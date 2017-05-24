@@ -5,14 +5,20 @@ import Dialog from 'react-native-dialogs';
 import DeviceInfo from 'react-native-device-info';
 import I18n from 'i18n-js';
 import moment from 'moment';
+import { setTheme } from 'react-native-material-kit';
 import 'moment/locale/es';
 
-import { ColosoClient, versionChecker, logger } from 'utils';
+import { ColosoClient, versionChecker, logger, colors } from 'utils';
 import RootContainer from './containers/RootContainer';
 import translations from './translations';
 import { loadSettings } from './modules/AppSettingsActions';
 
 I18n.translations = translations;
+
+setTheme({
+  primaryColor: colors.primary,
+  accentColor: colors.accent,
+});
 
 function configureLocale() {
   const deviceLocale = DeviceInfo.getDeviceLocale().slice(0, 2).toLowerCase();

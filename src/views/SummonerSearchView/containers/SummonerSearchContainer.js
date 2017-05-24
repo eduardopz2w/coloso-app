@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import { loadEntries, addEntry, deleteEntry } from '../../../modules/SearchHistoryActions';
 import {
@@ -69,6 +70,18 @@ function mapDispatchToProps(dispatch) {
 
     setSearchType: (searchType) => {
       dispatch(setSearchType(searchType));
+    },
+
+    goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
+    },
+
+    goToGameCurrent: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'GameCurrentView' }));
+    },
+
+    openDrawer: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' }));
     },
   };
 }

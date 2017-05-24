@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import Immutable from 'immutable';
+import { NavigationActions } from 'react-navigation';
 
 import { keyIn, createDenormalizeSelector } from 'utils';
 import { fetchProBuild } from '../modules/ProBuildActions';
@@ -55,6 +56,14 @@ function mapDispatchToProps(dispatch) {
 
     removeFromFavorites: (buildId) => {
       dispatch(removeFavoriteBuild(buildId));
+    },
+
+    goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
+    },
+
+    goBack: () => {
+      dispatch(NavigationActions.back());
     },
   };
 }

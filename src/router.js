@@ -2,6 +2,7 @@
 import { DrawerNavigator } from 'react-navigation';
 // import I18n from 'i18n-js';
 
+import { injectReducer } from './redux/store';
 import Drawer from './containers/DrawerContainer';
 
 // -------- Views --------------
@@ -31,7 +32,7 @@ import SettingsView from './views/SettingsView';
 //   return true;
 // }
 
-export default DrawerNavigator({
+const AppNavigator = DrawerNavigator({
   SummonerSearchView: {
     screen: SummonerSearchView,
   },
@@ -57,3 +58,16 @@ export default DrawerNavigator({
   drawerWidth: 250,
   contentComponent: Drawer,
 });
+
+const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('SummonerSearchView'));
+
+const navReducer = (state = initialState, action) => {
+  const nextState = AppNavigator.router.getStateForAction(action, state);
+
+  // Simply return the original `state` if `nextState` is null or undefined.
+  return nextState || state;
+};
+
+injectReducer('router', navReducer);
+
+export default AppNavigator;

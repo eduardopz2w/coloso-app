@@ -141,7 +141,7 @@ class ProBuildView extends Component {
   }
 
   handleOnPressParticipant(summonerId) {
-    this.props.navigation.navigate('SummonerProfileView', { summonerId });
+    this.props.goToSummonerProfile(summonerId);
   }
 
   handleOnPressProfileButton() {
@@ -173,7 +173,7 @@ class ProBuildView extends Component {
           role={proBuildData.getIn(['proSummoner', 'proPlayer', 'role'])}
           realName={proBuildData.getIn(['proSummoner', 'proPlayer', 'realName'])}
           isFavorite={proBuildData.get('isFavorite')}
-          onPressBackButton={() => { this.props.navigation.goBack(); }}
+          onPressBackButton={this.props.goBack}
           onPressProfileButton={this.handleOnPressProfileButton}
           onPressAddFavorite={this.handleOnPressAddToFavorites}
           onPressRemoveFavorite={this.handleOnPressRemoveFromFavorites}
@@ -182,7 +182,7 @@ class ProBuildView extends Component {
           initialPage={0}
           renderTabBar={() => <DefaultTabBar />}
           tabBarBackgroundColor={colors.primary}
-          tabBarActiveTextColor={colors.accent}
+          tabBarActiveTextColor="white"
           tabBarInactiveTextColor="rgba(255,255,255,0.8)"
           tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
           onChangeTab={this.handleOnChangeTab}
@@ -230,7 +230,7 @@ class ProBuildView extends Component {
     } else if (this.props.proBuild.get('isFetching')) {
       return (<View style={styles.root}>
         <BasicToolbar
-          onPressBackButton={() => { this.props.navigation.goBack(); }}
+          onPressBackButton={this.props.goBack}
         />
         <View style={[styles.basicContainer, { alignItems: 'center' }]}>
           <LoadingIndicator />
@@ -240,7 +240,7 @@ class ProBuildView extends Component {
 
     return (<View style={styles.root}>
       <BasicToolbar
-        onPressBackButton={() => { this.props.navigation.goBack(); }}
+        onPressBackButton={this.props.goBack}
       />
       <View style={styles.basicContainer}>
         <ErrorScreen
@@ -255,8 +255,6 @@ class ProBuildView extends Component {
 
 ProBuildView.propTypes = {
   navigation: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
-    navigate: PropTypes.func.isRequired,
     state: PropTypes.shape({
       params: PropTypes.shape({
         buildId: PropTypes.string.isRequired,
@@ -285,6 +283,8 @@ ProBuildView.propTypes = {
   fetchGame: PropTypes.func.isRequired,
   addToFavorites: PropTypes.func.isRequired,
   removeFromFavorites: PropTypes.func.isRequired,
+  goToSummonerProfile: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 export default ProBuildView;

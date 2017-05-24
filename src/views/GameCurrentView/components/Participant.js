@@ -108,7 +108,7 @@ const styles = MediaQueryStyleSheet.create(
     roundedButtonText: {
       fontSize: 12,
       textAlign: 'center',
-      color: colors.primary,
+      color: colors.accent,
       fontWeight: 'bold',
     },
   },

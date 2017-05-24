@@ -1,8 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PureComponent, PropTypes } from 'react';
 import { Picker, View } from 'react-native';
 import { regionHumanize, getDeviceRiotRegion } from 'utils';
 
-class RegionSelector extends Component {
+class RegionSelector extends PureComponent {
   constructor(props) {
     super(props);
     this.regions = [
@@ -19,21 +19,14 @@ class RegionSelector extends Component {
       { label: regionHumanize('tr'), value: 'TR' },
     ];
 
-    this.state = {
-      selectedValue: props.selectedValue,
-    };
-
     this.handleOnValueChange = this.handleOnValueChange.bind(this);
     this.pristine = true;
   }
 
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedValue !== this.state.selectedValue) {
+    if (nextProps.selectedValue !== this.props.selectedValue) {
       this.pristine = false;
-      this.setState({
-        selectedValue: nextProps.selectedValue.toUpperCase(),
-      });
     }
   }
 
@@ -49,7 +42,6 @@ class RegionSelector extends Component {
   handleOnValueChange(newRegion) {
     if (this.props.onChangeRegion) {
       this.props.onChangeRegion(newRegion);
-      this.setState({ selectedValue: newRegion });
     }
   }
 
@@ -57,7 +49,7 @@ class RegionSelector extends Component {
     return (<Picker
       style={this.props.style}
       onValueChange={this.handleOnValueChange}
-      selectedValue={this.state.selectedValue}
+      selectedValue={this.props.selectedValue}
     >
       {this.regions.map((region, index) => <Picker.Item
         key={index}
@@ -72,6 +64,10 @@ RegionSelector.propTypes = {
   selectedValue: PropTypes.string,
   style: View.propTypes.style,
   onChangeRegion: PropTypes.func,
+};
+
+RegionSelector.defaultProps = {
+  selectedValue: 'NA',
 };
 
 export default RegionSelector;
