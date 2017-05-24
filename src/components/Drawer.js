@@ -90,6 +90,10 @@ class Drawer extends PureComponent {
     BackHandler.addEventListener('hardwareBackPress', handleOnExitApp);
   }
 
+  componentDidMount() {
+    this.props.openDrawer();
+  }
+
   handleOnPressMyGame() {
     const { riotAccount } = this.props;
 
@@ -141,6 +145,7 @@ Drawer.propTypes = {
   goToManageAccount: PropTypes.func.isRequired,
   goToSettings: PropTypes.func.isRequired,
   goToSummonerProfile: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
 export default Drawer;

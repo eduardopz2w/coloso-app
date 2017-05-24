@@ -59,6 +59,10 @@ function mapDispatchToProps(dispatch) {
       dispatch(NavigationActions.back({ key: null }));
       dispatch(NavigationActions.navigate({ routeName: 'SettingsView' }));
     },
+
+    openDrawer: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' }));
+    },
   };
 }
 
