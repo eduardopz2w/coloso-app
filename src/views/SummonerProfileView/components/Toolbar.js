@@ -206,7 +206,7 @@ class SummonerProfileViewToolbar extends Component {
         style={{ backgroundColor: 'white', borderRadius: 50, width: 40, height: 40 }}
         onPress={this.props.onPressRetryButton}
         iconName="refresh"
-        iconColor={colors.primary}
+        iconColor={colors.accent}
       />
     </View>);
   }
