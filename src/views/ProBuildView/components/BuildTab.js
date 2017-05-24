@@ -10,6 +10,7 @@ import Immutable from 'immutable';
 
 import { colors, sentenceCase } from 'utils';
 import ItemsOrder from './ItemsOrder';
+import SkillsOrder from './SkillsOrder';
 
 const itemsArrowSize = 20;
 
@@ -184,7 +185,6 @@ class BuildTab extends Component {
 
     this.deviceDimensions = Dimensions.get('window');
     this.renderSkillsPriority = this.renderSkillsPriority.bind(this);
-    this.renderSkillsOrder = this.renderSkillsOrder.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -251,59 +251,6 @@ class BuildTab extends Component {
     </View>);
   }
 
-  renderSkillsOrder() {
-    const skillsOrderList = this.props.proBuild.getIn(['data', 'skillsOrder']);
-    const skillNodes = [];
-
-    skillsOrderList.forEach((skill, skIndex) => {
-      const levelUpType = skill.get('levelUpType');
-      const skillSlot = skill.get('skillSlot');
-      let skillLetter;
-
-      if (skillSlot === 1) {
-        skillLetter = 'Q';
-      } else if (skillSlot === 2) {
-        skillLetter = 'W';
-      } else if (skillSlot === 3) {
-        skillLetter = 'E';
-      } else {
-        skillLetter = 'R';
-      }
-
-      if (levelUpType === 'NORMAL') {
-        skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
-          <Text style={styles.skillLabel}>{skillLetter}</Text>
-          <Text style={{ textAlign: 'center' }}>{I18n.t('level')} {skIndex + 1}</Text>
-        </View>);
-      } else {
-        skillNodes.push(<View key={`sk_${skIndex}`} style={{ marginHorizontal: 16, alignItems: 'center' }}>
-          <Text style={[styles.skillLabel, { backgroundColor: '#F44336' }]}>{skillLetter}</Text>
-          <Text style={{ textAlign: 'center' }}>{I18n.t('special')}</Text>
-        </View>);
-      }
-
-
-      if (skIndex !== skillsOrderList.size - 1) {
-        skillNodes.push(<Icon
-          key={`ar_${skIndex}`}
-          style={styles.itemsArrow}
-          name="keyboard-arrow-right"
-          color="rgba(0,0,0,0.5)"
-          size={18}
-        />);
-      }
-    });
-
-    return (<ScrollView
-      contentContainerStyle={{ flexDirection: 'row', alignItems: 'center' }}
-      showsHorizontalScrollIndicator={false}
-      keyboardShouldPersistTaps="handled"
-      horizontal
-    >
-      {skillNodes}
-    </ScrollView>);
-  }
-
   render() {
     const proBuildData = this.props.proBuild.get('data');
 
@@ -358,7 +305,7 @@ class BuildTab extends Component {
 
       <Text style={styles.title}>{I18n.t('skills_order')}</Text>
 
-      {this.renderSkillsOrder()}
+      <SkillsOrder skills={this.props.proBuild.getIn(['data', 'skillsOrder'])} />
 
       <Text style={styles.title}>{I18n.t('buy_order')}</Text>
 
