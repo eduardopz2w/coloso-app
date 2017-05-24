@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Picker, View } from 'react-native';
+import { Picker, ViewPropTypes } from 'react-native';
 import { regionHumanize, getDeviceRiotRegion } from 'utils';
 
 class RegionSelector extends PureComponent {
@@ -62,7 +62,7 @@ class RegionSelector extends PureComponent {
 
 RegionSelector.propTypes = {
   selectedValue: PropTypes.string,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onChangeRegion: PropTypes.func,
 };
 

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Text, Dimensions, TouchableNativeFeedback } from 'react-native';
+import { View, Image, Text, Dimensions, TouchableNativeFeedback, ViewPropTypes } from 'react-native';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
@@ -500,7 +500,7 @@ class Participant extends Component {
 }
 
 Participant.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   participant: ImmutablePropTypes.map,
   onPressRunesButton: PropTypes.func,
   onPressMasteriesButton: PropTypes.func,

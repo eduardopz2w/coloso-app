@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ViewPropTypes } from 'react-native';
 
 class ParticipantSquare extends Component {
   constructor(props) {
@@ -89,7 +89,7 @@ ParticipantSquare.propTypes = {
   spell2Id: PropTypes.number.isRequired,
   level: PropTypes.number,
   size: PropTypes.number.isRequired,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 };
 
 ParticipantSquare.defaultProps = {

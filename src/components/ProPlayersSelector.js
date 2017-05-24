@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
@@ -104,7 +104,7 @@ ProPlayersSelector.propTypes = {
   value: PropTypes.string,
   onChangeSelected: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   titleStyle: Text.propTypes.style,
   proPlayers: ImmutablePropTypes.listOf(ImmutablePropTypes.mapContains({
     id: PropTypes.string.isRequired,

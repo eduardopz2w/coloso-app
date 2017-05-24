@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
@@ -36,7 +36,7 @@ class SearchViewToolbar extends PureComponent {
 }
 
 SearchViewToolbar.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onPressHistoryButton: PropTypes.func,
   onPressMenuButton: PropTypes.func,
 };

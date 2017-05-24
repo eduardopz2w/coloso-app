@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, ViewPropTypes } from 'react-native';
 
 const styles = StyleSheet.create({
   root: {
@@ -53,7 +53,7 @@ FinalItems.propTypes = {
   item5: PropTypes.number,
   item6: PropTypes.number,
   size: PropTypes.number,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 };
 
 FinalItems.defaultProps = {

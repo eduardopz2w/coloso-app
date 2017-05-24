@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
@@ -88,7 +88,7 @@ class Toolbar extends PureComponent {
 }
 
 Toolbar.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   proPlayers: ImmutablePropTypes.mapContains({
     data: ImmutablePropTypes.list.isRequired,
   }).isRequired,

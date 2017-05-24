@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView, TouchableNativeFeedback } from 'react-native';
+import { View, StyleSheet, Text, ListView, TouchableNativeFeedback, ViewPropTypes } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -120,7 +120,7 @@ History.propTypes = {
     summonerName: PropTypes.string,
     region: PropTypes.string,
   })),
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onPressHistoryEntry: PropTypes.func.isRequired,
   onPressDelete: PropTypes.func,
 };

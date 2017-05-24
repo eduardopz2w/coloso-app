@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet, Image, Text, TouchableNativeFeedback } from 'react-native';
+import { View, StyleSheet, Image, Text, TouchableNativeFeedback, ViewPropTypes } from 'react-native';
 
 const styles = StyleSheet.create({
   root: {
@@ -51,7 +51,7 @@ Item.propTypes = {
     final: PropTypes.bool,
   }),
   onPress: PropTypes.func,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 };
 
 export default Item;
