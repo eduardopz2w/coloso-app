@@ -3,9 +3,8 @@ import { ListView, View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
-import ErrorScreen from '../../../../components/ErrorScreen';
-import LoadingIndicator from '../../../../components/LoadingIndicator';
-import { tracker } from '../../../../utils/analytics';
+import { ErrorScreen, LoadingIndicator } from 'components';
+import { tracker } from 'utils';
 import GameRecent from './GameRecent';
 
 class GamesRecentView extends PureComponent {

@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { ListView, Dimensions, Text, View } from 'react-native';
+import { ListView, Dimensions, View } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
@@ -7,9 +7,8 @@ import Modal from 'react-native-modalbox';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 
-import LoadingIndicator from '../../../../components/LoadingIndicator';
-import ErrorScreen from '../../../../components/ErrorScreen';
-import { tracker } from '../../../../utils/analytics';
+import { LoadingIndicator, ErrorScreen } from 'components';
+import { tracker } from 'utils';
 import ChampionMastery from './ChampionMastery';
 import MasteryInfo from './MasteryInfo';
 import Summary from './Summary';

@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 
-import MasteryPage from '../../../components/MasteryPage';
+import { MasteryPage } from 'components';
 
 class MasteryTab extends PureComponent {
   shouldComponentUpdate(nextProps) {

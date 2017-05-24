@@ -4,12 +4,8 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 
-import PageSelector from '../../../../components/PageSelector';
-import MasteryPage from '../../../../components/MasteryPage';
-import colors from '../../../../utils/colors';
-import ErrorScreen from '../../../../components/ErrorScreen';
-import LoadingIndicator from '../../../../components/LoadingIndicator';
-import { tracker } from '../../../../utils/analytics';
+import { PageSelector, MasteryPage, ErrorScreen, LoadingIndicator } from 'components';
+import { colors, tracker } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

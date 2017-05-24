@@ -5,12 +5,15 @@ import Drawer from 'react-native-drawer';
 import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import Dialog from 'react-native-dialogs';
+/* eslint-disable */
 import { RNMail as Mailer } from 'NativeModules';
+/* eslint-enable */
+
 import _ from 'lodash';
 import I18n from 'i18n-js';
 
+import { tracker } from 'utils';
 import SideMenu from './SideMenu';
-import tracker from '../utils/tracker';
 
 
 const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';

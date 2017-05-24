@@ -8,12 +8,10 @@ import { MKRadioButton } from 'react-native-material-kit';
 import { Actions } from 'react-native-router-flux';
 import update from 'immutability-helper';
 
+import { tracker } from 'utils';
+import { LoadingIndicator, RegionSelector, TextField } from 'components';
 import SearchViewToolbar from './SearchViewToolbar';
 import HistoryModal from './HistoryModal';
-import { tracker } from '../../../utils/analytics';
-import LoadingIndicator from '../../../components/LoadingIndicator';
-import RegionSelector from '../../../components/RegionSelector';
-import TextField from '../../../components/TextField';
 
 import styles from './styles';
 

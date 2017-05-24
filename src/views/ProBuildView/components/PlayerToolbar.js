@@ -1,9 +1,9 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import IconButton from '../../../components/IconButton';
-import ProPlayerImage from '../../../components/ProPlayerImage';
-import colors from '../../../utils/colors';
+
+import { IconButton, ProPlayerImage } from 'components';
+import { colors } from 'utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

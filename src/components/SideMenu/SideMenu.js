@@ -6,8 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
 
-import regionHumanize from '../../utils/regionHumanize';
-import colors from '../../utils/colors';
+import { colors, regionHumanize } from 'utils';
 import MenuItem from './MenuItem';
 import ProfileImage from '../ProfileImage';
 

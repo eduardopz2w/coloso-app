@@ -6,8 +6,8 @@ import moment from 'moment';
 import numeral from 'numeral';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
+import { colors } from 'utils';
 import ProPlayerImage from '../ProPlayerImage';
-import colors from '../../utils/colors';
 
 const styles = MediaQueryStyleSheet.create(
   {

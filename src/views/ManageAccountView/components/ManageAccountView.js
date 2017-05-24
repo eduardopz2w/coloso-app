@@ -6,11 +6,9 @@ import I18n from 'i18n-js';
 import update from 'immutability-helper';
 import _ from 'lodash';
 
+import { colors } from 'utils';
+import { RegionSelector, LoadingIndicator, TextField } from 'components';
 import Toolbar from './Toolbar';
-import colors from '../../../utils/colors';
-import RegionSelector from '../../../components/RegionSelector';
-import LoadingIndicator from '../../../components/LoadingIndicator';
-import TextField from '../../../components/TextField';
 
 const styles = StyleSheet.create({
   root: {

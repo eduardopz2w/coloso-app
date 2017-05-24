@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, Image } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
-import colors from '../../../utils/colors';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

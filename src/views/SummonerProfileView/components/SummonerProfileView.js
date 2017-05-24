@@ -4,16 +4,15 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
-import Toolbar from './Toolbar';
 
+import { tracker, colors } from 'utils';
+import Toolbar from './Toolbar';
 import LeagueEntryView from './LeagueEntryView';
 import ChampionsMasteryView from './ChampionsMasteryView';
 import GamesRecentView from './GamesRecentView';
 import MasteriesView from './MasteriesView';
 import SummonerSummaryView from './SummonerSummaryView';
 import RunesView from './RunesView';
-import colors from '../../../utils/colors';
-import { tracker } from '../../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {

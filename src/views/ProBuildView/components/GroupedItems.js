@@ -4,9 +4,8 @@ import moment from 'moment';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 import _ from 'lodash';
-import Immutable from 'immutable';
 
-import colors from '../../../utils/colors';
+import { colors } from 'utils';
 import { mediaBreakpointUp } from '../../../utils/mediaBreakpoints';
 
 const styles = MediaQueryStyleSheet.create(

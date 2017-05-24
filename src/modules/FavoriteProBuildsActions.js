@@ -2,9 +2,8 @@ import { createAction } from 'redux-actions';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 
+import { tracker, Storage } from 'utils';
 import { COLOSO_CALL, COLOSO_CALL_TYPES } from '../redux/middlewares/ColosoApiMiddleware';
-import Storage from '../utils/Storage';
-import { tracker } from '../utils/analytics';
 
 const STORAGE_KEY = 'favoriteBuildsIds';
 

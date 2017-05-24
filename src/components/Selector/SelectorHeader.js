@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet, TextInput } from 'react-native';
 
+import { colors } from 'utils';
 import IconButton from '../IconButton';
-import colors from '../../utils/colors';
 
 const styles = StyleSheet.create({
   root: {

@@ -2,9 +2,8 @@ import { connect } from 'react-redux';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import Immutable from 'immutable';
 
+import { keyIn, createDenormalizeSelector } from 'utils';
 import ProBuildsListView from '../components/ProBuildsListView';
-import keyIn from '../../../utils/keyIn';
-import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
 import { fetchBuilds, refreshBuilds } from '../../../modules/ProBuildsActions';
 import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../../../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';

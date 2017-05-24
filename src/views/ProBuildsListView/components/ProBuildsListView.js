@@ -5,9 +5,8 @@ import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
 
+import { colors, tracker } from 'utils';
 import Toolbar from './Toolbar';
-import { tracker } from '../../../utils/analytics';
-import colors from '../../../utils/colors';
 import ProBuildsTab from './ProBuildsTab';
 import FavoriteProBuildsTab from './FavoriteProBuildsTab';
 
