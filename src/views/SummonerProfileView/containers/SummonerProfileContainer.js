@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import { keyIn, createDenormalizeSelector } from 'utils';
 import SummonerProfileView from '../components/SummonerProfileView';
@@ -116,6 +117,10 @@ function mapDispatchToProps(dispatch) {
 
     clearCache: () => {
       dispatch(clearCache());
+    },
+
+    goBack: () => {
+      dispatch(NavigationActions.back());
     },
   };
 }

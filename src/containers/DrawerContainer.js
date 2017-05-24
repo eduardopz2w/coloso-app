@@ -17,6 +17,13 @@ function mapStateToProps(state) {
   };
 }
 
+function replaceRoute(dispatch, routeName) {
+  dispatch(NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName })],
+  }));
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     loadAccount: () => {
@@ -31,22 +38,25 @@ function mapDispatchToProps(dispatch) {
     },
 
     goToProBuildsList: () => {
-      dispatch(NavigationActions.navigate({ routeName: 'ProBuildsListView' }));
+      replaceRoute(dispatch, 'ProBuildsListView');
     },
 
     goToSummonerSearch: () => {
-      dispatch(NavigationActions.navigate({ routeName: 'SummonerSearchView' }));
+      replaceRoute(dispatch, 'SummonerSearchView');
     },
 
     goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.back({ key: null }));
       dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
     },
 
     goToManageAccount: () => {
+      dispatch(NavigationActions.back({ key: null }));
       dispatch(NavigationActions.navigate({ routeName: 'ManageAccountView' }));
     },
 
     goToSettings: () => {
+      dispatch(NavigationActions.back({ key: null }));
       dispatch(NavigationActions.navigate({ routeName: 'SettingsView' }));
     },
   };

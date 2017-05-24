@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image, Text } from 'react-native';
+import { View, Image, Text, BackHandler } from 'react-native';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Modal from 'react-native-modalbox';
@@ -81,6 +81,7 @@ class ProBuildView extends Component {
     this.handleOnPressParticipant = this.handleOnPressParticipant.bind(this);
     this.handleOnPressAddToFavorites = this.handleOnPressAddToFavorites.bind(this);
     this.handleOnPressRemoveFromFavorites = this.handleOnPressRemoveFromFavorites.bind(this);
+    this.handleHardwareBack = this.handleHardwareBack.bind(this);
     this.fetchGame = this.fetchGame.bind(this);
     this.fetchBuild = this.fetchBuild.bind(this);
   }
@@ -92,6 +93,8 @@ class ProBuildView extends Component {
     if (!fetched || fetchedProBuildId !== this.props.buildId) {
       this.fetchBuild();
     }
+
+    BackHandler.addEventListener('hardwareBackPress', this.handleHardwareBack);
   }
 
   componentDidMount() {
@@ -102,6 +105,10 @@ class ProBuildView extends Component {
     return !Immutable.is(nextProps.proBuild, this.props.proBuild) ||
       !Immutable.is(nextProps.game, this.props.game) ||
       !_.isEqual(nextState, this.state);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleHardwareBack);
   }
 
   fetchGame() {
@@ -127,6 +134,13 @@ class ProBuildView extends Component {
 
     this.props.removeFromFavorites(buildId);
   }
+
+  handleHardwareBack() {
+    this.props.goBack();
+
+    return true;
+  }
+
   handleOnPressItem(itemData) {
     this.setState({
       modalData: {

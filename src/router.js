@@ -1,9 +1,9 @@
 // import { ToastAndroid } from 'react-native';
-import { DrawerNavigator } from 'react-navigation';
+import { StackNavigator, DrawerNavigator } from 'react-navigation';
 // import I18n from 'i18n-js';
+import Drawer from './containers/DrawerContainer';
 
 import { injectReducer } from './redux/store';
-import Drawer from './containers/DrawerContainer';
 
 // -------- Views --------------
 import SummonerSearchView from './views/SummonerSearchView';
@@ -32,7 +32,7 @@ import SettingsView from './views/SettingsView';
 //   return true;
 // }
 
-const AppNavigator = DrawerNavigator({
+const ContentNavigator = StackNavigator({
   SummonerSearchView: {
     screen: SummonerSearchView,
   },
@@ -55,9 +55,22 @@ const AppNavigator = DrawerNavigator({
     screen: SettingsView,
   },
 }, {
-  drawerWidth: 250,
-  contentComponent: Drawer,
+  headerMode: 'none',
+  cardStyle: {
+    backgroundColor: 'white',
+  },
 });
+
+const SideMenuNavigator = DrawerNavigator({
+  Content: {
+    screen: ContentNavigator,
+  },
+}, {
+  contentComponent: Drawer,
+  drawerWidth: 250,
+});
+
+const AppNavigator = SideMenuNavigator;
 
 const initialState = AppNavigator.router.getStateForAction(AppNavigator.router.getActionForPathAndParams('SummonerSearchView'));
 
@@ -69,5 +82,16 @@ const navReducer = (state = initialState, action) => {
 };
 
 injectReducer('router', navReducer);
+
+const initialState2 = ContentNavigator.router.getStateForAction(ContentNavigator.router.getActionForPathAndParams('SummonerSearchView'));
+
+const navReducer2 = (state = initialState2, action) => {
+  const nextState = ContentNavigator.router.getStateForAction(action, state);
+
+  // Simply return the original `state` if `nextState` is null or undefined.
+  return nextState || state;
+};
+
+injectReducer('router2', navReducer2);
 
 export default AppNavigator;

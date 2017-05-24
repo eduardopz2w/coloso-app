@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, BackHandler } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ScrollableTabView, { ScrollableTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
@@ -24,6 +24,7 @@ class SummonerProfileView extends Component {
     super(props);
 
     this.handleOnChangeTab = this.handleOnChangeTab.bind(this);
+    this.handleHardwareBack = this.handleHardwareBack.bind(this);
   }
 
   componentWillMount() {
@@ -34,6 +35,7 @@ class SummonerProfileView extends Component {
       this.props.fetchSummonerData(summonerId);
       this.props.fetchLeagueEntry(summonerId);
     }
+    BackHandler.addEventListener('hardwareBackPress', this.handleHardwareBack);
   }
 
   componentDidMount() {
@@ -85,13 +87,19 @@ class SummonerProfileView extends Component {
     }
   }
 
+  handleHardwareBack() {
+    this.props.goBack();
+
+    return true;
+  }
+
   render() {
     const summonerId = this.props.navigation.state.params.summonerId;
 
     return (<View style={styles.root}>
       <Toolbar
         summonerData={this.props.summonerData}
-        onPressBackButton={() => { this.props.navigation.goBack(); }}
+        onPressBackButton={() => { this.props.goBack(); }}
         onPressRetryButton={() => { this.props.fetchSummonerData(); }}
       />
       <ScrollableTabView
@@ -143,8 +151,6 @@ class SummonerProfileView extends Component {
 
 SummonerProfileView.propTypes = {
   navigation: PropTypes.shape({
-    goBack: PropTypes.func.isRequired,
-    navigate: PropTypes.func.isRequired,
     state: PropTypes.shape({
       params: PropTypes.shape({
         summonerId: PropTypes.string.isRequired,
@@ -159,6 +165,7 @@ SummonerProfileView.propTypes = {
   fetchSummary: PropTypes.func.isRequired,
   fetchRunes: PropTypes.func.isRequired,
   clearCache: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
   leagueEntries: ImmutablePropTypes.mapContains({
     isFetching: PropTypes.bool,
     fetched: PropTypes.bool.isRequired,
