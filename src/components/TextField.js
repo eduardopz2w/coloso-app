@@ -3,6 +3,8 @@ import { View, StyleSheet, Text } from 'react-native';
 import { MKTextField, MKColor } from 'react-native-material-kit';
 import _ from 'lodash';
 
+import { colors } from 'utils';
+
 const styles = StyleSheet.create({
   root: {},
   textError: {
@@ -40,6 +42,7 @@ class TextField extends Component {
         value={this.props.value}
         onTextChange={this.props.onTextChange}
         placeholder={this.props.placeholder}
+        highlightColor={colors.primary}
         {...textFieldProperties}
       />
       {this.renderError()}

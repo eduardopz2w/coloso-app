@@ -61,7 +61,7 @@ export default MediaQueryStyleSheet.create(
     },
 
     searchButton: {
-      backgroundColor: colors.accent,
+      backgroundColor: colors.primary,
       justifyContent: 'center',
       alignItems: 'center',
       height: 40,
