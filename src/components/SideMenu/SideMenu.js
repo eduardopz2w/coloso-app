@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   },
 
   headerBackground: {
+    width: 250,
     height: 160,
     position: 'absolute',
     top: 0,
