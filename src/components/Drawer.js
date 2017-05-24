@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Linking } from 'react-native';
+import { Linking, BackHandler, ToastAndroid } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import DeviceInfo from 'react-native-device-info';
 import Dialog from 'react-native-dialogs';
@@ -59,6 +59,24 @@ function handleOnPressWeb() {
   dialog.show();
 }
 
+let waitingNextExit = false;
+
+function handleOnExitApp() {
+  if (waitingNextExit) {
+    return false;
+  }
+
+  waitingNextExit = true;
+
+  setTimeout(() => {
+    waitingNextExit = false;
+  }, 3000);
+
+  ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
+
+  return true;
+}
+
 class Drawer extends PureComponent {
   constructor(props) {
     super(props);
@@ -69,6 +87,7 @@ class Drawer extends PureComponent {
 
   componentWillMount() {
     this.props.loadAccount();
+    BackHandler.addEventListener('hardwareBackPress', handleOnExitApp);
   }
 
   handleOnPressMyGame() {

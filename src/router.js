@@ -14,24 +14,6 @@ import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
 import SettingsView from './views/SettingsView';
 
-// let waitingNextExit = false;
-//
-// function handleOnExitApp() {
-//   if (waitingNextExit) {
-//     return false;
-//   }
-//
-//   waitingNextExit = true;
-//
-//   setTimeout(() => {
-//     waitingNextExit = false;
-//   }, 3000);
-//
-//   ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
-//
-//   return true;
-// }
-
 const ContentNavigator = StackNavigator({
   SummonerSearchView: {
     screen: SummonerSearchView,

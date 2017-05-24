@@ -42,6 +42,10 @@ class SummonerProfileView extends Component {
     tracker.trackScreenView('SummonerProfileView');
   }
 
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleHardwareBack);
+  }
+
   handleOnChangeTab({ i: tabIndex }) {
     const summonerId = this.props.navigation.state.params.summonerId;
 
