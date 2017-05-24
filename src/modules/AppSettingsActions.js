@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import Storage from '../utils/Storage';
+import { Storage } from '../utils';
 
 const SETTINGS_STORAGE_KEY = 'appSettings';
 export const DEFAULT_SETTINGS = {

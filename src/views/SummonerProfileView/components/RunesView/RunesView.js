@@ -8,7 +8,7 @@ import LoadingIndicator from '../../../../components/LoadingIndicator';
 import PageSelector from '../../../../components/PageSelector';
 import RunePage from '../../../../components/RunePage';
 import ErrorScreen from '../../../../components/ErrorScreen';
-import { tracker } from '../../../../utils/analytics';
+import { tracker } from '../../../../utils';
 
 const styles = StyleSheet.create({
   root: {

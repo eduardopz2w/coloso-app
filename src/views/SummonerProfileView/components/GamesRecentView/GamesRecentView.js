@@ -5,7 +5,7 @@ import Immutable from 'immutable';
 
 import ErrorScreen from '../../../../components/ErrorScreen';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
-import { tracker } from '../../../../utils/analytics';
+import { tracker } from '../../../../utils';
 import GameRecent from './GameRecent';
 
 class GamesRecentView extends PureComponent {

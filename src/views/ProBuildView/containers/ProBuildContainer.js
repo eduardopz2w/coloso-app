@@ -5,8 +5,7 @@ import Immutable from 'immutable';
 import { fetchProBuild } from '../modules/ProBuildActions';
 import { addFavoriteBuild, removeFavoriteBuild } from '../../../modules/FavoriteProBuildsActions';
 import { fetchGame } from '../modules/GameActions';
-import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
-import keyIn from '../../../utils/keyIn';
+import { keyIn, createDenormalizeSelector } from '../../../utils';
 import ProBuildView from '../components/ProBuildView';
 
 const createImmutableSelector = createSelectorCreator(defaultMemoize, Immutable.is);

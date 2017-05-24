@@ -8,9 +8,7 @@ import _ from 'lodash';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
-import colors from '../../../../utils/colors';
-import styleUtils from '../../../../utils/styleUtils';
-import gameModeParser from '../../../../utils/gameModeParser';
+import { colors, styleUtils, gameModeParser } from '../../../../utils';
 import ParticipantSquare from '../../../../components/ParticipantSquare';
 import FinalItems from '../../../../components/FinalItems';
 

@@ -8,9 +8,8 @@ import _ from 'lodash';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Immutable from 'immutable';
 
-import sentenceCase from '../../../utils/sentenceCase';
 import ItemsOrder from './ItemsOrder';
-import colors from '../../../utils/colors';
+import { colors, sentenceCase } from '../../../utils';
 
 const itemsArrowSize = 20;
 

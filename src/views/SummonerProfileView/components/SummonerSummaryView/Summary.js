@@ -5,8 +5,7 @@ import numeral from 'numeral';
 import _ from 'lodash';
 import I18n from 'i18n-js';
 import CollapsibleBar from 'react-native-bar-collapsible';
-import colors from '../../../../utils/colors';
-import constantsParser from '../../../../utils/riotConstantsParser';
+import { colors, constantsParser } from '../../../../utils';
 
 const PADDING = 16;
 

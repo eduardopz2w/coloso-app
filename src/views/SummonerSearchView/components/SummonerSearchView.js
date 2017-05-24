@@ -10,7 +10,7 @@ import update from 'immutability-helper';
 
 import SearchViewToolbar from './SearchViewToolbar';
 import HistoryModal from './HistoryModal';
-import { tracker } from '../../../utils/analytics';
+import { tracker } from '../../../utils';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import RegionSelector from '../../../components/RegionSelector';
 import TextField from '../../../components/TextField';

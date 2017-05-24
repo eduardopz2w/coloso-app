@@ -6,8 +6,7 @@ import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-vi
 import I18n from 'i18n-js';
 
 import Toolbar from './Toolbar';
-import { tracker } from '../../../utils/analytics';
-import colors from '../../../utils/colors';
+import { colors, tracker } from '../../../utils';
 import ProBuildsTab from './ProBuildsTab';
 import FavoriteProBuildsTab from './FavoriteProBuildsTab';
 

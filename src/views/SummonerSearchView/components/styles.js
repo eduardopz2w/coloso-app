@@ -1,5 +1,5 @@
 import { MediaQueryStyleSheet } from 'react-native-responsive';
-import colors from '../../../utils/colors';
+import { colors } from '../../../utils';
 
 export default MediaQueryStyleSheet.create(
   {

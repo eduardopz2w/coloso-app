@@ -11,8 +11,7 @@ import {
   fetchSummary,
   clearCache,
 } from '../modules/SummonerProfileActions';
-import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
-import keyIn from '../../../utils/keyIn';
+import { keyIn, createDenormalizeSelector } from '../../../utils';
 
 const getChampionsMasteriesId = state => state.summonerProfile.getIn(['championsMasteries', 'id']);
 const getChampionsMasteriesEntities = state => state.entities.filter(keyIn('championsMasteries'));

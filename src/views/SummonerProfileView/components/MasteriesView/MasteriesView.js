@@ -6,10 +6,9 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 
 import PageSelector from '../../../../components/PageSelector';
 import MasteryPage from '../../../../components/MasteryPage';
-import colors from '../../../../utils/colors';
+import { colors, tracker } from '../../../../utils';
 import ErrorScreen from '../../../../components/ErrorScreen';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
-import { tracker } from '../../../../utils/analytics';
 
 const styles = StyleSheet.create({
   root: {

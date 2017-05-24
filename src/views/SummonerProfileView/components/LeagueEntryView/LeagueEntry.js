@@ -6,9 +6,7 @@ import I18n from 'i18n-js';
 import _ from 'lodash';
 
 import RankedMiniseries from '../../../../components/RankedMiniseries';
-import rankedQueueParser from '../../../../utils/rankedQueueParser';
-import colors from '../../../../utils/colors';
-import styleUtils from '../../../../utils/styleUtils';
+import { colors, styleUtils, rankedQueueParser } from '../../../../utils';
 
 const TIER_SIZE = {
   phone: 70,

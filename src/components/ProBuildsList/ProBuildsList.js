@@ -6,7 +6,7 @@ import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import I18n from 'i18n-js';
 
 import ProBuildListRow from './ProBuildsListRow';
-import colors from '../../utils/colors';
+import { colors } from '../../utils';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorScreen from '../../components/ErrorScreen';
 

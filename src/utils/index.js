@@ -1,7 +1,22 @@
 /* eslint-disable import/prefer-default-export*/
-export { default as createThunkAction } from './createThunkAction';
-export { default as Storage } from './Storage';
-export { default as ColosoApi } from './ColosoApi';
-export { default as tracker } from './tracker';
-export { default as logger } from './logger';
 export { default as colors } from './colors';
+export { default as ColosoApi } from './ColosoApi';
+export { default as ColosoClient } from './ColosoClient';
+export { default as createDenormalizeSelector } from './createDenormalizeSelector';
+export { default as createThunkAction } from './createThunkAction';
+export { default as denormalize } from './denormalize';
+export { default as gameModeParser } from './gameModeParser';
+export { default as getDeviceRiotRegion } from './getDeviceRiotRegion';
+export { default as keyIn } from './keyIn';
+export { default as logger } from './logger';
+export { default as mapName } from './mapName';
+export { default as mediaBreakpoints } from './mediaBreakpoints';
+export { default as queueIdParser } from './queueIdParser';
+export { default as rankedQueueParser } from './rankedQueueParser';
+export { default as regionHumanize } from './regionHumanize';
+export { default as riotConstantsParser } from './riotConstantsParser';
+export { default as sentenceCase } from './sentenceCase';
+export { default as Storage } from './Storage';
+export { default as styleUtils } from './styleUtils';
+export { default as tracker } from './tracker';
+export { default as versionChecker } from './versionChecker';

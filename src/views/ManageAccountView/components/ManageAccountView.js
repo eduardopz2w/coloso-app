@@ -7,7 +7,7 @@ import update from 'immutability-helper';
 import _ from 'lodash';
 
 import Toolbar from './Toolbar';
-import colors from '../../../utils/colors';
+import { colors } from '../../../utils';
 import RegionSelector from '../../../components/RegionSelector';
 import LoadingIndicator from '../../../components/LoadingIndicator';
 import TextField from '../../../components/TextField';

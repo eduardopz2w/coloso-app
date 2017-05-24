@@ -7,7 +7,7 @@ import numeral from 'numeral';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import ProPlayerImage from '../ProPlayerImage';
-import colors from '../../utils/colors';
+import { colors } from '../../utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

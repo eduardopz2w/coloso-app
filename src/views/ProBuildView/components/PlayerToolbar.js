@@ -3,7 +3,7 @@ import { View, Text, Dimensions } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import IconButton from '../../../components/IconButton';
 import ProPlayerImage from '../../../components/ProPlayerImage';
-import colors from '../../../utils/colors';
+import { colors } from '../../../utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

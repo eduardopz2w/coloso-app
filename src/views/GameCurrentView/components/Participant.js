@@ -6,8 +6,7 @@ import I18n from 'i18n-js';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 
 import RankedMiniseries from '../../../components/RankedMiniseries';
-import colors from '../../../utils/colors';
-import styleUtils from '../../../utils/styleUtils';
+import { colors, styleUtils } from '../../../utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

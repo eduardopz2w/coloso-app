@@ -3,10 +3,9 @@ import { View, Text, Image } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
-import Immutable from 'immutable';
 
 import Selector from './Selector';
-import colors from '../utils/colors';
+import { colors } from '../utils';
 
 const styles = MediaQueryStyleSheet.create(
   {

@@ -6,7 +6,7 @@ import Immutable from 'immutable';
 import LeagueEntry from './LeagueEntry';
 import LoadingIndicator from '../../../../components/LoadingIndicator';
 import ErrorScreen from '../../../../components/ErrorScreen';
-import { tracker } from '../../../../utils/analytics';
+import { tracker } from '../../../../utils';
 
 const styles = StyleSheet.create({
   rootScrollView: {

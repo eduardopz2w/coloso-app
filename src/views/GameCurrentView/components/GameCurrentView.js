@@ -8,13 +8,12 @@ import Immutable from 'immutable';
 import I18n from 'i18n-js';
 import _ from 'lodash';
 
-import colors from '../../../utils/colors';
 import Team from './Team';
 import RunePage from '../../../components/RunePage';
 import MasteryPage from '../../../components/MasteryPage';
 import ProBuildsList from '../../../components/ProBuildsList';
 import ProPlayersSelector from '../../../components/ProPlayersSelector';
-import { tracker } from '../../../utils/analytics';
+import { tracker, colors } from '../../../utils';
 import Toolbar from './Toolbar';
 
 const styles = StyleSheet.create({
