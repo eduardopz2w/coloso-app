@@ -14,7 +14,7 @@ import { tracker } from 'utils';
 import SideMenu from './SideMenu';
 
 
-const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
+const SUGGESTION_EMAIL = 'admin@coloso.net';
 
 const suggestionTemplate = `====== Required Info ======
 App Version: ${DeviceInfo.getVersion()}
