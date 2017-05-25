@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 import Immutable from 'immutable';
@@ -228,7 +228,7 @@ ChampionSelector.propTypes = {
   value: PropTypes.number,
   onChangeSelected: PropTypes.func,
   disabled: PropTypes.bool,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   titleStyle: Text.propTypes.style,
 };
 

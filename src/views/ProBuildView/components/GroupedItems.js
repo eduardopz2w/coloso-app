@@ -4,9 +4,7 @@ import moment from 'moment';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
 import _ from 'lodash';
-import Immutable from 'immutable';
 
-import colors from '../../../utils/colors';
 import { mediaBreakpointUp } from '../../../utils/mediaBreakpoints';
 
 const styles = MediaQueryStyleSheet.create(
@@ -17,11 +15,11 @@ const styles = MediaQueryStyleSheet.create(
 
     itemsContainer: {
       flexDirection: 'row',
-      backgroundColor: colors.primary,
+      backgroundColor: 'rgba(0,0,0,0.3)',
       paddingVertical: 4,
       paddingLeft: 4,
       paddingRight: 2,
-      borderRadius: 4,
+      borderRadius: 7,
     },
 
     itemContainer: {

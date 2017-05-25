@@ -1,12 +1,11 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
-import colors from '../../../utils/colors';
-import IconButton from '../../../components/IconButton';
-import ChampionSelector from '../../../components/ChampionSelector';
-import ProPlayersSelector from '../../../components/ProPlayersSelector';
+
+import { colors } from 'utils';
+import { IconButton, ChampionSelector, ProPlayersSelector } from 'components';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -89,7 +88,7 @@ class Toolbar extends PureComponent {
 }
 
 Toolbar.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   proPlayers: ImmutablePropTypes.mapContains({
     data: ImmutablePropTypes.list.isRequired,
   }).isRequired,

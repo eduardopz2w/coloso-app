@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
+import { keyIn, createDenormalizeSelector } from 'utils';
 import SummonerProfileView from '../components/SummonerProfileView';
 import {
   fetchSummonerData,
@@ -11,8 +13,6 @@ import {
   fetchSummary,
   clearCache,
 } from '../modules/SummonerProfileActions';
-import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
-import keyIn from '../../../utils/keyIn';
 
 const getChampionsMasteriesId = state => state.summonerProfile.getIn(['championsMasteries', 'id']);
 const getChampionsMasteriesEntities = state => state.entities.filter(keyIn('championsMasteries'));
@@ -85,40 +85,42 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch, ownProps) {
-  const { summonerId } = ownProps;
-
+function mapDispatchToProps(dispatch) {
   return {
-    fetchSummonerData: () => {
+    fetchSummonerData: (summonerId) => {
       dispatch(fetchSummonerData({ id: summonerId }));
     },
 
-    fetchLeagueEntry: () => {
+    fetchLeagueEntry: (summonerId) => {
       dispatch(fetchLeagueEntry({ summonerId }));
     },
 
-    fetchChampionsMasteries: () => {
+    fetchChampionsMasteries: (summonerId) => {
       dispatch(fetchChampionsMasteries({ summonerId }));
     },
 
-    fetchGamesRecent: () => {
+    fetchGamesRecent: (summonerId) => {
       dispatch(fetchGamesRecent({ summonerId }));
     },
 
-    fetchMasteries: () => {
+    fetchMasteries: (summonerId) => {
       dispatch(fetchMasteries({ summonerId }));
     },
 
-    fetchRunes: () => {
+    fetchRunes: (summonerId) => {
       dispatch(fetchRunes({ summonerId }));
     },
 
-    fetchSummary: (season) => {
+    fetchSummary: (summonerId, season) => {
       dispatch(fetchSummary({ summonerId, season }));
     },
 
     clearCache: () => {
       dispatch(clearCache());
+    },
+
+    goBack: () => {
+      dispatch(NavigationActions.back());
     },
   };
 }

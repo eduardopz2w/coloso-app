@@ -1,6 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { Actions } from 'react-native-router-flux';
+import { View, StyleSheet, BackHandler } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import I18n from 'i18n-js';
 
@@ -16,15 +15,26 @@ const styles = StyleSheet.create({
   },
 });
 
-function handleOnPressBackButton() {
-  Actions.pop();
-}
-
 class SettingsView extends PureComponent {
   constructor(props) {
     super(props);
 
     this.handleOnKeepAwakeCheckedChange = this.handleOnKeepAwakeCheckedChange.bind(this);
+    this.handleHardwareBack = this.handleHardwareBack.bind(this);
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleHardwareBack);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleHardwareBack);
+  }
+
+  handleHardwareBack() {
+    this.props.goBack();
+
+    return true;
   }
 
   handleOnKeepAwakeCheckedChange({ checked }) {
@@ -35,7 +45,7 @@ class SettingsView extends PureComponent {
     const settings = this.props.settings;
 
     return (<View style={styles.root}>
-      <Toolbar onPressBackButton={handleOnPressBackButton} />
+      <Toolbar onPressBackButton={this.props.goBack} />
       <View style={styles.container}>
         <SwitchSetting
           title={I18n.t('keep_awake')}
@@ -53,6 +63,7 @@ SettingsView.propTypes = {
     keepAwake: PropTypes.bool.isRequired,
   }).isRequired,
   setSetting: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired,
 };
 
 export default SettingsView;

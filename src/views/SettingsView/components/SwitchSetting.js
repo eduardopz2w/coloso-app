@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { MKSwitch } from 'react-native-material-kit';
 
-import colors from '../../../utils/colors';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

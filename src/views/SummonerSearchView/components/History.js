@@ -1,10 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { View, StyleSheet, Text, ListView, TouchableNativeFeedback } from 'react-native';
+import { View, StyleSheet, Text, ListView, TouchableNativeFeedback, ViewPropTypes } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
-import colors from '../../../utils/colors';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   region: {
     width: 50,
     height: 25,
-    backgroundColor: colors.primary,
+    backgroundColor: colors.accent,
     marginRight: 16,
     textAlign: 'center',
     textAlignVertical: 'center',
@@ -120,7 +120,7 @@ History.propTypes = {
     summonerName: PropTypes.string,
     region: PropTypes.string,
   })),
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onPressHistoryEntry: PropTypes.func.isRequired,
   onPressDelete: PropTypes.func,
 };

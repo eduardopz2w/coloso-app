@@ -2,7 +2,7 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, TouchableNativeFeedback, Image } from 'react-native';
 import I18n from 'i18n-js';
 
-import colors from '../utils/colors';
+import { colors } from 'utils';
 
 const styles = StyleSheet.create({
   root: {
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
   },
   retryText: {
     fontSize: 16,
-    color: colors.primary,
+    color: colors.accent,
     fontWeight: 'bold',
   },
   retryButton: {

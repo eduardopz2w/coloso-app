@@ -5,8 +5,8 @@ import Immutable from 'immutable';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import I18n from 'i18n-js';
 
+import { colors } from 'utils';
 import ProBuildListRow from './ProBuildsListRow';
-import colors from '../../utils/colors';
 import LoadingIndicator from '../../components/LoadingIndicator';
 import ErrorScreen from '../../components/ErrorScreen';
 
@@ -133,7 +133,7 @@ class ProBuildsList extends Component {
           }
           enabled={this.props.refreshControl}
           onRefresh={this.handleOnRefresh}
-          colors={[colors.primary]}
+          colors={[colors.accent]}
         />
       }
       renderScrollComponent={props => <InfiniteScrollView {...props} />}

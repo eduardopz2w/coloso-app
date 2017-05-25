@@ -1,9 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import IconButton from '../../../components/IconButton';
-import colors from '../../../utils/colors';
-import mapName from '../../../utils/mapName';
-import queueIdParser from '../../../utils/queueIdParser';
+
+import { IconButton } from 'components';
+import { colors, mapName, queueIdParser } from 'utils';
 
 const styles = StyleSheet.create({
   root: {

@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { createSelectorCreator, defaultMemoize } from 'reselect';
 import Immutable from 'immutable';
+import { NavigationActions } from 'react-navigation';
 
+import { keyIn, createDenormalizeSelector } from 'utils';
 import ProBuildsListView from '../components/ProBuildsListView';
-import keyIn from '../../../utils/keyIn';
-import createDenormalizeSelector from '../../../utils/createDenormalizeSelector';
 import { fetchBuilds, refreshBuilds } from '../../../modules/ProBuildsActions';
 import { fetchFavoriteBuilds, addFavoriteBuild, removeFavoriteBuild, setFavoriteBuildsFilters } from '../../../modules/FavoriteProBuildsActions';
 import { fetchProPlayers } from '../../../modules/ProPlayersActions';
@@ -70,23 +70,45 @@ function mapDispatchToProps(dispatch) {
     fetchBuilds: (params) => {
       dispatch(fetchBuilds(params));
     },
+
     fetchFavoriteBuilds: () => {
       dispatch(fetchFavoriteBuilds());
     },
+
     refreshBuilds: (params) => {
       dispatch(refreshBuilds(params));
     },
+
     fetchProPlayers: () => {
       dispatch(fetchProPlayers());
     },
+
     addFavoriteBuild: (id) => {
       dispatch(addFavoriteBuild(id));
     },
+
     removeFavoriteBuild: (id) => {
       dispatch(removeFavoriteBuild(id));
     },
+
     setFavoriteBuildsFilters: (filters) => {
       dispatch(setFavoriteBuildsFilters(filters));
+    },
+
+    goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
+    },
+
+    goToBuild: (buildId) => {
+      dispatch(NavigationActions.navigate({ routeName: 'ProBuildView', params: { buildId } }));
+    },
+
+    openDrawer: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' }));
+    },
+
+    goBack: () => {
+      dispatch(NavigationActions.back());
     },
   };
 }

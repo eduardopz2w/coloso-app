@@ -6,8 +6,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import I18n from 'i18n-js';
 
-import regionHumanize from '../../utils/regionHumanize';
-import colors from '../../utils/colors';
+import { colors, regionHumanize } from 'utils';
 import MenuItem from './MenuItem';
 import ProfileImage from '../ProfileImage';
 
@@ -15,7 +14,6 @@ const styles = StyleSheet.create({
   root: {
     backgroundColor: 'white',
     flex: 1,
-    width: 240,
     position: 'relative',
   },
   header: {
@@ -27,7 +25,7 @@ const styles = StyleSheet.create({
   },
 
   headerBackground: {
-    width: 240,
+    width: 250,
     height: 160,
     position: 'absolute',
     top: 0,

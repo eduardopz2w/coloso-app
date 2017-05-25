@@ -3,6 +3,7 @@ import {
   StyleSheet,
   View,
   TouchableNativeFeedback,
+  ViewPropTypes,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -46,7 +47,7 @@ IconButton.propTypes = {
   iconName: PropTypes.string.isRequired,
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onPress: PropTypes.func,
 };
 

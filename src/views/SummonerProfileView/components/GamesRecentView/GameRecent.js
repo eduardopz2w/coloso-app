@@ -8,11 +8,8 @@ import _ from 'lodash';
 import { MediaQueryStyleSheet, MediaQuery } from 'react-native-responsive';
 import I18n from 'i18n-js';
 
-import colors from '../../../../utils/colors';
-import styleUtils from '../../../../utils/styleUtils';
-import gameModeParser from '../../../../utils/gameModeParser';
-import ParticipantSquare from '../../../../components/ParticipantSquare';
-import FinalItems from '../../../../components/FinalItems';
+import { colors, styleUtils, gameModeParser } from 'utils';
+import { ParticipantSquare, FinalItems } from 'components';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -59,7 +56,7 @@ const styles = MediaQueryStyleSheet.create(
       marginBottom: 6,
     },
     multikillContainer: {
-      backgroundColor: '#d0aa49',
+      backgroundColor: colors.accent,
       borderRadius: 5,
       marginTop: 8,
     },

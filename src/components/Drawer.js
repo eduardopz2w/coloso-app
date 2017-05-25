@@ -1,19 +1,20 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { Linking } from 'react-native';
+import { Linking, BackHandler, ToastAndroid } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Drawer from 'react-native-drawer';
-import { Actions, DefaultRenderer } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import Dialog from 'react-native-dialogs';
+/* eslint-disable */
 import { RNMail as Mailer } from 'NativeModules';
+/* eslint-enable */
+
 import _ from 'lodash';
 import I18n from 'i18n-js';
 
+import { tracker } from 'utils';
 import SideMenu from './SideMenu';
-import tracker from '../utils/tracker';
 
 
-const SUGGESTION_EMAIL = 'pedron.albert@gmail.com';
+const SUGGESTION_EMAIL = 'admin@coloso.net';
 
 const suggestionTemplate = `====== Required Info ======
 App Version: ${DeviceInfo.getVersion()}
@@ -58,20 +59,39 @@ function handleOnPressWeb() {
   dialog.show();
 }
 
-class MainDrawer extends PureComponent {
+let waitingNextExit = false;
+
+function handleOnExitApp() {
+  if (waitingNextExit) {
+    return false;
+  }
+
+  waitingNextExit = true;
+
+  setTimeout(() => {
+    waitingNextExit = false;
+  }, 3000);
+
+  ToastAndroid.show(I18n.t('press_again_to_quit'), ToastAndroid.SHORT);
+
+  return true;
+}
+
+class Drawer extends PureComponent {
   constructor(props) {
     super(props);
 
     this.handleOnPressMyGame = this.handleOnPressMyGame.bind(this);
     this.handleOnPressProfile = this.handleOnPressProfile.bind(this);
-    this.handleOnPressProBuilds = this.handleOnPressProBuilds.bind(this);
-    this.handleOnPressSummonerSearch = this.handleOnPressSummonerSearch.bind(this);
-    this.handleOnPressManageAccount = this.handleOnPressManageAccount.bind(this);
-    this.handleOnPressSettings = this.handleOnPressSettings.bind(this);
   }
 
   componentWillMount() {
     this.props.loadAccount();
+    BackHandler.addEventListener('hardwareBackPress', handleOnExitApp);
+  }
+
+  componentDidMount() {
+    this.props.openDrawer();
   }
 
   handleOnPressMyGame() {
@@ -79,11 +99,9 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      Actions.manageAccountView();
-      this.drawer.close();
+      this.props.goToManageAccount();
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerSearchView();
-      this.drawer.close();
+      this.props.goToSummonerSearch();
       this.props.searchGame({
         summonerName: riotAccount.get('name'),
         region: riotAccount.get('region'),
@@ -96,78 +114,38 @@ class MainDrawer extends PureComponent {
 
     if (_.isNull(riotAccount.get('id'))) {
       showAddAccountDialog();
-      Actions.manageAccountView();
-      this.drawer.close();
+      this.props.goToManageAccount();
     } else if (!this.props.isSearchingGame) {
-      Actions.summonerProfileView({ summonerId: riotAccount.get('id') });
-      this.drawer.close();
+      this.props.goToSummonerProfile(riotAccount.get('id'));
     }
   }
 
-  handleOnPressProBuilds() {
-    Actions.proBuildsListView();
-    this.drawer.close();
-  }
-
-  handleOnPressSummonerSearch() {
-    Actions.summonerSearchView();
-    this.drawer.close();
-  }
-
-  handleOnPressManageAccount() {
-    Actions.manageAccountView();
-    this.drawer.close();
-  }
-
-  handleOnPressSettings() {
-    Actions.settingsView();
-    this.drawer.close();
-  }
-
   render() {
-    const state = this.props.navigationState;
-    const children = state.children;
-
-    return (<Drawer
-      open={state.open}
-      onOpen={() => Actions.refresh({ key: state.key, open: true })}
-      onClose={() => Actions.refresh({ key: state.key, open: false })}
-      type="overlay"
-      content={<SideMenu
-        riotAccount={this.props.riotAccount}
-        onPressMyGame={this.handleOnPressMyGame}
-        onPressSuggestion={handleOnPressSuggestion}
-        onPressProBuilds={this.handleOnPressProBuilds}
-        onPressProfile={this.handleOnPressProfile}
-        onPressSummonerSearch={this.handleOnPressSummonerSearch}
-        onPressManageAccount={this.handleOnPressManageAccount}
-        onPressSettings={this.handleOnPressSettings}
-        onPressWeb={handleOnPressWeb}
-      />}
-      captureGestures
-      panOpenMask={0.02}
-      panCloseMask={0.2}
-      tapToClose
-      negotiatePan
-      ref={(drawer) => { this.drawer = drawer; }}
-      tweenHandler={ratio => ({
-        mainOverlay: {
-          backgroundColor: `rgba(0,0,0,0.${ratio * 3})`,
-        },
-      })}
-    >
-      <DefaultRenderer navigationState={children[0]} onNavigate={this.props.onNavigate} />
-    </Drawer>);
+    return (<SideMenu
+      riotAccount={this.props.riotAccount}
+      onPressMyGame={this.handleOnPressMyGame}
+      onPressSuggestion={handleOnPressSuggestion}
+      onPressProBuilds={this.props.goToProBuildsList}
+      onPressProfile={this.handleOnPressProfile}
+      onPressSummonerSearch={this.props.goToSummonerSearch}
+      onPressManageAccount={this.props.goToManageAccount}
+      onPressSettings={this.props.goToSettings}
+      onPressWeb={handleOnPressWeb}
+    />);
   }
 }
 
-MainDrawer.propTypes = {
-  navigationState: PropTypes.shape({}),
+Drawer.propTypes = {
   isSearchingGame: PropTypes.bool,
-  onNavigate: PropTypes.func,
   riotAccount: ImmutablePropTypes.map,
   loadAccount: PropTypes.func,
   searchGame: PropTypes.func,
+  goToProBuildsList: PropTypes.func.isRequired,
+  goToSummonerSearch: PropTypes.func.isRequired,
+  goToManageAccount: PropTypes.func.isRequired,
+  goToSettings: PropTypes.func.isRequired,
+  goToSummonerProfile: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
-export default MainDrawer;
+export default Drawer;

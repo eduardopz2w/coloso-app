@@ -1,5 +1,5 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Image } from 'react-native';
+import { ViewPropTypes, Image } from 'react-native';
 
 class ProfileImage extends PureComponent {
   render() {
@@ -11,7 +11,7 @@ class ProfileImage extends PureComponent {
 
 ProfileImage.propTypes = {
   id: PropTypes.number.isRequired,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 };
 
 ProfileImage.defaultProps = {

@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 import Drawer from '../components/Drawer';
 import { loadAccount } from '../modules/ManageAccountActions';
@@ -16,6 +17,13 @@ function mapStateToProps(state) {
   };
 }
 
+function replaceRoute(dispatch, routeName) {
+  dispatch(NavigationActions.reset({
+    index: 0,
+    actions: [NavigationActions.navigate({ routeName })],
+  }));
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     loadAccount: () => {
@@ -27,6 +35,33 @@ function mapDispatchToProps(dispatch) {
       dispatch(setRegion(region));
       dispatch(setSearchType('GAME_SEARCH'));
       dispatch(searchGame({ summonerName, region }));
+    },
+
+    goToProBuildsList: () => {
+      replaceRoute(dispatch, 'ProBuildsListView');
+    },
+
+    goToSummonerSearch: () => {
+      replaceRoute(dispatch, 'SummonerSearchView');
+    },
+
+    goToSummonerProfile: (summonerId) => {
+      dispatch(NavigationActions.back({ key: null }));
+      dispatch(NavigationActions.navigate({ routeName: 'SummonerProfileView', params: { summonerId } }));
+    },
+
+    goToManageAccount: () => {
+      dispatch(NavigationActions.back({ key: null }));
+      dispatch(NavigationActions.navigate({ routeName: 'ManageAccountView' }));
+    },
+
+    goToSettings: () => {
+      dispatch(NavigationActions.back({ key: null }));
+      dispatch(NavigationActions.navigate({ routeName: 'SettingsView' }));
+    },
+
+    openDrawer: () => {
+      dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' }));
     },
   };
 }

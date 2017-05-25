@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, ViewPropTypes } from 'react-native';
 
 class ProPlayerImage extends Component {
   getStyles() {
@@ -64,7 +64,7 @@ ProPlayerImage.propTypes = {
   imageUrl: PropTypes.string,
   role: PropTypes.string,
   size: PropTypes.number,
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
 };
 
 ProPlayerImage.defaultProps = {

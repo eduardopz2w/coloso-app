@@ -6,6 +6,7 @@ import { loadSettings } from '../modules/AppSettingsActions';
 function mapStateToProps(state) {
   return {
     keepAwake: state.appSettings.get('keepAwake'),
+    router: state.router,
   };
 }
 
@@ -14,6 +15,7 @@ function mapDispatchToProps(dispatch) {
     loadAppSettings() {
       dispatch(loadSettings());
     },
+    dispatch,
   };
 }
 

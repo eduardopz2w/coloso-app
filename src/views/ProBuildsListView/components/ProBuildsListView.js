@@ -1,13 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Actions } from 'react-native-router-flux';
 import ScrollableTabView, { DefaultTabBar } from 'react-native-scrollable-tab-view';
 import I18n from 'i18n-js';
 
+import { colors, tracker } from 'utils';
 import Toolbar from './Toolbar';
-import { tracker } from '../../../utils/analytics';
-import colors from '../../../utils/colors';
 import ProBuildsTab from './ProBuildsTab';
 import FavoriteProBuildsTab from './FavoriteProBuildsTab';
 
@@ -128,7 +126,7 @@ class ProBuildsListView extends Component {
       <Toolbar
         proPlayers={this.props.proPlayers}
         disabledFilters={this.props.proBuilds.get('isFetching')}
-        onPressMenuButton={() => { Actions.refresh({ key: 'drawer', open: true }); }}
+        onPressMenuButton={this.props.openDrawer}
         championSelected={this.state.championId}
         proPlayerSelected={this.state.proPlayerId}
         onChangeChampionSelected={this.handleOnChangeChampionSelected}
@@ -139,7 +137,7 @@ class ProBuildsListView extends Component {
         style={{ flex: 1 }}
         renderTabBar={() => <DefaultTabBar />}
         tabBarBackgroundColor={colors.primary}
-        tabBarActiveTextColor={colors.accent}
+        tabBarActiveTextColor="white"
         tabBarInactiveTextColor="rgba(255,255,255,0.8)"
         tabBarUnderlineStyle={{ backgroundColor: colors.accent }}
         onChangeTab={this.handleOnChangeTab}
@@ -150,7 +148,7 @@ class ProBuildsListView extends Component {
           proBuilds={this.props.proBuilds}
           onPressRetryButton={this.handleOnPressProBuildsTabRetryButton}
           onPressRefreshButton={this.handleOnPressProBuildsTabRefreshButton}
-          onPressBuild={buildId => Actions.proBuildView({ buildId })}
+          onPressBuild={this.props.goToBuild}
           onLoadMore={this.handleOnLoadMoreProBuildsTab}
           onAddFavorite={this.props.addFavoriteBuild}
           onRemoveFavorite={this.props.removeFavoriteBuild}
@@ -159,7 +157,7 @@ class ProBuildsListView extends Component {
           tabLabel={I18n.t('favorites')}
           favoriteProBuilds={this.props.favoriteProBuilds}
           onPressRetryButton={this.handleOnPressFavoriteProBuildsTabRetryButton}
-          onPressBuild={buildId => Actions.proBuildView({ buildId })}
+          onPressBuild={this.props.goToBuild}
           onRemoveFavorite={this.props.removeFavoriteBuild}
         />
       </ScrollableTabView>
@@ -202,6 +200,8 @@ ProBuildsListView.propTypes = {
   addFavoriteBuild: PropTypes.func.isRequired,
   removeFavoriteBuild: PropTypes.func.isRequired,
   setFavoriteBuildsFilters: PropTypes.func.isRequired,
+  goToBuild: PropTypes.func.isRequired,
+  openDrawer: PropTypes.func.isRequired,
 };
 
 export default ProBuildsListView;

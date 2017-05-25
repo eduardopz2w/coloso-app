@@ -4,12 +4,14 @@ import Config from 'react-native-config';
 import KeepAwake from 'react-native-keep-awake';
 import { AdMobBanner } from 'react-native-admob';
 import DeviceInfo from 'react-native-device-info';
+import { addNavigationHelpers } from 'react-navigation';
 
-import Routes from '../routes';
+import Router from '../router';
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: 'white',
   },
 });
 
@@ -34,7 +36,12 @@ class DefaultLayout extends Component {
 
   render() {
     return (<View style={styles.root}>
-      <Routes />
+      <Router
+        navigation={addNavigationHelpers({
+          dispatch: this.props.dispatch,
+          state: this.props.router,
+        })}
+      />
       {renderAdmob()}
       {this.props.keepAwake && <KeepAwake />}
     </View>);
@@ -42,8 +49,10 @@ class DefaultLayout extends Component {
 }
 
 DefaultLayout.propTypes = {
+  router: PropTypes.shape({}).isRequired,
   keepAwake: PropTypes.bool.isRequired,
   // Dispatchers
+  dispatch: PropTypes.func.isRequired,
   loadAppSettings: PropTypes.func.isRequired,
 };
 

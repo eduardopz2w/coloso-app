@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import normalize from 'json-api-normalizer';
-import ColosoApi from '../../utils/ColosoApi';
+import { ColosoApi } from 'utils';
 import { mergeEntities } from '../../modules/EntitiesActions';
 
 export const COLOSO_CALL = 'RIOT_API_MIDDLEWARE/COLOSO_CALL';

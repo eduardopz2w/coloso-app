@@ -1,9 +1,10 @@
 import React, { PureComponent, PropTypes } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, ViewPropTypes } from 'react-native';
 import { MediaQueryStyleSheet } from 'react-native-responsive';
 import I18n from 'i18n-js';
-import colors from '../../../utils/colors';
-import IconButton from '../../../components/IconButton';
+
+import { colors } from 'utils';
+import { IconButton } from 'components';
 
 const styles = MediaQueryStyleSheet.create(
   {
@@ -35,7 +36,7 @@ class SearchViewToolbar extends PureComponent {
 }
 
 SearchViewToolbar.propTypes = {
-  style: View.propTypes.style,
+  style: ViewPropTypes.style,
   onPressHistoryButton: PropTypes.func,
   onPressMenuButton: PropTypes.func,
 };
