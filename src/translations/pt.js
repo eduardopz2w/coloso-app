@@ -42,7 +42,7 @@ export default {
   keep_awake_description: 'A tela nunca dormirá',
   killing_spree: 'Kilingspree',
   kills: 'Matou',
-  league_points: 'IP',
+  league_points: 'Pontos da liga',
   level: 'Nível',
   magic_damage_dealt: 'Dano mágico causado',
   masteries: 'Maestria',
