@@ -2,7 +2,6 @@ import React, { PureComponent, PropTypes } from 'react';
 import { View, StyleSheet, Text, Image } from 'react-native';
 import I18n from 'i18n-js';
 
-import { colors } from 'utils';
 import Toolbar from './Toolbar';
 
 const styles = StyleSheet.create({
@@ -27,21 +26,25 @@ const styles = StyleSheet.create({
   },
 
   name: {
-    color: 'rgba(0,0,0,0.8)',
+    color: 'rgba(0,0,0,0.75)',
     fontWeight: 'bold',
     fontSize: 18,
   },
 });
 
-function renderContributor(imgUri, name, contributions) {
-  return (<View style={styles.contributor} key={imgUri}>
-    <Image source={{ uri: imgUri }} style={styles.contributorImg} />
-    <View style={styles.dataCol}>
-      <Text style={styles.name}>{ name }</Text>
-      <Text>{ contributions }</Text>
-    </View>
-  </View>);
-}
+const Contributor = props => <View style={styles.contributor} key={props.imgUri}>
+  <Image source={{ uri: props.imgUri }} style={styles.contributorImg} />
+  <View style={styles.dataCol}>
+    <Text style={styles.name}>{ props.name }</Text>
+    <Text>{ props.contributions }</Text>
+  </View>
+</View>;
+
+Contributor.propTypes = {
+  imgUri: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  contributions: PropTypes.string.isRequired,
+};
 
 
 class ContributorsView extends PureComponent {
@@ -62,10 +65,12 @@ class ContributorsView extends PureComponent {
     return (<View style={styles.root}>
       <Toolbar onPressBackButton={this.props.goBack} />
       <View style={styles.container}>
-        { contributors.map(contributor => renderContributor(
-          contributor.imgUri,
-          contributor.name,
-          contributor.contributions)) }
+        { contributors.map((contributor, idx) => <Contributor
+          key={idx}
+          imgUri={contributor.imgUri}
+          name={contributor.name}
+          contributions={contributor.contributions}
+        />)}
       </View>
     </View>);
   }
