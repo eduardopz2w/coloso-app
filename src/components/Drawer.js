@@ -130,6 +130,7 @@ class Drawer extends PureComponent {
       onPressSummonerSearch={this.props.goToSummonerSearch}
       onPressManageAccount={this.props.goToManageAccount}
       onPressSettings={this.props.goToSettings}
+      onPressContributors={this.props.goToContributors}
       onPressWeb={handleOnPressWeb}
     />);
   }
@@ -145,6 +146,7 @@ Drawer.propTypes = {
   goToManageAccount: PropTypes.func.isRequired,
   goToSettings: PropTypes.func.isRequired,
   goToSummonerProfile: PropTypes.func.isRequired,
+  goToContributors: PropTypes.func.isRequired,
   openDrawer: PropTypes.func.isRequired,
 };
 

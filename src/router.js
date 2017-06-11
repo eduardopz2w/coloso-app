@@ -13,6 +13,7 @@ import ManageAccountView from './views/ManageAccountView';
 import ProBuildView from './views/ProBuildView';
 import GameCurrentView from './views/GameCurrentView';
 import SettingsView from './views/SettingsView';
+import ContributorsView from './views/ContributorsView';
 
 const ContentNavigator = StackNavigator({
   SummonerSearchView: {
@@ -35,6 +36,9 @@ const ContentNavigator = StackNavigator({
   },
   SettingsView: {
     screen: SettingsView,
+  },
+  ContributorsView: {
+    screen: ContributorsView,
   },
 }, {
   headerMode: 'none',
