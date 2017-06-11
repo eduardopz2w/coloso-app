@@ -17,8 +17,8 @@ const styles = MediaQueryStyleSheet.create(
     championImage: {
       width: 35,
       height: 35,
-      marginRight: 16,
-      marginLeft: 16,
+      marginRight: 4,
+      marginLeft: 4,
       borderRadius: 50,
       borderWidth: 2,
       borderColor: 'black',
@@ -30,10 +30,18 @@ const styles = MediaQueryStyleSheet.create(
     },
   },
   {
+    '@media (min-device-width: 400)': {
+      championImage: {
+        marginLeft: 12,
+        marginRight: 12,
+      },
+    },
+  },
+  {
     '@media (min-device-width: 600)': {
       root: {
-        paddingLeft: 40,
-        paddingRight: 40,
+        paddingLeft: 24,
+        paddingRight: 24,
       },
       text: {
         fontSize: 18,
