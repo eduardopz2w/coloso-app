@@ -216,6 +216,6 @@ export default {
   langs: {
     en: 'Ingles',
     es: 'Español',
-    pt: 'Portuguese',
+    pt: 'Portugués',
   },
 };
