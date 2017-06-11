@@ -113,6 +113,7 @@ export default {
   no_results_found: 'No se han encontrado resultados',
   minutes: 'Minutos',
   webDisclaimer: 'La version web www.coloso.net está pensada para que la uses desde tu computador',
+  contributors: 'Colaboradores',
   regions: {
     na: 'Norte América',
     lan: 'Latinoamérica Norte',
@@ -207,5 +208,14 @@ export default {
     diamond: 'Diamante',
     master: 'Maestro',
     challenger: 'Retador',
+  },
+  contributions: {
+    mainDeveloper: 'Programador Principal',
+    translator: 'Traducciones a {{lang}}',
+  },
+  langs: {
+    en: 'Ingles',
+    es: 'Español',
+    pt: 'Portugués',
   },
 };

@@ -7,6 +7,7 @@ import I18n from 'i18n-js';
 import moment from 'moment';
 import { setTheme } from 'react-native-material-kit';
 import 'moment/locale/es';
+import 'moment/locale/pt';
 
 import { ColosoClient, versionChecker, logger, colors } from 'utils';
 import RootContainer from './containers/RootContainer';
@@ -20,16 +21,18 @@ setTheme({
   accentColor: colors.accent,
 });
 
+const LANGS = ['en', 'es', 'pt'];
+
 function configureLocale() {
   const deviceLocale = DeviceInfo.getDeviceLocale().slice(0, 2).toLowerCase();
   let locale;
 
-  if (deviceLocale === 'en' || deviceLocale === 'es') {
+  if (LANGS.includes(deviceLocale)) {
     locale = deviceLocale;
     logger.debug(`Locale loaded from device: ${deviceLocale}`);
   } else {
-    locale = 'en';
-    logger.debug('Locale default: en');
+    locale = LANGS[0];
+    logger.debug('Locale default: ', locale);
   }
 
   I18n.locale = locale;

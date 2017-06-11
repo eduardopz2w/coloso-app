@@ -21,8 +21,8 @@ const styles = MediaQueryStyleSheet.create(
       marginBottom: 10,
     },
     masteryImage: {
-      width: 40,
-      height: 40,
+      width: 42,
+      height: 42,
       borderRadius: 5,
       borderColor: 'black',
       borderWidth: 2,
@@ -31,9 +31,12 @@ const styles = MediaQueryStyleSheet.create(
       borderColor: '#d0aa49',
     },
     masteryImageContainer: {
-      width: 40,
-      height: 40,
+      width: 42,
+      height: 42,
       position: 'relative',
+    },
+    circular: {
+      borderRadius: 50,
     },
     rankText: {
       position: 'absolute',
@@ -48,7 +51,7 @@ const styles = MediaQueryStyleSheet.create(
       fontWeight: 'bold',
     },
     masteryPageContainer: {
-      minWidth: 200,
+      minWidth: 190,
       padding: 8,
       borderRadius: 10,
       alignSelf: 'center',
@@ -120,7 +123,6 @@ const CUNNING_ROWS = [
   [6361, 6362, 6363],
 ];
 
-
 class MasteryPage extends Component {
   constructor(props) {
     super(props);
@@ -135,8 +137,13 @@ class MasteryPage extends Component {
     }
   }
 
-  renderMasteryImage(masteryId) {
+  renderMasteryImage(masteryId, rowIndex) {
+    let isCircular = false;
     const masteries = this.props.page.get('masteries');
+
+    if (rowIndex % 2 !== 0) {
+      isCircular = true;
+    }
 
     if (masteries) {
       const indexFound = masteries.findIndex((mastery) => {
@@ -153,14 +160,14 @@ class MasteryPage extends Component {
         const rank = masteries.getIn([indexFound, 'rank']);
 
         return (<View style={styles.masteryImageContainer}>
-          <Image style={[styles.masteryImage, styles.masteryActive]} source={{ uri: `mastery_${masteryId}` }} />
-          <Text style={styles.rankText}>{rank}</Text>
+          <Image style={[styles.masteryImage, styles.masteryActive, isCircular && styles.circular]} source={{ uri: `mastery_${masteryId}` }} />
+          { !isCircular && <Text style={styles.rankText}>{rank}</Text> }
         </View>);
       }
     }
 
     return (<View style={styles.masteryImageContainer}>
-      <Image style={styles.masteryImage} source={{ uri: `mastery_gray_${masteryId}` }} />
+      <Image style={[styles.masteryImage, isCircular && styles.circular]} source={{ uri: `mastery_gray_${masteryId}` }} />
     </View>);
   }
 
@@ -168,7 +175,7 @@ class MasteryPage extends Component {
     return (<View style={[styles.masteryPageContainer, pageStyle]}>
       {rows.map((row, rowIndex) => <View key={rowIndex} style={styles.masteryRow}>
         {row.map((masteryId, masteryIndex) => <View key={masteryIndex}>
-          <View>{this.renderMasteryImage(masteryId)}</View>
+          <View>{this.renderMasteryImage(masteryId, rowIndex)}</View>
         </View>)}
       </View>)}
     </View>);

@@ -113,6 +113,7 @@ export default {
   no_results_found: 'No results found',
   minutes: 'Minutes',
   webDisclaimer: 'The web version www.coloso.net was designed for use from your computer',
+  contributors: 'Contributors',
   regions: {
     na: 'North America',
     lan: 'Latin America North',
@@ -181,7 +182,7 @@ export default {
     310: 'Nemesis',
     313: 'Black Market',
     315: 'Nexus Siege',
-    317: 'this is not Dominion',
+    317: 'This is not Dominion',
     318: 'Ultra Rapid Fire (Random)',
     400: 'Normal 5 vs 5',
     410: 'Ranked 5 vs 5',
@@ -207,5 +208,14 @@ export default {
     diamond: 'Diamond',
     master: 'Master',
     challenger: 'Challenger',
+  },
+  contributions: {
+    mainDeveloper: 'Main Developer',
+    translator: '{{lang}} translations',
+  },
+  langs: {
+    en: 'English',
+    es: 'Spanish',
+    pt: 'Portuguese',
   },
 };

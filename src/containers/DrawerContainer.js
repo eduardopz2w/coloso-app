@@ -60,6 +60,12 @@ function mapDispatchToProps(dispatch) {
       dispatch(NavigationActions.navigate({ routeName: 'SettingsView' }));
     },
 
+    goToContributors: () => {
+      dispatch(NavigationActions.back({ key: null }));
+      dispatch(NavigationActions.navigate({ routeName: 'ContributorsView' }));
+    },
+
+
     openDrawer: () => {
       dispatch(NavigationActions.navigate({ routeName: 'DrawerOpen' }));
     },

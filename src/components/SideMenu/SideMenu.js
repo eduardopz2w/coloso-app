@@ -154,6 +154,12 @@ class SideMenu extends PureComponent {
         />
 
         <MenuItem
+          title={I18n.t('contributors')}
+          iconName="people"
+          onPress={this.props.onPressContributors}
+        />
+
+        <MenuItem
           title={I18n.t('suggestion')}
           iconName="mail"
           onPress={this.props.onPressSuggestion}
@@ -186,6 +192,7 @@ SideMenu.propTypes = {
   onPressManageAccount: PropTypes.func,
   onPressSettings: PropTypes.func,
   onPressWeb: PropTypes.func,
+  onPressContributors: PropTypes.func,
 };
 
 export default SideMenu;
